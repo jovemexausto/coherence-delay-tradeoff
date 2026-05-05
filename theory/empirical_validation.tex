@@ -549,7 +549,7 @@ KuaiRand & $\lambda = 4.0$ & bubble rate 0.747 & healthy FP/u 1.632 \\
 
 This experiment instantiates \cref{cor:coercive,def:tci_effort} in the
 non-Gaussian, non-linear particle tracker. The environment evolves according to the scalar
-particle-filter simulator implemented in \texttt{particle\_tracker.py}, but now
+particle-filter simulator implemented in \texttt{experiments/particle/model.py}, but now
 with an explicit action-coupling parameter $\alpha \in [0,1]$ so that the
 actuation can pull the latent state toward the stale controller output. In
 the synthetic setting we operationalise the effort proxy as the \emph{realized
