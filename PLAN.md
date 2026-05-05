@@ -63,7 +63,7 @@ Why this phase exists:
 - [x] Add an explicit operational hierarchy for effort proxies and state when each one is valid.
 - [x] Tighten the KuaiRand wording so it clearly reflects logged-data limitations, confounding risk, and the meaning of the reported metric.
 - [x] Add any needed ablations on `\lambda`, `E0`, and proxy choice, and remove any unsupported causal language.
-- [in_progress] Commit Phase 12.
+- [completed] Commit Phase 12.
 
 Why this phase exists:
 - The reviewer’s critique of effort estimation is real and must be answered with both language and evidence.

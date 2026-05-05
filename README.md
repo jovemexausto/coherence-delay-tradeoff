@@ -8,7 +8,7 @@
 
 Tracking under drift is not just a filtering problem. It is a trade-off between statistical precision and staleness.
 
-This work shows that, once those two forces are written explicitly, the optimal effective memory follows a cube-root law. In action-coupled settings, the same lens also explains why standard coherence measures can look stable while effort-aware diagnostics reveal the cost of forcing the world to match a frozen action.
+This work shows that, once those two forces are written explicitly, the optimal effective memory in the finite-memory averaging class follows a cube-root law. In action-coupled settings, the same lens also explains why standard coherence measures can look stable while effort-aware diagnostics reveal the cost of forcing the world to match a frozen action.
 
 ## Core idea
 

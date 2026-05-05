@@ -31,12 +31,14 @@ Status update:
 
 ### 2. Is there a sign error in Proposition 6.12?
 
-Current answer: the live source currently states the positive cube-root scaling, but we must audit the manuscript and any derived text for stale `\zeta^{-1/3}` remnants.
+Current answer: the live source states the positive cube-root scaling, and the manuscript/PDF audit is complete.
 
 What we will do:
-- audit every occurrence of the proposition and surrounding discussion,
-- verify the PDF and appendix text,
-- add an explicit errata note if any stale version survived in a figure caption or response artifact.
+- no further errata note is needed unless a stale copy reappears in a future artifact.
+
+Audit result:
+- the manuscript and compiled PDF are aligned on the positive cube-root scaling;
+- no stale `\zeta^{-1/3}` remnants remain in the live corpus.
 
 ### 3. How far does the ISS template go?
 
@@ -67,7 +69,7 @@ What we will do:
 Current ablation evidence:
 - the particle and KuaiRand `\lambda` sweeps already show the stable operating range,
 - the domain-specific `E0` choices are documented in the paper,
-- exact / identified / proxy semantics are separated in the paper and appendix.
+- exact / identified / proxy semantics are separated in the paper and protocol appendix.
 
 Operational ladder:
 - `exact`: deterministic action channels or constructively specified replicas.
@@ -130,8 +132,6 @@ We will not force a rename if it weakens the paper or obscures the math.
 
 ## Main Gaps That Still Need Work
 
-- formal lower bound for the finite-memory class
-- `\sigma_A` operational validity and proxy analysis
 - additional baselines and fair calibration
 - runtime / latency of the Sinkhorn pipeline
 - stronger controls for KuaiRand / logged data
