@@ -1,5 +1,6 @@
 # Coherence-Delay Trade-off
 
+[![ORCID](https://img.shields.io/badge/ORCID-0009--0005--0201--9308-a6ce39.svg?logo=orcid&logoColor=white)](https://orcid.org/0009-0005-0201-9308)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20041349-blue.svg)](https://doi.org/10.5281/zenodo.20041349)
 [![License: CC BY 4.0 / Apache-2.0](https://img.shields.io/badge/License-CC%20BY%204.0%20%2F%20Apache--2.0-blue.svg)](LICENSE)
 
@@ -27,6 +28,7 @@ If you use this work, please cite:
 @software{parreira2026coherence_delay_tradeoff,
   title = {The Coherence-Delay Trade-off in Tracking Under Drift: A Cube-Root Law for Finite-Memory Estimation},
   author = {Parreira, Vinicius},
+  month = may,
   year = {2026},
   doi = {10.5281/zenodo.20041349},
   url = {https://doi.org/10.5281/zenodo.20041349}

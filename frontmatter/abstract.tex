@@ -3,21 +3,22 @@ We study the problem of tracking non-stationary environments under finite memory
 constraints. When observations are aggregated over time, estimation variance
 decreases with window size, but delay-induced bias increases as older data
 becomes less representative under drift. We formalize this trade-off and show
-that, in the finite-memory setting considered here, it induces a cube-root
-scaling law: the minimum achievable tracking error scales as $\zeta^{1/3}$ with
-the drift rate $\zeta$, with an optimal effective memory that scales as
-$\zeta^{-2/3}$. Empirically, we recover a log-log slope of 0.316 in controlled
-experiments, closely matching the theoretical prediction.
+that, in the finite-memory setting considered here, it induces a
+\textbf{cube-root scaling law}: the \textbf{minimum achievable tracking error}
+scales as $\boldsymbol{\zeta^{1/3}}$ with the drift rate $\zeta$, with an
+\textbf{optimal effective memory} that scales as $\boldsymbol{\zeta^{-2/3}}$.
+Empirically, we recover a log-log slope of 0.316 in controlled experiments,
+closely matching the theoretical prediction.
 
 We further consider action-coupled systems, where observations are influenced by
 the system's own interventions. In this setting, apparent improvements in
 tracking performance may arise from increased control effort rather than
 improved estimation, leading to a form of feedback-induced masking. To address
-this, we introduce an effort-aware coherence diagnostic that separates genuine
-adaptation from action-induced alignment. Empirical evaluations on synthetic
-trackers and real-world datasets show that standard passive drift detectors
-capture distributional change but do not distinguish these regimes under
-feedback, while the proposed diagnostic identifies early transitions under
+this, we introduce an \textbf{effort-aware coherence diagnostic} that separates
+genuine adaptation from action-induced alignment. Empirical evaluations on
+synthetic trackers and real-world datasets show that standard passive drift
+detectors capture distributional change but do not distinguish these regimes
+under feedback, while the proposed diagnostic identifies early transitions under
 intervention with median delay 5.0 steps. These results suggest that tracking
 under drift is fundamentally constrained by temporal staleness, and that
 evaluating adaptive systems requires accounting for the interaction between
