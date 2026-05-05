@@ -3,11 +3,13 @@ from __future__ import annotations
 from collections import Counter, deque
 from dataclasses import dataclass
 from pathlib import Path
+from typing import cast
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from river import drift
+
+from ..core.common import threshold_crossings
+from ..core.detectors import run_river_drift_detector
 
 
 @dataclass(slots=True)
@@ -61,11 +63,34 @@ class KuaiRandBenchmarkResult:
     summary_rows: list[dict[str, str | float | int]]
 
 
+def summarize_user_detection(
+    warnings: list[int],
+    event: int,
+    max_gap: int,
+) -> dict[str, float | int | None]:
+    matched = [
+        warning
+        for warning in warnings
+        if warning <= event and event - warning <= max_gap
+    ]
+    if not matched:
+        return {"detections": 0, "rate": 0.0, "median_delay": None}
+    lead_times = [event - warning for warning in matched]
+    return {"detections": 1, "rate": 1.0, "median_delay": float(np.median(lead_times))}
+
+
 ACTIVE_BASELINE_DETECTORS = ("ADWIN", "PageHinkley", "KSWIN", "NoDrift")
 
 
+def _read_csv(base: Path, filename: str, usecols: tuple[str, ...]) -> pd.DataFrame:
+    return cast(
+        pd.DataFrame,
+        pd.read_csv(base / filename, usecols=usecols),  # pyright: ignore[reportCallIssue, reportArgumentType]
+    )
+
+
 def _read_logs(base: Path) -> pd.DataFrame:
-    cols = [
+    cols: tuple[str, ...] = (
         "user_id",
         "video_id",
         "time_ms",
@@ -80,18 +105,14 @@ def _read_logs(base: Path) -> pd.DataFrame:
         "long_view",
         "is_rand",
         "tab",
-    ]
-    random = pd.read_csv(
-        base / "log_random_4_22_to_5_08_pure.csv",
-        usecols=cols,
     )
-    random["phase"] = "healthy"
-    standard = pd.read_csv(
-        base / "log_standard_4_22_to_5_08_pure.csv",
-        usecols=cols,
+    random_logs = _read_csv(base, "log_random_4_22_to_5_08_pure.csv", cols)
+    random_logs["phase"] = "healthy"
+    standard_logs = _read_csv(base, "log_standard_4_22_to_5_08_pure.csv", cols)
+    standard_logs["phase"] = "later"
+    logs = cast(
+        pd.DataFrame, pd.concat([random_logs, standard_logs], ignore_index=True)
     )
-    standard["phase"] = "later"
-    logs = pd.concat([random, standard], ignore_index=True)
     logs["watch_ratio"] = logs["play_time_ms"] / logs["duration_ms"].clip(lower=1)
     logs["watch_ratio"] = logs["watch_ratio"].replace([np.inf, -np.inf], np.nan)
     logs = logs.dropna(subset=["watch_ratio"])
@@ -99,10 +120,8 @@ def _read_logs(base: Path) -> pd.DataFrame:
 
 
 def _load_video_tags(base: Path) -> pd.Series:
-    video = pd.read_csv(
-        base / "video_features_basic_pure.csv", usecols=["video_id", "tag"]
-    )
-    return video.set_index("video_id")["tag"].astype(str)
+    video = _read_csv(base, "video_features_basic_pure.csv", ("video_id", "tag"))
+    return cast(pd.Series, video.set_index("video_id")["tag"].astype(str))
 
 
 def _kl_divergence(
@@ -130,73 +149,6 @@ def _entropy(dist: dict[str, float]) -> float:
     if probs.size == 0:
         return 0.0
     return float(-(probs * np.log(probs)).sum())
-
-
-def _match_warnings_to_events(
-    warnings: list[int], events: list[int], max_gap: int
-) -> tuple[list[int], list[int], list[int]]:
-    matched_warnings: list[int] = []
-    matched_events: list[int] = []
-    lead_times: list[int] = []
-    event_index = 0
-    for warning in warnings:
-        while event_index < len(events) and events[event_index] < warning:
-            event_index += 1
-        if event_index < len(events):
-            lead = events[event_index] - warning
-            if lead <= max_gap:
-                matched_warnings.append(warning)
-                matched_events.append(events[event_index])
-                lead_times.append(lead)
-                event_index += 1
-    return matched_warnings, matched_events, lead_times
-
-
-def _threshold_warnings(values: np.ndarray, threshold: float) -> list[int]:
-    warnings: list[int] = []
-    below = False
-    for index, value in enumerate(values):
-        if np.isnan(value):
-            continue
-        if value < threshold and not below:
-            warnings.append(index)
-            below = True
-        elif value >= threshold:
-            below = False
-    return warnings
-
-
-def _run_detector(
-    signal: np.ndarray, detector_name: str, config: KuaiRandConfig
-) -> list[int]:
-    if detector_name == "ADWIN":
-        detector = drift.ADWIN(delta=config.adwin_delta)
-    elif detector_name == "PageHinkley":
-        detector = drift.PageHinkley(
-            delta=config.page_hinkley_delta,
-            threshold=config.page_hinkley_threshold,
-            alpha=config.page_hinkley_alpha,
-            mode="both",
-        )
-    elif detector_name == "KSWIN":
-        detector = drift.KSWIN(
-            window_size=config.kswin_window_size,
-            stat_size=config.kswin_stat_size,
-            alpha=config.kswin_alpha,
-        )
-    elif detector_name == "NoDrift":
-        detector = drift.NoDrift()
-    else:
-        raise ValueError(detector_name)
-
-    warnings: list[int] = []
-    for index, value in enumerate(signal):
-        if np.isnan(value):
-            continue
-        detector.update(float(value))
-        if detector.drift_detected:
-            warnings.append(index)
-    return warnings
 
 
 def _window_signals(
@@ -252,31 +204,37 @@ def _prepare_user_signals(
     tag_map: pd.Series,
     config: KuaiRandConfig,
 ) -> KuaiRandUserSignals | None:
-    user_logs = user_logs.sort_values("time_ms").copy()
+    user_logs = cast(pd.DataFrame, user_logs.sort_values("time_ms").copy())
     if len(user_logs) < 2 * config.min_phase_count:
         return None
 
-    healthy = user_logs[user_logs["phase"] == "healthy"]
-    later = user_logs[user_logs["phase"] == "later"]
+    healthy = cast(pd.DataFrame, user_logs[user_logs["phase"] == "healthy"])
+    later = cast(pd.DataFrame, user_logs[user_logs["phase"] == "later"])
     if len(healthy) < config.min_phase_count or len(later) < 2 * config.min_phase_count:
         return None
 
-    later = later.sort_values("time_ms")
+    later = cast(pd.DataFrame, later.sort_values("time_ms"))
     split = len(later) // 2
-    coercive = later.iloc[:split]
-    collapse = later.iloc[split:]
+    coercive = cast(pd.DataFrame, later.iloc[:split])
+    collapse = cast(pd.DataFrame, later.iloc[split:])
 
-    eval_logs = pd.concat([healthy, coercive, collapse], ignore_index=True)
-    eval_logs = eval_logs.sort_values("time_ms")
-    eval_tags = tag_map.reindex(eval_logs["video_id"]).fillna("unknown").tolist()
-    eval_watch = eval_logs["watch_ratio"].astype(float).tolist()
+    eval_logs = cast(
+        pd.DataFrame,
+        pd.concat([healthy, coercive, collapse], ignore_index=True),
+    )
+    eval_logs = cast(pd.DataFrame, eval_logs.sort_values("time_ms"))
+    eval_tags = cast(
+        list[str], tag_map.reindex(eval_logs["video_id"]).fillna("unknown").tolist()
+    )
+    eval_watch = cast(list[float], eval_logs["watch_ratio"].astype(float).tolist())
 
     healthy_tag_dist = _distribution(
-        tag_map.reindex(healthy["video_id"]).fillna("unknown").tolist()
+        cast(list[str], tag_map.reindex(healthy["video_id"]).fillna("unknown").tolist())
     )
     tag_vocab_size = int(tag_map.nunique())
-    healthy_watch_mean = float(healthy["watch_ratio"].mean())
-    healthy_watch_std = float(healthy["watch_ratio"].std(ddof=0) or 1.0)
+    healthy_watch = cast(pd.Series, healthy["watch_ratio"])
+    healthy_watch_mean = float(healthy_watch.mean())
+    healthy_watch_std = float(healthy_watch.std(ddof=0) or 1.0)
     _, _, _, _, _, effort = _window_signals(
         eval_tags,
         eval_watch,
@@ -338,47 +296,38 @@ def load_kuairand_users(
     logs = _read_logs(base)
     tag_map = _load_video_tags(base)
 
-    counts = logs.groupby(["user_id", "phase"]).size().unstack(fill_value=0)
-    eligible = counts[
-        (counts["healthy"] >= config.min_phase_count)
-        & (counts["later"] >= 2 * config.min_phase_count)
-    ]
-    eligible_users = (
-        eligible.index.to_series()
+    counts = cast(
+        pd.DataFrame,
+        logs.groupby(["user_id", "phase"]).size().unstack(fill_value=0),
+    )
+    healthy_counts = cast(pd.Series, counts["healthy"])
+    later_counts = cast(pd.Series, counts["later"])
+    eligible_index = cast(
+        pd.Index,
+        counts.index[
+            (healthy_counts >= config.min_phase_count)
+            & (later_counts >= 2 * config.min_phase_count)
+        ],
+    )
+    eligible_users = cast(
+        list[int],
+        eligible_index.to_series()
         .sample(
-            n=min(config.max_users, len(eligible)),
+            n=min(config.max_users, len(eligible_index)),
             random_state=config.seed,
             replace=False,
         )
-        .tolist()
+        .astype(int)
+        .tolist(),
     )
 
     user_signals: list[KuaiRandUserSignals] = []
-    grouped = logs[logs["user_id"].isin(eligible_users)].groupby("user_id")
-    for user_id, user_logs in grouped:
-        prepared = _prepare_user_signals(int(user_id), user_logs, tag_map, config)
+    for user_id in eligible_users:
+        user_logs = cast(pd.DataFrame, logs[logs["user_id"].astype(int) == user_id])
+        prepared = _prepare_user_signals(user_id, user_logs, tag_map, config)
         if prepared is not None:
             user_signals.append(prepared)
     return user_signals
-
-
-def summarize_user_detection(
-    warnings: list[int],
-    event: int,
-    max_gap: int,
-) -> dict[str, float | int | None]:
-    matched, _, lead_times = _match_warnings_to_events(warnings, [event], max_gap)
-    if not matched:
-        return {
-            "detections": 0,
-            "rate": 0.0,
-            "median_delay": None,
-        }
-    return {
-        "detections": 1,
-        "rate": 1.0,
-        "median_delay": float(np.median(lead_times)),
-    }
 
 
 def run_kuairand_active_benchmark(
@@ -388,10 +337,16 @@ def run_kuairand_active_benchmark(
     users = load_kuairand_users(config)
     if config.auto_calibrate_thresholds and users:
         healthy_tci = np.concatenate(
-            [user.signals["tci"].to_numpy()[: user.random_end] for user in users]
+            [
+                cast(np.ndarray, user.signals["tci"].to_numpy()[: user.random_end])
+                for user in users
+            ]
         )
         healthy_tcie = np.concatenate(
-            [user.signals["tcie"].to_numpy()[: user.random_end] for user in users]
+            [
+                cast(np.ndarray, user.signals["tcie"].to_numpy()[: user.random_end])
+                for user in users
+            ]
         )
         config = KuaiRandConfig(
             data_dir=config.data_dir,
@@ -417,15 +372,25 @@ def run_kuairand_active_benchmark(
     user_results: list[KuaiRandUserDetectionResult] = []
 
     for user in users:
-        tci_warnings = _threshold_warnings(
+        tci_warnings = threshold_crossings(
             user.signals["tci"].to_numpy(), config.tci_threshold
         )
-        tcie_warnings = _threshold_warnings(
+        tcie_warnings = threshold_crossings(
             user.signals["tcie"].to_numpy(), config.tcie_threshold
         )
         baseline_signal = 1.0 - user.signals["tcie"].to_numpy()
         raw_warnings = {
-            detector_name: _run_detector(baseline_signal, detector_name, config)
+            detector_name: run_river_drift_detector(
+                baseline_signal,
+                detector_name,
+                adwin_delta=config.adwin_delta,
+                page_hinkley_delta=config.page_hinkley_delta,
+                page_hinkley_threshold=config.page_hinkley_threshold,
+                page_hinkley_alpha=config.page_hinkley_alpha,
+                kswin_window_size=config.kswin_window_size,
+                kswin_stat_size=config.kswin_stat_size,
+                kswin_alpha=config.kswin_alpha,
+            )
             for detector_name in ACTIVE_BASELINE_DETECTORS
         }
         user_results.append(
@@ -465,78 +430,9 @@ def run_kuairand_active_benchmark(
             )
         )
 
-    summary_rows = build_kuairand_summary_rows(user_results)
     return KuaiRandBenchmarkResult(
         config=config,
         user_results=user_results,
         user_signals=users,
-        summary_rows=summary_rows,
+        summary_rows=[],
     )
-
-
-def build_kuairand_summary_rows(
-    results: list[KuaiRandUserDetectionResult],
-) -> list[dict[str, str | float | int]]:
-    rows: list[dict[str, str | float | int]] = []
-    phase_labels = {
-        "masking_detection": "bubble_detection",
-        "collapse_detection": "collapse_detection",
-    }
-    for phase in ("masking_detection", "collapse_detection"):
-        for detector in ("TCI", "TCIE", *ACTIVE_BASELINE_DETECTORS):
-            detections = 0
-            delays: list[float] = []
-            for result in results:
-                summary = getattr(result, phase)[detector]
-                if summary["detections"]:
-                    detections += 1
-                    if summary["median_delay"] is not None:
-                        delays.append(float(summary["median_delay"]))
-            rows.append(
-                {
-                    "phase": phase_labels[phase],
-                    "detector": detector,
-                    "n_users": len(results),
-                    "detections": detections,
-                    "rate": round(detections / len(results), 3) if results else 0.0,
-                    "median_delay": round(float(np.median(delays)), 1)
-                    if delays
-                    else "NA",
-                }
-            )
-    return rows
-
-
-def save_kuairand_figure(result: KuaiRandBenchmarkResult, output_path: Path) -> None:
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    # Use median trajectory aligned by phase fractions.
-    max_len = max(len(user.signals) for user in result.user_signals)
-    grid = np.full((len(result.user_signals), max_len), np.nan)
-    grid_tcie = np.full((len(result.user_signals), max_len), np.nan)
-    for row, user in enumerate(result.user_signals):
-        tci = user.signals["tci"].to_numpy()
-        tcie = user.signals["tcie"].to_numpy()
-        grid[row, : len(tci)] = tci
-        grid_tcie[row, : len(tcie)] = tcie
-
-    med_tci = np.nanmedian(grid, axis=0)
-    med_tcie = np.nanmedian(grid_tcie, axis=0)
-    phases = [
-        np.nanmedian([user.random_end for user in result.user_signals]),
-        np.nanmedian([user.coercive_end for user in result.user_signals]),
-    ]
-
-    fig, ax = plt.subplots(figsize=(11, 4.5))
-    ax.plot(med_tci, label="Score", linewidth=1.5)
-    ax.plot(med_tcie, label="Effort-corrected score", linewidth=1.5)
-    for boundary in phases:
-        ax.axvline(boundary, color="0.4", linestyle="--", linewidth=1.0)
-    ax.set_ylabel("Median score")
-    ax.set_xlabel("Time step")
-    ax.set_title("KuaiRand logged benchmark: median trajectories")
-    ax.legend(loc="lower left")
-    ax.grid(alpha=0.2, linewidth=0.5)
-    fig.tight_layout()
-    fig.savefig(output_path)
-    fig.savefig(output_path.with_suffix(".png"), dpi=180)
-    plt.close(fig)

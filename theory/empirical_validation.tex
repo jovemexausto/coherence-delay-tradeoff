@@ -287,7 +287,7 @@ $\ScoreHat$ warnings are recorded on each falling-edge crossing of
 $\hat\sigma_P < 0.295$.
 Because ELEC2 exposes no direct actuation or effort channel, this benchmark
 uses the estimable score rather than $\ScoreE$; the effort-corrected
-score is reserved for the active/coercive setting of \cref{sec:tpt_masking}.
+score is reserved for the active/coercive setting of \cref{sec:particle_tracking_masking}.
 Lead time is defined as the gap between a warning and the nearest subsequent
 Page-Hinkley event, using an adaptive maximum gap set to half the median
 inter-event interval (nearest-future matching; see \cref{app:code_repository} for implementation).
@@ -398,7 +398,7 @@ The trade-off is structural and expected: the fixed $n = 50$ strategy is the
 most conservative, while the dynamic rule trades some precision for more
 lead-time sensitivity than fixed $n = 100$.
 
-\subsection{Experiment E: Feedback Masking in the Particle Tracker}\label{sec:tpt_masking}
+\subsection{Experiment E: Feedback Masking in the Particle Tracker}\label{sec:particle_tracking_masking}
 
 This experiment instantiates \cref{cor:coercive,def:tci_effort} in the
 non-Gaussian, non-linear particle tracker. The environment evolves according to the scalar
@@ -426,7 +426,7 @@ aggregated metrics from the experiment harness.
 
 \begin{figure}[h]
 \centering
-\safeincludegraphics[width=\linewidth]{figures/fig_tpt_masking}
+\safeincludegraphics[width=\linewidth]{figures/fig_particle_tracking_masking}
 \caption{Synthetic feedback masking in the particle tracker.
   \emph{Top:} passive FM-1 retains high tracking error, while coercive FM-1
   suppresses the visible error by pulling the world toward the frozen action.
@@ -434,7 +434,7 @@ aggregated metrics from the experiment harness.
   coercive effort appears only when influence is positive. \emph{Bottom:}
   the standard score stays artificially high in the feedback-masking regime,
   whereas $\ScoreE$ drops once effort is penalized.}
-\label{fig:tpt_masking}
+\label{fig:particle_tracking_masking}
 \end{figure}
 
 \begin{table}[h]
@@ -442,7 +442,7 @@ aggregated metrics from the experiment harness.
 \small
 \caption{Multi-seed feedback masking summary for FM-1 in the particle tracker
   ($\alpha = 0.3$, $\lambda = 3.0$, 8 seeds).}
-\label{tab:tpt_masking}
+\label{tab:particle_tracking_masking}
 \begin{tabular}{@{}lrrrrr@{}}
 \toprule
 Regime & $|e|$ & action gap & effort & $\Score$ & $\ScoreE$ \\
@@ -464,14 +464,14 @@ coincide.
 
 \begin{figure}[h]
 \centering
-\safeincludegraphics[width=\linewidth]{figures/fig_tpt_masking_grid}
+\safeincludegraphics[width=\linewidth]{figures/fig_particle_tracking_masking_grid}
 \caption{Multi-seed parameter sweep for feedback masking in the particle tracker
   (8 seeds). Left: mean standard $\Score$. Middle: mean effort-corrected
   $\ScoreE$. Right: masking gap
   $\Score - \ScoreE$. The standard score monotonically rises with
   influence, while the masking gap widens with both influence and effort
   penalty $\lambda$.}
-\label{fig:tpt_masking_grid}
+\label{fig:particle_tracking_masking_grid}
 \end{figure}
 
 The sweep confirms that the correction is not an artifact of one parameter
@@ -498,12 +498,12 @@ rather than a model-derived residual.
 
 \begin{figure}[h]
 \centering
-\safeincludegraphics[width=\linewidth]{figures/fig_tpt_active_benchmark}
+\safeincludegraphics[width=\linewidth]{figures/fig_particle_tracking_active_benchmark}
 \caption{Active benchmark in the particle tracker with two known phase changes.
   Orange line: masking onset at $t=200$. Red line: collapse onset at
   $t=400$. ADWIN receives the raw observation stream. $\Score$ and
   $\ScoreE$ are thresholded at $0.8$.}
-\label{fig:tpt_active_benchmark}
+\label{fig:particle_tracking_active_benchmark}
 \end{figure}
 
 \begin{table}[h]
@@ -511,7 +511,7 @@ rather than a model-derived residual.
 \caption{Active benchmark summary in the particle tracker (12 seeds).
   Detection is measured against the known onset of feedback masking and the
   known onset of coercive collapse.}
-\label{tab:tpt_active_benchmark}
+\label{tab:particle_tracking_active_benchmark}
 \begin{tabular}{@{}llrrr@{}}
 \toprule
 Phase & Detector & Detections & Rate & Median delay \\
@@ -547,13 +547,13 @@ a generic passive detector does not encode.
 
 \begin{figure}[h]
 \centering
-\safeincludegraphics[width=0.95\linewidth]{figures/fig_tpt_tcie_calibration}
+\safeincludegraphics[width=0.95\linewidth]{figures/fig_particle_tracking_tcie_calibration}
 \caption{Calibration grid for $\ScoreE$ over effort penalty $\lambda$
   and threshold. The masking detection rate saturates at 1.0 across most of
   the grid, so the useful calibration axes are delay and false positives;
   the paper setting ($\lambda = 3.0$, threshold $0.80$) remains a
   low-delay compromise.}
-\label{fig:tpt_tcie_calibration}
+\label{fig:particle_tracking_tcie_calibration}
 \end{figure}
 
 \subsection{Experiment F: Bikes Early-Warning Lead Time}\label{sec:tgt_exp_f}

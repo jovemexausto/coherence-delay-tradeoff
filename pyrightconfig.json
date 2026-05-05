@@ -1,0 +1,23 @@
+{
+  "typeCheckingMode": "standard",
+  "pythonVersion": "3.11",
+  "venvPath": "experiments",
+  "venv": ".venv",
+  "extraPaths": [
+    "experiments",
+  ],
+  "reportImplicitStringConcatenation": "none",
+  "reportUnannotatedClassAttribute": "none",
+  "reportUnusedCallResult": "none",
+  "reportUnknownVariableType": "warning",
+  "reportUnknownMemberType": "none",
+  "reportUnknownArgumentType": "warning",
+  "reportMissingTypeStubs": "none",
+  "reportDeprecated": "error",
+  "reportUnusedImport": "error",
+  "executionEnvironments": [
+    {
+      "root": "experiments"
+    }
+  ]
+}

@@ -38,10 +38,12 @@ Prerequisite: `uv`.
 ```bash
 cd experiments
 uv sync
-uv run python run_tgt.py
-uv run python run_experiment.py --experiment masking --output ../figures/fig_tpt_masking.pdf
-uv run python run_experiment.py --experiment active-benchmark --output ../figures/fig_tpt_active_benchmark.pdf
-uv run python run_experiment.py --experiment kuairand-logged --output ../figures/fig_kuairand_active.pdf
+uv run python run.py particle --experiment masking --output ../figures/particle/fig_particle_masking.pdf
+uv run python run.py gaussian --figures-dir ../figures/gaussian
+uv run python run.py bikes --figures-dir ../figures/bikes
+uv run python run.py elec2 --figures-dir ../figures/elec2
+uv run python run.py kuairand --figures-dir ../figures/kuairand
+uv run python run.py all
 ```
 
 The experiment suite writes figures to `../figures/` and summary tables to `experiments/artifacts/`.

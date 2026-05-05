@@ -7,6 +7,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
+from ..core.common import rolling_mean
+
 TGT_CONDITIONS = ("full", "fm1", "fm2", "fm3")
 TGT_LABELS = {
     "full": "Full TGT",
@@ -81,11 +83,6 @@ def _steady_state_variance(process_scale: float, observation_scale: float) -> fl
     q = process_scale * process_scale
     r = observation_scale * observation_scale
     return 0.5 * (q + np.sqrt(q * q + 4.0 * q * r))
-
-
-def _rolling_mean(values: np.ndarray, window: int) -> np.ndarray:
-    kernel = np.ones(window) / window
-    return np.convolve(values, kernel, mode="same")
 
 
 def _simulate_environment(
@@ -227,89 +224,6 @@ def run_tgt_ablation(config: TGTConfig | None = None) -> dict[str, TGTResult]:
     return results
 
 
-def summarize_tgt_result(result: TGTResult, tail_window: int = 100) -> dict[str, float]:
-    tail = slice(-min(tail_window, result.config.steps), None)
-    return {
-        "mean_v_p": float(np.mean(result.v_p[tail])),
-        "mean_v_a": float(np.mean(result.v_a[tail])),
-        "mean_v_phi": float(np.mean(result.v_phi[tail])),
-        "mean_sigma_p": float(np.mean(result.sigma_p[tail])),
-        "mean_sigma_a": float(np.mean(result.sigma_a[tail])),
-        "mean_sigma_phi": float(np.mean(result.sigma_phi[tail])),
-        "mean_tci": float(np.mean(result.tci[tail])),
-        "mean_v_total": float(np.mean(result.v_total[tail])),
-    }
-
-
-def build_ablation_rows(results: dict[str, TGTResult]) -> list[dict[str, str | float]]:
-    rows: list[dict[str, str | float]] = []
-    for condition in TGT_CONDITIONS:
-        summary = summarize_tgt_result(results[condition])
-        rows.append(
-            {
-                "condition": condition,
-                "mean_v_p": round(summary["mean_v_p"], 3),
-                "mean_v_a": round(summary["mean_v_a"], 3),
-                "mean_v_phi": round(summary["mean_v_phi"], 3),
-                "mean_sigma_p": round(summary["mean_sigma_p"], 3),
-                "mean_sigma_a": round(summary["mean_sigma_a"], 3),
-                "mean_sigma_phi": round(summary["mean_sigma_phi"], 3),
-                "mean_tci": round(summary["mean_tci"], 3),
-                "mean_v_total": round(summary["mean_v_total"], 3),
-            }
-        )
-    return rows
-
-
-def export_rows_csv(rows: list[dict[str, str | float]], output_path: Path) -> None:
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    if not rows:
-        return
-    with output_path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()))
-        writer.writeheader()
-        writer.writerows(rows)
-
-
-def save_ablation_figure(results: dict[str, TGTResult], output_path: Path) -> None:
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    time = np.arange(next(iter(results.values())).config.steps)
-    fig, axes = plt.subplots(2, 1, figsize=(11, 8), sharex=True)
-
-    for condition in TGT_CONDITIONS:
-        result = results[condition]
-        axes[0].plot(
-            time,
-            _rolling_mean(result.v_total, 20),
-            color=TGT_COLORS[condition],
-            linewidth=1.3,
-            label=TGT_LABELS[condition],
-        )
-        axes[1].plot(
-            time,
-            _rolling_mean(result.tci, 20),
-            color=TGT_COLORS[condition],
-            linewidth=1.3,
-            label=TGT_LABELS[condition],
-        )
-
-    axes[0].set_yscale("log")
-    axes[0].set_ylabel(r"$V_{total}$")
-    axes[0].set_title("Component ablation under passive drift")
-    axes[0].legend(loc="upper left", ncol=2)
-    axes[1].set_ylabel("Score")
-    axes[1].set_xlabel("Time step")
-    axes[1].set_ylim(0.0, 1.05)
-    axes[1].legend(loc="lower left", ncol=2)
-
-    for axis in axes:
-        axis.grid(alpha=0.2, linewidth=0.5)
-
-    fig.tight_layout()
-    fig.savefig(output_path)
-    plt.close(fig)
-
-
 def _window_errors_for_drift(
     drift: float,
     window_sizes: np.ndarray,
@@ -383,80 +297,6 @@ def run_ucurve_experiment() -> UCurveResult:
     )
 
 
-def save_ucurve_figure(result: UCurveResult, output_path: Path) -> None:
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    fig, axes = plt.subplots(1, 2, figsize=(12, 4.8))
-    for index, drift in enumerate(result.drift_values):
-        axes[0].plot(
-            result.window_sizes,
-            result.mean_error_grid[index],
-            linewidth=1.4,
-            marker="o",
-            markersize=3,
-            label=rf"$\zeta={drift:.3f}$",
-        )
-        best = int(np.argmin(result.mean_error_grid[index]))
-        axes[0].scatter(
-            result.window_sizes[best],
-            result.mean_error_grid[index, best],
-            color="black",
-            s=28,
-            zorder=4,
-        )
-
-    axes[0].set_xscale("log")
-    axes[0].set_yscale("log")
-    axes[0].set_xlabel("Window size n")
-    axes[0].set_ylabel("Mean absolute tracking error")
-    axes[0].set_title("Lag-drift U-curve")
-    axes[0].legend(loc="upper right")
-
-    axes[1].plot(result.drift_values, result.empirical_e_min, marker="o", linewidth=1.5)
-    fit_constant = np.exp(
-        np.polyfit(np.log(result.drift_values), np.log(result.empirical_e_min), 1)[1]
-    )
-    fit_curve = fit_constant * result.drift_values**result.slope
-    axes[1].plot(
-        result.drift_values,
-        fit_curve,
-        linestyle="--",
-        color="0.35",
-        label=rf"fit slope={result.slope:.3f}",
-    )
-    axes[1].set_xscale("log")
-    axes[1].set_yscale("log")
-    axes[1].set_xlabel(r"Drift rate $\zeta$")
-    axes[1].set_ylabel(r"$\mathcal{E}_{min}$")
-    axes[1].set_title("Minimum error vs drift")
-    axes[1].legend(loc="upper left")
-
-    for axis in axes:
-        axis.grid(alpha=0.2, linewidth=0.5)
-
-    fig.tight_layout()
-    fig.savefig(output_path)
-    plt.close(fig)
-
-
-def build_ucurve_rows(result: UCurveResult) -> list[dict[str, float | int]]:
-    rows: list[dict[str, float | int]] = []
-    for drift, n_star, e_min in zip(
-        result.drift_values,
-        result.empirical_n_star,
-        result.empirical_e_min,
-        strict=True,
-    ):
-        rows.append(
-            {
-                "drift": round(float(drift), 4),
-                "n_star": int(n_star),
-                "e_min": round(float(e_min), 4),
-                "scaled_constant": round(float(e_min / np.cbrt(drift)), 4),
-            }
-        )
-    return rows
-
-
 def run_sample_complexity_experiment() -> SampleComplexityResult:
     # The paper still refers to this artifact as fig_sinkhorn for continuity,
     # but the implemented experiment measures the sample complexity of the
@@ -499,74 +339,3 @@ def run_sample_complexity_experiment() -> SampleComplexityResult:
         std_absolute_error=std_absolute_error,
         slope=slope,
     )
-
-
-def save_sigma_p_complexity_figure(
-    result: SampleComplexityResult,
-    output_path: Path,
-) -> None:
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    fig, axis = plt.subplots(figsize=(6.6, 4.6))
-    axis.plot(
-        result.window_sizes,
-        result.mean_absolute_error,
-        marker="o",
-        linewidth=1.5,
-        color="tab:blue",
-        label="measured MAE",
-    )
-    fit_constant = np.exp(
-        np.polyfit(np.log(result.window_sizes), np.log(result.mean_absolute_error), 1)[
-            1
-        ]
-    )
-    fit_curve = fit_constant * result.window_sizes**result.slope
-    axis.plot(
-        result.window_sizes,
-        fit_curve,
-        linestyle="--",
-        color="0.35",
-        label=rf"fit slope={result.slope:.3f}",
-    )
-    axis.fill_between(
-        result.window_sizes,
-        result.mean_absolute_error - result.std_absolute_error,
-        result.mean_absolute_error + result.std_absolute_error,
-        color="tab:blue",
-        alpha=0.15,
-    )
-    axis.set_xscale("log")
-    axis.set_yscale("log")
-    axis.set_xlabel("Window size n")
-    axis.set_ylabel(r"MAE $|\sigma_P - \hat\sigma_P|$")
-    axis.set_title("Variance-dominated sample complexity")
-    axis.grid(alpha=0.2, linewidth=0.5)
-    axis.legend(loc="upper right")
-    fig.tight_layout()
-    fig.savefig(output_path)
-    plt.close(fig)
-
-
-def save_sinkhorn_figure(result: SampleComplexityResult, output_path: Path) -> None:
-    # Backward-compatible wrapper for the paper artifact name figures/fig_sinkhorn.pdf.
-    save_sigma_p_complexity_figure(result, output_path)
-
-
-def build_sample_complexity_rows(
-    result: SampleComplexityResult,
-) -> list[dict[str, float | int]]:
-    rows: list[dict[str, float | int]] = []
-    for window_size, mean_error, std_error in zip(
-        result.window_sizes,
-        result.mean_absolute_error,
-        result.std_absolute_error,
-        strict=True,
-    ):
-        rows.append(
-            {
-                "window_size": int(window_size),
-                "mean_absolute_error": round(float(mean_error), 4),
-                "std_absolute_error": round(float(std_error), 4),
-            }
-        )
-    return rows
