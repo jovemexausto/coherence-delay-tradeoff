@@ -65,7 +65,7 @@ steady-state Kalman gain $K_\infty = \hat\sigma_\infty^2 /
 (\hat\sigma_\infty^2 + \sigma_{\mathrm{obs}}^2)$.
 \end{proof}
 
-\begin{table}[h]
+\begin{table}[ht]
 \centering
 \small
 \caption{Gaussian-tracker experimental parameters.
@@ -113,7 +113,7 @@ Masking Corollary (\cref{cor:coercive}).
 \Cref{tab:ablation} summarizes the tail-mean Lyapunov functionals and
 component coherence scores.
 
-\begin{table}[h]
+\begin{table}[ht]
 \centering
 \caption{Ablation results ($T=500$, $\zeta=0.02$, influence$=0$, 42 seeds).
   Cells report mean $\pm$ standard deviation over the final 100 steps.}\label{tab:ablation}
@@ -213,7 +213,7 @@ $\mathbf{0.316}$ (95\% CI $[0.287, 0.345]$), close to the theoretical
 $1/3$ scaling for this finite-window estimator class.
 \Cref{tab:ucurve} reports the extracted minima.
 
-\begin{table}[h]
+\begin{table}[ht]
 \centering
 \caption{Empirical validation of the Coherence-Delay bound
   ($T=6{,}000$, 20 seeds, passive environment).}\label{tab:ucurve}
@@ -241,7 +241,7 @@ exponentially weighted moving average (EWMA)
 $\hat\mu_t = \alpha s_t + (1-\alpha)\hat\mu_{t-1}$ over
 $\alpha \in \{0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.3, 0.5\}$.
 
-\begin{table}[h]
+\begin{table}[ht]
 \centering
 \caption{EWMA baseline on the Gaussian tracker: optimal forgetting factor by
   drift rate.}
@@ -285,7 +285,7 @@ window and residual autocorrelation induced by the slow-drift regime
   This is the variance-only regime of the U-curve in \cref{fig:ucurve}.}\label{fig:sinkhorn}
 \end{figure}
 
-\begin{table}[h]
+\begin{table}[ht]
 \centering
 \caption{Sinkhorn estimation error vs window size
   ($\zeta = 0.001$, 50 seeds, $T = 5000$; mean $\pm$ standard deviation).}\label{tab:sinkhorn}
@@ -360,7 +360,7 @@ continues to serve as a tuneable structural diagnostic whose score semantics
 carry over to the active setting where $\ScoreE$ becomes the correct
 observable.
 
-\subsection{Experiment D: Dynamic $n^*_t$ Optimization on ELEC2}\label{sec:tgt_exp_d}
+\subsection{Experiment D: Dynamic \texorpdfstring{$n^*_t$}{n-star-t} Optimization on ELEC2}\label{sec:tgt_exp_d}
 
 \Cref{prop:coherence_delay} provides the self-tuning rule
 $n^*_t = (C_K/\hat\zeta_t)^{2/3}$.
@@ -399,7 +399,7 @@ using the same warning threshold $0.295$ and one-to-one future matching.
   \emph{Bottom:} lead-time distributions, including the ADWIN baseline.}\label{fig:dynamic_nstar}
 \end{figure}
 
-\begin{table}[h]
+\begin{table}[ht]
 \centering
 \caption{ELEC2 early-warning comparison: fixed vs.\ dynamic windows and ADWIN.
   113 PH failures; warning level $= 0.295$; max gap adaptive
@@ -482,7 +482,7 @@ smoothing.
 \label{fig:kuairand_active}
 \end{figure}
 
-\begin{table}[h]
+\begin{table}[ht]
 \centering
 \caption{KuaiRand logged benchmark summary on 367 users.}
 \label{tab:kuairand_active}
@@ -527,7 +527,7 @@ $1.387$, and $1.632$ per user. Together with the particle masking-gap sweep,
 this makes $\lambda \in [2,3]$ the stable operating region and justifies the
 paper default $\lambda = 3$ as a compromise rather than a hand-tuned optimum.
 
-\begin{table}[h]
+\begin{table}[ht]
 \centering
 \caption{Calibration summaries for the dynamic window rule and effort penalty.}
 \label{tab:phase3_calibration}
@@ -597,7 +597,7 @@ coercive coupling.
 \label{fig:particle_tracking_masking}
 \end{figure}
 
-\begin{table}[h]
+\begin{table}[ht]
 \centering
 \small
 \caption{Five-regime masking matrix for frozen-$\Pot$ FM-1 in the particle
@@ -671,7 +671,7 @@ rather than a model-derived residual.
 \label{fig:particle_tracking_active_benchmark}
 \end{figure}
 
-\begin{table}[h]
+\begin{table}[ht]
 \centering
 \caption{Active benchmark summary in the particle tracker (12 seeds).
   Detection is measured against the known onset of feedback masking and the
@@ -751,7 +751,7 @@ against future failures.
 \label{fig:bikes}
 \end{figure}
 
-\begin{table}[h]
+\begin{table}[ht]
 \centering
 \caption{Bikes early-warning comparison: fixed vs. dynamic windows and
   ADWIN. The same one-to-one future matching rule is used as in ELEC2.}
