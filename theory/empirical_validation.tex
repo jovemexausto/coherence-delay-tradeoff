@@ -82,7 +82,7 @@ $\zeta$               & 0.02      & 0.001      & estimated       \\
 $\sigma_w$            & 0.1       & 0.0 / 0.035 & N/A            \\
 $\varepsilon$ (Sinkhorn) & 0.1   & 0.1        & 0.1             \\
 Window $n$            & N/A       & 5--100     & 100             \\
-EMA $\alpha$          & N/A       & N/A        & 0.05            \\
+EMA $\alpha$          & N/A       & 0.005--0.5 & 0.05            \\
 PH threshold          & N/A       & N/A        & 84              \\
 PH $\delta$           & N/A       & N/A        & 0.01            \\
 Warning level         & N/A       & N/A        & 0.295           \\
@@ -175,7 +175,7 @@ The estimation error has two competing terms
   \;\leq\;
   \underbrace{C_K \, n^{-1/2}}_{\text{variance term}}
   \;+\;
-  \underbrace{L \cdot \zeta \cdot \tfrac{n}{2}}_{\text{lag-bias term}}.
+  \underbrace{\zeta \cdot \tfrac{n}{2}}_{\text{lag-bias term}}.
 \end{equation}
 At large $n$ or fast drift, the lag-bias term dominates and the total
 error increases with $n$, hiding the $O(n^{-1/2})$ variance rate.
@@ -233,6 +233,39 @@ $\zeta$ & $n^*_{\mathrm{obs}}$ & $\mathcal{E}_{\min}$ &
 The ratio $\mathcal{E}_{\min}/\zeta^{1/3}$ remains close to constant
 ($\approx 0.91$ across the four drift levels), confirming the expected
 $\zeta^{1/3}$ scaling despite finite-window effects.
+
+\paragraph{EWMA baseline and finite-memory universality.}
+To test whether the observed cube-root law is specific to the uniform
+sliding-window estimator, we ran the same Gaussian drift sweep with an
+exponentially weighted moving average (EWMA)
+$\hat\mu_t = \alpha s_t + (1-\alpha)\hat\mu_{t-1}$ over
+$\alpha \in \{0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.3, 0.5\}$.
+
+\begin{table}[h]
+\centering
+\caption{EWMA baseline on the Gaussian tracker: optimal forgetting factor by
+  drift rate.}
+\label{tab:ewma}
+\begin{tabular}{@{}rr@{}}
+\toprule
+$\zeta$ & $\alpha^*$ \\
+\midrule
+0.001 & 0.02 \\
+0.005 & 0.05 \\
+0.010 & 0.10 \\
+0.050 & 0.20 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The minimum-error EWMA slope is \textbf{0.3173} on a log-log fit of
+$\mathcal{E}_{\min}$ vs.\ $\zeta$, essentially identical to the
+sliding-window slope \textbf{0.316} in \cref{fig:ucurve}. The optimal
+forgetting factor follows log-log slope \textbf{0.6011}, close to the
+$2/3$ prediction from \cref{cor:ewma_cube_root}. Empirically, the optimal
+forgetting factors increase with drift exactly as finite effective memory
+theory predicts, supporting the claim that the cube-root law is a property of
+the finite-memory class rather than an artifact of uniform windows.
 
 For the score estimation rate, we use slow drift ($\zeta = 0.001$, $\sigma_w = 0.035$)
 to stay near the variance-dominated regime while retaining a visible lag term at
