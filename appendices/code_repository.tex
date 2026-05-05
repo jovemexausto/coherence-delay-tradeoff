@@ -1,7 +1,6 @@
 \section{Code Repository}\label{app:code_repository}
 
-All implementations --- the Gaussian tracker, the particle tracker, and the
-ELEC2 benchmark experiments --- are publicly available at:
+All implementations are publicly available at:
 
 \begin{center}
 \url{https://github.com/jovemexausto/coherence-delay-tradeoff}
@@ -9,15 +8,10 @@ ELEC2 benchmark experiments --- are publicly available at:
 
 The repository contains:
 \begin{itemize}[noitemsep]
-  \item \texttt{experiments/tracking/gaussian\_tracker.py} --- Gaussian-tracker experiments for
-    ablation, sample-complexity, U-curve, and ELEC2 diagnostics;
-  \item \texttt{experiments/tracking/particle\_tracker.py} --- particle-tracker experiments,
-    coercive-masking experiments, and effort-corrected $\ScoreE$;
-  \item \texttt{experiments/run\_tgt.py} and
-    \texttt{experiments/run\_experiment.py} --- reproducible entry points for
-    all current figures and CSV artifacts;
-  \item \texttt{experiments/artifacts/} --- generated summary tables used to
-    update the manuscript.
+  \item \texttt{experiments/run.py} --- single entry point for all experiment domains;
+  \item \texttt{experiments/gaussian/} and \texttt{experiments/particle/} --- core experiment logic;
+  \item \texttt{experiments/bikes/}, \texttt{experiments/elec2/}, and \texttt{experiments/kuairand/} --- domain-specific benchmarks;
+  \item \texttt{REPRODUCIBILITY.md} --- setup and run instructions.
 \end{itemize}
 
 All experiments use \texttt{uv} for dependency management
