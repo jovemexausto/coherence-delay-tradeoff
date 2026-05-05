@@ -11,7 +11,7 @@ from ..core.common import rolling_mean
 
 TGT_CONDITIONS = ("full", "fm1", "fm2", "fm3")
 TGT_LABELS = {
-    "full": "Full TGT",
+    "full": "Full tracker",
     "fm1": "FM-1 static Pot",
     "fm2": "FM-2 noisy Act",
     "fm3": "FM-3 absent Conv",
@@ -117,7 +117,7 @@ def _simulate_environment(
 def run_tgt_experiment(config: TGTConfig | None = None) -> TGTResult:
     config = config or TGTConfig()
     if config.condition not in TGT_CONDITIONS:
-        raise ValueError(f"Unknown TGT condition: {config.condition}")
+        raise ValueError(f"Unknown tracker condition: {config.condition}")
 
     rng = np.random.default_rng(config.seed + 17)
     latent_mean, free_mean, observations = _simulate_environment(config)

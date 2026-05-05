@@ -11,7 +11,7 @@ from ..core.detectors import create_river_drift_detector
 
 ABLATION_CONDITIONS = ("full", "fm1", "fm2", "fm3")
 CONDITION_LABELS = {
-    "full": "Full TPT",
+    "full": "Full tracker",
     "fm1": "FM-1 static Pot",
     "fm2": "FM-2 noisy Act",
     "fm3": "FM-3 absent Conv",
@@ -189,7 +189,7 @@ def _propagate_particles(
 def run_particle_tracking_experiment(config: TPTConfig | None = None) -> TPTResult:
     config = config or TPTConfig()
     if config.condition not in ABLATION_CONDITIONS:
-        raise ValueError(f"Unknown TPT condition: {config.condition}")
+        raise ValueError(f"Unknown tracker condition: {config.condition}")
 
     rng = np.random.default_rng(config.seed + CONDITION_OFFSETS[config.condition])
 
