@@ -431,6 +431,18 @@ The trade-off is structural and expected: the fixed $n = 50$ strategy is the
 most conservative, while the dynamic rule trades some precision for more
 lead-time sensitivity than fixed $n = 100$.
 
+The dynamic rule is also moderately robust to calibration error, as predicted by
+the $2/3$ sensitivity of $n_t^*$. On ELEC2, scaling $\hat\zeta_t$ by
+$0.75\times$, $1.5\times$, and $2.0\times$ moves the mean dynamic window from
+$47.7$ to $57.8$, $36.7$, and $31.9$, while matched leads change from $29$ to
+$22$, $21$, and $19$. Perturbing $C_K$ by the same factors gives mean windows
+$39.5$, $62.5$, and $75.7$ with $25$, $18$, and $19$ matched leads. The Bikes
+benchmark is more tolerant: $\hat\zeta_t$ perturbations yield $92$, $76$, and
+$74$ matched leads, while scaling $C_K$ upward to $1.5\times$ and $2.0\times$
+actually increases matched leads to $98$ and $110$. These shifts are material
+but not catastrophic, which is the practical point of the sublinear sensitivity
+law.
+
 \subsection{Experiment E: Flagship Real-Data Masking on KuaiRand}\label{sec:tgt_exp_e}
 
 \paragraph{Dataset and protocol.}
@@ -494,6 +506,44 @@ what we want from a conservative baseline: it damps short fluctuations but does
 not match the raw effort-aware diagnostic. The key point of the benchmark is
 that the effort term exposes a form of control-induced coherence that a generic
 detector may or may not surface depending on its operating assumptions.
+
+The KuaiRand $\lambda$ sweep gives the same calibration message as the particle
+tracker. Bubble detection for $\ScoreE$ rises from $0.463$ at $\lambda=0.5$ to
+$0.575$ at $\lambda=2.0$, $0.692$ at $\lambda=3.0$, and $0.747$ at
+$\lambda=4.0$, while healthy false positives rise from $0.777$ to $1.215$,
+$1.387$, and $1.632$ per user. Together with the particle masking-gap sweep,
+this makes $\lambda \in [2,3]$ the stable operating region and justifies the
+paper default $\lambda = 3$ as a compromise rather than a hand-tuned optimum.
+
+\begin{table}[h]
+\centering
+\caption{Calibration summaries for the dynamic window rule and effort penalty.}
+\label{tab:phase3_calibration}
+\begin{tabular}{@{}llrr@{}}
+\toprule
+Setting & Perturbation / $\lambda$ & Primary metric & Auxiliary metric \\
+\midrule
+ELEC2 dyn. $n_t^*$ & baseline & 29 matched leads & mean window 47.7 \\
+ELEC2 dyn. $n_t^*$ & $\hat\zeta_t \times 0.75$ & 22 matched leads & mean window 57.8 \\
+ELEC2 dyn. $n_t^*$ & $\hat\zeta_t \times 1.5$ & 21 matched leads & mean window 36.7 \\
+ELEC2 dyn. $n_t^*$ & $C_K \times 0.75$ & 25 matched leads & mean window 39.5 \\
+ELEC2 dyn. $n_t^*$ & $C_K \times 1.5$ & 18 matched leads & mean window 62.5 \\
+Bikes dyn. $n_t^*$ & baseline & 85 matched leads & mean window 113.3 \\
+Bikes dyn. $n_t^*$ & $\hat\zeta_t \times 0.75$ & 92 matched leads & mean window 136.1 \\
+Bikes dyn. $n_t^*$ & $\hat\zeta_t \times 1.5$ & 76 matched leads & mean window 86.9 \\
+Bikes dyn. $n_t^*$ & $C_K \times 1.5$ & 98 matched leads & mean window 146.3 \\
+Bikes dyn. $n_t^*$ & $C_K \times 2.0$ & 110 matched leads & mean window 173.4 \\
+Particle ($\alpha=0.3$) & $\lambda = 0.5$ & $\ScoreE = 0.898$ & $M_t = 0.051$ \\
+Particle ($\alpha=0.3$) & $\lambda = 2.0$ & $\ScoreE = 0.768$ & $M_t = 0.181$ \\
+Particle ($\alpha=0.3$) & $\lambda = 3.0$ & $\ScoreE = 0.697$ & $M_t = 0.252$ \\
+Particle ($\alpha=0.3$) & $\lambda = 4.0$ & $\ScoreE = 0.636$ & $M_t = 0.313$ \\
+KuaiRand & $\lambda = 0.5$ & bubble rate 0.463 & healthy FP/u 0.777 \\
+KuaiRand & $\lambda = 2.0$ & bubble rate 0.575 & healthy FP/u 1.215 \\
+KuaiRand & $\lambda = 3.0$ & bubble rate 0.692 & healthy FP/u 1.387 \\
+KuaiRand & $\lambda = 4.0$ & bubble rate 0.747 & healthy FP/u 1.632 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Experiment F: Feedback Masking in the Particle Tracker}\label{sec:particle_tracking_masking}
 
