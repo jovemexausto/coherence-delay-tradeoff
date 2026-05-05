@@ -48,4 +48,6 @@ archive
 .backup
 .ruff_cache
 /data/
+PLAN.md
+docs/
 # Compiled PDFs are committed intentionally — do not ignore *.pdf
