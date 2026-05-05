@@ -22,8 +22,8 @@ def save_tcie_calibration_figure(
     output_path.parent.mkdir(parents=True, exist_ok=True)
     lambdas = sorted({float(row["lambda"]) for row in rows})
     thresholds = sorted({float(row["threshold"]) for row in rows})
-    masking_rate = np.full((len(lambdas), len(thresholds)), np.nan)
     masking_delay = np.full((len(lambdas), len(thresholds)), np.nan)
+    collapse_delay = np.full((len(lambdas), len(thresholds)), np.nan)
     healthy_fp = np.full((len(lambdas), len(thresholds)), np.nan)
 
     lambda_index = {value: index for index, value in enumerate(lambdas)}
@@ -31,18 +31,22 @@ def save_tcie_calibration_figure(
     for row in rows:
         i = lambda_index[float(row["lambda"])]
         j = threshold_index[float(row["threshold"])]
-        masking_rate[i, j] = float(row["masking_rate"])
         masking_delay[i, j] = (
             np.nan
             if row["masking_median_delay"] == "NA"
             else float(row["masking_median_delay"])
         )
+        collapse_delay[i, j] = (
+            np.nan
+            if row["collapse_median_delay"] == "NA"
+            else float(row["collapse_median_delay"])
+        )
         healthy_fp[i, j] = float(row["mean_healthy_false_positives"])
 
     fig, axes = plt.subplots(1, 3, figsize=(14, 4.8), constrained_layout=True)
     panels = [
-        (masking_rate, "Masking rate"),
         (masking_delay, "Masking median delay"),
+        (collapse_delay, "Collapse median delay"),
         (healthy_fp, "Healthy false positives / run"),
     ]
 
@@ -71,7 +75,7 @@ def save_tcie_calibration_figure(
                 )
         fig.colorbar(image, ax=axis, fraction=0.046, pad=0.04)
 
-    axes[0].set_title("Effort-corrected score calibration on the active benchmark")
+    fig.suptitle("Effort-corrected score calibration on the active benchmark")
     fig.savefig(output_path)
     plt.close(fig)
 
@@ -364,7 +368,9 @@ def save_particle_tracking_figure(result: TPTResult, output_path: Path) -> None:
     plt.close(fig)
 
 
-def save_particle_tracking_ablation_figure(results: dict[str, TPTResult], output_path: Path) -> None:
+def save_particle_tracking_ablation_figure(
+    results: dict[str, TPTResult], output_path: Path
+) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     time = np.arange(next(iter(results.values())).config.steps)
     colors = {
@@ -420,130 +426,134 @@ def save_coercive_masking_figure(
     coercive = results["coercive"]
     passive_summary = summarize_result(passive)
     coercive_summary = summarize_result(coercive)
+    fig, axes = plt.subplots(3, 2, figsize=(13, 10), sharex=True)
 
-    fig, axes = plt.subplots(3, 1, figsize=(11, 9), sharex=True)
+    regime_specs = [
+        (
+            "Passive FM-1",
+            passive,
+            passive_summary,
+            "tab:green",
+            "tab:blue",
+            "tab:gray",
+        ),
+        (
+            "Coercive FM-1",
+            coercive,
+            coercive_summary,
+            "tab:purple",
+            "tab:orange",
+            "tab:red",
+        ),
+    ]
 
-    axes[0].plot(
-        time,
-        rolling_mean(np.abs(passive.tracking_error), 20),
-        color="tab:blue",
-        linewidth=1.3,
-        label="Passive FM-1 |error|",
-    )
-    axes[0].plot(
-        time,
-        rolling_mean(np.abs(coercive.tracking_error), 20),
-        color="tab:red",
-        linewidth=1.3,
-        label="Coercive FM-1 |error|",
-    )
-    axes[0].set_ylabel("|tracking error|")
-    axes[0].set_title(
+    for col, (
+        title,
+        result,
+        summary,
+        error_color,
+        effort_color,
+        score_color,
+    ) in enumerate(regime_specs):
+        axes[0, col].plot(
+            time,
+            rolling_mean(np.abs(result.tracking_error), 20),
+            color=error_color,
+            linewidth=1.5,
+        )
+        axes[0, col].set_title(title)
+        axes[0, col].set_ylabel("|tracking error|")
+
+        axes[1, col].plot(
+            time,
+            rolling_mean(result.action_gap, 20),
+            color=error_color,
+            linewidth=1.4,
+            label="action gap",
+        )
+        axes[1, col].plot(
+            time,
+            rolling_mean(result.effort_signal, 20),
+            color=effort_color,
+            linewidth=1.4,
+            linestyle="--",
+            label="effort",
+        )
+        axes[1, col].set_ylabel("Effort")
+        axes[1, col].legend(loc="upper left")
+
+        if title.startswith("Passive"):
+            axes[2, col].plot(
+                time,
+                rolling_mean(result.tci, 20),
+                color=score_color,
+                linewidth=1.4,
+                label="score",
+            )
+            axes[2, col].text(
+                0.02,
+                0.96,
+                (
+                    f"score={summary['mean_tci']:.3f}\n"
+                    f"effort-corrected={summary['mean_tcie']:.3f}\n"
+                    f"effort={summary['mean_effort']:.3f}"
+                ),
+                transform=axes[2, col].transAxes,
+                va="top",
+                ha="left",
+                fontsize=9,
+                bbox={"boxstyle": "round,pad=0.3", "facecolor": "white", "alpha": 0.9},
+            )
+            axes[2, col].text(
+                0.60,
+                0.17,
+                "TCI = TCIE",
+                transform=axes[2, col].transAxes,
+                fontsize=9,
+                color="0.35",
+            )
+        else:
+            axes[2, col].plot(
+                time,
+                rolling_mean(result.tci, 20),
+                color="tab:gray",
+                linewidth=1.2,
+                linestyle="--",
+                label="score",
+            )
+            axes[2, col].plot(
+                time,
+                rolling_mean(result.tcie, 20),
+                color=score_color,
+                linewidth=1.4,
+                label="effort-corrected score",
+            )
+            axes[2, col].text(
+                0.02,
+                0.96,
+                (
+                    f"score={summary['mean_tci']:.3f}\n"
+                    f"effort-corrected={summary['mean_tcie']:.3f}\n"
+                    f"effort={summary['mean_effort']:.3f}"
+                ),
+                transform=axes[2, col].transAxes,
+                va="top",
+                ha="left",
+                fontsize=9,
+                bbox={"boxstyle": "round,pad=0.3", "facecolor": "white", "alpha": 0.9},
+            )
+            axes[2, col].legend(loc="lower left")
+
+        axes[2, col].set_ylabel("Score")
+        axes[2, col].set_xlabel("Time step")
+        axes[2, col].set_ylim(0.0, 1.05)
+
+    fig.suptitle(
         "Coercive masking: score stays high while effort-corrected score pays for effort"
     )
-    axes[0].legend(loc="upper left")
-
-    axes[1].plot(
-        time,
-        rolling_mean(passive.action_gap, 20),
-        color="tab:blue",
-        linewidth=1.3,
-        label="Passive action gap",
-    )
-    axes[1].plot(
-        time,
-        rolling_mean(coercive.action_gap, 20),
-        color="tab:red",
-        linewidth=1.3,
-        label="Coercive action gap",
-    )
-    axes[1].plot(
-        time,
-        rolling_mean(passive.effort_signal, 20),
-        color="tab:cyan",
-        linewidth=1.1,
-        linestyle="--",
-        label="Passive coercive effort",
-    )
-    axes[1].plot(
-        time,
-        rolling_mean(coercive.effort_signal, 20),
-        color="tab:orange",
-        linewidth=1.2,
-        linestyle="--",
-        label="Coercive effort",
-    )
-    axes[1].set_ylabel("Effort")
-    axes[1].legend(loc="upper left", ncol=2)
-
-    axes[2].plot(
-        time,
-        rolling_mean(passive.tci, 20),
-        color="tab:blue",
-        linewidth=1.2,
-        linestyle="--",
-        label="Passive score",
-    )
-    axes[2].plot(
-        time,
-        rolling_mean(coercive.tci, 20),
-        color="tab:red",
-        linewidth=1.2,
-        linestyle="--",
-        label="Coercive score",
-    )
-    axes[2].plot(
-        time,
-        rolling_mean(passive.tcie, 20),
-        color="tab:cyan",
-        linewidth=1.2,
-        label="Passive effort-corrected score",
-    )
-    axes[2].plot(
-        time,
-        rolling_mean(coercive.tcie, 20),
-        color="tab:orange",
-        linewidth=1.4,
-        label="Coercive effort-corrected score",
-    )
-    axes[2].set_ylabel("Score")
-    axes[2].set_xlabel("Time step")
-    axes[2].set_ylim(0.0, 1.05)
-    axes[2].legend(loc="lower left", ncol=2)
-    axes[2].text(
-        0.02,
-        0.98,
-        (
-            "Passive\n"
-            f"score={passive_summary['mean_tci']:.3f}\n"
-            f"effort-corrected={passive_summary['mean_tcie']:.3f}\n"
-            f"effort={passive_summary['mean_effort']:.3f}"
-        ),
-        transform=axes[2].transAxes,
-        va="top",
-        ha="left",
-        fontsize=9,
-        bbox={"boxstyle": "round,pad=0.3", "facecolor": "white", "alpha": 0.9},
-    )
-    axes[2].text(
-        0.98,
-        0.98,
-        (
-            "Coercive\n"
-            f"score={coercive_summary['mean_tci']:.3f}\n"
-            f"effort-corrected={coercive_summary['mean_tcie']:.3f}\n"
-            f"effort={coercive_summary['mean_effort']:.3f}"
-        ),
-        transform=axes[2].transAxes,
-        va="top",
-        ha="right",
-        fontsize=9,
-        bbox={"boxstyle": "round,pad=0.3", "facecolor": "white", "alpha": 0.9},
-    )
-
-    for axis in axes:
+    for axis in axes.flat:
         axis.grid(alpha=0.2, linewidth=0.5)
 
-    fig.tight_layout()
+    fig.tight_layout(rect=(0, 0, 1, 0.96))
     fig.savefig(output_path)
     plt.close(fig)

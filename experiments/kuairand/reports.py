@@ -17,7 +17,7 @@ def build_kuairand_summary_rows(
         "collapse_detection": "collapse_detection",
     }
     for phase in ("masking_detection", "collapse_detection"):
-        for detector in ("TCI", "TCIE", *ACTIVE_BASELINE_DETECTORS):
+        for detector in ("TCI", "TCIE", "TCIE-EWMA", *ACTIVE_BASELINE_DETECTORS):
             detections = 0
             delays: list[float] = []
             for result in results:

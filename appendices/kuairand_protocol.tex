@@ -1,9 +1,10 @@
 \section{KuaiRand Logged Benchmark Protocol}\label{app:kuairand}
 
-This protocol instantiates an ethically motivated logged benchmark on top of
+This protocol instantiates the real-data masking benchmark on top of
 the KuaiRand sequential recommendation logs. The goal is to test whether an
 effort-corrected coherence score can surface exposure concentration and
-filter-bubble-like drift.
+filter-bubble-like drift better than passive detectors and a smoothed-score
+baseline.
 
 \subsection*{Data and signals}
 The primary state signal is \texttt{watch\_ratio}. Auxiliary feedback signals
@@ -41,7 +42,6 @@ The benchmark is executed in three phases.
   healthy baseline, generic detectors begin to fire, and the effort-corrected
   index should lead the baselines.
 \end{enumerate}
-
 \subsection*{Evaluation}
 Evaluation is carried out sequentially within each user session and then
 batched across users with strict temporal splits. Reported metrics are:
@@ -50,7 +50,8 @@ batched across users with strict temporal splits. Reported metrics are:
   \item median detection delay,
   \item false positives in the healthy phase,
   \item sensitivity to $\lambda$ in $\ScoreE$,
-  \item comparison against ADWIN, PageHinkley, KSWIN, and NoDrift.
+  \item comparison against ADWIN, PageHinkley, KSWIN, NoDrift, and a
+    smoothed $\ScoreE$ baseline (EWMA).
 \end{itemize}
 All baseline detectors consume the same effort-adjusted scalar signal,
 $1 - \ScoreE$, so the comparison is not biased by detector-specific

@@ -25,6 +25,7 @@ from ..gaussian.artifacts import (
 )
 from ..kuairand.artifacts import save_kuairand_figure
 from ..kuairand.model import KuaiRandConfig, run_kuairand_active_benchmark
+from ..kuairand.reports import build_kuairand_summary_rows
 from ..particle import (
     ParticleActiveBenchmarkConfig,
     ParticleConfig,
@@ -72,7 +73,8 @@ def main() -> None:
     )
     print(f"Saved {figures_dir / 'particle' / 'fig_particle_demo.pdf'}")
 
-    masking_results = run_particle_coercive_masking_experiment(particle_config)
+    masking_config = ParticleConfig(seed=args.seed, influence=0.3)
+    masking_results = run_particle_coercive_masking_experiment(masking_config)
     save_coercive_masking_figure(
         masking_results, figures_dir / "particle" / "fig_particle_masking.pdf"
     )
@@ -155,7 +157,7 @@ def main() -> None:
             kuairand_result, figures_dir / "kuairand" / "fig_kuairand.pdf"
         )
         export_summary_csv(
-            kuairand_result.summary_rows,
+            build_kuairand_summary_rows(kuairand_result.user_results),
             artifacts_dir / "kuairand" / "kuairand_summary.csv",
         )
 

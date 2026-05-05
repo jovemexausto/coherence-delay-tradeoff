@@ -1,9 +1,10 @@
 \begin{abstract}
-We study the problem of tracking non-stationary environments under finite memory
-constraints. When observations are aggregated over time, estimation variance
-decreases with window size, but delay-induced bias increases as older data
-becomes less representative under drift. We formalize this trade-off and show
-that, in the finite-memory setting considered here, it induces a
+Tracking under drift becomes a finite-memory estimation problem, where window
+size mediates a trade-off between variance and staleness. When observations are
+aggregated over time, estimation variance decreases with window size, but
+delay-induced bias increases as older data becomes less representative under
+drift. We formalize this trade-off and show that, in the finite-memory setting
+considered here, it induces a
 \textbf{cube-root scaling law}: the \textbf{minimum achievable tracking error}
 scales as $\boldsymbol{\zeta^{1/3}}$ with the drift rate $\zeta$, with an
 \textbf{optimal effective memory} that scales as $\boldsymbol{\zeta^{-2/3}}$.

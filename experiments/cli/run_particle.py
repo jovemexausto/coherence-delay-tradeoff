@@ -239,7 +239,15 @@ def main() -> None:
         return
 
     if args.experiment == "masking":
-        masking_results = run_particle_coercive_masking_experiment(config)
+        masking_config = ParticleConfig(
+            steps=args.steps,
+            particles=args.particles,
+            seed=args.seed,
+            drift=args.drift,
+            influence=args.influence if args.influence > 0 else 0.3,
+            condition=args.condition,
+        )
+        masking_results = run_particle_coercive_masking_experiment(masking_config)
         save_coercive_masking_figure(masking_results, args.output)
         rows = build_masking_summary_rows(masking_results)
         csv_path = args.artifacts_dir / "particle_masking_summary.csv"

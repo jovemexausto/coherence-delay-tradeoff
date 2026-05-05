@@ -1,6 +1,6 @@
 \section{Empirical Validation}\label{sec:tgt}
 
-A Gaussian tracker provides a minimal, analytically tractable
+A Gaussian tracker provides an analytically tractable
 closed-loop tracking model that instantiates the three roles
 $(\Pot,\Act,\Conv)$ and admits
 closed-form computation of all Lyapunov functionals.
@@ -31,7 +31,7 @@ The tracker components are:
   \item $\Conv_t$: Kalman measurement update (see \cref{ex:concrete}).
 \end{itemize}
 All three Lyapunov functionals are available in closed form
-(\cref{ex:concrete}), making the tracker the ideal minimal test bed for the
+(\cref{ex:concrete}), making the tracker a convenient test bed for the
 trade-off and diagnostic claims studied here.
 
 \begin{lemma}[The Gaussian Tracker Satisfies the ISS Hypotheses]\label{lem:tgt_iss}
@@ -132,7 +132,7 @@ FM-3 (absent $\Conv$) & 1.972 $\pm$ 3.680 & 0.000 $\pm$ 0.000 & 5.400 $\pm$ 0.00
 }
 \end{table}
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.92\linewidth]{figures/fig_ablation}
 \caption{Component ablation: $V_{\mathrm{total}}$ (log scale, 20-step rolling
@@ -190,7 +190,7 @@ in a passive environment (influence $= 0$) over $T = 6{,}000$ steps and
 
 \paragraph{Results.}
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=\linewidth]{figures/fig_ucurve}
 \caption{Coherence-Delay U-curve validation (\cref{prop:coherence_delay}).
@@ -242,7 +242,7 @@ target $-0.5$); the deviation reflects the onset of lag-bias at the largest
 window and residual autocorrelation induced by the slow-drift regime
 (\cref{tab:sinkhorn,fig:sinkhorn}).
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.70\linewidth]{figures/fig_sinkhorn}
 \caption{Sinkhorn sample complexity in the variance-dominated regime
@@ -294,7 +294,7 @@ inter-event interval (nearest-future matching; see \cref{app:code_repository} fo
 
 \paragraph{Results.}
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=\linewidth]{figures/fig_elec2}
 \caption{ELEC2 early-warning diagnostic.
@@ -349,7 +349,7 @@ using the same warning threshold $0.295$ and one-to-one future matching.
 
 \paragraph{Results.}
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=\linewidth]{figures/fig_dynamic_nstar}
 \caption{Dynamic $n^*_t$ optimization on ELEC2
@@ -398,7 +398,71 @@ The trade-off is structural and expected: the fixed $n = 50$ strategy is the
 most conservative, while the dynamic rule trades some precision for more
 lead-time sensitivity than fixed $n = 100$.
 
-\subsection{Experiment E: Feedback Masking in the Particle Tracker}\label{sec:particle_tracking_masking}
+\subsection{Experiment E: Flagship Real-Data Masking on KuaiRand}\label{sec:tgt_exp_e}
+
+\paragraph{Dataset and protocol.}
+We treat KuaiRand-Pure as the real-data masking benchmark. The
+random-exposure slice is treated as healthy, the first half of the later
+standard-recommendation slice as bubble formation, and the second half as
+collapse. The benchmark is evaluated on 367 users with at least 20
+interactions in each relevant phase. To keep the comparison honest, the score
+and $\ScoreE$ thresholds are calibrated only on healthy random-exposure
+windows, using the 20th percentile of the healthy score distribution. We also
+report an EWMA-smoothed $\ScoreE$ baseline to distinguish genuine masking from
+simple temporal smoothing.
+
+\paragraph{Results.}
+
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=0.95\linewidth]{figures/fig_kuairand_active}
+\caption{KuaiRand logged benchmark.
+  The random-exposure phase is treated as healthy, the first half of the later
+  standard-recommendation slice as bubble formation, and the second half as
+  collapse.
+  Thresholds for $\Score$, $\ScoreE$, and EWMA-smoothed $\ScoreE$ are
+  calibrated only on healthy windows.}
+\label{fig:kuairand_active}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\caption{KuaiRand logged benchmark summary on 367 users.}
+\label{tab:kuairand_active}
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+Phase & Detector & Detections & Rate & Median delay \\
+\midrule
+Bubble onset & $\Score$ & 168/367 & 0.458 & 27.0 \\
+Bubble onset & $\ScoreE$ & 254/367 & 0.692 & 31.8 \\
+Bubble onset & $\ScoreE$-EWMA & 194/367 & 0.529 & 35.5 \\
+Bubble onset & ADWIN & 0/367 & 0.000 & NA \\
+Bubble onset & PageHinkley & 0/367 & 0.000 & NA \\
+Bubble onset & KSWIN & 225/367 & 0.613 & 23.0 \\
+Bubble onset & NoDrift & 0/367 & 0.00 & NA \\
+Collapse onset & $\Score$ & 201/367 & 0.548 & 37.0 \\
+Collapse onset & $\ScoreE$ & 257/367 & 0.700 & 45.0 \\
+Collapse onset & $\ScoreE$-EWMA & 208/367 & 0.567 & 41.8 \\
+Collapse onset & ADWIN & 0/367 & 0.000 & NA \\
+Collapse onset & PageHinkley & 0/367 & 0.000 & NA \\
+Collapse onset & KSWIN & 357/367 & 0.973 & 26.5 \\
+Collapse onset & NoDrift & 0/367 & 0.00 & NA \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The passive detectors behave unevenly once all of them see the same
+effort-adjusted signal. KSWIN is the most sensitive generic baseline here,
+while ADWIN and PageHinkley stay inert under this calibration. The
+effort-corrected score remains more sensitive than the plain score: bubble
+detection rises from 45.8\% to 69.2\%, and collapse detection rises from
+54.8\% to 70.0\%. The EWMA-smoothed baseline sits in between, which is exactly
+what we want from a conservative baseline: it damps short fluctuations but does
+not match the raw effort-aware diagnostic. The key point of the benchmark is
+that the effort term exposes a form of control-induced coherence that a generic
+detector may or may not surface depending on its operating assumptions.
+
+\subsection{Experiment F: Feedback Masking in the Particle Tracker}\label{sec:particle_tracking_masking}
 
 This experiment instantiates \cref{cor:coercive,def:tci_effort} in the
 non-Gaussian, non-linear particle tracker. The environment evolves according to the scalar
@@ -424,16 +488,14 @@ aggregated metrics from the experiment harness.
 
 \paragraph{Results.}
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=\linewidth]{figures/fig_particle_tracking_masking}
 \caption{Synthetic feedback masking in the particle tracker.
-  \emph{Top:} passive FM-1 retains high tracking error, while coercive FM-1
-  suppresses the visible error by pulling the world toward the frozen action.
-  \emph{Middle:} the action gap remains nonzero in both cases, but realized
-  coercive effort appears only when influence is positive. \emph{Bottom:}
-  the standard score stays artificially high in the feedback-masking regime,
-  whereas $\ScoreE$ drops once effort is penalized.}
+  Left column: passive FM-1, where effort remains at zero and $\Score$ and
+  $\ScoreE$ coincide. Right column: coercive FM-1, where the action gap
+  remains nonzero, realized coercive effort appears once influence is positive,
+  and $\ScoreE$ drops once effort is penalized.}
 \label{fig:particle_tracking_masking}
 \end{figure}
 
@@ -462,7 +524,7 @@ rather than adaptation.
 In the passive regime, where no forcing occurs, $\Score$ and $\ScoreE$
 coincide.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=\linewidth]{figures/fig_particle_tracking_masking_grid}
 \caption{Multi-seed parameter sweep for feedback masking in the particle tracker
@@ -496,7 +558,7 @@ $\ScoreE$, ADWIN, PageHinkley, KSWIN, and NoDrift on the raw
 observation stream, giving the generic detectors a fully observable signal
 rather than a model-derived residual.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=\linewidth]{figures/fig_particle_tracking_active_benchmark}
 \caption{Active benchmark in the particle tracker with two known phase changes.
@@ -545,18 +607,19 @@ $\Score$ and $\ScoreE$ detect all of them, with $\ScoreE$ firing earliest.
 This is the regime in which the effort-corrected index provides information that
 a generic passive detector does not encode.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.95\linewidth]{figures/fig_particle_tracking_tcie_calibration}
 \caption{Calibration grid for $\ScoreE$ over effort penalty $\lambda$
-  and threshold. The masking detection rate saturates at 1.0 across most of
-  the grid, so the useful calibration axes are delay and false positives;
-  the paper setting ($\lambda = 3.0$, threshold $0.80$) remains a
-  low-delay compromise.}
+  and threshold. The rate panel is omitted because it saturates across most of
+  the grid; the figure instead reports masking delay, collapse delay, and
+  healthy false positives, which are the informative calibration axes.
+  The paper setting ($\lambda = 3.0$, threshold $0.80$) remains a low-delay
+  compromise.}
 \label{fig:particle_tracking_tcie_calibration}
 \end{figure}
 
-\subsection{Experiment F: Bikes Early-Warning Lead Time}\label{sec:tgt_exp_f}
+\subsection{Experiment G: Bikes Early-Warning Lead Time}\label{sec:tgt_exp_g}
 
 \paragraph{Dataset.}
 The River Bikes stream records a long real-world bike-demand sequence with
@@ -571,7 +634,7 @@ same one-to-one future matching rule.
 
 \paragraph{Results.}
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=\linewidth]{figures/fig_bikes}
 \caption{Bikes early-warning diagnostic.
@@ -605,65 +668,6 @@ detector, while the dynamic window rule improves modestly over fixed $n = 100$
 in precision but not in lead count. This confirms that the passive-stream caveat
 is not ELEC2-specific.
 
-\subsection{Experiment G: KuaiRand Logged Benchmark}\label{sec:tgt_exp_g}
-
-\paragraph{Dataset and protocol.}
-We next test the effort-corrected diagnostic on the KuaiRand-Pure sequential
-recommendation logs. The random-exposure slice is treated as healthy, the
-first half of the later standard-recommendation slice as bubble formation,
-and the second half as collapse. The benchmark is evaluated on 367 users with
-at least 20 interactions in each relevant phase. To keep the comparison
-honest, the score and $\ScoreE$ thresholds are calibrated only on healthy
-random-exposure windows, using the 20th percentile of the healthy score
-distribution.
-
-\paragraph{Results.}
-
-\begin{figure}[h]
-\centering
-\safeincludegraphics[width=0.95\linewidth]{figures/fig_kuairand_active}
-\caption{KuaiRand logged benchmark.
-  The random-exposure phase is treated as healthy, the first half of the later
-  standard-recommendation slice as bubble formation, and the second half as
-  collapse.
-  Thresholds for $\Score$ and $\ScoreE$ are calibrated only on healthy
-  windows.}
-\label{fig:kuairand_active}
-\end{figure}
-
-\begin{table}[h]
-\centering
-\caption{KuaiRand logged benchmark summary on 367 users.}
-\label{tab:kuairand_active}
-\begin{tabular}{@{}llrrr@{}}
-\toprule
-Phase & Detector & Detections & Rate & Median delay \\
-\midrule
-Bubble onset & $\Score$ & 168/367 & 0.458 & 27.0 \\
-Bubble onset & $\ScoreE$ & 254/367 & 0.692 & 36.0 \\
-Bubble onset & ADWIN & 0/367 & 0.000 & NA \\
-Bubble onset & PageHinkley & 0/367 & 0.000 & NA \\
-Bubble onset & KSWIN & 227/367 & 0.619 & 28.0 \\
-Bubble onset & NoDrift & 0/367 & 0.00 & NA \\
-Collapse onset & $\Score$ & 201/367 & 0.548 & 42.0 \\
-Collapse onset & $\ScoreE$ & 257/367 & 0.700 & 50.0 \\
-Collapse onset & ADWIN & 0/367 & 0.000 & NA \\
-Collapse onset & PageHinkley & 0/367 & 0.000 & NA \\
-Collapse onset & KSWIN & 357/367 & 0.973 & 35.0 \\
-Collapse onset & NoDrift & 0/367 & 0.00 & NA \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The passive detectors behave unevenly once all of them see the same
-effort-adjusted signal. KSWIN is the most sensitive generic baseline here,
-while ADWIN and PageHinkley stay inert under this calibration. The
-effort-corrected score is still more sensitive than the plain score: bubble
-detection rises from 45.8\% to 69.2\%, and collapse detection rises from
-54.8\% to 70.0\%. That is the main point of the benchmark: the effort term
-exposes a form of control-induced coherence that a generic detector may or may
-not surface depending on its operating assumptions.
-
 \subsection{Discussion: Limitations of the Empirical Validation}\label{sec:tgt_discussion}
 
 Four limitations bound the scope of these results.
@@ -681,7 +685,7 @@ Fourth, the dynamic $n^*_t$ strategy's precision depends critically on
 $\hat\zeta_t$ estimation quality; a more accurate real-time drift estimator
 would sharpen the precision-recall frontier.
 
-The Gaussian tracker provides the minimal, reproducible, analytically tractable validation
-of the main trade-off and diagnostic claims.
+The Gaussian tracker provides the reproducible, analytically tractable validation
+of the trade-off and diagnostic claims.
 High-dimensional, non-Gaussian, and non-linear extensions constitute
 open directions for future validation (\cref{sec:open}).

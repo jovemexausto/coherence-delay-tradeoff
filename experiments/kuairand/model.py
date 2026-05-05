@@ -24,6 +24,8 @@ class KuaiRandConfig:
     auto_calibrate_thresholds: bool = True
     threshold_quantile: float = 0.20
     tcie_lambda: float = 3.0
+    ewma_alpha: float = 0.15
+    tcie_ewma_threshold: float = 0.80
     adwin_delta: float = 0.03
     page_hinkley_delta: float = 0.005
     page_hinkley_threshold: float = 20.0
@@ -50,6 +52,7 @@ class KuaiRandUserDetectionResult:
     user_id: int
     tci_warnings: list[int]
     tcie_warnings: list[int]
+    tcie_ewma_warnings: list[int]
     raw_warnings: dict[str, list[int]]
     masking_detection: dict[str, dict[str, float | int | None]]
     collapse_detection: dict[str, dict[str, float | int | None]]
@@ -149,6 +152,17 @@ def _entropy(dist: dict[str, float]) -> float:
     if probs.size == 0:
         return 0.0
     return float(-(probs * np.log(probs)).sum())
+
+
+def _ewma(values: np.ndarray, alpha: float) -> np.ndarray:
+    if values.size == 0:
+        return np.empty_like(values, dtype=float)
+    smoothed = np.empty_like(values, dtype=float)
+    ema = float(values[0])
+    for index, value in enumerate(values):
+        ema = alpha * float(value) + (1.0 - alpha) * ema
+        smoothed[index] = ema
+    return smoothed
 
 
 def _window_signals(
@@ -261,6 +275,7 @@ def _prepare_user_signals(
         healthy_effort_scale,
         tag_vocab_size,
     )
+    tcie_ewma = _ewma(tcie, config.ewma_alpha)
 
     signals = pd.DataFrame(
         {
@@ -271,6 +286,7 @@ def _prepare_user_signals(
             "sigma_phi": sigma_phi,
             "tci": tci,
             "tcie": tcie,
+            "tcie_ewma": tcie_ewma,
         }
     )
 
@@ -348,6 +364,14 @@ def run_kuairand_active_benchmark(
                 for user in users
             ]
         )
+        healthy_tcie_ewma = np.concatenate(
+            [
+                cast(
+                    np.ndarray, user.signals["tcie_ewma"].to_numpy()[: user.random_end]
+                )
+                for user in users
+            ]
+        )
         config = KuaiRandConfig(
             data_dir=config.data_dir,
             window_size=config.window_size,
@@ -357,6 +381,10 @@ def run_kuairand_active_benchmark(
             tci_threshold=float(np.nanquantile(healthy_tci, config.threshold_quantile)),
             tcie_threshold=float(
                 np.nanquantile(healthy_tcie, config.threshold_quantile)
+            ),
+            ewma_alpha=config.ewma_alpha,
+            tcie_ewma_threshold=float(
+                np.nanquantile(healthy_tcie_ewma, config.threshold_quantile)
             ),
             auto_calibrate_thresholds=config.auto_calibrate_thresholds,
             threshold_quantile=config.threshold_quantile,
@@ -372,13 +400,15 @@ def run_kuairand_active_benchmark(
     user_results: list[KuaiRandUserDetectionResult] = []
 
     for user in users:
-        tci_warnings = threshold_crossings(
-            user.signals["tci"].to_numpy(), config.tci_threshold
+        tci_signal = cast(np.ndarray, user.signals["tci"].to_numpy())
+        tcie_signal = cast(np.ndarray, user.signals["tcie"].to_numpy())
+        tcie_ewma_signal = cast(np.ndarray, user.signals["tcie_ewma"].to_numpy())
+        tci_warnings = threshold_crossings(tci_signal, config.tci_threshold)
+        tcie_warnings = threshold_crossings(tcie_signal, config.tcie_threshold)
+        tcie_ewma_warnings = threshold_crossings(
+            tcie_ewma_signal, config.tcie_ewma_threshold
         )
-        tcie_warnings = threshold_crossings(
-            user.signals["tcie"].to_numpy(), config.tcie_threshold
-        )
-        baseline_signal = 1.0 - user.signals["tcie"].to_numpy()
+        baseline_signal = cast(np.ndarray, 1.0 - tcie_signal)
         raw_warnings = {
             detector_name: run_river_drift_detector(
                 baseline_signal,
@@ -398,6 +428,7 @@ def run_kuairand_active_benchmark(
                 user_id=user.user_id,
                 tci_warnings=tci_warnings,
                 tcie_warnings=tcie_warnings,
+                tcie_ewma_warnings=tcie_ewma_warnings,
                 raw_warnings=raw_warnings,
                 masking_detection={
                     "TCI": summarize_user_detection(
@@ -405,6 +436,9 @@ def run_kuairand_active_benchmark(
                     ),
                     "TCIE": summarize_user_detection(
                         tcie_warnings, user.random_end, config.window_size * 4
+                    ),
+                    "TCIE-EWMA": summarize_user_detection(
+                        tcie_ewma_warnings, user.random_end, config.window_size * 4
                     ),
                     **{
                         detector_name: summarize_user_detection(
@@ -419,6 +453,9 @@ def run_kuairand_active_benchmark(
                     ),
                     "TCIE": summarize_user_detection(
                         tcie_warnings, user.coercive_end, config.window_size * 4
+                    ),
+                    "TCIE-EWMA": summarize_user_detection(
+                        tcie_ewma_warnings, user.coercive_end, config.window_size * 4
                     ),
                     **{
                         detector_name: summarize_user_detection(

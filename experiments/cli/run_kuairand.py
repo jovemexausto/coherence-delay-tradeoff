@@ -7,6 +7,7 @@ from pathlib import Path
 
 from ..core.common import export_summary_csv
 from ..kuairand.artifacts import save_kuairand_figure
+from ..kuairand.reports import build_kuairand_summary_rows
 from ..kuairand.model import KuaiRandConfig, run_kuairand_active_benchmark
 
 
@@ -49,7 +50,7 @@ def main() -> None:
     figure_path = args.figures_dir / "fig_kuairand.pdf"
     csv_path = args.artifacts_dir / "kuairand_summary.csv"
     save_kuairand_figure(result, figure_path)
-    export_summary_csv(result.summary_rows, csv_path)
+    export_summary_csv(build_kuairand_summary_rows(result.user_results), csv_path)
     print(f"Saved {figure_path}")
     print(f"Saved {csv_path}")
 

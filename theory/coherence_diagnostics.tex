@@ -24,7 +24,7 @@ Define the three \emph{component coherence scores} at time $t$ as:
     \label{eq:sigmaPhi}
 \end{align}
 Each score takes values in $(0,1]$, equals $1$ when the corresponding
-component is ideal, and approaches $0$ as the component degrades.
+component is at its reference state, and approaches $0$ as the component degrades.
 \end{definition}
 
 \begin{definition}[Coherence Score]\label{def:tci}
@@ -347,7 +347,7 @@ The converse holds because $\Score\to 0$ requires at least one
 $\sigma_i\to 0$, which by the above requires the corresponding
 functional to diverge.
 
-(iii) $\Score = \min_i \sigma_i$; the argmin identifies which
-subsystem's functional is largest, i.e., which component is furthest from its
-ideal state.
+ (iii) $\Score = \min_i \sigma_i$; the argmin identifies which
+ subsystem's functional is largest, i.e., which component is furthest from its
+ reference state.
 \end{proof}

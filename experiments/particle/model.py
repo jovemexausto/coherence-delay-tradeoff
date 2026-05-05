@@ -144,15 +144,16 @@ def _systematic_resample(weights: np.ndarray, rng: np.random.Generator) -> np.nd
 
 
 def _observe_state(state: float, config: TPTConfig, rng: np.random.Generator) -> float:
-    return float(
-        _observation_model(state)
-        + student_t.rvs(
+    observation = float(_observation_model(state))
+    noise = float(
+        student_t.rvs(
             df=config.observation_df,
             loc=0.0,
             scale=config.observation_scale,
             random_state=rng,
         )
     )
+    return observation + noise
 
 
 def _propagate_latent_state(
@@ -257,7 +258,7 @@ def run_particle_tracking_experiment(config: TPTConfig | None = None) -> TPTResu
             loc=predicted_observation,
             scale=config.observation_scale,
         )
-        log_evidence[step] = logsumexp(log_likelihood) - np.log(config.particles)
+        log_evidence[step] = float(logsumexp(log_likelihood)) - np.log(config.particles)
 
         if config.condition == "fm3":
             weights = uniform_weights
@@ -267,14 +268,14 @@ def run_particle_tracking_experiment(config: TPTConfig | None = None) -> TPTResu
             entropy_ratio = 0.0
             sigma_phi_value = config.fm3_sigma_phi_floor
         elif config.condition == "fm1":
-            weights = np.exp(log_likelihood - logsumexp(log_likelihood))
+            weights = np.exp(log_likelihood - float(logsumexp(log_likelihood)))
             posterior_mean[step] = frozen_mean
             posterior_std[step] = frozen_std
             ess_ratio = 1.0
             entropy_ratio = 1.0
             sigma_phi_value = config.fm1_sigma_phi_level
         else:
-            weights = np.exp(log_likelihood - logsumexp(log_likelihood))
+            weights = np.exp(log_likelihood - float(logsumexp(log_likelihood)))
             posterior_mean[step] = float(np.sum(weights * candidate_particles))
             centered = candidate_particles - posterior_mean[step]
             posterior_std[step] = float(np.sqrt(np.sum(weights * centered * centered)))
@@ -347,11 +348,15 @@ def run_particle_tracking_experiment(config: TPTConfig | None = None) -> TPTResu
     )
 
 
-def run_particle_tracking_ablation(config: TPTConfig | None = None) -> dict[str, TPTResult]:
+def run_particle_tracking_ablation(
+    config: TPTConfig | None = None,
+) -> dict[str, TPTResult]:
     config = config or TPTConfig()
     results: dict[str, TPTResult] = {}
     for condition in ABLATION_CONDITIONS:
-        results[condition] = run_particle_tracking_experiment(replace(config, condition=condition))
+        results[condition] = run_particle_tracking_experiment(
+            replace(config, condition=condition)
+        )
     return results
 
 
@@ -495,7 +500,7 @@ def run_particle_tracking_active_benchmark(
                 loc=predicted_observation,
                 scale=config.observation_scale,
             )
-            weights = np.exp(log_likelihood - logsumexp(log_likelihood))
+            weights = np.exp(log_likelihood - float(logsumexp(log_likelihood)))
             current_mean = float(np.sum(weights * candidate_particles))
             centered = candidate_particles - current_mean
             current_std = float(np.sqrt(np.sum(weights * centered * centered)))
