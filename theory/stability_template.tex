@@ -29,9 +29,9 @@ construction follows the Wasserstein gradient-flow viewpoint
 \citep{AmbrosioGigliSavare2005,MironchenkoP2020}.
 \end{remark}
 
-\subsection{Main Stability Theorem}
+\subsection{Main Stability Template}
 
-\begin{theorem}[Borromean Cascade Stability]\label{thm:borromean}
+\begin{theorem}[Conditional Borromean Stability Template]\label{thm:borromean}
 Under hypotheses \emph{(H-ISS-P)}, \emph{(H-ISS-A)}, \emph{(H-ISS-$\Phi$)},
 and \emph{(H-ISS-Env)}, the composite system $\IS = (\Pot,\Act,\Conv)$ with
 feedback structure
@@ -41,9 +41,9 @@ feedback structure
   \xrightarrow{\mathrm{feeds\;back}} \Conv_t
 \]
 admits the composite Lyapunov functional
-$V_{\mathrm{total}} \coloneqq V_P + V_A + V_\Phi$, which is non-increasing
-along trajectories for bounded environmental inputs. Removing any one of the
-three roles destroys this guarantee in general.
+$V_{\mathrm{total}} \coloneqq V_P + V_A + V_\Phi$, which is non-increasing in
+expectation along trajectories for bounded environmental inputs. Removing any
+one of the three roles destroys this guarantee in general.
 \end{theorem}
 
 \begin{proof}
@@ -57,6 +57,16 @@ and without $\Act$ the feedback loop to adaptation is broken. In each case the
 monotone decrease of $V_{\mathrm{total}}$ is no longer guaranteed.
 \end{proof}
 
+\begin{remark}[Scope of the stability template]\label{rem:stability_scope}
+\Cref{thm:borromean} is a conditional stability template, not a universal
+theorem about all three-role architectures. Its force is constructive in cases
+where the subsystem Lyapunov functions can be written down and their gains
+checked directly. In this paper that verification is carried out only for the
+Gaussian tracker. For non-linear or black-box systems, the template should be
+read as a checklist of sufficient conditions rather than as an already verified
+property of the architecture itself.
+\end{remark}
+
 \begin{example}[Concrete Gaussian instantiation]\label{ex:concrete}
 Let $\Pot^*(S,t)\sim\mathcal{N}(\mu_t,\Sigma)$ with
 \[
@@ -67,5 +77,6 @@ Let $\Pot(S,t)=\mathcal{N}(\hat\mu_t,\Sigma)$ be the Kalman estimate,
 $\Act_t(\Pot)=\hat\mu_t$, and $\Conv_t$ the Kalman update. Then
 $V_P = W_2(\Pot,\Pot^*)^2 = \norm{\hat\mu_t-\mu_t}^2$, together with the
 standard actuation and innovation terms, yields a concrete instance satisfying
-the ISS template \citep{Jazwinski1970}.
+the ISS template \citep{Jazwinski1970}. This Gaussian case is the paper's
+constructive reference instance for \cref{thm:borromean}.
 \end{example}

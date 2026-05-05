@@ -11,7 +11,9 @@ The current formulation uses $W_2$ and its debiased Sinkhorn approximation to
 measure model drift. Extending the same trade-off cleanly to other geometries,
 such as $f$-divergences or kernel MMD, remains open. Likewise,
 $\ScoreE$ requires an observable proxy for intervention effort, and the
-preferred proxy is domain-dependent.
+preferred proxy is domain-dependent. This is especially relevant in performative
+or feedback-loop settings, where intervention and exposure are partially
+confounded \citep{PerdomoEtAl2020,HardtMendlerDunner2023,TaoriHashimoto2023,KrauthWangJordan2022}.
 
 \paragraph{Benchmark dependence.}
 The passive benchmarks use Page-Hinkley events as the operational reference for
@@ -27,3 +29,10 @@ settings, and the real-data benchmarks show that the diagnostics remain useful
 outside the synthetic environment. High-dimensional state spaces, richer action
 channels, and direct measurements of intervention effort are the next natural
 tests of the framework.
+
+\paragraph{Opaque adaptation maps.}
+For black-box $\Conv_t$, the paper currently provides only the template
+requirement that an ISS-Lyapunov functional $V_\Phi$ exist. The CEGIS-based
+recovery idea mentioned in \cref{rem:cegis} is not implemented or validated in
+this repository, so diagnosing $\sigma_\Phi$ for opaque adaptation subsystems
+remains an open engineering problem.

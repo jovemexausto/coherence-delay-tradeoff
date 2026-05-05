@@ -371,15 +371,14 @@ is the ISS-Lyapunov functional for the convergence subsystem.
 When $\Conv_t$ is a black box, with internal dynamics unknown and ISS
 comparison functions $(\alpha_{1\Phi}, \alpha_{2\Phi}, \alpha_{3\Phi},
 \chi_\Phi)$ unavailable, $V_\Phi$ admits no closed-form derivation.
-In such cases, $V_\Phi$ is estimated empirically via Counterexample-Guided
-Inductive Synthesis (CEGIS): a learner proposes a candidate $\hat{V}_\Phi$
-from observed state trajectories $\{(\Conv_t(p_i, o_i, s_i), p_i)\}_i$;
-a verifier checks the dissipation condition $\Delta\hat{V}_\Phi \leq 0$
-against sampled trajectories using local Lipschitz bounds;
-failed verification returns counterexamples to the learner.
-The resulting $\hat{V}_\Phi$ yields a conservative lower-bound estimate
-$\hat\sigma_\Phi = 1/(1+\hat{V}_\Phi) \leq \sigma_\Phi$,
-usable in $\ScoreHat$ for any opaque convergence subsystem.
+One possible route is Counterexample-Guided Inductive Synthesis (CEGIS), in
+which a learner proposes a candidate $\hat{V}_\Phi$ from observed state
+trajectories and a verifier attempts to falsify its dissipation inequality on
+sampled trajectories. We have not implemented that pipeline in the present
+codebase, so it should be read as future work rather than as a validated part
+of the current diagnostic. For opaque adaptation maps, the present paper should
+therefore be interpreted as providing the template requirement on $V_\Phi$, not
+an operational estimator for every black-box $\Conv_t$.
 \end{remark}
 
 \subsection{Architecture and Behavior Are Not Equivalent}%
