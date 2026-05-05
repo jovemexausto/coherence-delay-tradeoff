@@ -61,6 +61,16 @@ What we will do:
 - treat `\sigma_A` as exact only in deterministic or constructively specified settings, and as a surrogate elsewhere,
 - add explicit proxy-quality criteria.
 
+Current ablation evidence:
+- the particle and KuaiRand `\lambda` sweeps already show the stable operating range,
+- the domain-specific `E0` choices are documented in the paper,
+- exact / identified / proxy semantics are separated in the paper and appendix.
+
+Operational ladder:
+- `exact`: deterministic action channels or constructively specified replicas.
+- `identified`: settings where the action channel is directly logged well enough to estimate the target quantity with a tractable estimator.
+- `proxy`: logged or observational settings where the target is only approximated by an operational surrogate.
+
 ### 6. How honest is the KuaiRand interpretation?
 
 Current answer: it is useful, but off-policy confounding and exposure bias remain real limitations.
@@ -73,6 +83,7 @@ What we will do:
 Current operational stance:
 - KuaiRand is a logged-data surrogate benchmark, not a causal identification study.
 - The reported score is useful because it tracks exposure concentration and masking, not because it equals the unobserved conditional entropy exactly.
+- `\sigma_A` in KuaiRand belongs to the proxy level of the ladder.
 
 ### 7. Are there enough baselines?
 

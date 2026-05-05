@@ -151,6 +151,14 @@ normalized exposure entropy, available only because the benchmark exposes the
 necessary exposure counts. Likewise, $\sigma_\Phi = 1/(1+V_\Phi)$ is exact
 only when the convergence subsystem's Lyapunov functional is available or
 constructively specified.
+
+We therefore treat action observability as a three-level ladder: `exact` when
+the action channel is deterministic or constructively known, `identified` when
+the channel is logged richly enough to estimate the target quantity with a
+direct estimator, and `proxy` when the benchmark only supports an operational
+surrogate. The Gaussian tracker sits at the exact level, the synthetic particle
+benchmark sits at the identified/surrogate boundary, and KuaiRand sits at the
+proxy level.
 \end{definition}
 
 \begin{assumption}[$W_2$-Lipschitz Drift]\label{ass:adrift}
