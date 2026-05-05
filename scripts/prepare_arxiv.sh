@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: CC BY-SA 4.0
 
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
+ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 OUT_DIR="$ROOT_DIR/dist/arxiv"
 BUNDLE_DIR="$OUT_DIR/coherence-delay-tradeoff-arxiv"
 ARCHIVE_PATH="$OUT_DIR/coherence-delay-tradeoff-arxiv.tar.gz"

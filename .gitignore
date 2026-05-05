@@ -45,7 +45,7 @@ Thumbs.db
 # Misc
 archive
 .tcc_work/
-data/kuairand/
 .backup
 .ruff_cache
+/data/
 # Compiled PDFs are committed intentionally — do not ignore *.pdf

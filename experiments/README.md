@@ -24,6 +24,12 @@ uv run python run.py all
 
 KuaiRand expects extracted data under `../data/kuairand/KuaiRand-Pure/data`.
 
+Fetch it from `experiments/` with:
+
+```bash
+../scripts/fetch_kuairand.sh
+```
+
 ## License
 
 Code in this directory is licensed under `Apache-2.0`; see the repository root `LICENSE`.

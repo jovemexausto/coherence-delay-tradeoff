@@ -53,6 +53,12 @@ The experiment suite writes figures to `../figures/` and summary tables to `expe
 - The synthetic Gaussian and particle-tracker experiments run from the repository alone.
 - The KuaiRand benchmark expects extracted data under `data/kuairand/KuaiRand-Pure/data`.
 
+To fetch it:
+
+```bash
+./scripts/fetch_kuairand.sh
+```
+
 ## Citation
 
 Use the metadata in `CITATION.cff` or cite the repository URL listed in `appendices/code_repository.tex`.
