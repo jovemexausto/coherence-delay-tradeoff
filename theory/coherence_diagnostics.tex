@@ -79,21 +79,22 @@ time and then batched across users.
 \begin{remark}[Finite-memory interpretation]
 The scaling law behind \cref{prop:tci_estimation_error} is not an artefact of
 the sliding-window estimator alone. The two terms in the bound,
-$n^{-1/2}$ and $\zeta\tau$, encode a structural bias--variance trade-off that
-any estimator with finite effective memory must confront: the first term
-reflects the statistical limit of estimating a distribution from finitely many
-samples under subgaussian noise, and the second reflects the mismatch induced
-by drift when the estimator necessarily looks at stale information.
+$n^{-1/2}$ and $\zeta\tau$, encode the structural trade-off between variance
+reduction and delay-induced bias that any estimator with finite effective
+memory must confront: the first term reflects the statistical limit of
+estimating a distribution from finitely many samples under subgaussian noise,
+and the second reflects the mismatch induced by drift when the estimator
+necessarily looks at stale information.
 
-Informally, one may interpret this as a minimax lower-bound phenomenon over
-the class of trajectories with bounded drift rate $\zeta$: if two admissible
-trajectories differ only by a perturbation below the resolution induced by
-finite memory, they are indistinguishable at the level of observations, and
-any estimator must incur an error of the same order. The estimator used in
-\cref{prop:tci_estimation_error} achieves the resulting cube-root scaling up
-to constants, so the $\zeta^{1/3}$ law should be read as near-optimal under
-the stated regularity assumptions rather than as a peculiarity of a single
-windowing scheme.
+Informally, one may interpret this as a near-minimax phenomenon over the class
+of trajectories with bounded drift rate $\zeta$: if two admissible trajectories
+ differ only by a perturbation below the resolution induced by finite memory,
+they are indistinguishable at the level of observations, and any estimator must
+incur an error of the same order. The estimator used in
+\cref{prop:tci_estimation_error} achieves the resulting cube-root scaling up to
+constants, so the $\zeta^{1/3}$ law should be read as a robust operational
+regime under the stated regularity assumptions rather than as a peculiarity of
+a single windowing scheme.
 
 More concretely, any estimator with finite effective memory must incur both a
 statistical error term of order $n^{-1/2}$ and a drift-induced bias of order
@@ -272,6 +273,9 @@ $n_t^* = (C_K/\hat\zeta_t)^{2/3}$ to operate at the minimum of the
 error U-curve at every step.
 This turns the coherence-delay law into a practical self-tuning rule for the
 windowed estimator class analyzed here.
+In practice, this implies that improvements in apparent tracking performance
+must be interpreted relative to this baseline, particularly in systems where
+actions influence observations.
 \end{remark}
 
 
