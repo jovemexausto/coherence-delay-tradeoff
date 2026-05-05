@@ -364,7 +364,7 @@ def main() -> None:
     result = run_tpt_experiment(config)
     save_tpt_figure(result, args.output)
     summary = summarize_result(result)
-        print(f"Saved particle-tracker figure to {args.output}")
+    print(f"Saved particle-tracker figure to {args.output}")
     print(
         "Summary: "
         f"tail |error|={summary['mean_abs_error']:.3f}, "
