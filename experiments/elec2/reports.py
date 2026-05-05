@@ -5,7 +5,9 @@ import numpy as np
 from .model import Elec2DetectionResult, Elec2ExperimentResult
 
 
-def summarize_detection(result: Elec2DetectionResult) -> dict[str, float]:
+def summarize_detection(
+    result: Elec2DetectionResult | object,
+) -> dict[str, float]:
     lead_times = np.asarray(result.lead_times, dtype=float)
     return {
         "warnings": float(len(result.warnings)),
@@ -28,6 +30,10 @@ def build_elec2_rows(result: Elec2ExperimentResult) -> list[dict[str, float | st
         ("fixed_300", result.fixed_300),
         ("dynamic", result.dynamic),
         ("adwin", result.adwin),
+        ("cusum", result.cusum),
+        ("rls", result.rls),
+        ("kalman", result.kalman),
+        ("frechet", result.frechet),
     ):
         summary = summarize_detection(detection)
         rows.append(

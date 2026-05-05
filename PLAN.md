@@ -70,10 +70,10 @@ Why this phase exists:
 
 ## Phase 13: Baseline Expansion and Fair Comparisons
 
-- [ ] Implement CUSUM, forgetting-factor RLS, and scalar Kalman baselines on the real-world streams.
-- [ ] Add at least one representation-space OT / Fréchet / MMD-style baseline if it can be implemented faithfully.
-- [ ] Re-evaluate ELEC2 and Bikes under the same matching rules used in the paper.
-- [ ] Re-evaluate active/logged benchmarks with calibration-matched comparisons and record any losses honestly.
+- [x] Implement CUSUM, forgetting-factor RLS, and scalar Kalman baselines on the real-world streams.
+- [x] Add at least one representation-space OT / Fréchet / MMD-style baseline if it can be implemented faithfully.
+- [x] Re-evaluate ELEC2 and Bikes under the same matching rules used in the paper.
+- [x] Re-evaluate active/logged benchmarks with calibration-matched comparisons and record any losses honestly.
 - [ ] Commit Phase 13.
 
 Why this phase exists:

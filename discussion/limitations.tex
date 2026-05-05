@@ -50,8 +50,8 @@ remains an open engineering problem.
 
 \paragraph{Missing adaptive baselines.}
 The current passive comparisons emphasize ADWIN, Page-Hinkley, KSWIN, and the
-NoDrift sanity baseline. Broader adaptive baselines such as CUSUM,
-forgetting-factor recursive least squares, and scalar Kalman predictors on the
-real-world streams remain future work. Their absence does not affect the active
-masking evidence, but it does limit how far the passive benchmark comparisons
-should be generalized.
+NoDrift sanity baseline, and now also include CUSUM, forgetting-factor
+recursive least squares, and scalar Kalman predictors on the real-world
+streams. That does not exhaust the baseline space: additional representation-
+space or multivariate passive detectors remain future work, and the present
+calibration should still be read as benchmark-specific rather than universal.

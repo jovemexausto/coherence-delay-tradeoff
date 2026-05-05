@@ -320,6 +320,11 @@ $\ScoreHat$ is computed from a 1D Gaussian tracker on the normalized target
 stream, with all detector hyperparameters fixed before evaluation. The passive
 benchmark therefore uses no effort proxy and no adaptive threshold retuning on
 future events.
+$\mathrm{CUSUM}$, forgetting-factor RLS, and scalar Kalman baselines are run on
+the same normalized stream, while ADWIN consumes the residual stream used in
+the original benchmark.
+The Fr\'echet baseline compares each current window to the healthy prefix in the
+same scalar representation space.
 $\ScoreHat$ warnings are recorded on each falling-edge crossing of
 $\hat\sigma_P < 0.295$.
 Because ELEC2 exposes no direct actuation or effort channel, this benchmark
@@ -397,20 +402,28 @@ using the same warning threshold $0.295$ and one-to-one future matching.
   grey lines are PH regime shifts.
   \emph{Middle:} dynamic window size $n^*_t$, contracting sharply near
   regime shifts and expanding during stable periods.
-  \emph{Bottom:} lead-time distributions, including the ADWIN baseline.}\label{fig:dynamic_nstar}
+  \emph{Bottom:} lead-time distributions, including ADWIN, CUSUM,
+  forgetting-factor RLS, scalar Kalman, and Fr\'echet baselines.}\label{fig:dynamic_nstar}
 \end{figure}
 
 \begin{table}[ht]
 \centering
-\caption{ELEC2 early-warning comparison: fixed-$n=100$, dynamic $n^*_t$, and ADWIN.
+\caption{ELEC2 early-warning comparison: fixed windows, dynamic $n^*_t$,
+  generic passive baselines, and ADWIN.
   113 PH failures; warning level $= 0.295$; max gap adaptive
   (half the median inter-event interval; 166 steps here).}\label{tab:dynamic}
 \begin{tabular}{@{}lrrrr@{}}
 \toprule
 Strategy & Warnings & Leads & Precision & Median lead \\
 \midrule
+Fixed $n = 50$ & 24 & 11 & 46\% & 91 \\
 Fixed $n = 100$ & 58 & 18 & 31\% & 94 \\
+Fixed $n = 300$ & 83 & 34 & 41\% & 44 \\
 Dynamic $n^*_t$ & 95 & 29 & 31\% & 101 \\
+CUSUM & 793 & 96 & 12\% & 141.5 \\
+FF-RLS & 151 & 45 & 30\% & 55 \\
+Kalman & 96 & 24 & 25\% & 91 \\
+Fr\'echet & 0 & 0 & 0\% & NA \\
 ADWIN ($\delta = 0.03$) & 114 & 54 & 47\% & 84.5 \\
 \bottomrule
 \end{tabular}
@@ -422,11 +435,13 @@ validated fixed-$n=100$ baseline, the dynamic rule increases matched leads from
 18 to 29 and slightly improves median lead time from 94 to 101, but both remain
 well behind ADWIN on raw passive detection.
 
-ADWIN is still a stronger generic passive-stream detector on this benchmark,
-reaching 54 matched leads at 47.4\% precision on the same residual signal.
-This is expected: ADWIN is designed for passive changepoint detection, whereas
-the score targets structural validity under feedback and extends naturally to
-the effort-corrected $\ScoreE$ used in the active masking experiment. The Bikes
+The added passive baselines do not change that ordering. CUSUM is highly
+sensitive but imprecise; FF-RLS and Kalman sit between the fixed-window score
+and ADWIN, while the Fr\'echet baseline is too conservative on ELEC2 to fire at
+this calibration. None overtakes ADWIN on matched leads or precision. This is
+expected: ADWIN is designed for passive changepoint detection, whereas the score
+targets structural validity under feedback and extends naturally to the
+effort-corrected $\ScoreE$ used in the active masking experiment. The Bikes
 benchmark below shows the same passive-stream pattern on a longer real-world
 demand sequence.
 
@@ -736,6 +751,10 @@ same one-to-one future matching rule. The dynamic rule uses the same deployment
 recipe as ELEC2: $C_K$ is calibrated on the initial prefix, $n_t^*$ is clipped
 to a bounded range, and the warning threshold is held fixed rather than tuned
 against future failures.
+CUSUM, forgetting-factor RLS, and scalar Kalman baselines are evaluated on the
+normalized stream with the same thresholding discipline.
+The Fr\'echet baseline compares each current window to the healthy prefix in
+the same representation space.
 
 \paragraph{Results.}
 
@@ -752,8 +771,9 @@ against future failures.
 
 \begin{table}[ht]
 \centering
-\caption{Bikes early-warning comparison: fixed vs. dynamic windows and
-  ADWIN. The same one-to-one future matching rule is used as in ELEC2.}
+\caption{Bikes early-warning comparison: fixed windows, dynamic $n^*_t$,
+  generic passive baselines, and ADWIN. The same one-to-one future matching
+  rule is used as in ELEC2.}
 \label{tab:bikes}
 \begin{tabular}{@{}lrrrrr@{}}
 \toprule
@@ -763,6 +783,10 @@ Fixed $n = 50$  & 572 & 75 & 13\% & 123 & 0 \\
 Fixed $n = 100$ & 989 & 101 & 10\% & 87 & 0 \\
 Fixed $n = 300$ & 3{,}363 & 137 & 4\% & 58 & 0 \\
 Dynamic $n^*_t$ & 717 & 85 & 12\% & 127 & 0 \\
+CUSUM & 5{,}928 & 384 & 6\% & 214 & 11 \\
+FF-RLS & 15{,}687 & 327 & 2\% & 220 & 0 \\
+Kalman & 13{,}985 & 319 & 2\% & 220 & 0 \\
+Fr\'echet & 21 & 4 & 19\% & 154.5 & 65 \\
 ADWIN ($\delta = 0.03$) & 477 & 250 & 52\% & 92 & 0 \\
 \bottomrule
 \end{tabular}
@@ -770,8 +794,9 @@ ADWIN ($\delta = 0.03$) & 477 & 250 & 52\% & 92 & 0 \\
 
 On Bikes, ADWIN again outperforms the score-based diagnostics as a generic passive
 detector, while the dynamic window rule improves modestly over fixed $n = 100$
-in precision but not in lead count. This confirms that the passive-stream caveat
-is not ELEC2-specific.
+in precision but not in lead count. The new CUSUM, FF-RLS, Kalman, and
+Fr\'echet baselines remain weaker than ADWIN under this calibration, which
+confirms that the passive-stream caveat is not ELEC2-specific.
 
 \subsection{Passive and Active Diagnostics Are Complementary}\label{sec:tgt_complementary}
 

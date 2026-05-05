@@ -92,14 +92,20 @@ Current operational stance:
 
 ### 7. Are there enough baselines?
 
-Current answer: not yet.
+Current answer: largely resolved for the current passive benchmark set.
 
 What we will do:
-- add CUSUM,
-- add forgetting-factor RLS,
-- add scalar Kalman predictors,
-- add OT / representation-space baselines (Wasserstein or Fréchet / MMD-style),
-- benchmark them under the same calibration discipline.
+- CUSUM, forgetting-factor RLS, and scalar Kalman baselines are now added on
+  ELEC2 and Bikes under the same matching discipline;
+- benchmark any new baseline under the same calibration discipline.
+
+Current evidence:
+- ADWIN remains the strongest generic passive detector on both ELEC2 and Bikes;
+- CUSUM is sensitive but imprecise;
+- FF-RLS and Kalman sit between the fixed-window score and ADWIN, but do not
+  overturn the passive-stream ordering;
+- the Fr\'echet baseline is useful on Bikes but inactive on ELEC2 at the current
+  calibration.
 
 ### 8. What about Sinkhorn runtime and practical cost?
 
@@ -132,7 +138,6 @@ We will not force a rename if it weakens the paper or obscures the math.
 
 ## Main Gaps That Still Need Work
 
-- additional baselines and fair calibration
 - runtime / latency of the Sinkhorn pipeline
 - stronger controls for KuaiRand / logged data
 

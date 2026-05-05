@@ -7,6 +7,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 from river import datasets
 
+from ..core.baselines import (
+    ScalarDetectionResult,
+    run_frechet_detector,
+    run_cusum_detector,
+    run_forgetting_factor_rls_detector,
+    run_scalar_kalman_detector,
+)
 from ..core.common import match_warnings_to_events, rolling_mean
 from ..core.detectors import run_river_drift_detector
 
@@ -27,6 +34,13 @@ class Elec2Config:
     dynamic_scale: float = 1.25
     dynamic_baseline_window: int = 100
     adwin_delta: float = 0.03
+    baseline_prefix_length: int = 2000
+    baseline_warning_threshold: float = 0.295
+    frechet_window_size: int = 100
+    rls_forgetting_factor: float = 0.995
+    kalman_process_scale: float = 0.02
+    cusum_drift_allowance: float = 0.25
+    cusum_alarm_scale: float = 8.0
 
 
 @dataclass(slots=True)
@@ -50,6 +64,10 @@ class Elec2ExperimentResult:
     fixed_300: Elec2DetectionResult
     dynamic: Elec2DetectionResult
     adwin: Elec2DetectionResult
+    cusum: ScalarDetectionResult
+    rls: ScalarDetectionResult
+    kalman: ScalarDetectionResult
+    frechet: ScalarDetectionResult
     residual_signal: np.ndarray
     dynamic_drift_estimate: np.ndarray
 
@@ -227,6 +245,40 @@ def run_elec2_experiments(config: Elec2Config | None = None) -> Elec2ExperimentR
         kswin_alpha=0.001,
     )
 
+    cusum = run_cusum_detector(
+        values,
+        events,
+        config.max_gap,
+        warning_threshold=config.baseline_warning_threshold,
+        prefix_length=config.baseline_prefix_length,
+        drift_allowance=config.cusum_drift_allowance,
+        alarm_scale=config.cusum_alarm_scale,
+    )
+    rls = run_forgetting_factor_rls_detector(
+        values,
+        events,
+        config.max_gap,
+        warning_threshold=config.baseline_warning_threshold,
+        prefix_length=config.baseline_prefix_length,
+        forgetting_factor=config.rls_forgetting_factor,
+    )
+    kalman = run_scalar_kalman_detector(
+        values,
+        events,
+        config.max_gap,
+        warning_threshold=config.baseline_warning_threshold,
+        prefix_length=config.baseline_prefix_length,
+        process_scale=config.kalman_process_scale,
+    )
+    frechet = run_frechet_detector(
+        values,
+        events,
+        config.max_gap,
+        warning_threshold=config.baseline_warning_threshold,
+        prefix_length=config.baseline_prefix_length,
+        window_size=config.frechet_window_size,
+    )
+
     return Elec2ExperimentResult(
         config=config,
         values=values,
@@ -249,6 +301,10 @@ def run_elec2_experiments(config: Elec2Config | None = None) -> Elec2ExperimentR
             events,
             config,
         ),
+        cusum=cusum,
+        rls=rls,
+        kalman=kalman,
+        frechet=frechet,
         residual_signal=residual_signal,
         dynamic_drift_estimate=zeta_hat,
     )
