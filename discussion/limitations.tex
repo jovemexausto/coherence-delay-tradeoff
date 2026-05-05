@@ -1,0 +1,29 @@
+\section{Limitations and Open Directions}\label{sec:open}
+
+\paragraph{Finite-memory scope.}
+The cube-root law of \cref{prop:coherence_delay} is derived for the
+finite-memory estimator class analyzed here. The experiments cover sliding
+windows and closely related effective-memory schemes, but they do not amount
+to a universal minimax result over all adaptive estimators.
+
+\paragraph{Geometry and observability.}
+The current formulation uses $W_2$ and its debiased Sinkhorn approximation to
+measure model drift. Extending the same trade-off cleanly to other geometries,
+such as $f$-divergences or kernel MMD, remains open. Likewise,
+$\ScoreE$ requires an observable proxy for intervention effort, and the
+best proxy is domain-dependent.
+
+\paragraph{Benchmark dependence.}
+The passive benchmarks use Page-Hinkley events as the operational reference for
+lead time, and different failure definitions would change the resulting alarm
+statistics. On active and logged benchmarks, the usefulness of
+$\ScoreE$ still depends on calibration choices such as the effort penalty
+$\lambda$, the warning threshold, and the local drift estimator
+$\hat\zeta_t$.
+
+\paragraph{Scaling beyond current validation.}
+The Gaussian and particle trackers validate the theory in controlled Gaussian and non-Gaussian
+settings, and the real-data benchmarks show that the diagnostics remain useful
+outside the synthetic environment. High-dimensional state spaces, richer action
+channels, and direct measurements of intervention effort are the next natural
+tests of the framework.

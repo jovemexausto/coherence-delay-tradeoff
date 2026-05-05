@@ -1,0 +1,40 @@
+\newcommand{\Pot}{\mathcal{P}}
+\newcommand{\Act}{\mathcal{A}}
+\newcommand{\Conv}{\Phi}
+\newcommand{\Meta}{\Pi}
+\newcommand{\Info}{\mathcal{I}}
+\newcommand{\Score}{\mathcal{C}}
+\newcommand{\ScoreE}{\mathcal{C}^{E}}
+\newcommand{\ScoreHat}{\widehat{\mathcal{C}}}
+\newcommand{\Sys}{\mathcal{S}}
+\newcommand{\Env}{\mathcal{X}}
+\newcommand{\Events}{\mathcal{E}}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\KL}{D_{\mathrm{KL}}}
+\newcommand{\TV}{\mathrm{TV}}
+\newcommand{\IS}{I (S,t)}
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\epigraph}[2]{%
+  \begin{flushright}
+  \begin{minipage}{0.72\textwidth}
+  \small\itshape #1\\[2pt]
+  \upshape\small --- #2
+  \end{minipage}
+  \end{flushright}
+  \medskip
+}
+\DeclareMathOperator{\ev}{ev}
+
+\newcommand{\safeincludegraphics}[2][]{%
+  \IfFileExists{#2.png}{\includegraphics[#1]{#2.png}}{%
+    \IfFileExists{#2.pdf}{\includegraphics[#1]{#2.pdf}}{%
+      \fbox{%
+        \begin{minipage}[c][0.22\textheight][c]{0.88\linewidth}
+          \centering
+          \textbf{Missing figure artifact}\\[4pt]
+          \texttt{\detokenize{#2}}
+        \end{minipage}%
+      }%
+    }%
+  }%
+}

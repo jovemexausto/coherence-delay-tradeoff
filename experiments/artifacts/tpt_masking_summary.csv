@@ -1,0 +1,3 @@
+regime,condition,influence,tail_abs_error,tail_action_gap,tail_effort,tail_sigma_p,tail_sigma_p_eff,tail_sigma_a,tail_sigma_phi,tail_tci,tail_tcie
+passive,fm1,0.0,0.8,0.8,0.0,0.749,0.749,1.0,1.0,0.749,0.749
+coercive,fm1,0.3,0.285,0.408,0.122,0.947,0.685,1.0,1.0,0.947,0.685

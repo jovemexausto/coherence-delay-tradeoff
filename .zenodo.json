@@ -1,0 +1,22 @@
+{
+  "title": "Coherence-Delay Trade-off",
+  "description": "LaTeX source and experiment code for the preprint 'The Coherence-Delay Trade-off in Tracking Under Drift: A Cube-Root Law for Finite-Memory Estimation'.",
+  "upload_type": "publication",
+  "publication_type": "preprint",
+  "creators": [
+    {
+      "name": "Parreira, Vinicius",
+      "affiliation": "Independent Researcher"
+    }
+  ],
+  "keywords": [
+    "tracking under drift",
+    "finite-memory estimation",
+    "concept drift",
+    "coherence score",
+    "coercive masking"
+  ],
+  "access_right": "open",
+  "language": "eng",
+  "version": "0.1.0"
+}

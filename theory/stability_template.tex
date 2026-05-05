@@ -1,0 +1,71 @@
+\section{A Minimal Stability Template for Closed-Loop Tracking}\label{sec:sufficiency}
+
+The necessity argument in \cref{sec:necessity} identifies the three inputs a
+closed-loop update must use. To turn that decomposition into a usable
+diagnostic, we need a stability template under which each component admits a
+coherence score. We use an ISS-based cascade model for that purpose.
+
+\subsection{Hypotheses}
+
+The following assumptions are explicit and application-dependent.
+
+\begin{itemize}
+\item[\textbf{(H-ISS-P)}] The representation subsystem admits an ISS-Lyapunov
+  function $V_P\colon\Info\to\reals_{\geq 0}$.
+\item[\textbf{(H-ISS-A)}] The actuation subsystem admits an ISS-Lyapunov
+  function $V_A$.
+\item[\textbf{(H-ISS-$\Phi$)}] The adaptation subsystem admits an ISS-Lyapunov
+  function $V_\Phi$.
+\item[\textbf{(H-ISS-Env)}] The environmental drift input is essentially
+  bounded and evolves slowly enough for $\Conv_t$ to remain contractive on the
+  induced state trajectory.
+\end{itemize}
+
+\begin{remark}[Measure-valued state spaces]\label{rem:jko}
+When $\Pot(S,t)$ is measure-valued, the natural potential function is
+$V_P = \tfrac{1}{2}W_2(\Pot(S,t),\Pot^*(S,t))^2$. In Gaussian instances this
+reduces to an ordinary quadratic tracking error; in more general settings the
+construction follows the Wasserstein gradient-flow viewpoint
+\citep{AmbrosioGigliSavare2005,MironchenkoP2020}.
+\end{remark}
+
+\subsection{Main Stability Theorem}
+
+\begin{theorem}[Borromean Cascade Stability]\label{thm:borromean}
+Under hypotheses \emph{(H-ISS-P)}, \emph{(H-ISS-A)}, \emph{(H-ISS-$\Phi$)},
+and \emph{(H-ISS-Env)}, the composite system $\IS = (\Pot,\Act,\Conv)$ with
+feedback structure
+\[
+  \Conv_t \xrightarrow{\mathrm{updates}} \Pot(S,t)
+  \xrightarrow{\mathrm{drives}} \Act_t
+  \xrightarrow{\mathrm{feeds\;back}} \Conv_t
+\]
+admits the composite Lyapunov functional
+$V_{\mathrm{total}} \coloneqq V_P + V_A + V_\Phi$, which is non-increasing
+along trajectories for bounded environmental inputs. Removing any one of the
+three roles destroys this guarantee in general.
+\end{theorem}
+
+\begin{proof}
+The cascade $(\Conv \to \Pot \to \Act)$ is ISS by repeated application of
+standard cascade arguments \citep{sontag1989,sontag1995,dashkovskiy2010}. The
+subsystem Lyapunov functions combine into a composite functional whose cross
+terms are absorbed by the ISS gains. If any one of the three roles is removed,
+at least one of the required input channels disappears: without $\Conv$ the
+state is not corrected, without $\Pot$ the action has no bounded state input,
+and without $\Act$ the feedback loop to adaptation is broken. In each case the
+monotone decrease of $V_{\mathrm{total}}$ is no longer guaranteed.
+\end{proof}
+
+\begin{example}[Concrete Gaussian instantiation]\label{ex:concrete}
+Let $\Pot^*(S,t)\sim\mathcal{N}(\mu_t,\Sigma)$ with
+\[
+  \mu_t = \mu_0 + \int_0^t \eta(s)\,ds,
+  \qquad \norm{\eta}_\infty < M.
+\]
+Let $\Pot(S,t)=\mathcal{N}(\hat\mu_t,\Sigma)$ be the Kalman estimate,
+$\Act_t(\Pot)=\hat\mu_t$, and $\Conv_t$ the Kalman update. Then
+$V_P = W_2(\Pot,\Pot^*)^2 = \norm{\hat\mu_t-\mu_t}^2$, together with the
+standard actuation and innovation terms, yields a concrete instance satisfying
+the ISS template \citep{Jazwinski1970}.
+\end{example}

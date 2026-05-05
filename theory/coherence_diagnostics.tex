@@ -1,0 +1,347 @@
+\section{Coherence Diagnostics}\label{sec:tci}
+
+The coherence-delay law constrains the representation term of any finite-memory
+tracking system, but closed-loop performance also depends on whether actions
+remain reproducible and whether adaptation remains effective. The ISS template
+of \cref{sec:sufficiency} provides one way to score those three ingredients.
+This section packages them into a diagnostic built from the
+minimal decomposition $(\Pot,\Act,\Conv)$ used throughout the paper.
+
+\begin{definition}[Component Coherence Scores]\label{def:component_scores}
+Let $\IS = (\Pot,\Act,\Conv)$ be an information system with ISS-Lyapunov
+functionals $V_P$, $V_A$, $V_\Phi$ as in \cref{sec:sufficiency}.
+Define the three \emph{component coherence scores} at time $t$ as:
+\begin{align}
+  \sigma_P(t)
+    &\coloneqq \frac{1}{1 + V_P(t)}
+     = \frac{1}{1 + \tfrac{1}{2}W_2\!\left(\Pot(S,t),\,\Pot^*(S,t)\right)^2},
+    \label{eq:sigmaP}\\[4pt]
+  \sigma_A(t)
+    &\coloneqq \exp\!\left(-H\!\left(\Act_t\mid\Pot(S,t)\right)\right),
+    \label{eq:sigmaA}\\[4pt]
+  \sigma_\Phi(t)
+    &\coloneqq \frac{1}{1 + V_\Phi(t)}.
+    \label{eq:sigmaPhi}
+\end{align}
+Each score takes values in $(0,1]$, equals $1$ when the corresponding
+component is ideal, and approaches $0$ as the component degrades.
+\end{definition}
+
+\begin{definition}[Coherence Score]\label{def:tci}
+The \emph{coherence score} of a system $\IS$ at time $t$ is
+\[
+  \Score(\IS, t)
+  \;\coloneqq\;
+  \min\!\left(\sigma_P(t),\;\sigma_A(t),\;\sigma_\Phi(t)\right)
+  \;\in\;(0,1].
+\]
+\end{definition}
+
+The $\min$ aggregation is the correct choice given the Borromean property
+(\cref{thm:borromean}): system coherence is bounded by the weakest
+component, and no strength in two components compensates for failure in
+the third.
+An arithmetic mean would obscure localized failures; the $\min$ preserves
+the diagnostic identity of the bottleneck.
+
+\begin{remark}[Bottleneck sensitivity and effort correction]
+The use of $\min(\sigma_P, \sigma_A, \sigma_\Phi)$ is
+bottleneck-sensitive: it is a diagnostic of the weakest active subsystem,
+not a smooth summary of overall system quality. Aggregators such as
+arithmetic or geometric means may be reported as descriptive summaries, but
+they are not valid replacements for the structural diagnostic given by
+\cref{def:tci}.
+
+In action-effective environments, however, high actuation capacity can keep
+$\sigma_P$ artificially high by forcing the world toward a stale model.
+When such coercive masking is possible, a conservative extension is the
+\emph{effort-corrected score}
+\[
+  \ScoreE(\IS,t)
+  \;\coloneqq\;
+  \min\!\left(
+    \sigma_P(t)e^{-\lambda E_t/E_0},\;\sigma_A(t),\;\sigma_\Phi(t)
+  \right),
+\]
+where $E_t$ is any monotone proxy for corrective actuation burden,
+$E_0 > 0$ is a reference scale, and $\lambda > 0$ controls sensitivity.
+In the synthetic particle tracker, $E_t$ is the realized coercive effort
+$\alpha |a_t - s_t^{\mathrm{free}}|$; in deployed systems, action increments,
+energy expenditure, or control-surface usage can play the same role.
+For logged recommendation benchmarks, the preferred instantiation is the
+per-user KL divergence between the current exposure-tag distribution and the
+healthy random-exposure baseline distribution, aggregated sequentially over
+time and then batched across users.
+\end{remark}
+
+\begin{remark}[Finite-memory interpretation]
+The scaling law behind \cref{prop:tci_estimation_error} is not an artefact of
+the sliding-window estimator alone. The two terms in the bound,
+$n^{-1/2}$ and $\zeta\tau$, encode a structural bias--variance trade-off that
+any estimator with finite effective memory must confront: the first term
+reflects the statistical limit of estimating a distribution from finitely many
+samples under subgaussian noise, and the second reflects the mismatch induced
+by drift when the estimator necessarily looks at stale information.
+
+Informally, one may interpret this as a minimax lower-bound phenomenon over
+the class of trajectories with bounded drift rate $\zeta$: if two admissible
+trajectories differ only by a perturbation below the resolution induced by
+finite memory, they are indistinguishable at the level of observations, and
+any estimator must incur an error of the same order. The estimator used in
+\cref{prop:tci_estimation_error} achieves the resulting cube-root scaling up
+to constants, so the $\zeta^{1/3}$ law should be read as near-optimal under
+the stated regularity assumptions rather than as a peculiarity of a single
+windowing scheme.
+
+More concretely, any estimator with finite effective memory must incur both a
+statistical error term of order $n^{-1/2}$ and a drift-induced bias of order
+$\zeta n$, so no choice of estimator can simultaneously eliminate both
+contributions. This argument applies to estimators with finite effective
+memory, including sliding-window and exponentially weighted schemes.
+
+Optimizing the balance between these unavoidable contributions yields the
+cube-root scaling. Any improvement beyond this regime must therefore come from
+stronger assumptions on the drift or on the model class, not merely from a
+different finite-memory estimator.
+\end{remark}
+
+\subsection{Estimable Score}
+
+\Cref{def:component_scores} requires $\Pot^*(S,t)$, the true oracle
+distribution of the environment, to compute $\sigma_P(t)$.
+In any deployed system, $\Pot^*$ is unobservable by construction: a system
+with complete knowledge of $\Pot^*$ would have nothing to estimate.
+We therefore introduce an estimable version of $\sigma_P$ using an
+empirical approximation of $\Pot^*$.
+
+\begin{definition}[Empirical Potentiality Estimator]\label{def:potestimator}
+Let $\{s_{t-n+1}, \ldots, s_t\}$ be the $n$ most recent environmental
+signals observed by the system.
+The \emph{empirical potentiality estimator} is the empirical measure:
+\[
+  \hat{\Pot}^*(S,t) \;\coloneqq\; \frac{1}{n} \sum_{k=t-n+1}^{t} \delta_{s_k},
+\]
+where $\delta_{s_k}$ is the Dirac measure at observation $s_k$.
+\end{definition}
+
+\begin{definition}[Estimable Score]\label{def:tci_estimable}
+The \emph{debiased Sinkhorn divergence} between measures $\mu$, $\nu$ is
+\[
+  S_\varepsilon(\mu,\nu)
+  \;\coloneqq\;
+  T_\varepsilon(\mu,\nu)
+  - \tfrac{1}{2}T_\varepsilon(\mu,\mu)
+  - \tfrac{1}{2}T_\varepsilon(\nu,\nu),
+\]
+where $T_\varepsilon$ is the raw entropically regularized optimal transport cost.
+Unlike $T_\varepsilon$, the debiased divergence satisfies $S_\varepsilon(\mu,\mu) = 0$,
+restoring the metric property and enabling the dimension-independent
+convergence rate of \cref{prop:tci_estimation_error}.
+
+The \emph{estimable component $\hat\sigma_P$} replaces $\Pot^*$ with
+$\hat\Pot^*$ in \cref{eq:sigmaP} using $S_\varepsilon$:
+\[
+  \hat\sigma_P(t) \;\coloneqq\;
+  \frac{1}{1 + \tfrac{1}{2}
+    S_\varepsilon\!\left(\Pot(S,t),\,\hat{\Pot}^*(S,t)\right)^2}.
+\]
+The \emph{estimable score} is
+\[
+  \ScoreHat(\IS,t) \;\coloneqq\;
+  \min\!\left(\hat\sigma_P(t),\;\sigma_A(t),\;\sigma_\Phi(t)\right).
+\]
+Note that $\sigma_A$ and $\sigma_\Phi$ remain exactly computable without
+oracle access: $\sigma_A = e^{-H(\Act_t | \Pot)}$ is estimated from replica
+divergence logs, and $\sigma_\Phi = 1/(1+V_\Phi)$ from the convergence
+subsystem's Lyapunov functional.
+\end{definition}
+
+\begin{proposition}[Estimation Error Bound for $\hat\sigma_P$]%
+\label{prop:tci_estimation_error}
+Let $\Pot^*(S,t)$ be $K$-subgaussian with drift rate
+$\zeta = \mathrm{ess\,sup}_s \|\dot\Pot^*(s)\|_{W_2}$.
+Let $\hat\Pot^*$ be the sliding-window empirical estimator with window
+$n$ (\cref{def:potestimator}), and let $\tau$ be the lag between the
+center of the window and $t$.
+Then under the entropic regularization of \cref{rem:sinkhorn}:
+\[
+  \bigl|\sigma_P(t) - \hat\sigma_P(t)\bigr|
+  \;\leq\;
+  \frac{C_K \cdot \bigl(n^{-1/2} + \zeta\tau\bigr)}
+       {\bigl(1 + V_P(t)\bigr)^2},
+\]
+where $C_K$ depends only on the subgaussian constant $K$.
+\end{proposition}
+
+\begin{proof}
+By the triangle inequality for $S_\varepsilon$:
+\[
+  \bigl|S_\varepsilon(\Pot,\Pot^*) - S_\varepsilon(\Pot,\hat\Pot^*)\bigr|
+  \leq S_\varepsilon(\Pot^*, \hat\Pot^*).
+\]
+Under $K$-subgaussian $\Pot^*$, Theorem~3 of \citet{GenevayEtAl2019}
+establishes that the debiased Sinkhorn divergence achieves a
+dimension-independent parametric rate:
+$\mathbb{E}[S_\varepsilon(\Pot^*, \hat\Pot^*)] \leq C_{K,\varepsilon}\, n^{-1/2}$,
+where $C_{K,\varepsilon}$ depends on the subgaussian norm $K$ and the
+regularization parameter $\varepsilon$.
+(Theorem~2 of the same paper, which proves that the Sinkhorn potentials
+lie in a Sobolev ball independent of the measures, is the enabling lemma
+for this rate.)
+The result holds when $\Pot^*$ is supported on bounded subsets of
+$\mathbb{R}^d$ with $C^1$ cost; for unbounded subgaussian measures, see
+\citet{MenaWeed2019} for an improvement.
+This rate is specific to the debiased $S_\varepsilon$; the raw cost
+$T_\varepsilon$ retains an entropy bias $T_\varepsilon(\mu,\mu) > 0$ that
+prevents the dimension-independent convergence from holding.
+An additional drift error of $\zeta\tau$ arises because $\hat\Pot^*$
+is centered $\tau$ steps in the past.
+The bound on $|\sigma_P - \hat\sigma_P|$ follows from the Lipschitz
+continuity of $x \mapsto 1/(1+\tfrac{1}{2}x^2)$ with derivative
+$\leq 1/(1+V_P)^2$.
+\end{proof}
+
+\cref{prop:tci_estimation_error} grounds $\ScoreHat$: the
+estimation error decreases as the window
+$n$ grows and increases proportionally to drift rate $\zeta$.
+The required window size for target error $\eta$ is $n = O(C_{K,\varepsilon}^2 / \eta^2)$,
+independent of dimension.
+
+
+
+
+
+This characterization also yields the tracking limit used throughout the paper.
+When window lag is accounted for explicitly ($\tau = n/2$ for a centred window),
+the total estimation error decomposes as a sum of two opposing terms.
+Minimising over $n$ yields a lower bound on achievable estimation
+accuracy for estimators with finite effective memory, including sliding-window
+and exponentially weighted schemes.
+
+\begin{definition}[Lag-Inclusive Estimation Error]\label{def:lag_error}
+For a sliding window of size $n$ centred at lag $\tau = n/2$, the
+total expected estimation error is:
+\[
+  \mathcal{E}(n) \;=\; C_K\, n^{-1/2} \;+\; \tfrac{1}{2}\,\zeta\, n,
+\]
+where the first term is the \emph{variance} (decreasing in $n$) and the
+second is the \emph{lag-bias} (increasing in $n$).
+\end{definition}
+
+\begin{proposition}[Optimal Window Under Drift]%
+\label{prop:coherence_delay}
+Under \cref{def:lag_error}, the estimation error $\mathcal{E}(n)$ is
+minimised at the \emph{optimal window}
+\[
+  n^* \;=\; \left(\frac{C_K}{\zeta}\right)^{2/3},
+\]
+yielding the \emph{minimum achievable tracking error}
+\[
+  \mathcal{E}_{\min} \;=\; \tfrac{3}{2}\,C_K^{2/3}\,\zeta^{1/3}.
+\]
+\end{proposition}
+
+\begin{proof}
+Setting $d\mathcal{E}/dn = 0$:
+$-\tfrac{1}{2}C_K n^{-3/2} + \tfrac{1}{2}\zeta = 0$,
+giving $n^* = (C_K/\zeta)^{2/3}$.
+Substituting back:
+$\mathcal{E}(n^*) = C_K(C_K/\zeta)^{-1/3} + \tfrac{1}{2}\zeta(C_K/\zeta)^{2/3}
+= C_K^{2/3}\zeta^{1/3} + \tfrac{1}{2}C_K^{2/3}\zeta^{1/3}
+= \tfrac{3}{2}C_K^{2/3}\zeta^{1/3}$.
+\end{proof}
+
+\begin{remark}[Interpretation: a finite-memory floor]\label{rem:cdfloor}
+\Cref{prop:coherence_delay} establishes that perfect coherence
+($V_P = 0$) is \emph{impossible} under continuous drift for estimators with
+finite effective memory in the sliding-window rate class analyzed here.
+Every drift-coherent system must carry a residual tracking error at least
+$\mathcal{E}_{\min} \propto \zeta^{1/3}$.
+This can be read as a finite-memory limitation: the two sources of error
+(variance and lag) trade against each other with no joint optimum of zero.
+The cube-root scaling has a concrete engineering consequence: a
+fifty-fold increase in drift rate $\zeta$ raises the minimum error floor
+by only $50^{1/3} \approx 3.7\times$, while simultaneously forcing the
+optimal window $n^*$ to contract by $50^{2/3} \approx 14\times$.
+The optimal window $n^* = (C_K/\zeta)^{2/3}$ provides a
+\emph{self-tuning rule}: given a real-time estimate $\hat\zeta_t$ of the
+local drift rate, the system should maintain window size
+$n_t^* = (C_K/\hat\zeta_t)^{2/3}$ to operate at the minimum of the
+error U-curve at every step.
+This turns the coherence-delay law into a practical self-tuning rule for the
+windowed estimator class analyzed here.
+\end{remark}
+
+
+
+\begin{remark}[Practical estimation of $V_\Phi$ for black-box $\Conv_t$]%
+\label{rem:cegis}
+The estimable score requires $\sigma_\Phi = 1/(1+V_\Phi)$, where $V_\Phi$
+is the ISS-Lyapunov functional for the convergence subsystem.
+When $\Conv_t$ is a black box, with internal dynamics unknown and ISS
+comparison functions $(\alpha_{1\Phi}, \alpha_{2\Phi}, \alpha_{3\Phi},
+\chi_\Phi)$ unavailable, $V_\Phi$ admits no closed-form derivation.
+In such cases, $V_\Phi$ is estimated empirically via Counterexample-Guided
+Inductive Synthesis (CEGIS): a learner proposes a candidate $\hat{V}_\Phi$
+from observed state trajectories $\{(\Conv_t(p_i, o_i, s_i), p_i)\}_i$;
+a verifier checks the dissipation condition $\Delta\hat{V}_\Phi \leq 0$
+against sampled trajectories using local Lipschitz bounds;
+failed verification returns counterexamples to the learner.
+The resulting $\hat{V}_\Phi$ yields a conservative lower-bound estimate
+$\hat\sigma_\Phi = 1/(1+\hat{V}_\Phi) \leq \sigma_\Phi$,
+usable in $\ScoreHat$ for any opaque convergence subsystem.
+\end{remark}
+
+\subsection{Architecture and Behavior Are Not Equivalent}%
+\label{sec:asymmetry}
+
+A structural asymmetry in the framework deserves explicit statement.
+
+\textbf{Drift-coherence implies the need for all three roles.}
+By \cref{lem:beliefupdate} and \cref{thm:irreducibility}, any
+drift-coherent, action-effective system must implement the three
+functional roles $(\Pot, \Act, \Conv)$.
+Drift-coherence is the stronger behavioral condition; the decomposition is its
+architectural consequence in action-effective settings.
+
+\textbf{Implementing the decomposition is not enough.}
+A system may implement $(\Pot, \Act, \Conv)$ structurally while failing
+to satisfy the ISS hypotheses (H-ISS-P/A/$\Phi$/Env) required for
+\cref{thm:borromean}. The components may be present but improperly tuned,
+have inadequate bandwidth, or lack sufficient expressiveness.
+
+\begin{proposition}[The Score Characterizes Component-Level Failure]\label{prop:tci_characterization}
+Let $\IS$ be a three-role system under hypotheses
+(H-ISS-P/A/$\Phi$/Env). Then:
+\begin{enumerate}[label=\textnormal{(\roman*)}]
+  \item $\Score(\IS,t) = 1$ if and only if $V_P(t)=0$,
+    $H(\Act_t\mid\Pot)=0$, and $V_\Phi(t)=0$ simultaneously.
+  \item $\Score(\IS,t)\to 0$ if and only if at least one of the
+    three failure modes is active:
+    $V_P(t)\to\infty$ \emph{(FM-1)},
+    $H(\Act_t\mid\Pot)\to\infty$ \emph{(FM-2)}, or
+    $V_\Phi(t)\to\infty$ \emph{(FM-3)}.
+  \item The identity of $\arg\min(\sigma_P, \sigma_A, \sigma_\Phi)$
+    names the bottleneck component.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i) Each score is a strictly decreasing function of its Lyapunov functional or
+conditional entropy: $\sigma_P=1\Leftrightarrow V_P=0$,
+$\sigma_A=1\Leftrightarrow H(\Act_t\mid\Pot)=0$,
+$\sigma_\Phi=1\Leftrightarrow V_\Phi=0$.
+The min equals~$1$ iff all three equal~$1$ simultaneously.
+
+(ii) As $V_P(t)\to\infty$, $\sigma_P(t)\to 0$, so $\Score\to 0$;
+similarly for $V_\Phi(t)\to\infty$.
+As $H(\Act_t\mid\Pot)\to\infty$, $\sigma_A(t)=e^{-H}\to 0$, so
+$\Score\to 0$.
+The converse holds because $\Score\to 0$ requires at least one
+$\sigma_i\to 0$, which by the above requires the corresponding
+functional to diverge.
+
+(iii) $\Score = \min_i \sigma_i$; the argmin identifies which
+subsystem's functional is largest, i.e., which component is furthest from its
+ideal state.
+\end{proof}

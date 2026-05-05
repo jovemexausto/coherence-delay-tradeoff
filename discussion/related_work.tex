@@ -1,0 +1,50 @@
+\section{Related Work}\label{sec:related}
+
+\paragraph{Tracking under non-stationarity.}
+The closest technical neighborhood is concept drift and streaming adaptation
+\citep{GamaSurvey2014}. Classical detectors such as ADWIN, DDM, and
+Page-Hinkley identify changepoints or sustained mean shifts in a monitored
+signal \citep{BifetGavalda2007,Gama2004,Harries1999}. On passive streams they are baseline changepoint
+detectors, whereas the coherence score is intended as a structural diagnostic tied
+to model fidelity and update quality rather than as a universal replacement for
+generic drift alarms.
+
+\paragraph{Transport-based diagnostics.}
+WATCH uses Wasserstein geometry to detect distribution shift in feature space
+\citep{faber2022watch}. Our work is adjacent but different in emphasis. We use
+$W_2$ and its debiased Sinkhorn surrogate inside a finite-memory tracking model
+to derive a lag--variance trade-off and a coherence score for model
+coherence.
+
+\paragraph{Filtering and closed-loop control.}
+The representation--action--adaptation decomposition is motivated by standard
+state-estimation and control logic, not by a claim that every adaptive system
+must be triadic. ISS theory supplies the stability template
+\citep{sontag1989,dashkovskiy2010,MironchenkoP2020}, while classical filtering
+provides the concrete Gaussian realization used here
+\citep{Jazwinski1970}. Once actions affect
+future observations, state update must solve a credit-assignment problem rather
+than a passive filtering problem.
+
+\paragraph{Belief update semantics.}
+The distinction between revision and update in dynamic worlds
+\citep{KatsunaMendelzon1992} gives a formal language for the same issue.
+\citet{Bonanno2024} makes explicit that action-conditioned belief update must
+distinguish exogenous change from state changes caused by the agent itself. We
+use this observation only to justify the presence of the action argument in the
+closed-loop update.
+
+\paragraph{Algorithmic regulation and compression.}
+\citet{Ruffini2026} interprets good
+regulation through algorithmic compression of realized trajectories. This work
+adds a temporal constraint absent from that framework: even a useful compressed
+model becomes stale under drift. The cube-root law therefore complements the
+algorithmic-regulation viewpoint by quantifying how finite memory limits the
+duration for which compression remains valid in a changing environment.
+
+\paragraph{Action-coupled prediction.}
+The coercive masking regime is related to broader work on systems that change
+the data-generating process they seek to model. The claim is narrower
+than a general performative-prediction analysis: we isolate a diagnostic
+failure mode in which low observed error can be sustained by intervention, and
+we propose an effort-aware correction for that case.

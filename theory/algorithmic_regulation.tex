@@ -1,0 +1,118 @@
+\section{Relation to Algorithmic Regulation}\label{sec:ruffini}
+
+\citet{Ruffini2026} reformulates the good regulator principle in algorithmic
+terms: a regulator that materially simplifies the realized world trajectory is
+unlikely to be independent of that world. In Ruffini's setting, regulation is
+read through compression of the regulated output. The question here is
+different: not how much compression a regulator achieves on a realized episode,
+but how long a compressed internal model remains valid when the world itself
+drifts.
+
+Tracking under drift can be interpreted
+as \emph{online compression of a non-stationary process}. A finite-memory model
+compresses recent observations into a compact state, but that compression ages.
+The cube-root law in \cref{prop:coherence_delay} quantifies the resulting
+trade-off between statistical efficiency and temporal validity.
+
+The decomposition $(\Pot,\Act,\Conv)$ then serves as an explicit model of the
+three channels that matter in closed-loop regulation: what the system currently
+represents, what it does, and how it updates. Ruffini studies the compression
+value of regulation on individual episodes, whereas the analysis here tracks
+the stability of that compression under drift and feedback.
+
+\subsection{Coercive Masking}\label{sec:coercive}
+
+The most important point of contact with algorithmic regulation is the masking
+regime. A controller can keep the realized trajectory simple either because it
+tracks the world well or because it pushes the world toward a stale model. The
+latter mechanism is invisible to a diagnostic that looks only at model-world
+fit.
+
+\begin{definition}[Coercive Regime]\label{def:coercive}
+An information system $\IS = (\Pot, \Act, \Conv)$ operates in the
+\emph{coercive regime} if:
+\begin{enumerate}[label=\textnormal{(\roman*)}]
+  \item $\Act_t$ is action-effective (\cref{def:actioneffective}) with
+    coupling coefficient $\alpha > 0$: the transition kernel is
+    $P(s_{t+1} \mid s_t, o) = \mathcal{N}(\mu^*(t) + \alpha(o - \mu^*(t)),
+    \sigma_w^2)$;
+  \item $\Pot$ is static (\cref{prop:failP}): $\hat\mu_t \equiv \hat\mu_0$
+    and $\Act_t(\Pot) \equiv \hat\mu_0$;
+  \item the exogenous drift is bounded:
+    $|\zeta| < \alpha \cdot |\hat\mu_0 - \mu_0|$.
+\end{enumerate}
+\end{definition}
+
+In the coercive regime, the system's stale actions continuously pull
+$\mu^*$ toward the frozen estimate $\hat\mu_0$:
+$\mu^*(t+1) = \mu^*(t) + \zeta + \alpha(\hat\mu_0 - \mu^*(t))$,
+which is a mean-reverting process with equilibrium $\hat\mu_0 + \zeta/\alpha$.
+When $|\zeta/\alpha|$ is small, $\mu^*$ is held near $\hat\mu_0$,
+suppressing $V_P$ and making the system appear healthy under the standard score.
+
+\begin{corollary}[Coercive Masking]\label{cor:coercive}
+In the coercive regime (\cref{def:coercive}), the standard score
+$\sigma_P(t) = 1/(1 + V_P(t))$ can fail to detect FM-1:
+$\sigma_P(t) \approx 1$ for all $t \leq t_{\mathrm{mask}}$, where
+$t_{\mathrm{mask}} = O(\alpha^{-1} \log(\alpha/\zeta))$ is the
+\emph{coercive horizon}. Beyond $t_{\mathrm{mask}}$, exogenous drift overwhelms
+the coercive capacity and $V_P$ diverges.
+\end{corollary}
+
+\begin{proof}[Proof sketch]
+Under condition (iii) of \cref{def:coercive}, the gap
+$\delta_t = \mu^*(t) - \hat\mu_0$ satisfies
+$\delta_{t+1} = (1 - \alpha)\delta_t + \zeta$. The fixed point is
+$\delta^* = \zeta / \alpha$, so
+$V_P(t) \leq \tfrac{1}{2}(\zeta/\alpha)^2 + \sigma_w^2/(2\alpha)$ in
+expectation, masking FM-1 while the coercive condition holds. Once the drift
+accumulates beyond the available control authority, the frozen model can no
+longer hold the environment in place and the underlying mismatch reappears.
+\end{proof}
+
+\begin{remark}[Compression by adaptation vs. compression by forcing]
+From the algorithmic-regulation viewpoint, coercive masking matters because it
+can improve realized compressibility without improving the model. The external
+trajectory becomes simpler, but for the wrong reason: the controller is forcing
+the world into alignment rather than updating its internal state to match a
+changing world.
+\end{remark}
+
+\begin{definition}[Effort-Corrected Score]\label{def:tci_effort}
+The \emph{effort signal} at time $t$ is any monotone proxy for the corrective
+actuation burden required to keep the world aligned with the system's present
+output. A generic observable surrogate is
+\[
+  E_t^{\mathrm{obs}} \coloneqq |\Act_t(\Pot) - \Act_{t-1}(\Pot)|,
+\]
+the magnitude of change in the system's actuation. In controlled synthetic
+settings, a sharper proxy is the realized coercive effort
+\[
+  E_t^{\mathrm{sim}} \coloneqq \alpha\,|a_t - s_t^{\mathrm{free}}|,
+\]
+where $s_t^{\mathrm{free}}$ is the state that would have arisen before applying
+control.
+
+The \emph{effort-corrected score} is
+\[
+  \ScoreE(\IS,t)
+  \coloneqq
+  \min\!\left(
+    \sigma_P(t) \cdot e^{-\lambda E_t / E_0},\;
+    \sigma_A(t),\;
+    \sigma_\Phi(t)
+  \right),
+\]
+where $E_0 > 0$ is a reference effort scale and $\lambda > 0$ is a
+sensitivity parameter. $\ScoreE$ penalizes increasing actuation effort,
+correctly diagnosing FM-1 even in the coercive regime where
+$\sigma_P(t) \approx 1$.
+\end{definition}
+
+The empirical evidence for coercive masking comes from the particle-tracker experiment
+(\cref{sec:tpt_masking}). In the passive FM-1 regime, the standard score and
+$\ScoreE$ coincide because no realized forcing of the world occurs.
+Under moderate coupling ($\alpha = 0.3$, $\lambda = 3.0$), the same frozen
+model reaches $\Score = 0.949 \pm 0.012$ while
+$\ScoreE = 0.697 \pm 0.046$, showing that the apparent coherence is
+being purchased by intervention.

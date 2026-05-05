@@ -1,0 +1,65 @@
+\section{Diagnostic Failure Modes}\label{sec:failuremodes}\label{sec:examples}
+
+The decomposition $(\Pot,\Act,\Conv)$ is useful only if it identifies
+failure regimes that matter empirically. This section records the three
+diagnostic failure modes used throughout the experiments and the coherence
+scores.
+
+\begin{proposition}[Failure Mode~1: Static-$\Pot$ collapse]\label{prop:failP}
+Suppose $\Conv_t$ ceases to update $\Pot$, so $\Pot(S,t)=\Pot(S,t_0)$ for
+all $t>t_0$. If the environment undergoes distributional shift
+$\Pot^*(S,t)\neq\Pot^*(S,t_0)$ for large $t$, then
+$W_2(\Pot(S,t),\Pot^*(S,t))\to\infty$ and the expected actuation error
+$\mathbb{E}[d_\mathcal{O}(\Act_t(\Pot),\Act^*_t)]$ is unbounded.
+\end{proposition}
+
+\begin{proof}
+$\Pot(S,t)=\Pot(S,t_0)$ is fixed while $\Pot^*$ drifts, so $W_2\to\infty$ by
+definition. Lipschitz continuity of $\Act_t$ then propagates the divergence to
+actuation error.
+\end{proof}
+
+\begin{remark}[Interpretation]
+FM-1 is the stale-model regime: the representation no longer tracks the world,
+so downstream actions inherit an increasingly obsolete state estimate.
+\end{remark}
+
+\begin{proposition}[Failure Mode~2: Non-deterministic-$\Act$ divergence]\label{prop:failA}
+If $\Act_t$ is not $\delta$-reproducible for any $\delta<\infty$, then
+$H(\Act_t \mid \Pot(S,t))>0$ for all $t$: actuation carries information not
+determined by the state model. Distributed replicas of the system diverge, and
+the composite resists auditing and replication.
+\end{proposition}
+
+\begin{proof}
+Non-$\delta$-reproducibility implies $\exists\,\omega\neq\omega'$ with
+$\Act_t(p;\omega)\neq\Act_t(p;\omega')$, giving positive conditional entropy.
+Auditability requires reconstructing actuation from state; this fails when
+conditional entropy is positive.
+\end{proof}
+
+\begin{remark}[Interpretation]
+FM-2 is the non-reproducible-action regime: the model may still be accurate,
+but the realized action can no longer be reconstructed from the represented
+state, so replicas and audits diverge.
+\end{remark}
+
+\begin{proposition}[Failure Mode~3: Absent-$\Conv$ monopolization]\label{prop:failPhi}
+Let $\Conv_t\equiv\mathrm{id}$ (no update). In any closed-loop deployment,
+actuation feedback shifts $\Pot^*$; since $\Pot$ cannot track, the
+distributional mismatch grows at a rate lower-bounded by the rate of
+environmental response to actuation.
+\end{proposition}
+
+\begin{proof}
+The closed-loop case follows from
+$\Pot^*(t+1)\leftarrow f(\Pot^*(t), \Act_t(\Pot(t)))$ with $\Pot$ fixed, so
+the gap $W_2(\Pot,\Pot^*)$ grows at least as fast as the variation of $f$ in
+its second argument whenever $\Act_t(\Pot)\neq\Act^*_t$.
+\end{proof}
+
+\begin{remark}[Interpretation]
+FM-3 is the missing-adaptation regime. In passive settings it appears as a
+failure to track external drift; in closed-loop settings it can amplify the
+system's own feedback and produce self-reinforcing misalignment.
+\end{remark}

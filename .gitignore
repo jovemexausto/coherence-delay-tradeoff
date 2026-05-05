@@ -1,0 +1,51 @@
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.blg
+*.bbl
+*.bcf
+*.run.xml
+*.idx
+*.ind
+*.ilg
+*.lof
+*.lot
+*.blg
+*.log
+# Rust
+target/
+Cargo.lock
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Misc
+archive
+.tcc_work/
+data/kuairand/
+.backup
+.ruff_cache
+# Compiled PDFs are committed intentionally — do not ignore *.pdf

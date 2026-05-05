@@ -1,0 +1,101 @@
+\section{Why Action Enters the Update in Closed-Loop Tracking}\label{sec:necessity}
+
+The coherence-delay law in \cref{sec:tci} concerns estimation with finite
+memory. In open-loop settings, the estimator only needs to combine past state
+information and new observations. In closed-loop settings, however, the
+system's own actions alter future observations. The update must therefore keep
+track of what the system did, not only of what it saw.
+
+\subsection{External Characterization: Drift-Coherence}
+
+\begin{definition}[Drift-Coherence]\label{def:driftcoherent}
+An information system $\IS$ is \emph{drift-coherent} if there exist
+$\beta \in \mathcal{KL}$ and $\gamma \in \mathcal{K}$ such that for all
+$t \geq 0$ and all environmental inputs with
+$\mathrm{ess\,sup}_{s \leq t}\|u(s)\| \leq M < \infty$:
+\[
+  W_2\!\left(\Pot(S,t),\,\Pot^*(S,t)\right)
+  \;\leq\;
+  \beta\!\left(W_2\!\left(\Pot(S,0),\,\Pot^*(S,0)\right),\,t\right)
+  \;+
+  \gamma(M).
+\]
+The system maintains bounded tracking error under bounded drift.
+\end{definition}
+
+\begin{definition}[Action-Effectiveness]\label{def:actioneffective}
+The actuation operator $\Act_t$ is \emph{action-effective} in environment
+$\Env$ if there exist distinct outputs $o, o' \in \mathcal{O}$ and a state
+$s \in S$ such that
+\[
+  D_{\mathrm{TV}}\!\left(P(\cdot \mid s_t = s,\, o)
+  \;\Big\|\;
+  P(\cdot \mid s_t = s,\, o')\right) \;>\; 0.
+\]
+If this never occurs, the system is \emph{passive}: its actions do not affect
+the environmental transition law.
+\end{definition}
+
+\subsection{Belief Update With Feedback}
+
+\begin{lemma}[Belief Update Lemma]\label{lem:beliefupdate}
+Let $\IS$ be a drift-coherent, action-effective information system. Any update
+map $U$ whose repeated application preserves drift-coherence must depend on
+three arguments:
+\begin{enumerate}[label=\textnormal{(\roman*)}]
+  \item the current internal state $p = \Pot(S,t)$,
+  \item the most recent action $o = \Act_t(\Pot)$, and
+  \item the incoming environmental signal $s_{t+1}$.
+\end{enumerate}
+Each argument is indispensable.
+\end{lemma}
+
+\begin{proof}
+If $U$ omits $p$, the update becomes memoryless and discards the sufficient
+summary of the past; under temporally structured drift this prevents bounded
+tracking error. If $U$ omits $o$, then in an action-effective environment the
+update cannot distinguish exogenous drift from changes induced by the system's
+own actuation. This is precisely the credit-assignment problem that appears in
+POMDP filtering and belief update semantics
+\citep{kaelbling1998,KatsunaMendelzon1992,Bonanno2024}. If $U$ omits
+$s_{t+1}$, no new environmental evidence enters the state estimate and the gap
+between $\Pot$ and $\Pot^*$ grows with drift. In each case, the
+drift-coherence bound fails.
+\end{proof}
+
+\begin{remark}[Passive observer systems]\label{rem:passive}
+When actions do not influence transitions, the update can drop the actuation
+argument and the system is genuinely dyadic. The three-role decomposition is
+therefore motivated only for action-effective settings.
+\end{remark}
+
+\begin{corollary}[Ternary Update Structure]\label{cor:ternary}
+For action-effective tracking systems, any drift-coherent update map has the
+form
+\[
+  U\colon \Info \times \mathcal{O} \times S \to \Info.
+\]
+Any ostensibly smaller description either hides one of these arguments inside a
+state variable or fails drift-coherence.
+\end{corollary}
+
+\begin{proof}
+This is immediate from \cref{lem:beliefupdate}.
+\end{proof}
+
+\begin{theorem}[Minimal Functional Roles]\label{thm:irreducibility}
+Let $\IS$ be a drift-coherent, action-effective information system. Any
+functional decomposition that preserves \cref{cor:ternary} must realize three
+roles: a stored state, an action channel, and an adaptation rule that maps the
+state, action, and new observation to an updated state. The tuple
+$(\Pot,\Act,\Conv)$ is the explicit decomposition used here.
+\end{theorem}
+
+\begin{proof}
+By \cref{cor:ternary}, the update requires all three arguments
+$(p,o,s_{t+1})$. A decomposition that omits any one of the corresponding roles
+must either re-encode it implicitly inside another component or lose the update
+structure required for drift-coherence. The explicit realization used here is
+$\Pot$ for stored state, $\Act$ for the action channel, and $\Conv$ for the
+update map.
+\end{proof}

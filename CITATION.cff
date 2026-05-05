@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+title: "Coherence-Delay Trade-off"
+message: "If you use this repository, please cite the preprint or the software record described below."
+type: software
+authors:
+  - family-names: "Parreira"
+    given-names: "Vinicius"
+    email: "figueiredo@pm.me"
+repository-code: "https://github.com/jovemexausto/coherence-delay-tradeoff"
+abstract: "LaTeX source and experiment code for the preprint 'The Coherence-Delay Trade-off in Tracking Under Drift: A Cube-Root Law for Finite-Memory Estimation'."
+keywords:
+  - tracking under drift
+  - finite-memory estimation
+  - concept drift
+  - coherence diagnostics
+  - coercive masking
