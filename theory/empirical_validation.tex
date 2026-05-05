@@ -517,7 +517,10 @@ and coercive ($\alpha > 0$). The main single-run diagnostic uses
 $\alpha = 0.3$ and effort penalty $\lambda = 3.0$. We then sweep
 $\alpha \in \{0.1,0.2,0.3,0.5,0.7,0.9\}$ and
 $\lambda \in \{0.5,1.0,2.0,3.0,4.0\}$ over 8 seeds, exporting all raw and
-aggregated metrics from the experiment harness.
+aggregated metrics from the experiment harness. To keep the main text readable,
+\cref{tab:particle_tracking_masking} reports a five-regime masking matrix at
+the paper default $\lambda = 3.0$: passive, weak, mild, moderate, and strong
+coercive coupling.
 
 \paragraph{Results.}
 
@@ -535,27 +538,29 @@ aggregated metrics from the experiment harness.
 \begin{table}[h]
 \centering
 \small
-\caption{Multi-seed feedback masking summary for FM-1 in the particle tracker
-  ($\alpha = 0.3$, $\lambda = 3.0$, 8 seeds).}
+\caption{Five-regime masking matrix for frozen-$\Pot$ FM-1 in the particle
+  tracker at $\lambda = 3.0$ (8 seeds). Cells report tail means.}
 \label{tab:particle_tracking_masking}
 \begin{tabular}{@{}lrrrrr@{}}
 \toprule
-Regime & $|e|$ & action gap & effort & $\Score$ & $\ScoreE$ \\
+Regime & $\alpha$ & effort & $\Score$ & $\ScoreE$ & $M_t$ \\
 \midrule
-Passive  & $0.686 \pm 0.158$ & $0.686 \pm 0.158$ & $0.000 \pm 0.000$ & $0.795 \pm 0.062$ & $0.795 \pm 0.062$ \\
-Coercive & $0.276 \pm 0.046$ & $0.394 \pm 0.066$ & $0.118 \pm 0.020$ & $0.949 \pm 0.012$ & $0.697 \pm 0.046$ \\
+Passive & 0.0 & 0.000 & 0.795 & 0.795 & 0.000 \\
+Weak coercion & 0.1 & 0.054 & 0.872 & 0.757 & 0.115 \\
+Mild coercion & 0.2 & 0.090 & 0.920 & 0.726 & 0.194 \\
+Moderate coercion & 0.3 & 0.118 & 0.949 & 0.697 & 0.252 \\
+Strong coercion & 0.9 & 0.266 & 0.999 & 0.518 & 0.481 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Under feedback masking, the stale FM-1 controller appears nearly healthy under
-the standard score ($0.949 \pm 0.012$) because the environment is being dragged
-toward the frozen action, shrinking the visible tracking error to $0.276 \pm
-0.046$. The effort-corrected index, however, falls to $0.697 \pm 0.046$,
-correctly diagnosing that this "coherence" is being purchased by intervention
-rather than adaptation.
-In the passive regime, where no forcing occurs, $\Score$ and $\ScoreE$
-coincide.
+The matrix makes the masking mechanism explicit. As coupling increases, the
+stale FM-1 controller looks progressively healthier under the plain score:
+$\Score$ rises from $0.795$ in the passive regime to $0.999$ under strong
+coercion. The effort-aware diagnostic moves in the opposite direction:
+$\ScoreE$ falls from $0.795$ to $0.518$, and the masking gap grows from $0$ to
+$0.481$. This is the closed-loop signature we care about: apparent coherence is
+improving while effort-aware coherence is deteriorating.
 
 \begin{figure}[!htbp]
 \centering
@@ -563,7 +568,7 @@ coincide.
 \caption{Multi-seed parameter sweep for feedback masking in the particle tracker
   (8 seeds). Left: mean standard $\Score$. Middle: mean effort-corrected
   $\ScoreE$. Right: masking gap
-  $\Score - \ScoreE$. The standard score monotonically rises with
+  $M_t = \Score - \ScoreE$. The standard score monotonically rises with
   influence, while the masking gap widens with both influence and effort
   penalty $\lambda$.}
 \label{fig:particle_tracking_masking_grid}
@@ -579,7 +584,10 @@ effort penalisation separate apparent from genuine coherence in the expected
 direction. The particle tracker closes the empirical loop on
 \cref{cor:coercive}: the standard score can be masked by control, whereas
 $\ScoreE$ remains sensitive to the intervention cost that creates the
-mask.
+mask. Combined with the calibration grid in
+\cref{fig:particle_tracking_tcie_calibration}, this supports the practical rule
+used throughout the paper: set $E_0$ to the healthy effort scale and choose
+$\lambda$ in the range $2$--$3$, with $\lambda = 3$ as a strong default.
 
 To test whether this advantage survives comparison with a generic change
 detector, we build an active benchmark with two known regime transitions:

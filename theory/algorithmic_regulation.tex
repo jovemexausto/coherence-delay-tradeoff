@@ -106,13 +106,50 @@ The \emph{effort-corrected score} is
 where $E_0 > 0$ is a reference effort scale and $\lambda > 0$ is a
 sensitivity parameter. $\ScoreE$ penalizes increasing actuation effort,
 correcting for action-induced confounding: it discounts apparent coherence when
-the environment is being held in place rather than genuinely estimated.
+the environment is being held in place rather than genuinely estimated. In
+action-effective settings where coercive masking is plausible, $\ScoreE$ is the
+primary closed-loop diagnostic and $\Score$ is the corresponding apparent-fit
+baseline.
 \end{definition}
+
+\begin{definition}[Masking Gap]\label{def:masking_gap}
+The \emph{masking gap} at time $t$ is
+\[
+  M_t
+  \;\coloneqq\;
+  \Score(\IS,t) - \ScoreE(\IS,t)
+  \;\geq\; 0.
+\]
+It quantifies how much apparent coherence is lost once corrective effort is
+charged explicitly. Large $M_t$ indicates that the observed fit is being
+maintained by intervention rather than by an up-to-date model.
+\end{definition}
+
+\begin{remark}[Calibration guidance for $E_t$, $E_0$, and $\lambda$]
+The effort proxy should follow the strongest observable hierarchy available:
+$E_t^{\mathrm{sim}}$ in controlled simulators,
+$E_t^{\mathrm{obs}}$ from direct actuator burden in deployed systems, and
+$E_t^{\mathrm{log}}$ from logged exposure or policy divergence when only
+observational traces are available.
+
+The reference scale $E_0$ should be set to the typical healthy effort level of
+the domain, not to a global constant. In practice this means using a nominal
+controller effort in simulation or the median healthy effort over a temporally
+held-out prefix in logged data.
+
+The penalty $\lambda$ controls how aggressively apparent coherence is discounted.
+Across the particle masking grid and the KuaiRand sensitivity sweep, values in
+the range $\lambda \in [2,3]$ provide the most stable trade-off, with
+$\lambda = 3$ serving as the paper default: $\lambda < 1$ under-penalizes
+masking, while $\lambda = 4$ tends to be more aggressive than the added
+separation usually justifies.
+\end{remark}
 
 The empirical evidence for coercive masking comes from the particle-tracker experiment
 (\cref{sec:particle_tracking_masking}). In the passive FM-1 regime, the standard score and
-$\ScoreE$ coincide because no realized forcing of the world occurs.
+$\ScoreE$ coincide because no realized forcing of the world occurs, so $M_t=0$.
 Under moderate coupling ($\alpha = 0.3$, $\lambda = 3.0$), the same frozen
 model reaches $\Score = 0.949 \pm 0.012$ while
-$\ScoreE = 0.697 \pm 0.046$, showing that the apparent coherence is
-being purchased by intervention.
+$\ScoreE = 0.697 \pm 0.046$, so the mean masking gap is
+$M_t \approx 0.252$, showing that the apparent coherence is being purchased by
+intervention rather than adaptation.
