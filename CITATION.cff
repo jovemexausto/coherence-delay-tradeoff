@@ -8,6 +8,7 @@ authors:
     email: "figueiredo@pm.me"
 repository-code: "https://github.com/jovemexausto/coherence-delay-tradeoff"
 abstract: "LaTeX source and experiment code for the preprint 'The Coherence-Delay Trade-off in Tracking Under Drift: A Cube-Root Law for Finite-Memory Estimation'."
+doi: "10.5281/zenodo.20041349"
 keywords:
   - tracking under drift
   - finite-memory estimation
