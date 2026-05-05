@@ -7,11 +7,21 @@ Page-Hinkley identify changepoints or sustained mean shifts in a monitored
 signal \citep{BifetGavalda2007,Gama2004,Harries1999}. On passive streams they are baseline changepoint
 detectors, whereas the coherence score is intended as a structural diagnostic tied
 to model fidelity and update quality rather than as a universal replacement for
-generic drift alarms.
+generic drift alarms. Related finite-memory results in nonstationary
+optimization and online least-squares establish the same cube-root trade-off
+between variation and memory, but in Euclidean loss or bandit settings rather
+than in a distributional \(W_2\)/Sinkhorn geometry
+\citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,YuanLamperski2020,MazzettoUpfal2023}.
+Classical smoothing rules such as EWMA and Kalman filtering also inhabit this
+neighborhood: they trade responsiveness against variance through forgetting or
+effective memory, but they are usually analyzed as estimators rather than as a
+closed-loop diagnostic baseline. Our EWMA results are included precisely to
+show that the cube-root law is a finite-memory phenomenon rather than a
+sliding-window artifact.
 
 \paragraph{Transport-based diagnostics.}
 WATCH uses Wasserstein geometry to detect distribution shift in feature space
-\citep{faber2022watch}. Our work is adjacent but different in emphasis. We use
+\citep{faber2022watch,FaberEtAl2022LIFEWATCH}. Our work is adjacent but different in emphasis. We use
 $W_2$ and its debiased Sinkhorn surrogate inside a finite-memory tracking model
 to derive a lag--variance trade-off and a coherence score for model
 coherence.
@@ -47,4 +57,6 @@ The coercive masking regime is related to broader work on systems that change
 the data-generating process they seek to model. The claim is narrower
 than a general performative-prediction analysis: we isolate a diagnostic
 failure mode in which low observed error can be sustained by intervention, and
-we propose an effort-aware correction for that case.
+we propose an effort-aware correction for that case. This connects most directly
+to performative prediction and feedback-loop analyses in recommendation and
+dataset construction \citep{PerdomoEtAl2020,HardtMendlerDunner2023,TaoriHashimoto2023,PaganEtAl2023,KrauthWangJordan2022,EilatRosenfeld2023}. The main distinction is that we are not trying to solve the full causal problem of performative feedback; we are proposing a diagnostic for when intervention effort masks stale models in active or logged systems.
