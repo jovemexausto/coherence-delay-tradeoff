@@ -12,6 +12,9 @@ optimization and online least-squares establish the same cube-root trade-off
 between variation and memory, but in Euclidean loss or bandit settings rather
 than in a distributional \(W_2\)/Sinkhorn geometry
 \citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,YuanLamperski2020,MazzettoUpfal2023}.
+The kernel-level lower bound added in this revision makes that comparison more
+precise for causal averaging estimators: the same bias-vs.-variance tension now
+appears directly in the finite-memory class studied here.
 Classical smoothing rules such as EWMA and Kalman filtering also inhabit this
 neighborhood: they trade responsiveness against variance through forgetting or
 effective memory, but they are usually analyzed as estimators rather than as a

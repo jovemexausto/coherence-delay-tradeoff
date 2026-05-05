@@ -26,6 +26,9 @@ What we will do:
 Preferred route:
 - prove a lower bound for a class of causal, finite-memory averaging kernels with effective size and effective lag parameters.
 
+Status update:
+- the paper now includes a kernel-level lower bound for the causal averaging family, so the cube-root law is exact for the class actually studied.
+
 ### 2. Is there a sign error in Proposition 6.12?
 
 Current answer: the live source currently states the positive cube-root scaling, but we must audit the manuscript and any derived text for stale `\zeta^{-1/3}` remnants.

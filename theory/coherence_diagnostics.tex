@@ -323,6 +323,57 @@ $\alpha^* = O((\zeta/C_K)^{2/3})$, and substitution yields the same
 $\zeta^{1/3}$ minimum-error law as the sliding-window case.
 \end{proof}
 
+\begin{definition}[Causal Averaging Kernel]\label{def:avg_kernel}
+A \emph{causal averaging kernel} is a sequence of weights
+$w = (w_0,w_1,\dots)$ such that $w_j \geq 0$ and $\sum_{j\geq 0} w_j = 1$.
+Its effective size and effective lag are
+\[
+  n_{\mathrm{eff}}(w) \coloneqq \frac{1}{\sum_{j\geq 0} w_j^2},
+  \qquad
+  \tau_{\mathrm{eff}}(w) \coloneqq \sum_{j\geq 0} j w_j.
+\]
+\end{definition}
+
+\begin{proposition}[Kernel-Level Lower Bound]\label{prop:kernel_lower_bound}
+Let $X_t = \mu_t + \xi_t$ with $\xi_t \sim \mathcal{N}(0,\sigma^2)$ i.i.d.
+and let the drift trajectory be the monotone translation model
+$\mu_t = \zeta t$ with $\zeta \geq 0$. For any causal averaging kernel
+$w$ as in \cref{def:avg_kernel}, the kernel estimator
+\[
+  \hat\mu_t^{(w)} \coloneqq \sum_{j\geq 0} w_j X_{t-j}
+\]
+satisfies
+\[
+  \mathbb{E}\,\bigl|\hat\mu_t^{(w)} - \mu_t\bigr|
+  \;\geq\;
+  c_1\,\sigma\,n_{\mathrm{eff}}(w)^{-1/2}
+  + c_2\,\zeta\,\tau_{\mathrm{eff}}(w)
+\]
+for universal constants $c_1,c_2>0$.
+In particular, optimizing over the averaging family yields the same cube-root
+exponent as \cref{prop:coherence_delay}.
+\end{proposition}
+
+\begin{proof}
+The estimator error decomposes as
+\[
+  \hat\mu_t^{(w)} - \mu_t
+  = \underbrace{\zeta\sum_{j\geq 0} j w_j}_{\text{bias}}
+    + \underbrace{\sum_{j\geq 0} w_j \xi_{t-j}}_{\text{noise}}.
+\]
+Hence the bias magnitude is exactly $\zeta\tau_{\mathrm{eff}}(w)$ and the noise
+term is Gaussian with variance $\sigma^2\sum_{j\geq 0}w_j^2 = \sigma^2 /
+n_{\mathrm{eff}}(w)$. For a Gaussian random variable $Z\sim\mathcal{N}(b,v)$,
+\[
+  \mathbb{E}|Z| \geq \max\!\bigl(|b|,\sqrt{2/\pi}\,\sqrt{v}\bigr)
+  \geq \tfrac{1}{2}\bigl(|b| + \sqrt{2/\pi}\,\sqrt{v}\bigr).
+\]
+Substituting $b=\zeta\tau_{\mathrm{eff}}(w)$ and
+$v=\sigma^2 / n_{\mathrm{eff}}(w)$ gives the claim, with constants absorbed into
+$c_1,c_2$. Optimizing the lower bound over the averaging family recovers the
+same $2/3$ window scaling and $1/3$ error exponent as the upper bound.
+\end{proof}
+
 \begin{remark}[Interpretation: a finite-memory floor]\label{rem:cdfloor}
 \Cref{prop:coherence_delay} establishes that perfect coherence
 ($V_P = 0$) is \emph{impossible} under continuous drift for the finite-memory

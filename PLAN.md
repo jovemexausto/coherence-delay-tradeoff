@@ -48,10 +48,10 @@ Why this phase exists:
 ## Phase 11: Theoretical Strengthening and Lower Bounds
 
 - [x] Tighten the cube-root discussion so it is precise about what is proven, what is conjectured, and what is operationally supported by experiments.
-- [ ] Prove a formal lower bound for an explicit class of finite-memory estimators / kernels.
-- [ ] Add the strongest possible relation to nonstationary optimization, dynamic regret, and adaptive filtering without overclaiming equivalence.
-- [ ] Update the manuscript and the report together with the final theorem statement.
-- [ ] Commit Phase 11.
+- [x] Prove a formal lower bound for an explicit class of finite-memory estimators / kernels.
+- [x] Add the strongest possible relation to nonstationary optimization, dynamic regret, and adaptive filtering without overclaiming equivalence.
+- [x] Update the manuscript and the report together with the final theorem statement.
+- [completed] Commit Phase 11.
 
 Why this phase exists:
 - This is the biggest remaining theoretical vulnerability, and the review is explicit about it.
