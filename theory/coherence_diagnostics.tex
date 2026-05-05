@@ -54,7 +54,7 @@ they are not valid replacements for the structural diagnostic given by
 
 In action-effective environments, however, high actuation capacity can keep
 $\sigma_P$ artificially high by forcing the world toward a stale model.
-When such coercive masking is possible, a conservative extension is the
+When such feedback masking is possible, a conservative extension is the
 \emph{effort-corrected score}
 \[
   \ScoreE(\IS,t)
@@ -64,8 +64,10 @@ When such coercive masking is possible, a conservative extension is the
   \right),
 \]
 where $E_t$ is any monotone proxy for corrective actuation burden,
-$E_0 > 0$ is a reference scale, and $\lambda > 0$ controls sensitivity.
-In the synthetic particle tracker, $E_t$ is the realized coercive effort
+$E_0 > 0$ is a reference scale, and $\lambda > 0$ controls sensitivity. It
+discounts apparent improvements in model-world alignment when those gains come
+from action-induced confounding rather than better state estimation. In the
+synthetic particle tracker, $E_t$ is the realized coercive effort
 $\alpha |a_t - s_t^{\mathrm{free}}|$; in deployed systems, action increments,
 energy expenditure, or control-surface usage can play the same role.
 For logged recommendation benchmarks, the preferred instantiation is the

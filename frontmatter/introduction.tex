@@ -29,18 +29,19 @@ world keeps moving.
 In closed-loop settings, raw tracking error is not always enough. A system may
 appear well aligned with its environment because its actions are pushing the
 environment toward a stale model rather than because the model remains current.
-This is the phenomenon of \emph{coercive masking}. A useful decomposition has
-three functional roles: a representation of the
-world ($\Pot$), an actuation rule ($\Act$), and an adaptation operator
-($\Conv$). It is motivated by action-effective tracking systems rather than by
-a claim about information in general.
+This is the phenomenon of \emph{feedback masking}. In the synthetic control
+regime studied below, the same effect is called coercive masking. A useful
+decomposition has three functional roles: a representation of the world
+($\Pot$), an actuation rule ($\Act$), and an adaptation operator ($\Conv$).
+It is motivated by action-effective tracking systems rather than by a claim
+about information in general.
 
 The decomposition yields two diagnostics. The first is the
 coherence score $\Score$, a bottleneck-sensitive score that
 combines model fidelity, actuation reproducibility, and adaptation quality. The
 second is an effort-corrected version, $\ScoreE$, designed for regimes
 where low observed error may be purchased through intervention rather than
-through adaptation. The distinction separates degradation from its cause.
+through adaptation. The distinction separates degradation from its cause and controls for action-induced confounding.
 
 \Cref{sec:tci} derives the
 coherence-delay trade-off and the cube-root scaling law. \Cref{sec:necessity}

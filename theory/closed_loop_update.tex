@@ -3,8 +3,8 @@
 The coherence-delay law in \cref{sec:tci} concerns estimation with finite
 memory. In open-loop settings, the estimator only needs to combine past state
 information and new observations. In closed-loop settings, however, the
-system's own actions alter future observations. The update must therefore keep
-track of what the system did, not only of what it saw.
+system's own actions alter future observations. The update therefore needs to
+keep track of what the system did, not only of what it saw.
 
 \subsection{External Characterization: Drift-Coherence}
 
@@ -17,7 +17,7 @@ $\mathrm{ess\,sup}_{s \leq t}\|u(s)\| \leq M < \infty$:
   W_2\!\left(\Pot(S,t),\,\Pot^*(S,t)\right)
   \;\leq\;
   \beta\!\left(W_2\!\left(\Pot(S,0),\,\Pot^*(S,0)\right),\,t\right)
-  \;+
+  \;+\;
   \gamma(M).
 \]
 The system maintains bounded tracking error under bounded drift.
@@ -40,14 +40,15 @@ the environmental transition law.
 
 \begin{lemma}[Belief Update Lemma]\label{lem:beliefupdate}
 Let $\IS$ be a drift-coherent, action-effective information system. Any update
-map $U$ whose repeated application preserves drift-coherence must depend on
-three arguments:
+map $U$ whose repeated application preserves drift-coherence in this class must
+depend on three arguments:
 \begin{enumerate}[label=\textnormal{(\roman*)}]
   \item the current internal state $p = \Pot(S,t)$,
   \item the most recent action $o = \Act_t(\Pot)$, and
   \item the incoming environmental signal $s_{t+1}$.
 \end{enumerate}
-Each argument is indispensable.
+Each argument cannot be dropped without leaving the class of drift-coherent
+updates considered here.
 \end{lemma}
 
 \begin{proof}
@@ -85,9 +86,9 @@ This is immediate from \cref{lem:beliefupdate}.
 
 \begin{theorem}[Minimal Functional Roles]\label{thm:irreducibility}
 Let $\IS$ be a drift-coherent, action-effective information system. Any
-functional decomposition that preserves \cref{cor:ternary} must realize three
-roles: a stored state, an action channel, and an adaptation rule that maps the
-state, action, and new observation to an updated state. The tuple
+functional decomposition that preserves \cref{cor:ternary} in this class must
+realize three roles: a stored state, an action channel, and an adaptation rule
+that maps the state, action, and new observation to an updated state. The tuple
 $(\Pot,\Act,\Conv)$ is the explicit decomposition used here.
 \end{theorem}
 

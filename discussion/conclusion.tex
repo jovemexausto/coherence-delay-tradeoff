@@ -8,23 +8,22 @@ analyzed here. In that sense, tracking under drift is constrained by the same
 object that makes online compression useful: memory. More memory reduces noise,
 but it also increases the age of the compressed model.
 
-Action-coupled settings admit a minimal decomposition into
-representation, actuation, and adaptation roles $(\Pot,\Act,\Conv)$. In this
-setting the decomposition separates three experimentally
-meaningful failure modes and supports bottleneck-sensitive diagnostics. The score
-measures ordinary coherence, while $\ScoreE$ corrects the specific regime
-in which apparent coherence is maintained by intervention rather than by model
+Action-coupled settings motivate a minimal decomposition into representation,
+actuation, and adaptation roles $(\Pot,\Act,\Conv)$. In the class of systems
+studied here, the decomposition separates three experimentally meaningful
+failure modes and supports bottleneck-sensitive diagnostics. The score measures
+ordinary coherence, while $\ScoreE$ corrects the specific regime in which
+apparent coherence is maintained by intervention rather than by model
 adaptation.
 
 The empirical results support this structure. The Gaussian tracker recovers the
 predicted U-curve and the $\zeta^{1/3}$ scaling law in the controlled setting.
-The particle tracker shows that coercive masking can keep the standard score
-high even when
-the underlying model is stale. On passive benchmarks, generic changepoint
-detectors such as ADWIN remain stronger default alarms. On the logged
-KuaiRand benchmark, however, the effort-corrected score detects a mode of
-feedback-induced degradation that the generic baselines do not capture under the
-same calibration.
+The particle tracker shows that feedback masking can keep the standard score
+high even when the underlying model is stale. On passive benchmarks, generic
+changepoint detectors such as ADWIN remain stronger default alarms. On the
+logged KuaiRand benchmark, however, the effort-corrected score detects a mode
+of feedback-induced degradation that the generic baselines do not capture under
+the same calibration.
 
 Finite-memory tracking under drift obeys a structural coherence-delay trade-off.
 Closed-loop systems can hide model failure through feedback, and effort-aware

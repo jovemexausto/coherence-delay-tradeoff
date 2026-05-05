@@ -388,20 +388,21 @@ and fixed $n = 300$ on both lead count and precision.
 
 ADWIN is still a stronger generic passive-stream detector on this benchmark,
 reaching 54 matched leads at 47.4\% precision on the same residual signal.
-ADWIN yields a changepoint alarm, whereas the score remains tied to the
-potentiality error term and therefore extends naturally to the effort-corrected $\ScoreE$ used in the active
-coercive-masking experiment. The Bikes benchmark below shows the same
-passive-stream pattern on a longer real-world demand sequence.
+This is expected: ADWIN is designed for passive changepoint detection, whereas
+the score targets structural validity under feedback and extends naturally to
+the effort-corrected $\ScoreE$ used in the active masking experiment. The Bikes
+benchmark below shows the same passive-stream pattern on a longer real-world
+demand sequence.
 
 The trade-off is structural and expected: the fixed $n = 50$ strategy is the
 most conservative, while the dynamic rule trades some precision for more
 lead-time sensitivity than fixed $n = 100$.
 
-\subsection{Experiment E: Coercive Masking in the Particle Tracker}\label{sec:tpt_masking}
+\subsection{Experiment E: Feedback Masking in the Particle Tracker}\label{sec:tpt_masking}
 
 This experiment instantiates \cref{cor:coercive,def:tci_effort} in the
 non-Gaussian, non-linear particle tracker. The environment evolves according to the scalar
-particle-filter simulator implemented in \texttt{tpt.py}, but now
+particle-filter simulator implemented in \texttt{particle\_tracker.py}, but now
 with an explicit action-coupling parameter $\alpha \in [0,1]$ so that the
 actuation can pull the latent state toward the stale controller output. In
 the synthetic setting we operationalise the effort proxy as the \emph{realized
@@ -426,20 +427,20 @@ aggregated metrics from the experiment harness.
 \begin{figure}[h]
 \centering
 \safeincludegraphics[width=\linewidth]{figures/fig_tpt_masking}
-\caption{Synthetic coercive masking in the particle tracker.
+\caption{Synthetic feedback masking in the particle tracker.
   \emph{Top:} passive FM-1 retains high tracking error, while coercive FM-1
   suppresses the visible error by pulling the world toward the frozen action.
   \emph{Middle:} the action gap remains nonzero in both cases, but realized
   coercive effort appears only when influence is positive. \emph{Bottom:}
-  the standard score stays artificially high in the coercive regime, whereas
-  $\ScoreE$ drops once effort is penalized.}
+  the standard score stays artificially high in the feedback-masking regime,
+  whereas $\ScoreE$ drops once effort is penalized.}
 \label{fig:tpt_masking}
 \end{figure}
 
 \begin{table}[h]
 \centering
 \small
-\caption{Multi-seed coercive masking summary for FM-1 in the particle tracker
+\caption{Multi-seed feedback masking summary for FM-1 in the particle tracker
   ($\alpha = 0.3$, $\lambda = 3.0$, 8 seeds).}
 \label{tab:tpt_masking}
 \begin{tabular}{@{}lrrrrr@{}}
@@ -452,20 +453,20 @@ Coercive & $0.276 \pm 0.046$ & $0.394 \pm 0.066$ & $0.118 \pm 0.020$ & $0.949 \p
 \end{tabular}
 \end{table}
 
-Under coercion, the stale FM-1 controller
-appears nearly healthy under the standard score ($0.949 \pm 0.012$) because
-the environment is being dragged toward the frozen action, shrinking the
-visible tracking error to $0.276 \pm 0.046$. The effort-corrected index,
-however, falls to $0.697 \pm 0.046$, correctly diagnosing that this
-"coherence" is being purchased by intervention rather than adaptation.
+Under feedback masking, the stale FM-1 controller appears nearly healthy under
+the standard score ($0.949 \pm 0.012$) because the environment is being dragged
+toward the frozen action, shrinking the visible tracking error to $0.276 \pm
+0.046$. The effort-corrected index, however, falls to $0.697 \pm 0.046$,
+correctly diagnosing that this "coherence" is being purchased by intervention
+rather than adaptation.
 In the passive regime, where no forcing occurs, $\Score$ and $\ScoreE$
 coincide.
 
 \begin{figure}[h]
 \centering
 \safeincludegraphics[width=\linewidth]{figures/fig_tpt_masking_grid}
-\caption{Multi-seed parameter sweep for coercive masking in the particle tracker
-  (8 seeds). Left: mean coercive $\Score$. Middle: mean coercive
+\caption{Multi-seed parameter sweep for feedback masking in the particle tracker
+  (8 seeds). Left: mean standard $\Score$. Middle: mean effort-corrected
   $\ScoreE$. Right: masking gap
   $\Score - \ScoreE$. The standard score monotonically rises with
   influence, while the masking gap widens with both influence and effort
@@ -487,7 +488,7 @@ mask.
 
 To test whether this advantage survives comparison with a generic change
 detector, we build an active benchmark with two known regime transitions:
-healthy tracking for $t<200$, coercive masking for $200 \le t < 400$, and
+healthy tracking for $t<200$, feedback masking for $200 \le t < 400$, and
 coercive collapse for $t \ge 400$. The masking phase freezes $\Pot$ while
 maintaining moderate coupling ($\alpha = 0.3$); the collapse phase sharply
 increases exogenous drift. We compare thresholded $\Score$, thresholded
@@ -508,7 +509,7 @@ rather than a model-derived residual.
 \begin{table}[h]
 \centering
 \caption{Active benchmark summary in the particle tracker (12 seeds).
-  Detection is measured against the known onset of coercive masking and the
+  Detection is measured against the known onset of feedback masking and the
   known onset of coercive collapse.}
 \label{tab:tpt_active_benchmark}
 \begin{tabular}{@{}llrrr@{}}
@@ -531,19 +532,18 @@ Collapse onset & NoDrift & 0/12 & 0.00 & NA \\
 \end{tabular}
 \end{table}
 
-The benchmark isolates the point that passive ELEC2 cannot address.
-ADWIN is stronger on passive streams because it is a generic changepoint
-detector. PageHinkley is reliable but slower, KSWIN is too conservative on
-this signal, and NoDrift is the sanity baseline. In the active setting,
-however, the relevant anomaly is not merely distributional change but
-coercive maintenance of an apparently healthy world-model fit. Here
-$\ScoreE$ detects masking onset in all 12 runs with median delay
-$5.0$, whereas ADWIN detects only 7 of 12 masking onsets and does so with
-median delay $279.0$. For the collapse transition the same ordering persists:
-ADWIN detects only 5 of 12 runs, while $\Score$ and $\ScoreE$ detect all
-of them, with $\ScoreE$ firing earliest. This is the regime in which
-the effort-corrected index provides information that a generic passive
-detector does not encode.
+The benchmark isolates the point that passive ELEC2 cannot address. ADWIN is
+stronger on passive streams because it is a generic changepoint detector.
+PageHinkley is reliable but slower, KSWIN is too conservative on this signal,
+and NoDrift is the sanity baseline. In the active setting, however, the
+relevant anomaly is not merely distributional change but coercive maintenance
+of an apparently healthy world-model fit. Here $\ScoreE$ detects masking onset
+in all 12 runs with median delay $5.0$, whereas ADWIN detects only 7 of 12
+masking onsets and does so with median delay $279.0$. For the collapse
+transition the same ordering persists: ADWIN detects only 5 of 12 runs, while
+$\Score$ and $\ScoreE$ detect all of them, with $\ScoreE$ firing earliest.
+This is the regime in which the effort-corrected index provides information that
+a generic passive detector does not encode.
 
 \begin{figure}[h]
 \centering

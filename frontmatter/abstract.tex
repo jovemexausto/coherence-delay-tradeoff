@@ -8,26 +8,28 @@ $n^* = (C_K/\zeta)^{2/3}$. We interpret this trade-off as a limit on online
 compression of a non-stationary process: larger memory reduces variance but
 extends the temporal mismatch between the model and the current environment.
 
-Action-coupled settings require a minimal decomposition into
-representation, actuation, and adaptation components, denoted
-$(\Pot, \Act, \Conv)$. In action-effective systems the update must depend on
-the current internal state, the most recent action, and the incoming signal;
-dropping any one of these destroys drift-coherent tracking. This decomposition
-yields a coherence score, $\Score$, together with an effort-corrected version
-$\ScoreE$ for settings where feedback can mask model failure by forcing
-the environment toward a stale internal model.
+Action-coupled settings motivate a minimal decomposition into representation,
+actuation, and adaptation components, denoted $(\Pot, \Act, \Conv)$. In the
+class of action-effective systems studied here, the update depends on the
+current internal state, the most recent action, and the incoming signal;
+dropping any one of these leaves the drift-coherent class analyzed in the
+paper. This decomposition yields a coherence score, $\Score$, together with an
+effort-corrected version, $\ScoreE$, for settings where feedback masking can
+make stale models look healthy by forcing the environment toward an obsolete
+internal estimate.
 
 Empirically, a Gaussian tracker confirms the predicted
 U-curve and the $\zeta^{1/3}$ scaling law on synthetic drift processes
-(observed slope $0.316$, 95\% CI $[0.287, 0.345]$), while the
-a particle tracker shows that coercive masking can keep the
+(observed slope $0.316$, 95\% CI $[0.287, 0.345]$), while the particle tracker
+shows that coercive masking can keep the
 standard score artificially high ($0.949 \pm 0.012$) even when the
 effort-corrected score falls ($0.697 \pm 0.046$). On the ELEC2 and Bikes
 passive benchmarks, ADWIN remains the strongest generic changepoint detector on
-the residual streams, while the coherence scores remain an interpretable
-structural diagnostic. On the KuaiRand logged benchmark (367 eligible users,
-healthy-phase calibration), $\ScoreE$ raises bubble detection from
-45.8\% to 69.2\% and collapse detection from 54.8\% to 70.0\%.
+the residual streams, as expected for a passive-stream baseline, while the
+coherence scores remain an interpretable structural diagnostic. On the KuaiRand
+logged benchmark (367 eligible users, healthy-phase calibration), $\ScoreE$
+raises bubble detection from 45.8\% to 69.2\% and collapse detection from
+54.8\% to 70.0\%.
 
 \end{abstract}
 
@@ -35,6 +37,6 @@ healthy-phase calibration), $\ScoreE$ raises bubble detection from
 \noindent\textbf{Keywords:}
 tracking under drift; finite-memory estimation; Wasserstein distance;
 Sinkhorn divergence; concept drift; online compression;
-coherence score; coercive masking; coherence-delay trade-off.
+coherence score; feedback masking; coherence-delay trade-off.
 
 \noindent\textbf{MSC~2020:} 93D05, 93D30, 68P99.
