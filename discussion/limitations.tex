@@ -23,6 +23,17 @@ $\ScoreE$ still depends on calibration choices such as the effort penalty
 $\lambda$, the warning threshold, and the local drift estimator
 $\hat\zeta_t$.
 
+\paragraph{Effort proxies and $\sigma_A$ surrogates.}
+The practical hierarchy of effort proxies is strongest in simulation,
+weaker in direct observation, and weakest in logged recommendation data.
+Likewise, $\sigma_A$ is exact only in settings with replicated or fully
+specified action channels. In the Gaussian tracker it is constructive, in the
+particle tracker it is a controlled surrogate based on actuation gap, and in
+KuaiRand it is a normalized exposure-entropy proxy rather than a direct
+estimate of $e^{-H(\Act\mid\Pot)}$. The logged benchmark should therefore be
+read as operational evidence for effort-aware diagnostics, not as full causal
+identification of intervention dynamics.
+
 \paragraph{Scaling beyond current validation.}
 The Gaussian and particle trackers validate the theory in controlled Gaussian and non-Gaussian
 settings, and the real-data benchmarks show that the diagnostics remain useful
@@ -36,3 +47,11 @@ requirement that an ISS-Lyapunov functional $V_\Phi$ exist. The CEGIS-based
 recovery idea mentioned in \cref{rem:cegis} is not implemented or validated in
 this repository, so diagnosing $\sigma_\Phi$ for opaque adaptation subsystems
 remains an open engineering problem.
+
+\paragraph{Missing adaptive baselines.}
+The current passive comparisons emphasize ADWIN, Page-Hinkley, KSWIN, and the
+NoDrift sanity baseline. Broader adaptive baselines such as CUSUM,
+forgetting-factor recursive least squares, and scalar Kalman predictors on the
+real-world streams remain future work. Their absence does not affect the active
+masking evidence, but it does limit how far the passive benchmark comparisons
+should be generalized.

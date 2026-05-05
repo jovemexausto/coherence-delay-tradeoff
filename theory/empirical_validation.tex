@@ -316,6 +316,10 @@ We apply a 1D Gaussian tracker to the normalized demand stream.
 Failures are detected by the Page-Hinkley test
 \citep[threshold $= 84$, $\delta = 0.01$]{Harries1999},
 yielding 113 regime-shift events on the normalized NSW demand stream.
+$\ScoreHat$ is computed from a 1D Gaussian tracker on the normalized target
+stream, with all detector hyperparameters fixed before evaluation. The passive
+benchmark therefore uses no effort proxy and no adaptive threshold retuning on
+future events.
 $\ScoreHat$ warnings are recorded on each falling-edge crossing of
 $\hat\sigma_P < 0.295$.
 Because ELEC2 exposes no direct actuation or effort channel, this benchmark
@@ -450,11 +454,19 @@ We treat KuaiRand-Pure as the real-data masking benchmark. The
 random-exposure slice is treated as healthy, the first half of the later
 standard-recommendation slice as bubble formation, and the second half as
 collapse. The benchmark is evaluated on 367 users with at least 20
-interactions in each relevant phase. To keep the comparison honest, the score
-and $\ScoreE$ thresholds are calibrated only on healthy random-exposure
-windows, using the 20th percentile of the healthy score distribution. We also
-report an EWMA-smoothed $\ScoreE$ baseline to distinguish genuine masking from
-simple temporal smoothing.
+interactions in each relevant phase. User signals are computed on 20-step
+windows over \texttt{watch\_ratio} with video-tag exposure summaries; the
+effort term is the KL divergence between the current exposure-tag distribution
+and the user's healthy random-exposure baseline. The KuaiRand implementation
+uses a surrogate $\sigma_A$ based on normalized exposure entropy rather than on
+replicated action logs, so the benchmark should be read as an operational
+logged-data proxy for actuation reproducibility rather than as exact
+$e^{-H(\Act\mid\Pot)}$. To keep the comparison honest, the score and
+$\ScoreE$ thresholds are calibrated only on healthy random-exposure windows,
+using the 20th percentile of the healthy score distribution, and the reported
+$E_0$ is the median healthy effort scale. We also report an EWMA-smoothed
+$\ScoreE$ baseline to distinguish genuine masking from simple temporal
+smoothing.
 
 \paragraph{Results.}
 
@@ -721,7 +733,10 @@ variance and use it as a second passive benchmark beyond ELEC2.
 As in ELEC2, Page-Hinkley events on the normalized stream define the warning
 reference. The same fixed-window score strategies ($n = 50, 100, 300$), the
 dynamic $n^*_t$ rule, and ADWIN on the residual stream are evaluated under the
-same one-to-one future matching rule.
+same one-to-one future matching rule. The dynamic rule uses the same deployment
+recipe as ELEC2: $C_K$ is calibrated on the initial prefix, $n_t^*$ is clipped
+to a bounded range, and the warning threshold is held fixed rather than tuned
+against future failures.
 
 \paragraph{Results.}
 

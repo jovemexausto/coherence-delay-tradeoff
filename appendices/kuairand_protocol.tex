@@ -14,6 +14,18 @@ For user $u$ at time $t$, let $P_{u,t}$ denote the inferred preference state,
 $A_{u,t}$ the exposure policy, and $\Phi_{u,t}$ the composite feedback signal.
 All user windows use \texttt{window\_size = 20}, and video tags are binned from
 \texttt{video\_features\_basic\_pure.csv}.
+The benchmark keeps only users with at least 20 interactions in the healthy,
+bubble, and collapse segments, yielding the 367-user evaluation cohort used in
+the main text.
+
+\subsection*{Operational score components}
+In KuaiRand, $\sigma_P$ is a normalized deviation of the current watch-ratio
+window from the healthy watch-ratio baseline, $\sigma_\Phi$ is a stability term
+based on within-window watch-ratio dispersion, and $\sigma_A$ is an operational
+surrogate based on normalized exposure-tag entropy. This last term should be
+read as a logged-data proxy for action reproducibility, not as a direct
+estimator of $e^{-H(\Act\mid\Pot)}$, because the benchmark has no replicated
+policy logs.
 
 \subsection*{Effort proxy}
 The effort proxy is defined as the divergence between the current exposure
@@ -44,7 +56,10 @@ The benchmark is executed in three phases.
 \end{enumerate}
 \subsection*{Evaluation}
 Evaluation is carried out sequentially within each user session and then
-batched across users with strict temporal splits. Reported metrics are:
+batched across users with strict temporal splits. Thresholds for $\Score$,
+$\ScoreE$, and EWMA-smoothed $\ScoreE$ are calibrated on healthy windows only,
+using the 20th percentile of the healthy score distribution. The reference
+effort scale $E_0$ is the median healthy KL divergence. Reported metrics are:
 \begin{itemize}[leftmargin=*]
   \item detection rate of the bubble/collapse phases,
   \item median detection delay,
