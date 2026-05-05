@@ -17,14 +17,14 @@ The project remains centered on two flagship ideas:
 
 ### 1. How general is the cube-root law?
 
-Current answer: the clean derivation is rigorous for the finite-memory estimator class already written in the paper, with sliding windows and EWMA as the verified cases. The current text is too broad if it suggests a universal minimax statement over all adaptive estimators.
+Current answer: the clean derivation is rigorous for the finite-memory averaging class already written in the paper, with sliding windows and EWMA as the verified cases. The current text is too broad if it suggests a universal minimax statement over all adaptive estimators.
 
 What we will do:
 - either prove a formal minimax lower bound for an explicit class of finite-memory kernels, or
 - narrow the theorem language to a precise estimator class if the stronger proof does not close.
 
 Preferred route:
-- prove a lower bound for a class of causal, finite-memory kernels with effective size and effective lag parameters.
+- prove a lower bound for a class of causal, finite-memory averaging kernels with effective size and effective lag parameters.
 
 ### 2. Is there a sign error in Proposition 6.12?
 

@@ -47,8 +47,8 @@ Why this phase exists:
 
 ## Phase 11: Theoretical Strengthening and Lower Bounds
 
-- [ ] Prove a formal lower bound for an explicit class of finite-memory estimators / kernels, or tighten the theorem language to the exact class that is actually proved.
-- [ ] Rework the cube-root discussion so it is precise about what is proven, what is conjectured, and what is operationally supported by experiments.
+- [x] Tighten the cube-root discussion so it is precise about what is proven, what is conjectured, and what is operationally supported by experiments.
+- [in_progress] Prove a formal lower bound for an explicit class of finite-memory estimators / kernels.
 - [ ] Add the strongest possible relation to nonstationary optimization, dynamic regret, and adaptive filtering without overclaiming equivalence.
 - [ ] Update the manuscript and the report together with the final theorem statement.
 - [ ] Commit Phase 11.
