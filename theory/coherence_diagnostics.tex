@@ -143,10 +143,14 @@ The \emph{estimable score} is
   \ScoreHat(\IS,t) \;\coloneqq\;
   \min\!\left(\hat\sigma_P(t),\;\sigma_A(t),\;\sigma_\Phi(t)\right).
 \]
-Note that $\sigma_A$ and $\sigma_\Phi$ remain exactly computable without
-oracle access: $\sigma_A = e^{-H(\Act_t | \Pot)}$ is estimated from replica
-divergence logs, and $\sigma_\Phi = 1/(1+V_\Phi)$ from the convergence
-subsystem's Lyapunov functional.
+The three components have different operational meanings. In the Gaussian
+tracker, $\sigma_A$ is exact because the action channel is deterministic. In
+the particle tracker, $\sigma_A$ is a controlled synthetic surrogate based on
+the actuation gap. In KuaiRand, $\sigma_A$ is a logged-data surrogate based on
+normalized exposure entropy, available only because the benchmark exposes the
+necessary exposure counts. Likewise, $\sigma_\Phi = 1/(1+V_\Phi)$ is exact
+only when the convergence subsystem's Lyapunov functional is available or
+constructively specified.
 \end{definition}
 
 \begin{assumption}[$W_2$-Lipschitz Drift]\label{ass:adrift}

@@ -58,7 +58,7 @@ Current answer: the score is promising, but its behavior under proxy mis-specifi
 
 What we will do:
 - expand sensitivity and ablation analyses,
-- treat `\sigma_A` as operationally exact only where the logs justify it,
+- treat `\sigma_A` as exact only in deterministic or constructively specified settings, and as a surrogate elsewhere,
 - add explicit proxy-quality criteria.
 
 ### 6. How honest is the KuaiRand interpretation?
@@ -69,6 +69,10 @@ What we will do:
 - tighten the language around logged-data proxies,
 - add stronger controls and matched comparisons,
 - avoid causal claims that the data cannot support.
+
+Current operational stance:
+- KuaiRand is a logged-data surrogate benchmark, not a causal identification study.
+- The reported score is useful because it tracks exposure concentration and masking, not because it equals the unobserved conditional entropy exactly.
 
 ### 7. Are there enough baselines?
 

@@ -48,7 +48,7 @@ Why this phase exists:
 ## Phase 11: Theoretical Strengthening and Lower Bounds
 
 - [x] Tighten the cube-root discussion so it is precise about what is proven, what is conjectured, and what is operationally supported by experiments.
-- [in_progress] Prove a formal lower bound for an explicit class of finite-memory estimators / kernels.
+- [completed] Prove a formal lower bound for an explicit class of finite-memory estimators / kernels.
 - [ ] Add the strongest possible relation to nonstationary optimization, dynamic regret, and adaptive filtering without overclaiming equivalence.
 - [ ] Update the manuscript and the report together with the final theorem statement.
 - [ ] Commit Phase 11.
@@ -58,7 +58,7 @@ Why this phase exists:
 
 ## Phase 12: Effort Proxy, `\sigma_A`, and KuaiRand Honesty
 
-- [ ] Separate exact, synthetic, and logged-data interpretations of `\sigma_A` in the paper.
+- [in_progress] Separate exact, synthetic, and logged-data interpretations of `\sigma_A` in the paper.
 - [ ] Add an explicit operational hierarchy for effort proxies and state when each one is valid.
 - [ ] Tighten the KuaiRand wording so it clearly reflects logged-data limitations, confounding risk, and the meaning of the reported metric.
 - [ ] Add any needed ablations on `\lambda`, `E0`, and proxy choice, and remove any unsupported causal language.
