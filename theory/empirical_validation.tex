@@ -774,6 +774,26 @@ detector, while the dynamic window rule improves modestly over fixed $n = 100$
 in precision but not in lead count. This confirms that the passive-stream caveat
 is not ELEC2-specific.
 
+\subsection{Passive and Active Diagnostics Are Complementary}\label{sec:tgt_complementary}
+
+The experiments support a clean division of labor. On passive streams such as
+ELEC2 and Bikes, the relevant anomaly is changepoint detection on exogenous
+data. In that regime, generic detectors such as ADWIN are the right default
+tools, and the score should be read as a structural diagnostic with tunable
+semantics rather than as a universal replacement for passive alarms.
+
+On active or logged benchmarks, the target anomaly changes. In the particle
+tracker and KuaiRand, the problem is not only that the data distribution moves,
+but that intervention can keep apparent model-world fit high while a stale model
+is being protected by effort. In that regime, $\ScoreE$ and the masking gap are
+the relevant observables. KSWIN remains a competitive generic detector on
+KuaiRand, but it pays with false positives comparable to or higher than the
+effort-aware diagnostic, while ADWIN and PageHinkley contribute little under the
+same calibration. The practical conclusion is therefore complementary rather
+than adversarial: use passive drift detectors for passive streams, and use
+effort-aware coherence when the system can actively shape the observations it is
+judged against.
+
 \subsection{Discussion: Limitations of the Empirical Validation}\label{sec:tgt_discussion}
 
 Four limitations bound the scope of these results.
