@@ -26,6 +26,13 @@ compression of a non-stationary process}: memory reduces variance, but it also
 extends the interval over which a compressed model must remain valid while the
 world keeps moving.
 
+This finite-memory baseline is also the right reference point for evaluating
+closed-loop diagnostics. In action-coupled systems, lower observed error need
+not mean better estimation, because interventions can reduce error by steering
+the environment toward a stale model. The coherence score $\Score$ measures the
+state-update bottleneck directly, while $\ScoreE$ discounts alignment that is
+purchased through intervention rather than adaptation.
+
 In closed-loop settings, raw tracking error is not always enough. A system may
 appear well aligned with its environment because its actions are pushing the
 environment toward a stale model rather than because the model remains current.
