@@ -344,14 +344,21 @@ $w$ as in \cref{def:avg_kernel}, the kernel estimator
 \]
 satisfies
 \[
-  \mathbb{E}\,\bigl|\hat\mu_t^{(w)} - \mu_t\bigr|
+  \sqrt{\mathbb{E}\,\bigl(\hat\mu_t^{(w)} - \mu_t\bigr)^2}
   \;\geq\;
   c_1\,\sigma\,n_{\mathrm{eff}}(w)^{-1/2}
-  + c_2\,\zeta\,\tau_{\mathrm{eff}}(w)
+  \vee
+  c_2\,\zeta\,\tau_{\mathrm{eff}}(w)
 \]
 for universal constants $c_1,c_2>0$.
-In particular, optimizing over the averaging family yields the same cube-root
-exponent as \cref{prop:coherence_delay}.
+Equivalently, the mean-squared error obeys the exact decomposition
+\[
+  \mathbb{E}\,\bigl(\hat\mu_t^{(w)} - \mu_t\bigr)^2
+  \;=\;
+  \sigma^2 n_{\mathrm{eff}}(w)^{-1} + \zeta^2 \tau_{\mathrm{eff}}(w)^2,
+\]
+and therefore the RMSE lower bound above. In particular, optimizing over the
+averaging family yields the same cube-root exponent as \cref{prop:coherence_delay}.
 \end{proposition}
 
 \begin{proof}
@@ -363,15 +370,15 @@ The estimator error decomposes as
 \]
 Hence the bias magnitude is exactly $\zeta\tau_{\mathrm{eff}}(w)$ and the noise
 term is Gaussian with variance $\sigma^2\sum_{j\geq 0}w_j^2 = \sigma^2 /
-n_{\mathrm{eff}}(w)$. For a Gaussian random variable $Z\sim\mathcal{N}(b,v)$,
+n_{\mathrm{eff}}(w)$. Therefore
 \[
-  \mathbb{E}|Z| \geq \max\!\bigl(|b|,\sqrt{2/\pi}\,\sqrt{v}\bigr)
-  \geq \tfrac{1}{2}\bigl(|b| + \sqrt{2/\pi}\,\sqrt{v}\bigr).
+  \mathbb{E}\,\bigl(\hat\mu_t^{(w)} - \mu_t\bigr)^2
+  = \zeta^2 \tau_{\mathrm{eff}}(w)^2 + \sigma^2 n_{\mathrm{eff}}(w)^{-1},
 \]
-Substituting $b=\zeta\tau_{\mathrm{eff}}(w)$ and
-$v=\sigma^2 / n_{\mathrm{eff}}(w)$ gives the claim, with constants absorbed into
-$c_1,c_2$. Optimizing the lower bound over the averaging family recovers the
-same $2/3$ window scaling and $1/3$ error exponent as the upper bound.
+and taking square roots gives the stated lower bound, since
+\(\sqrt{a+b} \geq a^{1/2} \vee b^{1/2}\) for nonnegative $a,b$.
+Optimizing the resulting trade-off over the averaging family recovers the same
+$2/3$ window scaling and $1/3$ error exponent as the upper bound.
 \end{proof}
 
 \begin{remark}[Interpretation: a finite-memory floor]\label{rem:cdfloor}
