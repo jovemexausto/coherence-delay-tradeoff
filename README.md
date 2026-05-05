@@ -1,24 +1,30 @@
 # Coherence-Delay Trade-off
 
-Source repository for the preprint **"The Coherence-Delay Trade-off in Tracking Under Drift: A Cube-Root Law for Finite-Memory Estimation"**.
+**The Coherence-Delay Trade-off in Tracking Under Drift: A Cube-Root Law for Finite-Memory Estimation**
 
-## At a glance
+Tracking under drift is not just a filtering problem. It is a trade-off between statistical precision and staleness.
 
-The paper studies tracking under drift as a finite-memory estimation problem. When tracking error is split into statistical and staleness terms, the trade-off yields a cube-root law for the optimal effective memory. The repository also includes the empirical figures and datasets used for the paper's action-coupled experiments.
+This work shows that, once those two forces are written explicitly, the optimal effective memory follows a cube-root law. In action-coupled settings, the same lens also explains why standard coherence measures can look stable while effort-aware diagnostics reveal the cost of forcing the world to match a frozen action.
 
-## Layout
+## Core idea
 
-- `main.tex`: top-level LaTeX entry point.
-- `frontmatter/`, `theory/`, `discussion/`, `appendices/`, `config/`: manuscript source.
-- `figures/`: committed paper figures.
-- `experiments/`: experiment code.
-- `REPRODUCIBILITY.md`: setup and run instructions.
-- `CITATION.cff`: citation metadata.
+- finite-memory estimation under drift
+- cube-root scaling for the optimal memory budget
+- coherence, effort-corrected scores, and coercive masking
+
+## Reproducibility
+
+See `REPRODUCIBILITY.md` for setup and run instructions.
 
 ## Citation
 
-Use the metadata in `CITATION.cff` or cite the repository URL listed in `appendices/code_repository.tex`.
+If you use this work, please cite:
 
-## License
-
-`LICENSE` defines the split licensing for this repository.
+```bibtex
+@software{parreira2026coherence_delay_tradeoff,
+  title = {The Coherence-Delay Trade-off in Tracking Under Drift: A Cube-Root Law for Finite-Memory Estimation},
+  author = {Parreira, Vinicius},
+  year = {2026},
+  url = {https://github.com/jovemexausto/coherence-delay-tradeoff}
+}
+```
