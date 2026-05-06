@@ -314,15 +314,18 @@ While evaluating exact Wasserstein distances scales poorly, the debiased Sinkhor
 divergences used for $\hat\sigma_P$ and $\hat\sigma_A$ are highly parallelizable.
 \Cref{fig:gaussian_sinkhorn_runtime} and \cref{tab:sinkhorn_runtime} profile the
 computational cost across sequence lengths $n \in \{25, 50, 100\}$, ambient
-dimensions $d \in \{2, 8, 32, 64, 128\}$, and regularization parameters
-$\varepsilon \in \{0.05, 0.2, 1.0\}$. The metrics isolate the pairwise distance
-matrix computation and Sinkhorn iteration loop. The low-$\varepsilon$
-regime is the expensive one: at $d=8$ and $n=100$, mean solve time drops from
-7.498\,ms at $\varepsilon=0.05$ to 0.652\,ms at $\varepsilon=1.0$, while the mean
-absolute bias drops from 0.6102 to 0.1383. The corresponding pairwise-evaluation
-throughput rises from 1.33\,M/s to 15.34\,M/s. Window size increases cost in the
-expected direction; dimension mainly changes the bias profile, with tighter
-regularization amplifying the bias on higher-dimensional clouds.
+dimensions $d \in \{2, 8, 32, 64, 128, 256\}$, and regularization parameters
+$\varepsilon \in \{0.02, 0.05, 0.2, 1.0\}$. The metrics isolate the pairwise
+distance matrix computation and Sinkhorn iteration loop. On this grid the solver
+remains stable as dimension increases, but fixed $\varepsilon$ is not portable:
+larger regularization is consistently cheaper and also gives lower absolute bias
+on the Gaussian clouds we tested. For instance, at $d=8$ and $n=100$, mean solve
+time falls from 7.341\,ms at $\varepsilon=0.05$ to 0.661\,ms at $\varepsilon=1.0$,
+while mean absolute bias falls from 0.6102 to 0.1383; at $d=256$ and $n=100$,
+the corresponding pair is 0.799\,ms / 1.7778 at $\varepsilon=0.05$ versus
+0.571\,ms / 0.1446 at $\varepsilon=1.0$. The practical message is that
+intrinsic-dimension-aware calibration matters even when the same $S_\varepsilon$
+machinery is used throughout.
 
 \begin{figure}[!htbp]
 \centering
@@ -331,23 +334,24 @@ regularization amplifying the bias on higher-dimensional clouds.
   \emph{Left:} mean runtime versus window size for each combination of
   dimension and regularization.
   \emph{Right:} mean absolute bias versus regularization at the largest window
-  size ($n=100$).}\label{fig:sinkhorn_runtime}
+  size ($n=100$); the sweep extends to $d=256$ and $\varepsilon=0.02$.}\label{fig:sinkhorn_runtime}
 \end{figure}
 
 \begin{table}[ht]
 \centering
 \scriptsize
-\caption{Representative Sinkhorn runtime points (Gaussian clouds).}\label{tab:sinkhorn_runtime}
+\caption{Representative Sinkhorn runtime points (Gaussian clouds). The grid now
+  extends to $d=256$ and $\varepsilon=0.02$.}\label{tab:sinkhorn_runtime}
 \begin{tabular}{@{}lrrrr@{}}
 \toprule
 Setting & Mean runtime (ms) & Mean abs. bias & Mean iters & Pairwise/s \\
 \midrule
-$d=8$, $n=25$, $\varepsilon=0.05$ & 4.107 & 0.9639 & 250.0 & 152{,}179 \\
-$d=8$, $n=100$, $\varepsilon=0.05$ & 7.498 & 0.6102 & 250.0 & 1{,}333{,}689 \\
-$d=8$, $n=100$, $\varepsilon=1.0$ & 0.652 & 0.1383 & 14.5 & 15{,}337{,}423 \\
-$d=32$, $n=100$, $\varepsilon=0.05$ & 2.862 & 1.2240 & 249.2 & 3{,}494{,}060 \\
-$d=128$, $n=100$, $\varepsilon=0.05$ & 1.169 & 1.6354 & 81.5 & 8{,}551{,}881 \\
-$d=128$, $n=100$, $\varepsilon=1.0$ & 0.551 & 0.1412 & 6.7 & 18{,}144{,}237 \\
+$d=8$, $n=25$, $\varepsilon=0.02$ & 1.436 & 0.9522 & 250.0 & 435{,}296 \\
+$d=8$, $n=100$, $\varepsilon=0.05$ & 7.341 & 0.6102 & 250.0 & 1{,}362{,}217 \\
+$d=8$, $n=100$, $\varepsilon=1.0$ & 0.661 & 0.1383 & 14.5 & 15{,}121{,}765 \\
+$d=128$, $n=100$, $\varepsilon=0.05$ & 1.179 & 1.6354 & 81.5 & 8{,}481{,}666 \\
+$d=256$, $n=100$, $\varepsilon=0.05$ & 0.799 & 1.7778 & 35.5 & 12{,}511{,}617 \\
+$d=256$, $n=100$, $\varepsilon=1.0$ & 0.571 & 0.1446 & 6.2 & 17{,}519{,}521 \\
 \bottomrule
 \end{tabular}
 \end{table}

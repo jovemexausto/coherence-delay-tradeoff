@@ -234,18 +234,20 @@ Bottom line:
 Answer:
 - The existing Gaussian runtime artifact already answers part of this question:
   `experiments/artifacts/gaussian/gaussian_sinkhorn_runtime.csv` measures
-  dimensions `d in {2, 8, 32}` at several windows and regularization levels.
-- The practical picture is consistent with the manuscript wording: low
-  regularization amplifies bias in higher dimension, while larger
-  regularization sharply lowers runtime and keeps bias operationally moderate
-  on the validated grid.
+  dimensions `d in {2, 8, 32, 64, 128, 256}` and regularization levels
+  `epsilon in {0.02, 0.05, 0.2, 1.0}`.
+- The practical picture is now clearer: the solver remains stable as dimension
+  rises, but fixed `epsilon` is not portable. On the tested Gaussian clouds,
+  larger regularization is consistently cheaper and also gives lower absolute
+  bias, while the remaining bias floor still depends on dimension.
 - What we still do not have is the reviewer's stronger test: a real,
-  high-dimensional embedding benchmark in the hundreds of dimensions.
+  high-dimensional embedding benchmark in the hundreds of dimensions with a
+  non-Gaussian support geometry.
 
 Bottom line:
-- We now have a measured dimension/bias profile on controlled Gaussian clouds,
-  but not yet the high-dimensional real benchmark that would truly pressure-
-  test the framework.
+- We now have a more complete measured dimension/bias profile on controlled
+  Gaussian clouds, but not yet the high-dimensional real benchmark that would
+  truly pressure-test the framework.
 
 ### Q5. How fair is threshold calibration, and are the main KuaiRand gains statistically significant?
 
@@ -434,4 +436,3 @@ theory as particularly convincing.
 
 (None! All major and minor reviewer requests from Round 3 have been successfully addressed
 in the manuscript text and codebase.)
-

@@ -61,10 +61,11 @@ remains an open engineering problem.
 \paragraph{Computational profile.}
 The Sinkhorn runtime study is a prototype-level NumPy benchmark on Gaussian
 clouds. It is useful for separating statistical accuracy from wall-clock cost,
-but it does not claim a production implementation ceiling. The main practical
-message is that regularization $\varepsilon$ and window size dominate the cost--
-bias trade-off, while higher-dimensional settings mainly affect estimator bias
-under tight regularization.
+but it does not claim a production implementation ceiling. The current sweep
+reaches $d=256$ and $\varepsilon=0.02$, and the main practical message is that
+fixed regularization is not portable across geometry: larger $\varepsilon$ is
+consistently cheaper and more accurate on this grid, while the residual bias and
+iteration count still depend on dimension.
 
 \paragraph{Missing adaptive baselines.}
 The passive comparisons emphasize ADWIN, Page-Hinkley, KSWIN, and the NoDrift
