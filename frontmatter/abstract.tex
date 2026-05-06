@@ -14,17 +14,17 @@ prediction.
 
 Second, in action-coupled systems, low observed error can be maintained by
 forcing the environment toward a stale model rather than by genuine adaptation.
-We call this coercive masking and introduce an \textbf{effort-aware coherence
-diagnostic} to separate genuine adaptation from action-induced alignment. On
-passive benchmarks, generic changepoint detectors remain the stronger default
-alarms. On active synthetic and logged recommendation benchmarks, however, the
-effort-aware diagnostic exposes control-induced masking that passive detectors
-do not encode under the same calibration, identifying masking onset with median
-delay 5.0 steps in the particle benchmark and improving KuaiRand bubble
-detection from 0.458 to 0.692. These results show that tracking under drift
-is constrained by temporal staleness, and that evaluating adaptive systems
-under feedback requires accounting for intervention effort rather than relying
-on raw fit alone.
+We call this coercive masking and introduce the \textbf{Coherence Index (CI)}
+and the \textbf{Effort-Adjusted Coherence Index ($CI^E$)} to separate genuine
+adaptation from action-induced alignment. On passive benchmarks, generic
+changepoint detectors remain the stronger default alarms. On active synthetic
+and logged recommendation benchmarks, however, $CI^E$ exposes control-induced
+masking that passive detectors do not encode under the same calibration,
+identifying masking onset with median delay 5.0 steps in the particle benchmark
+and improving KuaiRand bubble detection from 0.458 to 0.692. These results show
+that tracking under drift is constrained by temporal staleness, and that
+evaluating adaptive systems under feedback requires accounting for intervention
+effort rather than relying on raw fit alone.
 
 \end{abstract}
 
@@ -32,6 +32,6 @@ on raw fit alone.
 \noindent\textbf{Keywords:}
 tracking under drift; finite-memory estimation; Wasserstein distance;
 Sinkhorn divergence; concept drift; online compression;
-coherence score; effort-aware coherence; coercive masking.
+Coherence Index; Effort-Adjusted Coherence Index; coercive masking.
 
 \noindent\textbf{MSC~2020:} 93D05, 93D30, 68P99.

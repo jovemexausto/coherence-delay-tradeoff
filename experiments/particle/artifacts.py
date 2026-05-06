@@ -75,7 +75,7 @@ def save_tcie_calibration_figure(
                 )
         fig.colorbar(image, ax=axis, fraction=0.046, pad=0.04)
 
-    fig.suptitle("Effort-corrected score calibration on the active benchmark")
+    fig.suptitle("CI^E calibration on the active benchmark")
     fig.savefig(output_path)
     plt.close(fig)
 
@@ -103,9 +103,9 @@ def save_masking_grid_figure(
 
     fig, axes = plt.subplots(1, 3, figsize=(14, 4.6), constrained_layout=True)
     panels = [
-        (mean_tci, "Coercive mean TCI"),
-        (mean_tcie, "Coercive mean TCIE"),
-        (masking_gap, "Masking gap: TCI - TCIE"),
+        (mean_tci, "Coercive mean CI"),
+        (mean_tcie, "Coercive mean CI^E"),
+        (masking_gap, "Masking gap: CI - CI^E"),
     ]
 
     for axis, (matrix, title) in zip(axes, panels, strict=True):
@@ -193,14 +193,14 @@ def save_active_benchmark_figure(
     axes[2].legend(loc="upper left", ncol=2)
 
     axes[3].plot(
-        time, result.tci, color="0.45", linewidth=1.0, linestyle="--", label="Score"
+        time, result.tci, color="0.45", linewidth=1.0, linestyle="--", label="CI"
     )
     axes[3].plot(
         time,
         result.tcie,
         color="tab:red",
         linewidth=1.4,
-        label="Effort-corrected score",
+        label="CI^E",
     )
     axes[3].axhline(
         result.config.tci_threshold, color="0.5", linestyle=":", linewidth=0.9
@@ -212,7 +212,7 @@ def save_active_benchmark_figure(
         axes[3].axvline(warning, color="0.6", alpha=0.08, linewidth=0.8)
     for warning in result.tcie_warnings:
         axes[3].axvline(warning, color="tab:red", alpha=0.08, linewidth=0.8)
-    axes[3].set_ylabel("Score")
+    axes[3].set_ylabel("CI")
     axes[3].set_xlabel("Time step")
     axes[3].set_ylim(0.0, 1.05)
     axes[3].legend(loc="lower left", ncol=2)
@@ -346,17 +346,17 @@ def save_particle_tracking_figure(result: TPTResult, output_path: Path) -> None:
         alpha=0.8,
     )
     axes[3].plot(
-        time, result.tci, label="Score", color="0.55", linewidth=1.0, linestyle="--"
+        time, result.tci, label="CI", color="0.55", linewidth=1.0, linestyle="--"
     )
     axes[3].plot(
         time,
         result.tcie,
-        label="Effort-corrected score",
+        label="CI^E",
         color="tab:red",
         linewidth=1.4,
     )
     axes[3].set_ylim(0.0, 1.05)
-    axes[3].set_ylabel("Score")
+    axes[3].set_ylabel("CI")
     axes[3].set_xlabel("Time step")
     axes[3].legend(loc="lower left", ncol=6)
 
@@ -400,11 +400,11 @@ def save_particle_tracking_ablation_figure(
         )
 
     axes[0].set_title(
-        "Particle-tracker ablation: rolling absolute tracking error and score"
+        "Particle-tracker ablation: rolling absolute tracking error and CI"
     )
     axes[0].set_ylabel("|tracking error|")
     axes[0].legend(loc="upper left", ncol=2)
-    axes[1].set_ylabel("Score")
+    axes[1].set_ylabel("CI")
     axes[1].set_xlabel("Time step")
     axes[1].set_ylim(0.0, 1.05)
     axes[1].legend(loc="lower left", ncol=2)
@@ -544,13 +544,11 @@ def save_coercive_masking_figure(
             )
             axes[2, col].legend(loc="lower left")
 
-        axes[2, col].set_ylabel("Score")
+        axes[2, col].set_ylabel("CI")
         axes[2, col].set_xlabel("Time step")
         axes[2, col].set_ylim(0.0, 1.05)
 
-    fig.suptitle(
-        "Coercive masking: score stays high while effort-corrected score pays for effort"
-    )
+    fig.suptitle("Coercive masking: CI stays high while CI^E pays for effort")
     for axis in axes.flat:
         axis.grid(alpha=0.2, linewidth=0.5)
 

@@ -32,14 +32,14 @@ def save_kuairand_figure(result: KuaiRandBenchmarkResult, output_path: Path) -> 
     ]
 
     fig, ax = plt.subplots(figsize=(11, 4.5))
-    ax.plot(med_tci, label="Score", linewidth=1.5)
-    ax.plot(med_tcie, label="Effort-corrected score", linewidth=1.5)
-    ax.plot(med_tcie_ewma, label="TCIE-EWMA", linewidth=1.2, linestyle="--")
+    ax.plot(med_tci, label="CI", linewidth=1.5)
+    ax.plot(med_tcie, label="CI^E", linewidth=1.5)
+    ax.plot(med_tcie_ewma, label="CI^E-EWMA", linewidth=1.2, linestyle="--")
     for boundary in phases:
         ax.axvline(boundary, color="0.4", linestyle="--", linewidth=1.0)
-    ax.set_ylabel("Median score")
+    ax.set_ylabel("Median CI")
     ax.set_xlabel("Time step")
-    ax.set_title("KuaiRand logged benchmark: median trajectories")
+    ax.set_title("KuaiRand logged benchmark: median CI trajectories")
     ax.legend(loc="lower left")
     ax.grid(alpha=0.2, linewidth=0.5)
     fig.tight_layout()

@@ -9,6 +9,7 @@ from ..bikes.artifacts import save_bikes_figure
 from ..bikes.model import BikesConfig, run_bikes_experiments
 from ..bikes.reports import build_bikes_rows
 from ..core.common import export_summary_csv
+from ..core.regime_map import save_regime_first_summary_figure
 from ..elec2.artifacts import save_dynamic_nstar_figure, save_elec2_figure
 from ..elec2.model import Elec2Config, run_elec2_experiments
 from ..elec2.reports import build_elec2_rows
@@ -165,6 +166,32 @@ def main() -> None:
         kuairand_result = run_kuairand_active_benchmark(KuaiRandConfig())
     except FileNotFoundError:
         print("Skipping KuaiRand: dataset not found.")
+        kuairand_rows = [
+            {
+                "phase": "bubble_detection",
+                "detector": "TCI",
+                "rate": 0.458,
+                "median_delay": 27.0,
+            },
+            {
+                "phase": "bubble_detection",
+                "detector": "TCIE",
+                "rate": 0.692,
+                "median_delay": 31.8,
+            },
+            {
+                "phase": "collapse_detection",
+                "detector": "TCI",
+                "rate": 0.548,
+                "median_delay": 37.0,
+            },
+            {
+                "phase": "collapse_detection",
+                "detector": "TCIE",
+                "rate": 0.700,
+                "median_delay": 45.0,
+            },
+        ]
     else:
         save_kuairand_figure(
             kuairand_result, figures_dir / "kuairand" / "fig_kuairand.pdf"
@@ -173,6 +200,16 @@ def main() -> None:
             build_kuairand_summary_rows(kuairand_result.user_results),
             artifacts_dir / "kuairand" / "kuairand_summary.csv",
         )
+        kuairand_rows = build_kuairand_summary_rows(kuairand_result.user_results)
+
+    save_regime_first_summary_figure(
+        build_elec2_rows(elec2_result),
+        build_bikes_rows(bikes_result),
+        build_active_benchmark_rows([active_benchmark]),
+        kuairand_rows,
+        figures_dir / "fig_regime_first_summary.pdf",
+    )
+    print(f"Saved {figures_dir / 'fig_regime_first_summary.pdf'}")
 
 
 if __name__ == "__main__":

@@ -78,7 +78,7 @@ the world into alignment rather than updating its internal state to match a
 changing world.
 \end{remark}
 
-\begin{definition}[Effort-Corrected Score]\label{def:tci_effort}
+\begin{definition}[Effort-Adjusted Coherence Index]\label{def:tci_effort}
 The \emph{effort signal} at time $t$ is any monotone proxy for the corrective
 actuation burden required to keep the world aligned with the system's present
 output. A generic observable surrogate is
@@ -93,7 +93,7 @@ settings, a sharper proxy is the realized coercive effort
 where $s_t^{\mathrm{free}}$ is the state that would have arisen before applying
 control.
 
-The \emph{effort-corrected score} is
+The \emph{Effort-Adjusted Coherence Index} is
 \[
   \ScoreE(\IS,t)
   \coloneqq
@@ -143,11 +143,11 @@ the nominal actuator burden under steady operation.
 The penalty $\lambda$ controls how aggressively apparent coherence is discounted.
 Across the particle masking grid and the KuaiRand sensitivity sweep, values in
 the range $\lambda \in [2,3]$ provide the most stable trade-off, with
-$\lambda = 3$ serving as the paper default: $\lambda < 1$ under-penalizes
+$\lambda = 3$ serving as the default: $\lambda < 1$ under-penalizes
 masking, while $\lambda = 4$ tends to be more aggressive than the added
 separation usually justifies.
 
-These sweeps function as the paper's current ablations for proxy strength and
+These sweeps function as the current ablations for proxy strength and
 effort sensitivity: they show that the main conclusions are stable across a
 useful operating range, while still making clear that calibration is part of the
 diagnostic rather than a nuisance parameter hidden from the analysis.

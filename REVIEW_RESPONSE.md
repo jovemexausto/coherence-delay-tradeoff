@@ -127,7 +127,7 @@ Current answer: yes, but only after the review-response work is stabilized.
 
 Preferred naming direction:
 - `C` -> `CI` (`Coherence Index`)
-- `C^E` -> `EAC` (`Effort-Adjusted Coherence`)
+- `C^E` -> `CI^E` (`Effort-Adjusted Coherence Index`)
 - `M_t` -> `Masking Gap`
 - umbrella: `CoherenceGuard`
 

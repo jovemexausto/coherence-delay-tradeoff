@@ -1,10 +1,10 @@
 \section{KuaiRand Logged Benchmark Protocol}\label{app:kuairand}
 
-This protocol instantiates the real-data masking benchmark on top of
-the KuaiRand sequential recommendation logs. The goal is to test whether an
-effort-corrected coherence score can surface exposure concentration and
-filter-bubble-like drift better than passive detectors and a smoothed-score
-baseline.
+This protocol instantiates the real-data masking benchmark on top of the
+KuaiRand sequential recommendation logs. The goal is to test whether the
+Effort-Adjusted Coherence Index ($CI^E$) can surface exposure concentration
+and filter-bubble-like drift better than passive detectors and a
+smoothed-score baseline.
 
 \subsection*{Data and signals}
 The primary state signal is \texttt{watch\_ratio}. Auxiliary feedback signals
@@ -73,7 +73,7 @@ effort scale $E_0$ is the median healthy KL divergence. Reported metrics are:
   \item false positives in the healthy phase,
   \item sensitivity to $\lambda$ in $\ScoreE$,
   \item comparison against ADWIN, PageHinkley, KSWIN, NoDrift, and a
-    smoothed $\ScoreE$ baseline (EWMA).
+    smoothed $CI^E$ baseline (EWMA).
 \end{itemize}
 All baseline detectors consume the same effort-adjusted scalar signal,
 $1 - \ScoreE$, so the comparison is not biased by detector-specific

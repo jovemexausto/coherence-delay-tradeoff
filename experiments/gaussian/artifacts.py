@@ -43,7 +43,7 @@ def save_ablation_figure(results: dict[str, TGTResult], output_path: Path) -> No
     axes[0].set_ylabel(r"$V_{total}$")
     axes[0].set_title("Component ablation under passive drift")
     axes[0].legend(loc="upper left", ncol=2)
-    axes[1].set_ylabel("Score")
+    axes[1].set_ylabel("CI")
     axes[1].set_xlabel("Time step")
     axes[1].set_ylim(0.0, 1.05)
     axes[1].legend(loc="lower left", ncol=2)

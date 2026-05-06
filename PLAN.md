@@ -15,7 +15,7 @@ the paper, code, figures, and report together whenever the evidence changes.
 ## Evidence Rule
 
 - Passive streams: keep ADWIN/KSWIN/Page-Hinkley as legitimate baselines and do not overclaim superiority.
-- Active or logged systems: optimize for intervention-aware diagnosis, where the renamed diagnostics (`CI`, `EAC`, `Masking Gap`) should become the flagship layer if they survive the evidence.
+- Active or logged systems: optimize for intervention-aware diagnosis, where the renamed diagnostics (`CI`, `CI^E`, `Masking Gap`) should become the flagship layer if they survive the evidence.
 - New names, visuals, or architecture only stay if they improve clarity, reproducibility, or measured performance.
 - Product claims must be backed by benchmark tables, artifacts, and manuscript text in the same phase.
 
@@ -92,11 +92,11 @@ Why this phase exists:
 
 ## Phase 15: Naming and Visual System
 
-- [ ] Decide whether the renamed diagnostics should become the default (`CI`, `EAC`, `Masking Gap`) or whether a different naming stack is better.
-- [ ] Decide the project umbrella name, with `CoherenceGuard` as the current leading candidate.
-- [ ] Design flagship visualizations that communicate regimes, not just calibration tables.
-- [ ] Update the paper figures and repo-facing docs if the new naming and visuals survive the evidence.
-- [ ] Commit Phase 15.
+- [x] Decide the diagnostics naming stack: `CI` (Coherence Index), `CI^E` (Effort-Adjusted Coherence Index), and `Masking Gap`.
+- [x] Decide the project umbrella name, with `CoherenceGuard` as the current leading candidate.
+- [x] Design flagship visualizations that communicate regimes, not just calibration tables.
+- [x] Update the paper figures and repo-facing docs if the new naming and visuals survive the evidence.
+- [x] Commit Phase 15.
 
 Why this phase exists:
 - The current notation is mathematically compact but product-poor.

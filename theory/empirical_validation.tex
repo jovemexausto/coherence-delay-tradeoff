@@ -136,8 +136,8 @@ FM-3 (absent $\Conv$) & 1.972 $\pm$ 3.680 & 0.000 $\pm$ 0.000 & 5.400 $\pm$ 0.00
 \centering
 \safeincludegraphics[width=0.92\linewidth]{figures/fig_ablation}
 \caption{Component ablation: $V_{\mathrm{total}}$ (log scale, 20-step rolling
-  mean, top) and $\Score$ (bottom) under the four conditions.
-  The full model is the only condition where $\Score$ remains bounded away from~$0$.
+  mean, top) and the Coherence Index (CI, bottom) under the four conditions.
+  The full model is the only condition where CI remains bounded away from~$0$.
   FM-1 and FM-3 both diverge in $V_{\mathrm{total}}$ but are distinguished by
   different bottleneck components: $\sigma_P \to 0$ for FM-1 (stale $\Pot$)
   and $\sigma_\Phi \to 0$ for FM-3 (absent $\Conv$).}\label{fig:ablation}
@@ -378,9 +378,9 @@ inter-event interval (nearest-future matching; see \cref{app:code_repository} fo
 \centering
 \safeincludegraphics[width=\linewidth]{figures/fig_elec2}
 \caption{ELEC2 early-warning diagnostic.
-  \emph{Top:} $\ScoreHat$ via $\hat\sigma_P(t)$ (sliding window $n=100$) with
+  \emph{Top:} the Coherence Index estimate $\widehat{CI}$ via $\hat\sigma_P(t)$ (sliding window $n=100$) with
   warning threshold $0.295$ (dashed red).
-  Vertical lines mark score warnings (red), ADWIN warnings (purple), and
+  Vertical lines mark CI warnings (red), ADWIN warnings (purple), and
   Page-Hinkley failures (grey). \emph{Bottom:} residual signal fed to
   ADWIN (50-step rolling mean).}\label{fig:elec2}
 \end{figure}
@@ -529,7 +529,7 @@ smoothing.
   The random-exposure phase is treated as healthy, the first half of the later
   standard-recommendation slice as bubble formation, and the second half as
   collapse.
-  Thresholds for $\Score$, $\ScoreE$, and EWMA-smoothed $\ScoreE$ are
+  Thresholds for CI, $CI^E$, and EWMA-smoothed $CI^E$ are
   calibrated only on healthy windows.}
 \label{fig:kuairand_active}
 \end{figure}
@@ -577,7 +577,7 @@ $0.575$ at $\lambda=2.0$, $0.692$ at $\lambda=3.0$, and $0.747$ at
 $\lambda=4.0$, while healthy false positives rise from $0.777$ to $1.215$,
 $1.387$, and $1.632$ per user. Together with the particle masking-gap sweep,
 this makes $\lambda \in [2,3]$ the stable operating region and justifies the
-paper default $\lambda = 3$ as a compromise rather than a hand-tuned optimum.
+default $\lambda = 3$ as a compromise rather than a hand-tuned optimum.
 
 \begin{table}[ht]
 \centering
@@ -633,7 +633,7 @@ $\alpha \in \{0.1,0.2,0.3,0.5,0.7,0.9\}$ and
 $\lambda \in \{0.5,1.0,2.0,3.0,4.0\}$ over 8 seeds, exporting all raw and
 aggregated metrics from the experiment harness. To keep the main text readable,
 \cref{tab:particle_tracking_masking} reports a five-regime masking matrix at
-the paper default $\lambda = 3.0$: passive, weak, mild, moderate, and strong
+the default $\lambda = 3.0$: passive, weak, mild, moderate, and strong
 coercive coupling.
 
 \paragraph{Results.}
@@ -642,10 +642,10 @@ coercive coupling.
 \centering
 \safeincludegraphics[width=\linewidth]{figures/fig_particle_tracking_masking}
 \caption{Synthetic feedback masking in the particle tracker.
-  Left column: passive FM-1, where effort remains at zero and $\Score$ and
-  $\ScoreE$ coincide. Right column: coercive FM-1, where the action gap
-  remains nonzero, realized coercive effort appears once influence is positive,
-  and $\ScoreE$ drops once effort is penalized.}
+  Left column: passive FM-1, where effort remains at zero and CI and $CI^E$
+  coincide. Right column: coercive FM-1, where the action gap remains
+  nonzero, realized coercive effort appears once influence is positive, and
+  $CI^E$ drops once effort is penalized.}
 \label{fig:particle_tracking_masking}
 \end{figure}
 
@@ -680,9 +680,8 @@ improving while effort-aware coherence is deteriorating.
 \centering
 \safeincludegraphics[width=\linewidth]{figures/fig_particle_tracking_masking_grid}
 \caption{Multi-seed parameter sweep for feedback masking in the particle tracker
-  (8 seeds). Left: mean standard $\Score$. Middle: mean effort-corrected
-  $\ScoreE$. Right: masking gap
-  $M_t = \Score - \ScoreE$. The standard score monotonically rises with
+  (8 seeds). Left: mean CI. Middle: mean $CI^E$. Right: masking gap
+  $M_t = CI - CI^E$. The standard index monotonically rises with
   influence, while the masking gap widens with both influence and effort
   penalty $\lambda$.}
 \label{fig:particle_tracking_masking_grid}
@@ -718,8 +717,8 @@ rather than a model-derived residual.
 \safeincludegraphics[width=\linewidth]{figures/fig_particle_tracking_active_benchmark}
 \caption{Active benchmark in the particle tracker with two known phase changes.
   Orange line: masking onset at $t=200$. Red line: collapse onset at
-  $t=400$. ADWIN receives the raw observation stream. $\Score$ and
-  $\ScoreE$ are thresholded at $0.8$.}
+  $t=400$. ADWIN receives the raw observation stream. CI and $CI^E$ are
+  thresholded at $0.8$.}
 \label{fig:particle_tracking_active_benchmark}
 \end{figure}
 
@@ -765,11 +764,11 @@ a generic passive detector does not encode.
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.95\linewidth]{figures/fig_particle_tracking_tcie_calibration}
-\caption{Calibration grid for $\ScoreE$ over effort penalty $\lambda$
+\caption{Calibration grid for $CI^E$ over effort penalty $\lambda$
   and threshold. The rate panel is omitted because it saturates across most of
   the grid; the figure instead reports masking delay, collapse delay, and
   healthy false positives, which are the informative calibration axes.
-  The paper setting ($\lambda = 3.0$, threshold $0.80$) remains a low-delay
+  The default setting ($\lambda = 3.0$, threshold $0.80$) remains a low-delay
   compromise.}
 \label{fig:particle_tracking_tcie_calibration}
 \end{figure}
@@ -801,7 +800,7 @@ the same representation space.
 \safeincludegraphics[width=\linewidth]{figures/fig_bikes}
 \caption{Bikes early-warning diagnostic.
   \emph{Top:} $\hat\sigma_P(t)$ (sliding window $n=100$) with warning
-  threshold $0.295$ (dashed red). Vertical lines mark score warnings (red),
+  threshold $0.295$ (dashed red). Vertical lines mark CI warnings (red),
   ADWIN warnings (purple), and Page-Hinkley failures (grey).
   \emph{Bottom:} residual signal fed to ADWIN (50-step rolling mean).}
 \label{fig:bikes}
@@ -835,6 +834,24 @@ detector, while the dynamic window rule improves modestly over fixed $n = 100$
 in precision but not in lead count. The new CUSUM, FF-RLS, Kalman, and
 Fr\'echet baselines remain weaker than ADWIN under this calibration, which
 confirms that the passive-stream caveat is not ELEC2-specific.
+
+\subsection{Regime-First Summary}\label{sec:tgt_regime_summary}
+
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=\linewidth]{figures/fig_regime_first_summary}
+\caption{Regime-first diagnostic summary.
+  Passive streams favor generic drift alarms, active feedback exposes the need
+  for $CI^E$, and logged recommendation data reward proxy-aware effort
+  correction. The figure places each diagnostic in the regime where it is most
+  informative.}
+\label{fig:regime_first_summary}
+\end{figure}
+
+This summary shows which diagnostic is most informative in each regime.
+Passive streams such as ELEC2 and Bikes still favor generic changepoint
+detectors; active systems under coercive masking require $CI^E$; and logged
+recommendation data use the same effort-aware logic with a proxy effort signal.
 
 \subsection{Passive and Active Diagnostics Are Complementary}\label{sec:tgt_complementary}
 

@@ -30,10 +30,11 @@ world keeps moving.
 This finite-memory baseline is also the right reference point for evaluating
 closed-loop diagnostics. In action-coupled systems, lower observed error need
 not mean better estimation, because interventions can reduce error by steering
-the environment toward a stale model. The coherence score $\Score$ measures the
-apparent state-update bottleneck, while $\ScoreE$ is the main diagnostic for
-the active masking regime because it discounts alignment purchased through
-intervention rather than adaptation.
+the environment toward a stale model. The Coherence Index (CI), written here as
+$\Score$, measures the apparent state-update bottleneck, while the
+Effort-Adjusted Coherence Index ($CI^E$), written here as $\ScoreE$, is the
+main diagnostic for the active masking regime because it discounts alignment
+purchased through intervention rather than adaptation.
 
 In closed-loop settings, raw tracking error is not always enough. A system may
 appear well aligned with its environment because its actions are pushing the
@@ -45,13 +46,13 @@ decomposition has three functional roles: a representation of the world
 It is motivated by action-effective tracking systems rather than by a claim
 about information in general.
 
-The decomposition yields two diagnostics. The first is the coherence score
-$\Score$, a bottleneck-sensitive summary that combines model fidelity,
-actuation reproducibility, and adaptation quality. The second is an
-effort-corrected version, $\ScoreE$, designed for regimes where low observed
-error may be purchased through intervention rather than through adaptation. The
-distinction separates degradation from its cause and controls for
-action-induced confounding.
+The decomposition yields two diagnostics. The first is the Coherence Index
+($CI$), a bottleneck-sensitive summary that combines model fidelity, actuation
+reproducibility, and adaptation quality. The second is the Effort-Adjusted
+Coherence Index ($CI^E$), designed for regimes where low observed error may be
+purchased through intervention rather than through adaptation. The distinction
+separates degradation from its cause and controls for action-induced
+confounding.
 
 \Cref{sec:tci} derives the coherence-delay trade-off and the finite-memory
 cube-root law. \Cref{sec:necessity} shows that action-effective environments

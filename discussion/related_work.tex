@@ -5,9 +5,10 @@ The closest technical neighborhood is concept drift and streaming adaptation
 \citep{GamaSurvey2014}. Classical detectors such as ADWIN, DDM, and
 Page-Hinkley identify changepoints or sustained mean shifts in a monitored
 signal \citep{BifetGavalda2007,Gama2004,Harries1999}. On passive streams they are baseline changepoint
-detectors, whereas the coherence score is intended as a structural diagnostic tied
-to model fidelity and update quality rather than as a universal replacement for
-generic drift alarms. Related finite-memory results in nonstationary
+detectors, whereas the Coherence Index (CI) is intended as a structural
+diagnostic tied to model fidelity and update quality rather than as a universal
+replacement for generic drift alarms. Related finite-memory results in
+nonstationary
 optimization and online least-squares establish the same cube-root trade-off
 between variation and memory, but in Euclidean loss or bandit settings rather
 than in a distributional \(W_2\)/Sinkhorn geometry
@@ -26,7 +27,7 @@ sliding-window artifact.
 WATCH uses Wasserstein geometry to detect distribution shift in feature space
 \citep{faber2022watch,FaberEtAl2022LIFEWATCH}. Our work is adjacent but different in emphasis. We use
 $W_2$ and its debiased Sinkhorn surrogate inside a finite-memory tracking model
-to derive a lag--variance trade-off and a coherence score for model
+to derive a lag--variance trade-off and the Coherence Index (CI) for model
 coherence.
 
 \paragraph{Filtering and closed-loop control.}

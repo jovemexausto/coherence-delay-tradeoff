@@ -14,7 +14,7 @@ This work shows that, once those two forces are written explicitly, the optimal 
 
 - finite-memory estimation under drift
 - cube-root scaling for the optimal memory budget
-- coherence, effort-corrected scores, and coercive masking
+- CI, CI^E, coercive masking, and the CoherenceGuard software umbrella
 
 ## Reproducibility
 
