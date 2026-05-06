@@ -1,41 +1,40 @@
 \section{Conclusion}\label{sec:conclusion}
 
-The story resolves into two conclusions. First, tracking under drift with the
-finite-memory averaging class obeys a sharp limit. When total error is written as a
-sum of estimation variance and drift-induced staleness, optimizing over memory
-yields the cube-root law
+The paper argues for a simple but consequential view of adaptive systems. Under
+drift, memory is not only a resource; it is also a source of staleness. Under
+feedback, good observed fit is not yet evidence that the model is current,
+because intervention can keep the world near a stale estimate. The two claims of
+the paper follow from taking those facts seriously.
+
+On the tracking side, the finite-memory averaging class obeys a sharp
+coherence-delay limit. When total error is written as a sum of estimation
+variance and drift-induced staleness, optimizing over memory yields the
+cube-root law
 $\mathcal{E}_{\min} = \tfrac{3}{2}C_K^{2/3}\zeta^{1/3}$ for the estimator class
-analyzed here. A broader minimax lower bound now shows that the same exponent is
-unavoidable for any estimator restricted to the last $m$ samples on a
-$\zeta$-Lipschitz drift class in the critical-window regime. In that sense, tracking under drift is
-constrained by the same object that makes online compression useful: memory.
-More memory reduces noise, but it also increases the age of the compressed
-model.
+analyzed here. The broader lower-bound argument then shows that the same
+exponent is not merely a sliding-window artifact: it reappears for arbitrary
+estimators restricted to the last $m$ samples on a $\zeta$-Lipschitz drift
+class in the critical-window regime. The practical lesson is direct. More data
+can still make a tracker worse if the world moves faster than the memory can
+stay current.
 
-Second, action-coupled settings admit a specific diagnostic failure mode:
-apparent coherence can be maintained by intervention rather than by model
-adaptation. The decomposition into representation, actuation, and adaptation
-roles $(\Pot,\Act,\Conv)$ separates that regime from ordinary degradation.
-Here, $\Score$ is the Coherence Index (CI), $\ScoreE$ is the
-Effort-Adjusted Coherence Index ($CI^E$), and the masking gap is the signed
-difference between them. Apparent coherence can therefore be maintained by
-intervention rather than by model adaptation.
+On the diagnostic side, action-coupled systems admit a specific failure mode in
+which apparent coherence is maintained by forcing rather than by adaptation. The
+decomposition into representation, actuation, and adaptation roles
+$(\Pot,\Act,\Conv)$ isolates that regime from ordinary degradation, and the
+Effort-Adjusted Coherence Index ($CI^E$) is designed precisely for it. The
+empirical results support that split. The Gaussian tracker recovers the expected
+U-curve and the $\zeta^{1/3}$ scaling law for both sliding windows and EWMA.
+The particle benchmark shows that feedback masking can keep the standard score
+high even when the model is stale. On passive streams, generic changepoint
+detectors such as ADWIN remain the stronger default alarms. On active and logged
+benchmarks, however, the effort-aware score becomes the right diagnostic because
+the failure mode is no longer passive drift alone.
 
-The empirical results support this split. The Gaussian tracker recovers the
-predicted U-curve and the $\zeta^{1/3}$ scaling law for both sliding windows
-and EWMA in the controlled setting. The particle tracker shows that feedback
-masking can keep the standard score high even when the underlying model is
-stale. On passive benchmarks, generic changepoint detectors such as ADWIN
-remain the stronger default alarms. On active and logged benchmarks, however,
-$\ScoreE$ becomes the right tool because the failure mode is coercive masking
-rather than passive drift alone. The logged KuaiRand benchmark makes this point
-directly: the effort-corrected score detects a mode of feedback-induced
-degradation that the passive baselines do not capture under the same
-calibration.
-
-Finite-memory tracking under drift obeys a structural coherence-delay trade-off.
-Closed-loop systems can hide model failure through feedback, and coercive
-masking is precisely the regime where effort-aware diagnostics add information
-beyond raw fit and passive drift alarms.
-How far this decomposition extends beyond the settings studied here remains
-open.
+The broader claim is therefore modest but, we think, useful. Adaptive systems
+should not be evaluated only by how well they fit what they currently see.
+They should also be evaluated by how much temporal staleness they can tolerate
+and by how much intervention is required to preserve the appearance of
+coherence. Within the scope studied here, that is the main lesson: finite
+memory imposes a real tracking floor, and under feedback, raw fit is not yet a
+safe measure of adaptation.

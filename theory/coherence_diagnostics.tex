@@ -1,10 +1,10 @@
 \section{Coherence Diagnostics}\label{sec:tci}
 
 The coherence-delay law constrains the representation term of the finite-memory
-averaging systems studied here, but closed-loop performance also depends on whether actions
-remain reproducible and whether adaptation remains effective. The ISS template
-of \cref{sec:sufficiency} provides one way to score those three ingredients.
-This section packages them into a diagnostic built from the
+averaging systems studied here, but closed-loop performance also depends on
+whether actions remain reproducible and whether adaptation remains effective.
+The ISS template of \cref{sec:sufficiency} provides one way to score those
+three ingredients. This section packages them into a diagnostic built from the
 minimal decomposition $(\Pot,\Act,\Conv)$ used throughout the paper.
 
 \begin{definition}[Component Coherence Scores]\label{def:component_scores}
@@ -46,8 +46,8 @@ the diagnostic identity of the bottleneck.
 
 \begin{remark}[Bottleneck sensitivity and effort correction]
 The use of $\min(\sigma_P, \sigma_A, \sigma_\Phi)$ is
-bottleneck-sensitive: it is a diagnostic of the weakest active subsystem,
-not a smooth summary of overall system quality. Aggregators such as
+bottleneck-sensitive: it diagnoses the weakest active subsystem, not overall
+system quality in the round. Aggregators such as
 arithmetic or geometric means may be reported as descriptive summaries, but
 they are not valid replacements for the structural diagnostic given by
 \cref{def:tci}.
@@ -77,7 +77,7 @@ time and then batched across users.
 \end{remark}
 
 \begin{remark}[Finite-memory interpretation]
-The scaling law behind \cref{prop:tci_estimation_error} is not an artefact of
+The scaling law behind \cref{prop:tci_estimation_error} is not an artifact of
 the sliding-window estimator alone. The two terms in the bound,
 $n^{-1/2}$ and $\zeta\tau$, encode the structural trade-off between variance
 reduction and delay-induced bias for the finite-memory averaging family studied

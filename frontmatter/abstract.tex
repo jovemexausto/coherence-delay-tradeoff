@@ -1,30 +1,33 @@
 \begin{abstract}
-We develop two linked claims about tracking in non-stationary environments.
-First, finite-memory tracking under drift obeys a structural coherence-delay
-trade-off. When observations are aggregated over time, estimation variance
-decreases with memory length, but delay-induced bias increases as older data
-becomes less representative of the present environment. We formalize this
-trade-off and show that, in the finite-memory setting considered here, it
-induces a \textbf{cube-root scaling law}: the \textbf{minimum achievable
-tracking error} scales as $\boldsymbol{\zeta^{1/3}}$ with drift rate $\zeta$,
-with an \textbf{optimal effective memory} that scales as
-$\boldsymbol{\zeta^{-2/3}}$. Empirically, we recover slopes of 0.316 for
-sliding windows and 0.317 for EWMA, closely matching the theoretical
-prediction.
+Tracking in a changing environment is limited by a simple tension: more memory
+reduces noise, but it also makes the estimate older. In passive streams this is
+already a statistical problem; in closed-loop systems it becomes an epistemic
+one, because the same actions used to stabilize behavior can also make a stale
+model look correct. This paper treats those two points as a single story.
 
-Second, in action-coupled systems, low observed error can be maintained by
-forcing the environment toward a stale model rather than by genuine adaptation.
-We call this coercive masking and introduce the \textbf{Coherence Index (CI)}
-and the \textbf{Effort-Adjusted Coherence Index ($CI^E$)} to separate genuine
+First, we formalize a coherence-delay trade-off for finite-memory tracking under
+drift. For the finite-memory averaging class studied here, the variance term
+falls with memory while the lag term grows with drift and effective age,
+yielding a \textbf{cube-root law}: the \textbf{minimum achievable tracking
+error} scales as $\boldsymbol{\zeta^{1/3}}$ with drift rate $\zeta$, and the
+\textbf{optimal effective memory} scales as $\boldsymbol{\zeta^{-2/3}}$.
+Empirically, we recover slopes of 0.316 for sliding windows and 0.317 for EWMA,
+closely matching the theoretical prediction.
+
+Second, we study the regime in which low observed error is maintained not by
+adaptation but by steering the environment toward a stale model. We call it
+coercive masking and introduce the \textbf{Coherence Index (CI)} and the
+\textbf{Effort-Adjusted Coherence Index ($CI^E$)} to separate genuine
 adaptation from action-induced alignment. On passive benchmarks, generic
 changepoint detectors remain the stronger default alarms. On active synthetic
-and logged recommendation benchmarks, however, $CI^E$ exposes control-induced
-masking that passive detectors do not encode under the same calibration,
-identifying masking onset with median delay 5.0 steps in the particle benchmark
-and improving KuaiRand bubble detection from 0.458 to 0.692. These results show
-that tracking under drift is constrained by temporal staleness, and that
-evaluating adaptive systems under feedback requires accounting for intervention
-effort rather than relying on raw fit alone.
+and logged recommendation benchmarks, however, $CI^E$ exposes masking that
+passive detectors do not encode under the same calibration, identifying masking
+onset with median delay 5.0 steps in the particle benchmark and improving
+KuaiRand bubble detection from 0.458 to 0.692.
+
+The resulting picture is narrow but useful: under drift, finite memory imposes a
+real error floor, and under feedback, raw fit can be misleading unless the cost
+of intervention is made explicit.
 
 \end{abstract}
 

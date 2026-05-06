@@ -1,9 +1,11 @@
 \section{Diagnostic Failure Modes}\label{sec:failuremodes}\label{sec:examples}
 
-The decomposition $(\Pot,\Act,\Conv)$ is useful only if it identifies
-failure regimes that matter empirically. This section records the three
-diagnostic failure modes used throughout the experiments and the coherence
-scores.
+The decomposition $(\Pot,\Act,\Conv)$ becomes useful only when it separates
+failure regimes that matter empirically. This section names the three failure
+modes that recur throughout the experiments and later feed directly into the
+coherence scores. The point is not to enumerate every possible pathology of an
+adaptive system, but to isolate the three ways in which representation,
+actuation, and adaptation can fail in the diagnostic story developed here.
 
 \begin{proposition}[Failure Mode~1: Static-$\Pot$ collapse]\label{prop:failP}
 Suppose $\Conv_t$ ceases to update $\Pot$, so $\Pot(S,t)=\Pot(S,t_0)$ for
@@ -63,3 +65,8 @@ FM-3 is the missing-adaptation regime. In passive settings it appears as a
 failure to track external drift; in closed-loop settings it can amplify the
 system's own feedback and produce self-reinforcing misalignment.
 \end{remark}
+
+These failure modes motivate the score construction in the next section. Once
+the three ways of failing are separated, the natural diagnostic question is how
+to summarize them in a single quantity without losing the identity of the active
+bottleneck.

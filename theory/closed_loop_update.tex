@@ -1,10 +1,13 @@
 \section{Why Action Enters the Update in Closed-Loop Tracking}\label{sec:necessity}
 
-The coherence-delay law in \cref{sec:tci} concerns estimation with finite
-memory. In open-loop settings, the estimator only needs to combine past state
-information and new observations. In closed-loop settings, however, the
-system's own actions alter future observations. The update therefore needs to
-keep track of what the system did, not only of what it saw.
+The next step is to justify the minimal closed-loop architecture used
+throughout the paper. The finite-memory law studied later concerns tracking
+error once a representation is already in place, but in action-effective
+systems there is a prior question: what must an update rule remember in order
+to remain coherent under feedback? In open-loop settings, combining past state
+and new observations is enough. In closed-loop settings, however, the system's
+own actions alter future observations. The update therefore needs to keep track
+of what the system did, not just of what it saw.
 
 \subsection{External Characterization: Drift-Coherence}
 
@@ -100,3 +103,9 @@ structure required for drift-coherence. The explicit realization used here is
 $\Pot$ for stored state, $\Act$ for the action channel, and $\Conv$ for the
 update map.
 \end{proof}
+
+This necessity result does not yet tell us when such a three-role system is
+stable or diagnostically meaningful. It only shows that once actions affect
+future observations, a dyadic state-observation update is too small.
+The next section supplies the corresponding stability template under which the
+three roles can be scored.

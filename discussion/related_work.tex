@@ -1,37 +1,43 @@
 \section{Related Work}\label{sec:related}
 
 \paragraph{Tracking under non-stationarity.}
-The closest technical neighborhood is concept drift and streaming adaptation
-\citep{GamaSurvey2014}. Classical detectors such as ADWIN, DDM, and
-Page-Hinkley identify changepoints or sustained mean shifts in a monitored
-signal \citep{BifetGavalda2007,Gama2004,Harries1999}. On passive streams they are baseline changepoint
-detectors, whereas the Coherence Index (CI) is intended as a structural
-diagnostic tied to model fidelity and update quality rather than as a universal
-replacement for generic drift alarms. Related finite-memory results in
-nonstationary
-optimization and online least-squares establish the same cube-root trade-off
-between variation and memory, but in Euclidean loss or bandit settings rather
-than in a distributional \(W_2\)/Sinkhorn geometry
+The paper sits at the intersection of three literatures that are usually kept
+apart: concept drift detection, finite-memory tracking, and action-coupled
+prediction. In the concept-drift literature, classical detectors such as ADWIN,
+DDM, and Page-Hinkley identify changepoints or sustained mean shifts in a
+monitored signal \citep{GamaSurvey2014,BifetGavalda2007,Gama2004,Harries1999}.
+Those methods are the right passive baselines, and our results do not contest
+that: on passive streams they remain the stronger default alarms. The role of
+the Coherence Index (CI) is narrower. It is a structural diagnostic tied to
+model fidelity, actuation reproducibility, and update quality, not a universal
+replacement for generic changepoint detection.
+
+The second neighborhood is nonstationary optimization, adaptive filtering, and
+online least-squares. There the same cube-root tension between variation and
+memory already appears, but in Euclidean loss, bandit, or regret-based settings
+rather than in a distributional \(W_2\)/Sinkhorn geometry
 \citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,YuanLamperski2020,MazzettoUpfal2023}.
-The lower-bound layer added in this revision makes that comparison more
-precise in two ways: it is exact for causal averaging estimators, and it also
-appears as a minimax obstruction for arbitrary window-restricted estimators on a
-$\zeta$-Lipschitz drift class in the critical-window regime. The shared point is still structural rather than
-identical: the present paper works in a distributional \(W_2\)/Sinkhorn
-tracking model rather than the Euclidean-loss settings of dynamic regret.
-Classical smoothing rules such as EWMA and Kalman filtering also inhabit this
-neighborhood: they trade responsiveness against variance through forgetting or
-effective memory, but they are usually analyzed as estimators rather than as a
-closed-loop diagnostic baseline. Our EWMA results are included precisely to
-show that the cube-root law is a finite-memory phenomenon rather than a
+The lower-bound layer added here sharpens that connection without collapsing the
+two problems into one. In our setting, the cube-root law is exact for causal
+averaging estimators and reappears as a minimax obstruction for arbitrary
+window-restricted estimators on a $\zeta$-Lipschitz drift class in the
+critical-window regime. Classical smoothers such as EWMA and Kalman filtering
+belong to the same broad family of variance-versus-responsiveness trade-offs,
+but they are typically studied as estimators rather than as components of a
+closed-loop diagnostic argument. Our EWMA results are included precisely to show
+that the cube-root law is a finite-memory phenomenon rather than a
 sliding-window artifact.
 
 \paragraph{Transport-based diagnostics.}
 WATCH uses Wasserstein geometry to detect distribution shift in feature space
-\citep{faber2022watch,FaberEtAl2022LIFEWATCH}. Our work is adjacent but different in emphasis. We use
-$W_2$ and its debiased Sinkhorn surrogate inside a finite-memory tracking model
-to derive a lag--variance trade-off and the Coherence Index (CI) for model
-coherence.
+\citep{faber2022watch,FaberEtAl2022LIFEWATCH}. Our work is adjacent, but the
+use of transport is different in function. There, Wasserstein distance is the
+detector. Here, $W_2$ and its debiased Sinkhorn surrogate are built into the
+tracking model itself: they quantify representation error, induce the
+lag--variance trade-off, and anchor the coherence diagnostics. The point is not
+simply that OT is a good shift statistic, but that in the present setting it is
+part of the geometry of what it means for a finite-memory tracker to stay
+current.
 
 \paragraph{Filtering and closed-loop control.}
 The representation--action--adaptation decomposition is motivated by standard
@@ -70,4 +76,7 @@ dataset construction, including
 \citep{PerdomoEtAl2020,HardtMendlerDunner2023,TaoriHashimoto2023,PaganEtAl2023,KrauthWangJordan2022,EilatRosenfeld2023}.
 The main distinction is that we are not trying to solve the full causal problem
 of performative feedback; we are proposing a diagnostic for when intervention
-effort masks stale models in active or logged systems.
+effort masks stale models in active or logged systems. In that sense, the paper
+is best read not as a full theory of performativity, but as an attempt to mark a
+specific epistemic boundary: when low error should stop counting as evidence of
+good adaptation.

@@ -1,9 +1,12 @@
 \section{A Minimal Stability Template for Closed-Loop Tracking}\label{sec:sufficiency}
 
 The necessity argument in \cref{sec:necessity} identifies the three inputs a
-closed-loop update must use. To turn that decomposition into a usable
-diagnostic, we need a stability template under which each component admits a
-coherence score. We use an ISS-based cascade model for that purpose.
+closed-loop update must use. The present section addresses the complementary
+question of sufficiency: under what conditions does that three-role
+decomposition support a meaningful diagnostic rather than just a formal one? To
+make the later scores interpretable, we need a stability template under which
+representation, actuation, and adaptation each admit a Lyapunov-style
+quantity. We use an ISS-based cascade model for that purpose.
 
 \subsection{Hypotheses}
 
@@ -80,3 +83,8 @@ standard actuation and innovation terms, yields a concrete instance satisfying
 the ISS template \citep{Jazwinski1970}. This Gaussian case is a constructive
 reference instance for \cref{thm:borromean}.
 \end{example}
+
+With the stability template in place, the remaining question is diagnostic:
+what kinds of breakdown this decomposition is meant to reveal, and how those
+breakdowns should appear in the component scores. The next section names the
+failure modes that organize the empirical part of the paper.
