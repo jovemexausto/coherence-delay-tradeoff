@@ -1,0 +1,15 @@
+phase,detector,rate,ci_low,ci_high,median_delay,healthy_fp_per_user
+bubble_detection,CI,0.458,0.409,0.512,25.0,0.749
+bubble_detection,CI^E,0.692,0.646,0.741,31.8,1.387
+bubble_detection,CI^E-EWMA,0.529,0.477,0.58,35.5,0.956
+bubble_detection,ADWIN,0.0,0.0,0.0,NA,0.0
+bubble_detection,PageHinkley,0.0,0.0,0.0,NA,0.0
+bubble_detection,KSWIN,0.619,0.569,0.665,23.0,1.308
+bubble_detection,NoDrift,0.0,0.0,0.0,NA,0.0
+collapse_detection,CI,0.548,0.499,0.6,37.0,0.749
+collapse_detection,CI^E,0.7,0.651,0.749,45.0,1.387
+collapse_detection,CI^E-EWMA,0.567,0.515,0.619,41.8,0.956
+collapse_detection,ADWIN,0.0,0.0,0.0,NA,0.0
+collapse_detection,PageHinkley,0.0,0.0,0.0,NA,0.0
+collapse_detection,KSWIN,0.978,0.962,0.992,26.5,1.308
+collapse_detection,NoDrift,0.0,0.0,0.0,NA,0.0

@@ -1,0 +1,13 @@
+comparison,outcome,left_mean,right_mean,delta,ci_low,ci_high,n_left,n_right
+CI flagged vs not,collapse_watch_ratio,77.32,76.673,0.647,-59.393,49.36,168,199
+CI flagged vs not,collapse_like_rate,0.011,0.006,0.005,-0.002,0.014,168,199
+CI flagged vs not,collapse_long_view_rate,0.128,0.136,-0.008,-0.031,0.017,168,199
+CI flagged vs not,collapse_tag_entropy,0.948,0.94,0.008,0.002,0.013,168,199
+CI^E flagged vs not,collapse_watch_ratio,76.16,78.788,-2.628,-90.219,54.776,254,113
+CI^E flagged vs not,collapse_like_rate,0.008,0.011,-0.003,-0.013,0.005,254,113
+CI^E flagged vs not,collapse_long_view_rate,0.135,0.127,0.008,-0.019,0.032,254,113
+CI^E flagged vs not,collapse_tag_entropy,0.945,0.941,0.003,-0.003,0.01,254,113
+CI^E-only vs neither,collapse_watch_ratio,66.655,88.323,-21.668,-128.542,51.957,107,92
+CI^E-only vs neither,collapse_like_rate,0.004,0.009,-0.005,-0.016,0.003,107,92
+CI^E-only vs neither,collapse_long_view_rate,0.137,0.135,0.002,-0.031,0.035,107,92
+CI^E-only vs neither,collapse_tag_entropy,0.941,0.939,0.003,-0.006,0.011,107,92

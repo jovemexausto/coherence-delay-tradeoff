@@ -11,6 +11,7 @@ COMMANDS = {
     "bikes": "experiments.cli.run_bikes",
     "elec2": "experiments.cli.run_elec2",
     "kuairand": "experiments.cli.run_kuairand",
+    "kuairand_followup": "experiments.cli.run_kuairand_followup",
     "all": "experiments.cli.run_all",
 }
 

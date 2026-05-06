@@ -151,3 +151,222 @@ We will not force a rename if it weakens the paper or obscures the math.
 ## Implementation Rule
 
 Every future phase must update the paper if the evidence changes the claim.
+
+## Round-2 Follow-up Answers
+
+This section records the follow-up analyses run after the later review pass. The
+main artifact bundle lives under `experiments/artifacts/kuairand/` in:
+
+- `kuairand_followup_report.md`
+- `kuairand_followup_default.csv`
+- `kuairand_followup_improvement.csv`
+- `kuairand_followup_lambda.csv`
+- `kuairand_followup_e0.csv`
+- `kuairand_followup_proxy.csv`
+- `kuairand_followup_threshold.csv`
+- `kuairand_followup_offpolicy.csv`
+- `kuairand_followup_downstream.csv`
+
+### Q1. How robust are the `CI^E` results to the effort proxy and to `\lambda` / `E_0` calibration?
+
+Answer:
+- On KuaiRand, the `CI^E` improvement over `CI` survives healthy-only threshold
+  calibration and remains statistically separated at the default operating
+  point. Bubble detection rises from `0.458` for `CI` to `0.692` for `CI^E`,
+  with a paired improvement of `+0.234` and bootstrap interval
+  `[0.183, 0.292]`.
+- The `\lambda` sweep keeps the same monotone pattern already seen in the paper:
+  stronger effort penalties increase bubble/collapse sensitivity but also raise
+  healthy false positives per user.
+- The `E_0` sweep shows the benchmark is not calibration-free. Halving `E_0`
+  pushes bubble detection to `0.845` but raises healthy false positives to
+  `1.837/user`; doubling `E_0` lowers bubble detection to `0.529` and healthy
+  false positives to `1.019/user`. The present default remains a compromise,
+  not a uniquely identified optimum.
+- Alternative effort proxies were tested at the same default operating point.
+  KL remains the strongest of the three proxies available in this repository:
+  TV and Gini-style concentration gaps still improve over plain `CI` in some
+  settings but sit materially below the default KL proxy.
+
+Bottom line:
+- `CI^E` is robust enough to survive proxy and calibration perturbations, but
+  the operating point matters and should be reported explicitly rather than
+  treated as universal.
+
+### Q2. Can we compare `CI^E` against causal / counterfactual baselines or off-policy risk estimates?
+
+Answer:
+- Not faithfully with the current repository inputs. We do not have item-level
+  propensities, replica policies, or the logged interventions needed to run a
+  CAFL/CRM-style counterfactual benchmark honestly.
+- To avoid pretending otherwise, we added only a coarse logged-data control:
+  a clipped self-normalized tag-frequency reweighting signal
+  (`kuairand_followup_offpolicy.csv`).
+- That control detects some later-phase change (`0.520` bubble,
+  `0.534` collapse) but aligns only weakly with `CI^E`
+  (`agreement 0.512/0.556`, very small score correlations).
+
+Bottom line:
+- This follow-up does not close the causal-validation gap. It confirms that the
+  paper still lacks a falsifiable counterfactual benchmark for masking, exactly
+  as the reviewer suspected.
+
+### Q3. Beyond averaging families, can model-based predictors beat the `\zeta^{1/3}` floor?
+
+Answer:
+- Under the current `\zeta`-Lipschitz drift assumption alone, our lower-bound
+  story applies to the finite-memory/window-restricted regime actually studied.
+- Extrapolative or model-based predictors can only beat that floor if they
+  exploit stronger structure than the current theorem assumes, for example:
+  identifiable state dynamics, higher-order temporal smoothness, parametric
+  trend structure, or external latent-state supervision.
+- The present paper still does not prove a minimax lower bound over that richer
+  model-based class, so the honest answer remains conditional: stronger models
+  may beat the current floor, but only by importing stronger regularity or
+  identifiability assumptions.
+
+Bottom line:
+- The cube-root law remains exact for the averaging family and relevant for
+  window-limited estimators, not universal for all adaptive predictors.
+
+### Q4. What do we now know about Sinkhorn dimension dependence and regularization bias?
+
+Answer:
+- The existing Gaussian runtime artifact already answers part of this question:
+  `experiments/artifacts/gaussian/gaussian_sinkhorn_runtime.csv` measures
+  dimensions `d in {2, 8, 32}` at several windows and regularization levels.
+- The practical picture is consistent with the manuscript wording: low
+  regularization amplifies bias in higher dimension, while larger
+  regularization sharply lowers runtime and keeps bias operationally moderate
+  on the validated grid.
+- What we still do not have is the reviewer's stronger test: a real,
+  high-dimensional embedding benchmark in the hundreds of dimensions.
+
+Bottom line:
+- We now have a measured dimension/bias profile on controlled Gaussian clouds,
+  but not yet the high-dimensional real benchmark that would truly pressure-
+  test the framework.
+
+### Q5. How fair is threshold calibration, and are the main KuaiRand gains statistically significant?
+
+Answer:
+- We now report the actual healthy false positives per user for all detectors at
+  the chosen operating points instead of only headline detection rates.
+- `CI`, `CI^E`, and `CI^E`-EWMA are calibrated on healthy windows only using the
+  same quantile rule; threshold sensitivity was re-run for quantiles
+  `{0.1, 0.2, 0.3}`.
+- At the default `0.2` quantile, `CI^E` remains above `CI` with paired bootstrap
+  intervals and exact paired-significance checks:
+  bubble `+0.234 [0.183, 0.292]`, collapse `+0.153 [0.098, 0.207]`.
+- The passive baselines still occupy different effective false-alarm regimes.
+  For example, KSWIN is highly sensitive on collapse but already sits at a high
+  healthy false-positive rate in the same benchmark.
+
+Bottom line:
+- The `CI^E` gain over `CI` is statistically real on this benchmark, but the
+  overall detector comparison is still calibration-sensitive rather than fully
+  equalized by false-alarm rate.
+
+### Q6. What practical guidance can we now give for estimating `\sigma_A` and `\sigma_\Phi` in black-box systems?
+
+Answer:
+- The exact / identified / proxy ladder remains the right operational framing.
+- The clearest practical recommendation that emerged from this pass is:
+  if a shadow policy, replica policy, or direct intervention log exists, use it
+  to estimate action-induced exposure distortion directly and treat that as the
+  highest-quality route to `\sigma_A`.
+- Without such logs, the benchmark falls back to proxy semantics and should be
+  described as such. KuaiRand remains at the proxy level.
+- For `\sigma_\Phi`, the repository still has no general black-box estimator.
+  The honest guidance is limited to surrogate stability diagnostics:
+  repeated-seed replay, logged update norms, or explicit simulator-side energy
+  functions when those are available.
+
+Bottom line:
+- The follow-up did not solve black-box identifiability of `\sigma_A` or
+  `\sigma_\Phi`; it clarified that shadow-policy style logging is the most
+  credible next step if we want to move beyond proxies.
+
+### Q7. Do early `CI^E` flags align with downstream user consequences in KuaiRand?
+
+Answer:
+- We ran an external-outcome check using collapse-phase tag diversity,
+  `long_view`, and `like` rates (`kuairand_followup_downstream.csv`).
+- The current logged benchmark does not show a clean downstream-separation story
+  for `CI^E`. Some differences move in the expected direction, but the evidence
+  is weak and inconsistent on the available observables.
+- This is an informative non-result. It means the current KuaiRand benchmark is
+  still better at demonstrating intervention-aware sensitivity than at tying the
+  score to an externally validated welfare consequence.
+
+Bottom line:
+- The strongest next benchmark should include either counterfactual logs,
+  shadow-policy observations, or an external human/welfare label. The present
+  repository does not yet have that surface.
+
+## Commands Run For The Follow-up
+
+From `experiments/`:
+
+```bash
+uv sync
+uv run python run.py kuairand_followup
+uv run python run.py kuairand --artifacts-dir ./artifacts/kuairand
+```
+
+## Rebuttal Draft For The New Review
+
+The rebuttal should lead with the new uncertainty quantification, then narrow the
+logged-data claim before the reviewer has to ask again, and finally turn the
+proxy comparison into a concrete practitioner-facing result.
+
+### Core paragraph
+
+We thank the reviewer for asking for uncertainty quantification. We have now
+added paired bootstrap intervals for the KuaiRand comparison. At the default
+healthy-only calibration, $CI^E$ improves over $CI$ by $+0.234$ on bubble
+detection (95\% bootstrap CI $[0.183, 0.292]$) and by $+0.153$ on collapse
+detection (95\% bootstrap CI $[0.098, 0.207]$). These intervals exclude zero,
+so the main empirical gain is statistically stable on this benchmark rather
+than a small-sample fluctuation.
+
+### Causal-ceiling paragraph
+
+We also agree with the reviewer that the current KuaiRand benchmark provides
+robustness evidence, not causal identification of masking. We have made this
+boundary explicit in the manuscript and protocol appendix: the logged benchmark
+is presented as proxy-level evidence for effort-aware monitoring, not as a
+counterfactual estimate of intervention-induced misalignment. In the current
+repository, a shadow-policy benchmark, replica-policy logs, or external
+human-grounded outcomes would be required for the stronger causal claim, and we
+now identify that as the primary open direction rather than implying that the
+present logged benchmark closes it.
+
+### Proxy-selection paragraph
+
+We expanded the effort-proxy sensitivity analysis at the same operating point.
+Among the proxies available in this repository, the KL-based effort proxy is the
+strongest default: it yields higher bubble and collapse detection than the TV-
+and Gini-based alternatives under the same healthy-only calibration. We view
+this as a useful practical result in its own right, because the reviewer is
+correct that proxy choice matters whenever exact $\sigma_A$ is unavailable.
+
+### Optional closing paragraph
+
+Taken together, the new analyses sharpen the empirical claim without changing
+its scope. The paper now supports three narrower but stronger statements: (i)
+the KuaiRand gain of $CI^E$ over $CI$ is statistically stable on the logged
+benchmark, (ii) the logged benchmark should be read as robustness evidence for
+effort-aware diagnostics rather than causal identification of masking, and (iii)
+KL is the strongest effort proxy among the proxy families we can test here.
+
+### Evidence references to cite in the rebuttal
+
+- Statistical intervals and sensitivity tables:
+  `experiments/artifacts/kuairand/kuairand_followup_report.md`
+- Main KuaiRand benchmark wording:
+  `theory/empirical_validation.tex` (`Experiment E: Flagship Real-Data Masking on KuaiRand`)
+- Logged-data limitation wording:
+  `discussion/limitations.tex`
+- Proxy-level protocol wording:
+  `appendices/kuairand_protocol.tex`

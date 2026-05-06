@@ -525,7 +525,7 @@ smoothing.
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.95\linewidth]{figures/fig_kuairand_active}
-\caption{KuaiRand logged benchmark.
+\caption{KuaiRand proxy-level logged benchmark.
   The random-exposure phase is treated as healthy, the first half of the later
   standard-recommendation slice as bubble formation, and the second half as
   collapse.
@@ -536,7 +536,10 @@ smoothing.
 
 \begin{table}[ht]
 \centering
-\caption{KuaiRand logged benchmark summary on 367 users.}
+\caption{KuaiRand proxy-level logged benchmark summary on 367 users.
+  Under healthy-only calibration, $CI^E$ improves over CI with paired
+  bootstrap deltas $+0.234$ for bubble onset and $+0.153$ for collapse, both
+  with 95\% intervals excluding zero.}
 \label{tab:kuairand_active}
 \begin{tabular}{@{}llrrr@{}}
 \toprule
@@ -560,16 +563,20 @@ Collapse onset & NoDrift & 0/367 & 0.00 & NA \\
 \end{tabular}
 \end{table}
 
-The passive detectors behave unevenly once all of them see the same
-effort-adjusted signal. KSWIN is the most sensitive generic baseline here,
-while ADWIN and PageHinkley stay inert under this calibration. The
-effort-corrected score remains more sensitive than the plain score: bubble
-detection rises from 45.8\% to 69.2\%, and collapse detection rises from
-54.8\% to 70.0\%. The EWMA-smoothed baseline sits in between, which is exactly
+Under this healthy-only calibration, the effort-corrected score is the
+strongest score-based diagnostic in the logged benchmark. Relative to CI,
+$CI^E$ raises bubble detection from 45.8\% to 69.2\% and collapse detection
+from 54.8\% to 70.0\%, while the user-level paired-bootstrap improvements stay
+strictly positive: $+0.234$ for bubble onset with 95\% interval
+$[0.183, 0.292]$, and $+0.153$ for collapse onset with 95\% interval
+$[0.098, 0.207]$. The EWMA-smoothed baseline sits in between, which is exactly
 what we want from a conservative baseline: it damps short fluctuations but does
-not match the raw effort-aware diagnostic. The key point of the benchmark is
-that the effort term exposes a form of control-induced coherence that a generic
-detector may or may not surface depending on its operating assumptions.
+not match the raw effort-aware diagnostic. The passive detectors behave
+unevenly once all of them see the same effort-adjusted signal: KSWIN is the
+most sensitive generic baseline here, while ADWIN and PageHinkley stay inert
+under this calibration. The key point of the benchmark is therefore not that
+generic detectors fail uniformly, but that the effort term exposes a form of
+control-induced coherence that passive alarms do not encode directly.
 
 The KuaiRand $\lambda$ sweep gives the same calibration message as the particle
 tracker. Bubble detection for $\ScoreE$ rises from $0.463$ at $\lambda=0.5$ to
@@ -578,10 +585,17 @@ $\lambda=4.0$, while healthy false positives rise from $0.777$ to $1.215$,
 $1.387$, and $1.632$ per user. Together with the particle masking-gap sweep,
 this makes $\lambda \in [2,3]$ the stable operating region and justifies the
 default $\lambda = 3$ as a compromise rather than a hand-tuned optimum.
+The follow-up proxy comparison tells the same practical story. Replacing the KL
+effort proxy by total-variation or exposure-Gini alternatives preserves the
+qualitative ordering $\ScoreE > \Score$ on the logged benchmark, but both
+alternatives underperform KL at the same healthy-only calibration. We therefore
+keep KL as the default operational proxy whenever exact action-channel logs are
+not available.
 
 \begin{table}[ht]
 \centering
-\caption{Calibration summaries for the dynamic window rule and effort penalty.}
+\caption{Calibration summaries for the dynamic window rule, effort penalty, and
+  logged-data effort proxies.}
 \label{tab:phase3_calibration}
 \begin{tabular}{@{}llrr@{}}
 \toprule
@@ -605,6 +619,9 @@ KuaiRand & $\lambda = 0.5$ & bubble rate 0.463 & healthy FP/u 0.777 \\
 KuaiRand & $\lambda = 2.0$ & bubble rate 0.575 & healthy FP/u 1.215 \\
 KuaiRand & $\lambda = 3.0$ & bubble rate 0.692 & healthy FP/u 1.387 \\
 KuaiRand & $\lambda = 4.0$ & bubble rate 0.747 & healthy FP/u 1.632 \\
+KuaiRand & proxy = KL & bubble rate 0.692 & healthy FP/u 1.387 \\
+KuaiRand & proxy = TV & bubble rate 0.569 & healthy FP/u 1.014 \\
+KuaiRand & proxy = Gini & bubble rate 0.556 & healthy FP/u 1.008 \\
 \bottomrule
 \end{tabular}
 \end{table}

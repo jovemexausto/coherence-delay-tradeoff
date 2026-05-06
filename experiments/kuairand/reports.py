@@ -9,6 +9,13 @@ from .model import (
 from ..core.types import SummaryRow, SummaryRows
 
 
+DISPLAY_NAMES = {
+    "TCI": "CI",
+    "TCIE": "CI^E",
+    "TCIE-EWMA": "CI^E-EWMA",
+}
+
+
 def build_kuairand_summary_rows(
     results: list[KuaiRandUserDetectionResult],
 ) -> SummaryRows:
@@ -30,7 +37,7 @@ def build_kuairand_summary_rows(
             rows.append(
                 {
                     "phase": phase_labels[phase],
-                    "detector": detector,
+                    "detector": DISPLAY_NAMES.get(detector, detector),
                     "n_users": len(results),
                     "detections": detections,
                     "rate": round(detections / len(results), 3) if results else 0.0,

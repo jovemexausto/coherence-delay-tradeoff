@@ -25,6 +25,8 @@ class KuaiRandConfig:
     auto_calibrate_thresholds: bool = True
     threshold_quantile: float = 0.20
     tcie_lambda: float = 3.0
+    effort_proxy: str = "kl"
+    effort_scale_multiplier: float = 1.0
     ewma_alpha: float = 0.15
     tcie_ewma_threshold: float = 0.80
     adwin_delta: float = 0.03
@@ -139,6 +141,46 @@ def _kl_divergence(
     return float(np.sum(p_arr * np.log(p_arr / q_arr)))
 
 
+def _total_variation_distance(p: dict[str, float], q: dict[str, float]) -> float:
+    keys = sorted(set(p) | set(q))
+    if not keys:
+        return 0.0
+    return 0.5 * float(sum(abs(p.get(key, 0.0) - q.get(key, 0.0)) for key in keys))
+
+
+def _gini_coefficient(dist: dict[str, float]) -> float:
+    if not dist:
+        return 0.0
+    probs = np.sort(np.asarray(list(dist.values()), dtype=float))
+    total = float(probs.sum())
+    if total <= 0.0:
+        return 0.0
+    count = probs.size
+    weighted = float(np.sum((2 * np.arange(1, count + 1) - count - 1) * probs))
+    gini = weighted / (count * total)
+    max_gini = (count - 1) / count if count > 1 else 1.0
+    if max_gini <= 0.0:
+        return 0.0
+    return float(np.clip(gini / max_gini, 0.0, 1.0))
+
+
+def _effort_proxy_value(
+    current_tag_dist: dict[str, float],
+    baseline_tag_dist: dict[str, float],
+    proxy_name: str,
+) -> float:
+    if proxy_name == "kl":
+        return _kl_divergence(current_tag_dist, baseline_tag_dist)
+    if proxy_name == "tv":
+        return _total_variation_distance(current_tag_dist, baseline_tag_dist)
+    if proxy_name == "gini":
+        return max(
+            0.0,
+            _gini_coefficient(current_tag_dist) - _gini_coefficient(baseline_tag_dist),
+        )
+    raise ValueError(f"Unknown effort proxy: {proxy_name}")
+
+
 def _distribution(values: list[str]) -> dict[str, float]:
     if not values:
         return {}
@@ -176,6 +218,7 @@ def _window_signals(
     tcie_lambda: float,
     baseline_effort_scale: float,
     tag_vocab_size: int,
+    effort_proxy: str,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     n = len(tags)
     tci = np.full(n, np.nan)
@@ -195,8 +238,12 @@ def _window_signals(
         current_watch_mean = float(np.mean(watch_window))
         current_watch_std = float(np.std(watch_window))
 
-        tag_kl = _kl_divergence(current_tag_dist, baseline_tag_dist)
-        effort[index] = tag_kl
+        proxy_effort = _effort_proxy_value(
+            current_tag_dist,
+            baseline_tag_dist,
+            effort_proxy,
+        )
+        effort[index] = proxy_effort
         watch_gap = abs(current_watch_mean - baseline_watch_mean)
         sigma_p[index] = 1.0 / (1.0 + watch_gap / max(baseline_watch_std, 1e-6))
         entropy = _entropy(current_tag_dist)
@@ -205,7 +252,7 @@ def _window_signals(
         tci[index] = min(sigma_p[index], sigma_a[index], sigma_phi[index])
         tcie[index] = min(
             sigma_p[index]
-            * np.exp(-tcie_lambda * tag_kl / max(baseline_effort_scale, 1e-6)),
+            * np.exp(-tcie_lambda * proxy_effort / max(baseline_effort_scale, 1e-6)),
             sigma_a[index],
             sigma_phi[index],
         )
@@ -260,10 +307,12 @@ def _prepare_user_signals(
         config.tcie_lambda,
         1.0,
         tag_vocab_size,
+        config.effort_proxy,
     )
     healthy_effort_scale = float(np.nanmedian(effort[: len(healthy)]))
     if not np.isfinite(healthy_effort_scale) or healthy_effort_scale <= 1e-6:
         healthy_effort_scale = 1.0
+    healthy_effort_scale *= config.effort_scale_multiplier
 
     tci, tcie, sigma_p, sigma_a, sigma_phi, effort = _window_signals(
         eval_tags,
@@ -275,6 +324,7 @@ def _prepare_user_signals(
         config.tcie_lambda,
         healthy_effort_scale,
         tag_vocab_size,
+        config.effort_proxy,
     )
     tcie_ewma = _ewma(tcie, config.ewma_alpha)
 
@@ -282,9 +332,13 @@ def _prepare_user_signals(
         {
             "tag": eval_tags,
             "watch_ratio": eval_watch,
+            "is_click": eval_logs["is_click"].astype(float).to_numpy(),
+            "is_like": eval_logs["is_like"].astype(float).to_numpy(),
+            "long_view": eval_logs["long_view"].astype(float).to_numpy(),
             "sigma_p": sigma_p,
             "sigma_a": sigma_a,
             "sigma_phi": sigma_phi,
+            "effort": effort,
             "tci": tci,
             "tcie": tcie,
             "tcie_ewma": tcie_ewma,
@@ -390,6 +444,8 @@ def run_kuairand_active_benchmark(
             auto_calibrate_thresholds=config.auto_calibrate_thresholds,
             threshold_quantile=config.threshold_quantile,
             tcie_lambda=config.tcie_lambda,
+            effort_proxy=config.effort_proxy,
+            effort_scale_multiplier=config.effort_scale_multiplier,
             adwin_delta=config.adwin_delta,
             page_hinkley_delta=config.page_hinkley_delta,
             page_hinkley_threshold=config.page_hinkley_threshold,

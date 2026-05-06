@@ -48,6 +48,9 @@ This choice is directional, decomposable, and directly interpretable as the
 cost of keeping the observed trajectory close to a healthy baseline. In
 settings where only aggregate exposure counts are available, total variation
 distance may be used as a fallback, but KL is the preferred default.
+In the follow-up proxy sweep run for the present revision, the KL proxy also
+outperformed the total-variation and exposure-Gini alternatives at the same
+healthy-only calibration, so we keep it as the default operational choice here.
 We use additive smoothing $10^{-6}$ in the KL computation.
 
 \subsection*{Protocol}
@@ -86,4 +89,7 @@ calibrated on healthy windows only.
 Required controls include shuffled labels, random phase boundaries, no-
 coercion ablations, and removal of auxiliary feedback signals. These controls
 ensure that the benchmark does not reduce to a hindsight-tuned logged-bandit
-exercise.
+exercise. We additionally report a clipped self-normalized tag-reweighting
+sanity check as a weak logged-data control, but we do not present that control
+as a causal IPS or counterfactual identification result because the repository
+lacks item-level propensities and replica policies.

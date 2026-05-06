@@ -1,0 +1,15 @@
+phase,detector,n_users,detections,rate,median_delay
+bubble_detection,CI,367,168,0.458,25.0
+bubble_detection,CI^E,367,254,0.692,31.8
+bubble_detection,CI^E-EWMA,367,194,0.529,35.5
+bubble_detection,ADWIN,367,0,0.0,NA
+bubble_detection,PageHinkley,367,0,0.0,NA
+bubble_detection,KSWIN,367,227,0.619,23.0
+bubble_detection,NoDrift,367,0,0.0,NA
+collapse_detection,CI,367,201,0.548,37.0
+collapse_detection,CI^E,367,257,0.7,45.0
+collapse_detection,CI^E-EWMA,367,208,0.567,41.8
+collapse_detection,ADWIN,367,0,0.0,NA
+collapse_detection,PageHinkley,367,0,0.0,NA
+collapse_detection,KSWIN,367,358,0.975,27.0
+collapse_detection,NoDrift,367,0,0.0,NA

@@ -1,0 +1,3 @@
+phase,detector,threshold,rate,ci_low,ci_high,healthy_fp_per_user,agreement_with_ci_e,spearman_min_score_vs_ci_e
+bubble_detection,tag_snips_proxy,0.843,0.52,0.469,0.572,0.768,0.512,0.107
+collapse_detection,tag_snips_proxy,0.843,0.534,0.482,0.586,0.768,0.556,0.021
