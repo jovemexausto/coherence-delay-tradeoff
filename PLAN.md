@@ -93,7 +93,7 @@ Why this phase exists:
 ## Phase 15: Naming and Visual System
 
 - [x] Decide the diagnostics naming stack: `CI` (Coherence Index), `CI^E` (Effort-Adjusted Coherence Index), and `Masking Gap`.
-- [x] Decide the project umbrella name, with `CoherenceGuard` as the current leading candidate.
+- [x] Decide the project naming stack around `CI`, `CI^E`, and `Masking Gap`.
 - [x] Design flagship visualizations that communicate regimes, not just calibration tables.
 - [x] Update the paper figures and repo-facing docs if the new naming and visuals survive the evidence.
 - [x] Commit Phase 15.

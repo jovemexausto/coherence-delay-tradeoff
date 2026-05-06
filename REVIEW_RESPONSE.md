@@ -131,7 +131,7 @@ Preferred naming direction:
 - `C` -> `CI` (`Coherence Index`)
 - `C^E` -> `CI^E` (`Effort-Adjusted Coherence Index`)
 - `M_t` -> `Masking Gap`
-- umbrella: `CoherenceGuard`
+- umbrella: tracking/diagnostic stack centered on `CI` and `CI^E`
 
 We will not force a rename if it weakens the paper or obscures the math.
 

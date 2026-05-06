@@ -3,9 +3,9 @@
 Modern adaptive systems do not observe a fixed world. They estimate, predict,
 rank, and control while the environment keeps changing beneath them, and in many
 cases their own actions help shape what they will observe next. In recommender
-systems, adaptive control, and streaming prediction, the problem is therefore
-not only estimation under noise. It is estimation under drift, with finite
-memory, and often under feedback.
+systems, adaptive control, and streaming prediction, tracking under drift is not
+just a filtering problem. It is the question of how much of the past can still
+be trusted before it turns stale.
 
 That combination creates two distinct difficulties. The first is statistical.
 A finite-memory estimator improves when it can average more data, but every

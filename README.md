@@ -6,7 +6,7 @@
 
 **The Coherence-Delay Trade-off in Tracking Under Drift: A Cube-Root Law for Finite-Memory Estimation**
 
-Tracking under drift is not just a filtering problem. It is a trade-off between statistical precision and staleness.
+Tracking under drift is a race against obsolescence: you want enough memory to be precise, but not so much that the estimate lags behind the world.
 
 This work shows that, once those two forces are written explicitly, the optimal effective memory in the finite-memory averaging class follows a cube-root law. In action-coupled settings, the same lens also explains why standard coherence measures can look stable while effort-aware diagnostics reveal the cost of forcing the world to match a frozen action.
 
@@ -14,7 +14,7 @@ This work shows that, once those two forces are written explicitly, the optimal 
 
 - finite-memory estimation under drift
 - cube-root scaling for the optimal memory budget
-- CI, CI^E, coercive masking, and the CoherenceGuard software umbrella
+- CI, CI^E, coercive masking, and the paper's tracking/diagnostic stack
 
 ## Reproducibility
 
