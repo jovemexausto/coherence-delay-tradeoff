@@ -424,8 +424,15 @@ theory as particularly convincing.
   whether CI^E can be given any formal guarantee (e.g., false-positive
   control under a linear-Gaussian performative model). This has not been
   attempted. The Gaussian tracker is the natural setting for such a result.
-- **Smoothed-min aggregation:** The reviewer suggests smoothed or
-  confidence-adjusted alternatives to the min aggregation. We acknowledge
-  this as a legitimate design-space question; the current min is justified
-  by the Borromean property.
+5. **Smoothed-min aggregation addressed:**
+   - Added Remark 6.2 ("Smoothed aggregation alternatives") discussing the
+     $\operatorname{softmin}$ operator as a differentiable, confidence-adjusted surrogate
+     that recovers the exact $\min$ as $\beta \to \infty$.
+
+### Remaining open items from this review
+
+- **Theoretical detection-power guarantee for CI^E:** The reviewer asks
+  whether CI^E can be given any formal guarantee (e.g., false-positive
+  control under a linear-Gaussian performative model). This has not been
+  attempted. The Gaussian tracker is the natural setting for such a result.
 

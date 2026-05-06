@@ -44,6 +44,22 @@ the third.
 An arithmetic mean would obscure localized failures; the $\min$ preserves
 the diagnostic identity of the bottleneck.
 
+\begin{remark}[Smoothed aggregation alternatives]
+While the exact $\min$ operator enforces the Borromean property strictly,
+it is non-smooth and can be sensitive to isolated noise spikes in a single component.
+A natural variation is a smoothed aggregation via the $\operatorname{softmin}$ operator
+\[
+  \Score_\beta(\IS, t) \;\coloneqq\;
+  -\frac{1}{\beta} \log\!\left( \frac{e^{-\beta \sigma_P(t)} + e^{-\beta \sigma_A(t)} + e^{-\beta \sigma_\Phi(t)}}{3} \right)
+\]
+for a tuning parameter $\beta > 0$. As $\beta \to \infty$, this recovers the exact $\min$,
+while finite $\beta$ provides a differentiable, confidence-adjusted surrogate that still
+penalizes severe localized failures more harshly than an arithmetic mean.
+We use the exact $\min$ for clarity in the theoretical bounds, but smoothed relaxations
+may be preferable when constructing gradient-based tuning rules or when component scores
+are highly noisy.
+\end{remark}
+
 \begin{remark}[Bottleneck sensitivity and effort correction]
 The use of $\min(\sigma_P, \sigma_A, \sigma_\Phi)$ is
 bottleneck-sensitive: it diagnoses the weakest active subsystem, not overall
