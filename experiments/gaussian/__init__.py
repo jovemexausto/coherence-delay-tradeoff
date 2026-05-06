@@ -1,5 +1,7 @@
 """Gaussian experiment package."""
 
+# pyright: reportUnusedImport=false
+
 from .model import (
     SampleComplexityResult,
     SinkhornRuntimeResult,

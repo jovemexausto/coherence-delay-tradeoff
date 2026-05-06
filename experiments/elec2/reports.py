@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import numpy as np
 
-from .model import Elec2DetectionResult, Elec2ExperimentResult
+from .model import Elec2ExperimentResult
+from ..core.types import DetectionSummaryLike
 
 
 def summarize_detection(
-    result: Elec2DetectionResult | object,
+    result: DetectionSummaryLike,
 ) -> dict[str, float]:
     lead_times = np.asarray(result.lead_times, dtype=float)
     return {

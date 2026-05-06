@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
+import math
 
 import numpy as np
-from scipy.special import logsumexp
+from scipy.special import logsumexp  # pyright: ignore[reportUnknownVariableType]
 from scipy.stats import t as student_t
 
-from ..core.common import summarize_onset
+from ..core.common import OnsetSummary, summarize_onset
 from ..core.detectors import create_river_drift_detector
 
 ABLATION_CONDITIONS = ("full", "fm1", "fm2", "fm3")
@@ -110,8 +111,8 @@ class TPTActiveBenchmarkResult:
     tcie_warnings: list[int]
     adwin_warnings: list[int]
     baseline_warnings: dict[str, list[int]]
-    masking_detection: dict[str, dict[str, float | int | None]]
-    collapse_detection: dict[str, dict[str, float | int | None]]
+    masking_detection: dict[str, OnsetSummary]
+    collapse_detection: dict[str, OnsetSummary]
 
 
 ACTIVE_BASELINE_DETECTORS = ("ADWIN", "PageHinkley", "KSWIN", "NoDrift")
@@ -145,14 +146,7 @@ def _systematic_resample(weights: np.ndarray, rng: np.random.Generator) -> np.nd
 
 def _observe_state(state: float, config: TPTConfig, rng: np.random.Generator) -> float:
     observation = float(_observation_model(state))
-    noise = float(
-        student_t.rvs(
-            df=config.observation_df,
-            loc=0.0,
-            scale=config.observation_scale,
-            random_state=rng,
-        )
-    )
+    noise = float(rng.standard_t(config.observation_df) * config.observation_scale)
     return observation + noise
 
 
@@ -252,13 +246,18 @@ def run_particle_tracking_experiment(config: TPTConfig | None = None) -> TPTResu
             )
 
         predicted_observation = _observation_model(candidate_particles)
-        log_likelihood = student_t.logpdf(
-            observations[step],
-            df=config.observation_df,
-            loc=predicted_observation,
-            scale=config.observation_scale,
+        log_likelihood = np.asarray(
+            student_t.logpdf(
+                observations[step],
+                df=config.observation_df,
+                loc=predicted_observation,
+                scale=config.observation_scale,
+            ),
+            dtype=float,
         )
-        log_evidence[step] = float(logsumexp(log_likelihood)) - np.log(config.particles)
+        log_evidence[step] = float(logsumexp(log_likelihood)) - math.log(  # pyright: ignore[reportUnknownArgumentType]
+            config.particles
+        )
 
         if config.condition == "fm3":
             weights = uniform_weights
@@ -268,7 +267,7 @@ def run_particle_tracking_experiment(config: TPTConfig | None = None) -> TPTResu
             entropy_ratio = 0.0
             sigma_phi_value = config.fm3_sigma_phi_floor
         elif config.condition == "fm1":
-            weights = np.exp(log_likelihood - float(logsumexp(log_likelihood)))
+            weights = np.exp(log_likelihood - float(logsumexp(log_likelihood)))  # pyright: ignore[reportUnknownArgumentType]
             posterior_mean[step] = frozen_mean
             posterior_std[step] = frozen_std
             ess_ratio = 1.0
@@ -494,11 +493,14 @@ def run_particle_tracking_active_benchmark(
                 size=config.particles,
             )
             predicted_observation = _observation_model(candidate_particles)
-            log_likelihood = student_t.logpdf(
-                observations[step],
-                df=config.observation_df,
-                loc=predicted_observation,
-                scale=config.observation_scale,
+            log_likelihood = np.asarray(
+                student_t.logpdf(
+                    observations[step],
+                    df=config.observation_df,
+                    loc=predicted_observation,
+                    scale=config.observation_scale,
+                ),
+                dtype=float,
             )
             weights = np.exp(log_likelihood - float(logsumexp(log_likelihood)))
             current_mean = float(np.sum(weights * candidate_particles))

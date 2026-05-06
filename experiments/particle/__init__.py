@@ -1,5 +1,7 @@
 """Particle tracking experiment package."""
 
+# pyright: reportUnusedImport=false
+
 from .model import (
     ACTIVE_BASELINE_DETECTORS,
     TPTActiveBenchmarkConfig as ParticleActiveBenchmarkConfig,

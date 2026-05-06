@@ -1,8 +1,16 @@
 from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
-from typing import TypeAlias
+from typing import Protocol, TypeAlias
 
 SummaryValue: TypeAlias = str | float | int
 SummaryRow: TypeAlias = Mapping[str, SummaryValue]
 SummaryRows: TypeAlias = Sequence[SummaryRow]
+
+
+class DetectionSummaryLike(Protocol):
+    @property
+    def warnings(self) -> Sequence[int]: ...
+
+    @property
+    def lead_times(self) -> Sequence[int]: ...

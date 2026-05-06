@@ -1,14 +1,10 @@
 from __future__ import annotations
 
-import csv
 import time
 from dataclasses import dataclass
-from pathlib import Path
 
-import matplotlib.pyplot as plt
 import numpy as np
 
-from ..core.common import rolling_mean
 from ..core.sinkhorn import debiased_sinkhorn_divergence
 
 TGT_CONDITIONS = ("full", "fm1", "fm2", "fm3")
@@ -345,7 +341,9 @@ def run_sample_complexity_experiment() -> SampleComplexityResult:
 
     mean_absolute_error = np.mean(maes, axis=0)
     std_absolute_error = np.std(maes, axis=0)
-    slope = float(np.polyfit(np.log(window_sizes), np.log(mean_absolute_error), 1)[0])
+    log_window_sizes = [float(value) for value in window_sizes]
+    log_mean_absolute_error = [float(value) for value in mean_absolute_error]
+    slope = float(np.polyfit(log_window_sizes, log_mean_absolute_error, 1)[0])
     return SampleComplexityResult(
         window_sizes=window_sizes,
         mean_absolute_error=mean_absolute_error,
@@ -385,9 +383,14 @@ def run_sinkhorn_runtime_experiment() -> SinkhornRuntimeResult:
                     runtimes.append(elapsed_ms)
                     biases.append(abs(result.cost - true_w2_sq))
                     iters.append(float(result.iterations))
-                runtime_ms[d_index, n_index, e_index] = float(np.mean(runtimes))
-                abs_bias[d_index, n_index, e_index] = float(np.mean(biases))
-                iterations[d_index, n_index, e_index] = float(np.mean(iters))
+                runtime_samples: np.ndarray = np.asarray(runtimes, dtype=float)
+                bias_samples: np.ndarray = np.asarray(biases, dtype=float)
+                iteration_samples: np.ndarray = np.asarray(iters, dtype=float)
+                runtime_ms[d_index, n_index, e_index] = float(np.mean(runtime_samples))
+                abs_bias[d_index, n_index, e_index] = float(np.mean(bias_samples))
+                iterations[d_index, n_index, e_index] = float(
+                    np.mean(iteration_samples)
+                )
                 throughput[d_index, n_index, e_index] = float(
                     (n * n) / max(runtime_ms[d_index, n_index, e_index] / 1000.0, 1e-9)
                 )

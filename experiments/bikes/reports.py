@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import numpy as np
 
-from .model import BikesDetectionResult, BikesExperimentResult
+from .model import BikesExperimentResult
+from ..core.types import DetectionSummaryLike
 
 
 def summarize_detection(
-    result: BikesDetectionResult | object,
+    result: DetectionSummaryLike,
 ) -> dict[str, float]:
     lead_times = np.asarray(result.lead_times, dtype=float)
     return {
