@@ -66,15 +66,15 @@ The benchmark is executed in three phases.
 \end{enumerate}
 \subsection*{Evaluation}
 Evaluation is carried out sequentially within each user session and then
-batched across users with strict temporal splits. Thresholds for $\Score$,
-$\ScoreE$, and EWMA-smoothed $\ScoreE$ are calibrated on healthy windows only,
+batched across users with strict temporal splits. Thresholds for CI,
+CI$^E$, and EWMA-smoothed CI$^E$ are calibrated on healthy windows only,
 using the 20th percentile of the healthy score distribution. The reference
 effort scale $E_0$ is the median healthy KL divergence. Reported metrics are:
 \begin{itemize}[leftmargin=*]
   \item detection rate of the bubble/collapse phases,
   \item median detection delay,
   \item false positives in the healthy phase,
-  \item sensitivity to $\lambda$ in $\ScoreE$,
+  \item sensitivity to $\lambda$ in CI$^E$,
   \item comparison against ADWIN, PageHinkley, KSWIN, NoDrift, and a
     smoothed $CI^E$ baseline (EWMA).
 \end{itemize}
@@ -84,7 +84,7 @@ within a fixed four-window neighborhood before the corresponding annotated phase
 boundary. Reported uncertainty intervals are paired bootstrap intervals over
 users.
 All baseline detectors consume the same effort-adjusted scalar signal,
-$1 - \ScoreE$, so the comparison is not biased by detector-specific
+$1 - CI^E$, so the comparison is not biased by detector-specific
 inputs. The baseline hyperparameters are fixed a priori: ADWIN $\delta = 0.03$;
 PageHinkley $\delta = 0.005$, threshold $= 20$, $\alpha = 0.9999$; KSWIN
 window $= 30$, stat $= 10$, $\alpha = 0.001$. When enabled, thresholds are

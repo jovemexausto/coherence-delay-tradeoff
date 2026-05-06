@@ -275,6 +275,36 @@ slope is extracted by the same log--log fitting protocol as the sliding-window
 case, now using the minimum error over the tested $\alpha$ grid at each drift
 level.
 
+This is also the right point to separate the present theorem from stronger
+parametric filters. Forgetting-factor RLS and Kalman predictors address a
+closely related responsiveness-versus-variance trade-off, but they belong to a
+different estimator class: they exploit explicit state-space or parametric
+structure rather than only finite-memory averaging. They are therefore
+appropriate empirical baselines in the passive benchmarks below, but not
+counterexamples to the cube-root law proved here. In masking regimes that rely
+on suppressing innovations, this distinction becomes even sharper: a model-based
+filter can look artificially healthy when the controller keeps its innovation
+signal small, whereas $CI^E$ is designed precisely to charge the effort needed
+to maintain that apparent fit.
+
+In a correctly specified scalar parametric tracker with forgetting factor
+$\lambda$, the same engineering intuition can be written heuristically as a
+variance--lag balance,
+\[
+  \mathcal{E}_{\mathrm{RLS}}^2(\lambda)
+  \;\asymp\;
+  \frac{\sigma^2(1-\lambda)}{1+\lambda}
+  + \frac{\zeta^2}{(1-\lambda)^2},
+\]
+so the optimal responsiveness satisfies
+$1-\lambda^* \asymp (\zeta/\sigma)^{2/3}$ and the corresponding root-risk scale
+is again of order $\sigma^{2/3}\zeta^{1/3}$; see \citet{Ljung1999} for the
+classical forgetting-factor perspective. We do not prove that formula here, and
+we do not claim that all such parametric filters satisfy the present theorem.
+The point is narrower: even when a parametric filter shares the same exponent
+under correct specification, that does not collapse the distinction in estimator
+class or remove the masking failure mode that motivates $CI^E$.
+
 For the score estimation rate, we use slow drift ($\zeta = 0.001$, $\sigma_w = 0.035$)
 to stay near the variance-dominated regime while retaining a visible lag term at
 $n = 100$.
@@ -315,7 +345,7 @@ $n$ & MAE $|\sigma_P - \hat\sigma_P|$ & std \\
 \paragraph{Computational budget.}
 While evaluating exact Wasserstein distances scales poorly, the debiased Sinkhorn
 divergences used for $\hat\sigma_P$ and $\hat\sigma_A$ are highly parallelizable.
-\Cref{fig:gaussian_sinkhorn_runtime} and \cref{tab:sinkhorn_runtime} profile the
+\Cref{fig:sinkhorn_runtime} and \cref{tab:sinkhorn_runtime} profile the
 computational cost across sequence lengths $n \in \{25, 50, 100\}$, ambient
 dimensions $d \in \{2, 8, 32, 64, 128, 256\}$, and regularization parameters
 $\varepsilon \in \{0.02, 0.05, 0.2, 1.0\}$. The metrics isolate the pairwise
@@ -386,7 +416,7 @@ same scalar representation space.
 $\ScoreHat$ warnings are recorded on each falling-edge crossing of
 $\hat\sigma_P < 0.295$.
 Because ELEC2 exposes no direct actuation or effort channel, this benchmark
-uses the estimable score rather than $\ScoreE$; the effort-corrected
+uses the estimable score rather than CI$^E$; the effort-corrected
 score is reserved for the active/coercive setting of \cref{sec:particle_tracking_masking}.
 Lead time is defined as the gap between a warning and the nearest subsequent
 Page-Hinkley event, using an adaptive maximum gap set to half the median
@@ -420,7 +450,7 @@ reduces effective precision.
 On this passive benchmark ADWIN remains
 the strongest generic change detector under this calibration, while the score
 continues to serve as a tuneable structural diagnostic whose score semantics
-carry over to the active setting where $\ScoreE$ becomes the correct
+carry over to the active setting where CI$^E$ becomes the correct
 observable.
 
 \subsection{Experiment D: Dynamic \texorpdfstring{$n^*_t$}{n-star-t} Optimization on ELEC2}\label{sec:tgt_exp_d}
@@ -503,7 +533,7 @@ bandwidth, window vs.\ prefix comparison) achieves 48 matched leads at
 None overtakes ADWIN on matched leads or precision. This is
 expected: ADWIN is designed for passive changepoint detection, whereas the score
 targets structural validity under feedback and extends naturally to the
-effort-corrected $\ScoreE$ used in the active masking experiment. The Bikes
+effort-corrected CI$^E$ used in the active masking experiment. The Bikes
 benchmark below shows the same passive-stream pattern on a longer real-world
 demand sequence.
 
@@ -538,10 +568,10 @@ uses a surrogate $\sigma_A$ based on normalized exposure entropy rather than on
 replicated action logs, so the benchmark should be read as an operational
 logged-data proxy for actuation reproducibility rather than as exact
 $e^{-H(\Act\mid\Pot)}$. To keep the comparison honest, the score and
-$\ScoreE$ thresholds are calibrated only on healthy random-exposure windows,
+CI$^E$ thresholds are calibrated only on healthy random-exposure windows,
 using the 20th percentile of the healthy score distribution, and the reported
 $E_0$ is the median healthy effort scale. We also report an EWMA-smoothed
-$\ScoreE$ baseline to distinguish genuine masking from simple temporal
+CI$^E$ baseline to distinguish genuine masking from simple temporal
 smoothing. The main metric is a user-level detection rate: a user counts as
 detected for bubble or collapse if the corresponding warning fires within a
 fixed four-window neighborhood before the annotated phase boundary, and the
@@ -575,16 +605,16 @@ trivial exposure-shift explanations, not as causal identification.
 \toprule
 Phase & Detector & Detections & Rate & Median delay \\
 \midrule
-Bubble onset & $\Score$ & 168/367 & 0.458 & 27.0 \\
-Bubble onset & $\ScoreE$ & 254/367 & 0.692 & 31.8 \\
-Bubble onset & $\ScoreE$-EWMA & 194/367 & 0.529 & 35.5 \\
+Bubble onset & CI & 168/367 & 0.458 & 27.0 \\
+Bubble onset & CI$^E$ & 254/367 & 0.692 & 31.8 \\
+Bubble onset & CI$^E$-EWMA & 194/367 & 0.529 & 35.5 \\
 Bubble onset & ADWIN & 0/367 & 0.000 & NA \\
 Bubble onset & PageHinkley & 0/367 & 0.000 & NA \\
 Bubble onset & KSWIN & 225/367 & 0.613 & 23.0 \\
 Bubble onset & NoDrift & 0/367 & 0.00 & NA \\
-Collapse onset & $\Score$ & 201/367 & 0.548 & 37.0 \\
-Collapse onset & $\ScoreE$ & 257/367 & 0.700 & 45.0 \\
-Collapse onset & $\ScoreE$-EWMA & 208/367 & 0.567 & 41.8 \\
+Collapse onset & CI & 201/367 & 0.548 & 37.0 \\
+Collapse onset & CI$^E$ & 257/367 & 0.700 & 45.0 \\
+Collapse onset & CI$^E$-EWMA & 208/367 & 0.567 & 41.8 \\
 Collapse onset & ADWIN & 0/367 & 0.000 & NA \\
 Collapse onset & PageHinkley & 0/367 & 0.000 & NA \\
 Collapse onset & KSWIN & 357/367 & 0.973 & 26.5 \\
@@ -604,29 +634,68 @@ what we want from a conservative baseline: it damps short fluctuations but does
 not match the raw effort-aware diagnostic. The passive detectors behave
 unevenly once all of them see the same effort-adjusted signal: KSWIN is the
 most sensitive generic baseline here, while ADWIN and PageHinkley stay inert
-under this calibration. This is a fixed-operating-point comparison, not an
-exhaustive ROC analysis. The key point of the benchmark is therefore not that
-generic detectors fail uniformly, but that the effort term exposes a form of
-control-induced coherence that passive alarms do not encode directly.
+under this calibration. For fairness, the comparison is run at a fixed operating
+point: the score-based thresholds are fit on healthy windows only, the reported
+intervals are paired bootstraps over users, and all generic detectors consume
+the same effort-adjusted scalar signal rather than detector-specific inputs.
+This is therefore not an exhaustive ROC analysis. The key point of the
+benchmark is not that generic detectors fail uniformly, but that the effort term
+exposes a form of control-induced coherence that passive alarms do not encode
+directly.
 
 The KuaiRand $\lambda$ sweep gives the same calibration message as the particle
-tracker. Bubble detection for $\ScoreE$ rises from $0.463$ at $\lambda=0.5$ to
+tracker. Bubble detection for CI$^E$ rises from $0.463$ at $\lambda=0.5$ to
 $0.575$ at $\lambda=2.0$, $0.692$ at $\lambda=3.0$, and $0.747$ at
 $\lambda=4.0$, while healthy false positives rise from $0.777$ to $1.215$,
 $1.387$, and $1.632$ per user. Together with the particle masking-gap sweep,
 this makes $\lambda \in [2,3]$ the stable operating region and justifies the
 default $\lambda = 3$ as a compromise rather than a hand-tuned optimum.
+The reference scale $E_0$ behaves as the same calibration logic predicts. A
+smaller reference scale makes the effort penalty fire more aggressively, raising
+bubble detection to $0.845$ at $E_0 \times 0.5$ but also increasing healthy
+false positives to $1.837$ per user; a larger scale $E_0 \times 2.0$ relaxes
+the penalty, dropping bubble detection to $0.529$ while reducing healthy false
+positives to $1.019$.
 The follow-up proxy comparison tells the same practical story. Replacing the KL
 effort proxy by total-variation or exposure-Gini alternatives preserves the
-qualitative ordering $\ScoreE > \Score$ on the logged benchmark, but both
+qualitative ordering CI$^E$ $>$ CI on the logged benchmark, but both
 alternatives underperform KL at the same healthy-only calibration. We therefore
 keep KL as the default operational proxy whenever exact action-channel logs are
 not available.
 
+Taken together, the dynamic-window perturbations, particle $\lambda$ sweep,
+KuaiRand $\lambda$ sweep, and KuaiRand proxy swap form the paper's main
+sensitivity analysis: the operating point matters, but the central qualitative
+picture survives the tested perturbations. The manuscript therefore treats
+$\varepsilon$, $E_0$, and $\lambda$ as calibration knobs that must be reported,
+not nuisance parameters to be hidden. \Cref{fig:sensitivity_summary} collects
+the main calibration axes in one place: the Sinkhorn $\varepsilon$ runtime/bias
+trade-off, the KuaiRand $\lambda$ and $E_0$ sweeps, the logged effort-proxy
+swap, threshold sensitivity under healthy-only calibration, and the particle
+masking-gap sweep.
+
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=\linewidth]{figures/fig_sensitivity_summary}
+\caption{Consolidated sensitivity analysis from existing artifacts.
+  \emph{A:} Sinkhorn regularization $\varepsilon$ trades runtime against bias,
+  so it should be reported as an operational calibration knob rather than fixed
+  universally. \emph{B--C:} On KuaiRand, stronger effort penalties and smaller
+  reference scales raise bubble sensitivity but also increase healthy false
+  positives, making calibration part of the method rather than a nuisance detail.
+  \emph{D:} KL is the strongest logged effort proxy among the tested options.
+  \emph{E:} The ordering CI$^E$ $>$ CI$^E$-EWMA $>$ CI survives threshold-quantile
+  perturbations under healthy-only calibration. \emph{F:} In the particle
+  benchmark, the masking gap grows monotonically with $\lambda$ and with the
+  action-coupling strength $\alpha$, confirming that the effort correction is
+  responding to coercive control rather than passive drift alone.}
+\label{fig:sensitivity_summary}
+\end{figure}
+
 \begin{table}[ht]
 \centering
-\caption{Calibration summaries for the dynamic window rule, effort penalty, and
-  logged-data effort proxies.}
+\caption{Calibration summaries for the dynamic window rule, effort penalty,
+  reference effort scale, and logged-data effort proxies.}
 \label{tab:phase3_calibration}
 \begin{tabular}{@{}llrr@{}}
 \toprule
@@ -642,14 +711,17 @@ Bikes dyn. $n_t^*$ & $\hat\zeta_t \times 0.75$ & 92 matched leads & mean window 
 Bikes dyn. $n_t^*$ & $\hat\zeta_t \times 1.5$ & 76 matched leads & mean window 86.9 \\
 Bikes dyn. $n_t^*$ & $C_K \times 1.5$ & 98 matched leads & mean window 146.3 \\
 Bikes dyn. $n_t^*$ & $C_K \times 2.0$ & 110 matched leads & mean window 173.4 \\
-Particle ($\alpha=0.3$) & $\lambda = 0.5$ & $\ScoreE = 0.898$ & $M_t = 0.051$ \\
-Particle ($\alpha=0.3$) & $\lambda = 2.0$ & $\ScoreE = 0.768$ & $M_t = 0.181$ \\
-Particle ($\alpha=0.3$) & $\lambda = 3.0$ & $\ScoreE = 0.697$ & $M_t = 0.252$ \\
-Particle ($\alpha=0.3$) & $\lambda = 4.0$ & $\ScoreE = 0.636$ & $M_t = 0.313$ \\
+Particle ($\alpha=0.3$) & $\lambda = 0.5$ & CI$^E = 0.898$ & $M_t = 0.051$ \\
+Particle ($\alpha=0.3$) & $\lambda = 2.0$ & CI$^E = 0.768$ & $M_t = 0.181$ \\
+Particle ($\alpha=0.3$) & $\lambda = 3.0$ & CI$^E = 0.697$ & $M_t = 0.252$ \\
+Particle ($\alpha=0.3$) & $\lambda = 4.0$ & CI$^E = 0.636$ & $M_t = 0.313$ \\
 KuaiRand & $\lambda = 0.5$ & bubble rate 0.463 & healthy FP/u 0.777 \\
 KuaiRand & $\lambda = 2.0$ & bubble rate 0.575 & healthy FP/u 1.215 \\
 KuaiRand & $\lambda = 3.0$ & bubble rate 0.692 & healthy FP/u 1.387 \\
 KuaiRand & $\lambda = 4.0$ & bubble rate 0.747 & healthy FP/u 1.632 \\
+KuaiRand & $E_0 \times 0.5$ & bubble rate 0.845 & healthy FP/u 1.837 \\
+KuaiRand & $E_0 \times 1.0$ & bubble rate 0.692 & healthy FP/u 1.387 \\
+KuaiRand & $E_0 \times 2.0$ & bubble rate 0.529 & healthy FP/u 1.019 \\
 KuaiRand & proxy = KL & bubble rate 0.692 & healthy FP/u 1.387 \\
 KuaiRand & proxy = TV & bubble rate 0.569 & healthy FP/u 1.014 \\
 KuaiRand & proxy = Gini & bubble rate 0.556 & healthy FP/u 1.008 \\
@@ -705,7 +777,7 @@ coercive coupling.
 \label{tab:particle_tracking_masking}
 \begin{tabular}{@{}lrrrrr@{}}
 \toprule
-Regime & $\alpha$ & effort & $\Score$ & $\ScoreE$ & $M_t$ \\
+Regime & $\alpha$ & effort & CI & CI$^E$ & $M_t$ \\
 \midrule
 Passive & 0.0 & 0.000 & 0.795 & 0.795 & 0.000 \\
 Weak coercion & 0.1 & 0.054 & 0.872 & 0.757 & 0.115 \\
@@ -718,9 +790,9 @@ Strong coercion & 0.9 & 0.266 & 0.999 & 0.518 & 0.481 \\
 
 The matrix makes the masking mechanism explicit. As coupling increases, the
 stale FM-1 controller looks progressively healthier under the plain score:
-$\Score$ rises from $0.795$ in the passive regime to $0.999$ under strong
+CI rises from $0.795$ in the passive regime to $0.999$ under strong
 coercion. The effort-aware diagnostic moves in the opposite direction:
-$\ScoreE$ falls from $0.795$ to $0.518$, and the masking gap grows from $0$ to
+CI$^E$ falls from $0.795$ to $0.518$, and the masking gap grows from $0$ to
 $0.481$. This is the closed-loop signature we care about: apparent coherence is
 improving while effort-aware coherence is deteriorating.
 
@@ -744,7 +816,7 @@ from $0.051$ to $0.313$. Thus, stronger coercive capacity and stronger
 effort penalisation separate apparent from genuine coherence in the expected
 direction. The particle tracker closes the empirical loop on
 \cref{cor:coercive}: the standard score can be masked by control, whereas
-$\ScoreE$ remains sensitive to the intervention cost that creates the
+CI$^E$ remains sensitive to the intervention cost that creates the
 mask. Combined with the calibration grid in
 \cref{fig:particle_tracking_tcie_calibration}, this supports the practical rule
 used throughout the paper: set $E_0$ to the healthy effort scale and choose
@@ -755,8 +827,8 @@ detector, we build an active benchmark with two known regime transitions:
 healthy tracking for $t<200$, feedback masking for $200 \le t < 400$, and
 coercive collapse for $t \ge 400$. The masking phase freezes $\Pot$ while
 maintaining moderate coupling ($\alpha = 0.3$); the collapse phase sharply
-increases exogenous drift. We compare thresholded $\Score$, thresholded
-$\ScoreE$, ADWIN, PageHinkley, KSWIN, and NoDrift on the raw
+increases exogenous drift. We compare thresholded CI, thresholded
+CI$^E$, ADWIN, PageHinkley, KSWIN, and NoDrift on the raw
 observation stream, giving the generic detectors a fully observable signal
 rather than a model-derived residual.
 
@@ -780,14 +852,14 @@ rather than a model-derived residual.
 \toprule
 Phase & Detector & Detections & Rate & Median delay \\
 \midrule
-Masking onset & $\Score$ & 12/12 & 1.00 & 25.5 \\
-Masking onset & $\ScoreE$ & 12/12 & 1.00 & 5.0 \\
+Masking onset & CI & 12/12 & 1.00 & 25.5 \\
+Masking onset & CI$^E$ & 12/12 & 1.00 & 5.0 \\
 Masking onset & ADWIN & 7/12 & 0.58 & 279.0 \\
 Masking onset & PageHinkley & 12/12 & 1.00 & 68.5 \\
 Masking onset & KSWIN & 1/12 & 0.08 & 118.0 \\
 Masking onset & NoDrift & 0/12 & 0.00 & NA \\
-Collapse onset & $\Score$ & 12/12 & 1.00 & 2.0 \\
-Collapse onset & $\ScoreE$ & 12/12 & 1.00 & 0.0 \\
+Collapse onset & CI & 12/12 & 1.00 & 2.0 \\
+Collapse onset & CI$^E$ & 12/12 & 1.00 & 0.0 \\
 Collapse onset & ADWIN & 5/12 & 0.42 & 111.0 \\
 Collapse onset & PageHinkley & 12/12 & 1.00 & 37.5 \\
 Collapse onset & KSWIN & 0/12 & 0.00 & NA \\
@@ -801,11 +873,11 @@ stronger on passive streams because it is a generic changepoint detector.
 PageHinkley is reliable but slower, KSWIN is too conservative on this signal,
 and NoDrift is the sanity baseline. In the active setting, however, the
 relevant anomaly is not merely distributional change but coercive maintenance
-of an apparently healthy world-model fit. Here $\ScoreE$ detects masking onset
+of an apparently healthy world-model fit. Here CI$^E$ detects masking onset
 in all 12 runs with median delay $5.0$, whereas ADWIN detects only 7 of 12
 masking onsets and does so with median delay $279.0$. For the collapse
 transition the same ordering persists: ADWIN detects only 5 of 12 runs, while
-$\Score$ and $\ScoreE$ detect all of them, with $\ScoreE$ firing earliest.
+CI and CI$^E$ detect all of them, with CI$^E$ firing earliest.
 This is the regime in which the effort-corrected index provides information that
 a generic passive detector does not encode.
 
@@ -916,7 +988,7 @@ semantics rather than as a universal replacement for passive alarms.
 On active or logged benchmarks, the target anomaly changes. In the particle
 tracker and KuaiRand, the problem is not only that the data distribution moves,
 but that intervention can keep apparent model-world fit high while a stale model
-is being protected by effort. In that regime, $\ScoreE$ and the masking gap are
+is being protected by effort. In that regime, CI$^E$ and the masking gap are
 the relevant observables. KSWIN remains a competitive generic detector on
 KuaiRand, but it pays with false positives comparable to or higher than the
 effort-aware diagnostic, while ADWIN and PageHinkley contribute little under the

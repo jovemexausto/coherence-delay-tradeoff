@@ -28,7 +28,8 @@ component is at its reference state, and approaches $0$ as the component degrade
 \end{definition}
 
 \begin{definition}[Coherence Index]\label{def:tci}
-The \emph{Coherence Index (CI)} of a system $\IS$ at time $t$ is
+The \emph{Coherence Index (CI)} of a system $\IS$ at time $t$, written formally
+as $\Score(\IS,t)$ when the functional dependence must be shown explicitly, is
 \[
   \Score(\IS, t)
   \;\coloneqq\;
@@ -146,9 +147,9 @@ The \emph{debiased Sinkhorn divergence} between measures $\mu$, $\nu$ is
 \]
 where $T_\varepsilon$ is the raw entropically regularized optimal transport cost.
 Unlike $T_\varepsilon$, the debiased divergence satisfies $S_\varepsilon(\mu,\mu) = 0$,
-restoring the metric property and enabling the dimension-independent
-form of \cref{prop:tci_estimation_error}, with ambient dimension and
-regularization absorbed into the constants rather than the displayed exponent.
+restoring the metric property and enabling the clean exponent form of
+\cref{prop:tci_estimation_error}, with ambient dimension, regularization, and
+support geometry absorbed into the constants rather than the displayed rate.
 
 The \emph{estimable component $\hat\sigma_P$} replaces $\Pot^*$ with
 $\hat\Pot^*$ in \cref{eq:sigmaP} using $S_\varepsilon$:
@@ -179,6 +180,21 @@ surrogate. The Gaussian tracker sits at the exact level, the synthetic particle
 benchmark sits at the identified/surrogate boundary, and KuaiRand sits at the
 proxy level.
 \end{definition}
+
+\begin{remark}[Null and alternative calibration for Sinkhorn scores]
+Recent limit theorems for the empirical Sinkhorn divergence make an important
+calibration split explicit \citep{GoldfeldEtAl2022}. Under the null $P = P^*$,
+the debiased statistic has an $n^{-1}$ null fluctuation order, whereas under the
+drifted alternative regime in which the present estimation bound is used the
+statistical term follows the usual $n^{-1/2}$ scale. The practical implication
+is methodological rather than asymptotic: healthy reference windows and drifted
+evaluation windows should be calibrated separately rather than pooled into a
+single threshold rule. This is exactly the discipline used in the logged
+benchmark protocol, where thresholds are fit on healthy windows only and then
+evaluated on later regimes. The same line of work also supports
+bootstrap-based uncertainty quantification for Sinkhorn-type functionals, which
+matches the paired bootstrap intervals reported for KuaiRand.
+\end{remark}
 
 \begin{assumption}[$W_2$-Lipschitz Drift]\label{ass:adrift}
 The oracle trajectory $t \mapsto \Pot^*(S,t)$ is $W_2$-Lipschitz with drift
@@ -214,9 +230,9 @@ Then under the entropic regularization of \cref{rem:sinkhorn},
   C_K\,n^{-1/2} + \zeta\tau,
 \]
 where $C_K$ absorbs the finite-sample Sinkhorn constant, the fixed
-regularization $\varepsilon$, and the uniform subgaussian envelope. This is a
-finite-memory upper bound for the sliding-window class, not a minimax statement
-over all adaptive estimators.
+regularization $\varepsilon$, the ambient geometry, and the uniform subgaussian
+envelope. This is a finite-memory upper bound for the sliding-window class, not
+a minimax statement over all adaptive estimators.
 \end{proposition}
 
 \begin{proof}
@@ -265,8 +281,9 @@ than a proof-only looseness.
 \cref{prop:tci_estimation_error} grounds $\ScoreHat$: the
 estimation error decreases as the window
 $n$ grows and increases proportionally to drift rate $\zeta$.
-The required window size for target error $\eta$ is $n = O(C_{K,\varepsilon}^2 / \eta^2)$,
-independent of dimension.
+The required window size for target error $\eta$ is therefore controlled by the
+same $n^{-1/2}$ versus $\zeta\tau$ trade-off, with intrinsic-dimension and
+regularization effects absorbed into $C_K$ rather than the displayed exponent.
 
 
 
@@ -465,11 +482,21 @@ Kullback--Leibler divergence
   = \frac{1}{2\sigma^2} m\left(\frac{\sigma}{\sqrt{m}}\right)^2
   = \frac{1}{2}.
 \]
-Le Cam's two-point lemma therefore gives
+For any estimator $\delta_m$, the plug-in test $\psi = \mathbf{1}\{\delta_m \geq 0\}$
+must err whenever the estimate falls on the wrong side of the origin; on that
+event the endpoint error is at least $\sigma /(2\sqrt{m})$. By Le Cam's
+two-point lemma and Pinsker's inequality, the average testing error is at least
 \[
-  R_m^* \;\geq\; c_0\,\sigma m^{-1/2}
+  \frac{1-\mathrm{TV}(P_+,P_-)}{2}
+  \geq
+  \frac{1-\sqrt{\mathrm{KL}(P_+,P_-)/2}}{2}
+  \geq \frac{1}{4}.
 \]
-for a universal constant $c_0>0$.
+Hence
+\[
+  R_m^* \;\geq\; \frac{\sigma}{8\sqrt{m}}
+\]
+so one valid explicit choice is $c_0 = 1/8$.
 
 The second obstruction is local drift. Fix any $1\leq h\leq m$ and define
 \[
@@ -493,16 +520,25 @@ The corresponding Gaussian product laws satisfy
   \leq \frac{2\beta_h^2}{\sigma^2} h^3
   \leq \frac{1}{8}.
 \]
-Applying Le Cam again yields
+Applying the same reduction from estimation to testing, now with endpoint error
+threshold $\beta_h h$, and using Le Cam together with Pinsker gives average
+testing error at least
 \[
-  R_m^* \;\geq\; c_1\,\beta_h h
-  \;\geq\;
-  \frac{c_1}{4}\,\min\!\left\{\zeta h,\; \sigma h^{-1/2}\right\}
+  \frac{1-\mathrm{TV}(P_{+,h},P_{-,h})}{2}
+  \geq
+  \frac{1-\sqrt{\mathrm{KL}(P_{+,h},P_{-,h})/2}}{2}
+  \geq \frac{3}{8}.
 \]
-for another universal constant $c_1>0$. Since $h$ was arbitrary,
+Therefore
+\[
+  R_m^* \;\geq\; \frac{3}{8}\,\beta_h h
+  \;\geq\;
+  \frac{3}{32}\,\min\!\left\{\zeta h,\; \sigma h^{-1/2}\right\}
+\]
+which is again a fully explicit numerical lower bound. Since $h$ was arbitrary,
 \[
   R_m^* \;\geq\;
-  \frac{c_1}{4}\,\sup_{1\leq h\leq m}
+  \frac{3}{32}\,\sup_{1\leq h\leq m}
   \min\!\left\{\zeta h,\; \sigma h^{-1/2}\right\}.
 \]
 
@@ -527,10 +563,16 @@ Therefore
 \]
 and the ramp bound gives
 \[
-  R_m^* \geq c\,\sigma^{2/3}\zeta^{1/3}
+  R_m^* \geq \frac{3}{64}\,\sigma^{2/3}\zeta^{1/3}
 \]
-after absorbing constants. This proves the claim.
+so one admissible explicit constant in the critical-window regime is
+$c = 3/64$. This proves the claim.
 \end{proof}
+
+In other words, the displayed cube-root floor is operational exactly in the
+critical-window regime $1 \leq (\sigma/\zeta)^{2/3} \leq m$: below that range,
+the problem is noise-dominated, and above it the available window is too short
+for the minimax obstruction to reach the balancing scale.
 
 \begin{remark}[Interpretation: a finite-memory floor]\label{rem:cdfloor}
 \Cref{prop:coherence_delay} establishes that perfect coherence
@@ -659,7 +701,7 @@ reference state.
 \end{proof}
 
 \begin{proposition}[Null-State False Alarm Control for the Gaussian Tracker]\label{prop:gaussian_false_alarm}
-Consider the effort-corrected score $\ScoreE(\IS, t)$ evaluated on the linear-Gaussian tracking environment (\cref{sec:tgt_environment}). Under the null hypothesis of healthy tracking without coercive masking ($\zeta_t = \zeta$, action exactly targets the latent state), the variance of the optimal prediction error converges to a steady-state value $P_\infty$. At steady state, the false positive rate for a warning threshold $\tau \in (0, 1)$ is strictly controlled by:
+Consider the effort-corrected score $\ScoreE(\IS, t)$ evaluated on the linear-Gaussian tracking environment introduced in \cref{sec:tgt_formal}. Under the null hypothesis of healthy tracking without coercive masking ($\zeta_t = \zeta$, action exactly targets the latent state), the variance of the optimal prediction error converges to a steady-state value $P_\infty$. At steady state, the false positive rate for a warning threshold $\tau \in (0, 1)$ is strictly controlled by:
 \[
   \mathbb{P}(\ScoreE(\IS, t) < \tau) \;\le\; 2 \Phi^c\!\left( \sqrt{\frac{2}{P_\infty}\left(\frac{1}{\tau} - 1\right)} \right)
 \]

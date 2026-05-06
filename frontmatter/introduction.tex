@@ -19,7 +19,9 @@ coherent for the wrong reason.
 This paper studies those two difficulties as parts of the same story. We first
 ask what finite memory can achieve when the target itself is moving. We then ask
 how to diagnose the special failure mode in which apparent coherence is being
-maintained by intervention rather than by adaptation.
+maintained by intervention rather than by adaptation. The first question gives
+the paper its finite-memory law; the second gives it its central diagnostic
+diagnostic.
 
 The first answer is a structural coherence-delay trade-off. When observations
 are aggregated over time, total tracking error decomposes into a variance term
@@ -43,15 +45,17 @@ the world ($\Pot$), an actuation rule ($\Act$), and an adaptation operator
 ($\Conv$). This is a modeling decomposition for action-effective tracking
 systems, not a claim about every information process.
 
-That decomposition yields two diagnostics. The Coherence Index (CI), denoted by
-$\Score$, measures the apparent bottleneck of the update loop. The
-Effort-Adjusted Coherence Index ($CI^E$), denoted by $\ScoreE$, discounts
-alignment that is purchased through intervention rather than through model
-adaptation. The point is not to replace generic changepoint detectors on passive
-streams. On passive benchmarks, such detectors remain the stronger default
-alarms. The point is to expose a failure mode that passive alarms do not encode:
-the regime in which the world looks stable because the system is forcing it to
-look stable.
+That decomposition yields two diagnostics. We refer to them throughout as the
+Coherence Index (CI) and the Effort-Adjusted Coherence Index ($CI^E$). When
+explicit functional notation is needed, we write $\Score(\IS,t)$ and
+$\ScoreE(\IS,t)$. CI measures the apparent bottleneck of the update loop, while
+$CI^E$ discounts alignment that is purchased through intervention rather than
+through model adaptation. This intervention-aware layer is the paper's most distinctive
+diagnostic contribution. The point is not to replace generic changepoint
+detectors on passive streams. On passive benchmarks, such detectors remain the
+stronger default alarms. The point is to expose a failure mode that passive
+alarms do not encode: the regime in which the world looks stable because the
+system is forcing it to look stable.
 
 The paper proceeds in that order. We begin by fixing the minimal formal objects
 needed to talk about action-effective tracking, then show why closed-loop
@@ -60,20 +64,23 @@ that structure in place, \Cref{sec:tci} derives the coherence-delay trade-off
 and the finite-memory cube-root law. The coherence diagnostics and their
 effort-aware variant are then introduced, and \Cref{sec:tgt} tests both parts
 of the story: passive benchmarks situate the finite-memory result against
-generic drift alarms, while active and logged benchmarks test whether
-effort-aware coherence can surface coercive masking.
+generic drift alarms, while active and logged benchmarks test the main applied
+claim of the paper, namely that effort-aware coherence can surface coercive
+masking that passive alarms do not encode directly.
 
 The scope is intentionally narrower than the opening contrast might suggest. The
 cube-root law is exact for the finite-memory averaging class analyzed here, not
 for every recursive or extrapolative architecture. The decomposition is
 motivated only for \emph{action-effective} systems; passive observers are a
-genuine boundary case. The stability results remain conditional on explicit ISS
-hypotheses, with the Gaussian tracker serving as the constructive reference
-instance. The logged recommendation benchmark is likewise interpreted at the
-proxy level: it is evidence for the usefulness of effort-aware diagnostics under
-logged exposure concentration, not a causal identification result about masking.
-Within that scope, however, the picture is sharp: temporal staleness imposes a
-real tracking floor, and under feedback, raw fit is not yet a safe diagnostic.
+genuine boundary case. The paper therefore does not claim universal superiority
+over generic drift detectors on passive streams, and the experiments do not show
+that. The stability results remain conditional on explicit ISS hypotheses, with
+the Gaussian tracker serving as the constructive reference instance. The logged
+recommendation benchmark is likewise interpreted at the proxy level: it is
+evidence for the usefulness of effort-aware diagnostics under logged exposure
+concentration, not a causal identification result about masking. Within that
+scope, however, the picture is sharp: temporal staleness imposes a real
+tracking floor, and under feedback, raw fit is not yet a safe diagnostic.
 
 \section{Mathematical Definitions}\label{sec:definitions}
 

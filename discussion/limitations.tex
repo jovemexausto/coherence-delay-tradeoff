@@ -13,7 +13,7 @@ recursive or extrapolative adaptive estimators.
 The present formulation uses $W_2$ and its debiased Sinkhorn approximation to
 measure model drift. Extending the same trade-off cleanly to other geometries,
 such as $f$-divergences or kernel MMD, remains open. Likewise,
-$\ScoreE$ (the Effort-Adjusted Coherence Index, $CI^E$) requires an observable
+$CI^E$ (written formally as $\ScoreE(\IS,t)$ when needed) requires an observable
 proxy for intervention effort, and the preferred proxy is domain-dependent.
 This is especially relevant in performative or feedback-loop settings, where
 intervention and exposure are partially confounded
@@ -23,7 +23,7 @@ intervention and exposure are partially confounded
 The passive benchmarks use Page-Hinkley events as the operational reference for
 lead time, and different failure definitions would change the resulting alarm
 statistics. On active and logged benchmarks, the usefulness of
-$\ScoreE$ still depends on calibration choices such as the effort penalty
+CI$^E$ still depends on calibration choices such as the effort penalty
 $\lambda$, the warning threshold, and the local drift estimator
 $\hat\zeta_t$.
 
@@ -39,7 +39,10 @@ read as operational evidence for effort-aware diagnostics, not as full causal
 identification of intervention dynamics. A stronger causal claim would require
 either replica-policy or shadow-policy logs, or an external human-grounded
 outcome surface against which masking could be falsified rather than inferred
-from the benchmark's own internal signals.
+from the benchmark's own internal signals. More richly logged recommender traces
+that preserve full slate or action-channel realizations would also strengthen
+the estimand itself: in that regime $\sigma_A$ could move from a proxy-level
+surrogate toward the identified tier of the hierarchy in \cref{def:tci_estimable}.
 
 \paragraph{Scaling beyond present validation.}
 The Gaussian and particle trackers validate the theory in controlled Gaussian and non-Gaussian
@@ -47,9 +50,21 @@ settings, and the real-data benchmarks show that the diagnostics remain useful
 outside the synthetic environment. High-dimensional state spaces, richer action
 channels, and direct measurements of intervention effort are the next natural
 tests of the framework. A particularly sharp next benchmark is RLHF-style
-post-training, where policy-reference KL is already logged as an intervention
-burden and proxy-reward versus held-out quality divergence offers an external
-surface on which masking could be tested more directly.
+post-training. That setting instantiates all three roles unusually cleanly: the
+current policy plays the role of $\Pot$, sampled completions or actions play the
+role of $\Act$, and the policy update rule plays the role of $\Conv$.
+Policy-reference KL is already logged as an intervention burden in standard
+RLHF pipelines \citep{StiennonEtAl2020,BaiEtAl2022}, making it a much cleaner
+effort proxy than the exposure surrogates available in logged recommendation
+data. At the same time, reward-model or proxy-reward improvement can be compared
+against held-out or human-grounded quality, creating an external masking surface
+that the present KuaiRand benchmark does not have. In the language of this
+paper, RLHF is therefore a natural next test bed for the masking gap
+$M_t = CI - CI^E$ (formally, $\Score(\IS,t) - \ScoreE(\IS,t)$): the system may maintain high proxy
+coherence while paying increasing KL cost and drifting away from the external
+target. Practical simulation frameworks such as AlpacaFarm \citep{DuboisEtAl2024}
+make that direction especially plausible without requiring full-scale LLM
+training in the loop.
 
 \paragraph{Opaque adaptation maps.}
 For black-box $\Conv_t$, the present manuscript provides only the template
@@ -77,6 +92,6 @@ sanity baseline, and now also include CUSUM, forgetting-factor recursive least
 squares, scalar Kalman predictors, and a kernel MMD two-sample test
 (Gaussian RBF, median-heuristic bandwidth) on the real-world streams. That does
 not exhaust the baseline space: multivariate MMD detectors, representation-space
-shift tests, and additional online adaptive learners remain future work, and the
-present calibration should still be read as benchmark-specific rather than
-universal.
+shift tests, and additional online adaptive learners such as explicit $H_\infty$
+filters remain future work, and the present calibration should still be read as
+benchmark-specific rather than universal.

@@ -1,6 +1,6 @@
 cff-version: 1.2.0
-title: "Coherence-Delay Trade-off"
-message: "If you use this repository, please cite the preprint or the software record described below."
+title: "The Coherence-Delay Trade-off and Coercive Masking Under Drift"
+message: "If you use this repository, please cite the v2 preprint title recorded below. Earlier citations under the old title refer to the same project lineage."
 type: software
 authors:
   - family-names: "Parreira"
@@ -8,7 +8,7 @@ authors:
     email: "figueiredo@pm.me"
     orcid: "https://orcid.org/0009-0005-0201-9308"
 repository-code: "https://github.com/jovemexausto/coherence-delay-tradeoff"
-abstract: "LaTeX source and experiment code for the preprint 'The Coherence-Delay Trade-off in Tracking Under Drift: A Cube-Root Law for Finite-Memory Estimation'."
+abstract: "LaTeX source and experiment code for the v2 preprint 'The Coherence-Delay Trade-off and Coercive Masking Under Drift: Finite-Memory Tracking Limits and Effort-Aware Diagnostics'. Earlier drafts circulated under the title 'The Coherence-Delay Trade-off in Tracking Under Drift: A Cube-Root Law for Finite-Memory Estimation'."
 doi: "10.5281/zenodo.20041349"
 date-released: "2026-05-05"
 keywords:
@@ -17,3 +17,14 @@ keywords:
   - concept drift
   - coherence diagnostics
   - coercive masking
+preferred-citation:
+  type: software
+  title: "The Coherence-Delay Trade-off and Coercive Masking Under Drift: Finite-Memory Tracking Limits and Effort-Aware Diagnostics"
+  authors:
+    - family-names: "Parreira"
+      given-names: "Vinicius"
+      orcid: "https://orcid.org/0009-0005-0201-9308"
+  year: 2026
+  month: may
+  doi: "10.5281/zenodo.20041349"
+  url: "https://doi.org/10.5281/zenodo.20041349"

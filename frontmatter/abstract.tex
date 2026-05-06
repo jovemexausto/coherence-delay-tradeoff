@@ -3,7 +3,9 @@ Tracking in a changing environment is limited by a simple tension: more memory
 reduces noise, but it also makes the estimate older. In passive streams this is
 already a statistical problem; in closed-loop systems it becomes an epistemic
 one, because the same actions used to stabilize behavior can also make a stale
-model look correct. This paper treats those two points as a single story.
+model look correct. This paper treats those two points as a single story: a
+finite-memory tracking law on the one hand, and an intervention-aware masking
+diagnostic on the other.
 
 First, we formalize a coherence-delay trade-off for finite-memory tracking under
 drift. For the finite-memory averaging class studied here, the variance term
@@ -18,17 +20,20 @@ Second, we study the regime in which low observed error is maintained not by
 adaptation but by steering the environment toward a stale model. We call it
 coercive masking and introduce the \textbf{Coherence Index (CI)} and the
 \textbf{Effort-Adjusted Coherence Index ($CI^E$)} to separate genuine
-adaptation from action-induced alignment. On passive benchmarks, generic
-changepoint detectors remain the stronger default alarms. On active synthetic
-and logged recommendation benchmarks, however, $CI^E$ exposes masking that
-passive detectors do not encode under the same calibration, identifying masking
-onset with median delay 5.0 steps in the particle benchmark and improving
-KuaiRand bubble detection from 0.458 to 0.692 on a proxy-level logged
-benchmark, with paired user-level bootstrap intervals excluding zero.
+adaptation from action-induced alignment. This is the paper's central
+diagnostic
+contribution. On passive benchmarks, generic changepoint detectors
+remain the stronger default alarms. On active synthetic and logged
+recommendation benchmarks, however, $CI^E$ exposes masking that passive
+detectors do not encode under matched calibration, identifying masking onset
+with median delay 5.0 steps in the particle benchmark and improving KuaiRand
+bubble detection from 0.458 to 0.692 on a proxy-level logged benchmark, with
+paired user-level bootstrap intervals excluding zero.
 
 The resulting picture is straightforward. Under drift, finite memory imposes a
 real error floor. Under feedback, raw fit can be misleading unless the cost of
-intervention is made explicit.
+intervention is made explicit. The theory explains the floor; the diagnostic
+identifies when apparent coherence is being purchased rather than earned.
 
 \end{abstract}
 

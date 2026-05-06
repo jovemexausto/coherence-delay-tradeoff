@@ -105,7 +105,7 @@ failure mode in which low observed error can be sustained by intervention, and
 we propose an effort-aware correction for that case. This connects most directly
 to performative prediction and feedback-loop analyses in recommendation and
 dataset construction, including
-\citep{PerdomoEtAl2020,HardtMendlerDunner2023,TaoriHashimoto2023,PaganEtAl2023,KrauthWangJordan2022,EilatRosenfeld2023}.
+\citep{PerdomoEtAl2020,HardtMendlerDunner2023,FarinaPerdomo2026,TaoriHashimoto2023,PaganEtAl2023,KrauthWangJordan2022,EilatRosenfeld2023}.
 The main distinction is that we are not trying to solve the full causal problem
 of performative feedback or recommendation confounding; we are proposing a
 diagnostic for when intervention effort masks stale models in active or logged
@@ -117,3 +117,13 @@ the system modifies the environment rather than the agents modifying
 themselves. CI$^E$ does not solve the full strategic or performative problem;
 it provides a diagnostic for when low observed error should stop counting as
 evidence of good adaptation.
+Performative stability asks where retraining dynamics settle under the
+distribution induced by their own predictions \citep{PerdomoEtAl2020}; recent
+online-learning results show that broad no-regret procedures can converge to
+mixed performatively stable equilibria even without strong structural
+restrictions \citep{FarinaPerdomo2026}. Coercive masking asks a complementary
+question. A system may remain near such an apparent equilibrium while paying a
+growing intervention cost to hold the world there against exogenous drift.
+CI$^E$ is designed to measure that maintenance burden directly. In that sense,
+performative prediction characterizes where the system settles, whereas the
+present diagnostic characterizes how much forcing is required to stay there.

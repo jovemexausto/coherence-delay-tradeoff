@@ -93,7 +93,8 @@ settings, a sharper proxy is the realized coercive effort
 where $s_t^{\mathrm{free}}$ is the state that would have arisen before applying
 control.
 
-The \emph{Effort-Adjusted Coherence Index} is
+The \emph{Effort-Adjusted Coherence Index} ($CI^E$), written formally as
+$\ScoreE(\IS,t)$ when the functional dependence must be shown explicitly, is
 \[
   \ScoreE(\IS,t)
   \coloneqq
@@ -104,11 +105,11 @@ The \emph{Effort-Adjusted Coherence Index} is
   \right),
 \]
 where $E_0 > 0$ is a reference effort scale and $\lambda > 0$ is a
-sensitivity parameter. $\ScoreE$ penalizes increasing actuation effort,
+sensitivity parameter. CI$^E$ penalizes increasing actuation effort,
 correcting for action-induced confounding: it discounts apparent coherence when
 the environment is being held in place rather than genuinely estimated. In
-action-effective settings where coercive masking is plausible, $\ScoreE$ is the
-primary closed-loop diagnostic and $\Score$ is the corresponding apparent-fit
+action-effective settings where coercive masking is plausible, CI$^E$ is the
+primary closed-loop diagnostic and CI is the corresponding apparent-fit
 baseline.
 \end{definition}
 
@@ -154,10 +155,10 @@ diagnostic rather than a nuisance parameter hidden from the analysis.
 \end{remark}
 
 The empirical evidence for coercive masking comes from the particle-tracker experiment
-(\cref{sec:particle_tracking_masking}). In the passive FM-1 regime, the standard score and
-$\ScoreE$ coincide because no realized forcing of the world occurs, so $M_t=0$.
+(\cref{sec:particle_tracking_masking}). In the passive FM-1 regime, CI and
+CI$^E$ coincide because no realized forcing of the world occurs, so $M_t=0$.
 Under moderate coupling ($\alpha = 0.3$, $\lambda = 3.0$), the same frozen
-model reaches $\Score = 0.949 \pm 0.012$ while
-$\ScoreE = 0.697 \pm 0.046$, so the mean masking gap is
+model reaches CI $= 0.949 \pm 0.012$ while
+CI$^E = 0.697 \pm 0.046$, so the mean masking gap is
 $M_t \approx 0.252$, showing that the apparent coherence is being purchased by
 intervention rather than adaptation.

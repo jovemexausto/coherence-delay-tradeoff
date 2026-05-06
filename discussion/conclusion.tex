@@ -3,8 +3,10 @@
 The paper argues for a simple but consequential view of adaptive systems. Under
 drift, memory is not only a resource; it is also a source of staleness. Under
 feedback, good observed fit is not yet evidence that the model is current,
-because intervention can keep the world near a stale estimate. The two claims of
-the paper follow from taking those facts seriously.
+because intervention can keep the world near a stale estimate. The paper's two
+main claims follow from taking those facts seriously: a finite-memory tracking
+floor, and an intervention-aware diagnostic for when apparent coherence is being
+purchased rather than earned.
 
 On the tracking side, the finite-memory averaging class obeys a sharp
 coherence-delay limit. When total error is written as a sum of estimation
@@ -29,18 +31,19 @@ The particle benchmark shows that feedback masking can keep the standard score
 high even when the model is stale. On passive streams, generic changepoint
 detectors such as ADWIN remain the stronger default alarms. On active and logged
 benchmarks, however, the effort-aware score becomes the right diagnostic because
-the failure mode is no longer passive drift alone. On KuaiRand, the gain of
-$CI^E$ over $CI$ is statistically stable under paired bootstrap resampling, but
- the logged benchmark still remains proxy-level evidence rather than causal
- identification of masking; within that proxy regime, KL is also the strongest
- effort proxy among the logged alternatives tested here. The practical tuning
- rule is correspondingly simple: set $E_0$ to the healthy effort scale, keep
- $\lambda$ in the empirically stable $2$--$3$ range, and use the KL proxy when
- only logged exposure summaries are available. Those settings are not presented
- as universal optima; they are the operating point supported by the current
- logged benchmark. The most natural next test of the same idea is RLHF-style
- post-training, where policy KL already measures intervention burden and
- proxy-reward divergence provides a sharper external masking surface.
+the failure mode is no longer passive drift alone. That intervention-aware
+diagnostic layer is the paper's central diagnostic contribution. On KuaiRand, the
+gain of $CI^E$ over $CI$ is statistically stable under paired bootstrap
+resampling, but the logged benchmark still remains proxy-level evidence rather
+than causal identification of masking; within that proxy regime, KL is also the
+strongest effort proxy among the logged alternatives tested here. The practical
+tuning rule is correspondingly simple: set $E_0$ to the healthy effort scale,
+keep $\lambda$ in the empirically stable $2$--$3$ range, and use the KL proxy
+when only logged exposure summaries are available. Those settings are not
+presented as universal optima; they are the operating point supported by the
+current logged benchmark. The most natural next test of the same idea is
+RLHF-style post-training, where policy KL already measures intervention burden
+and proxy-reward divergence provides a sharper external masking surface.
 
 The broader claim is therefore modest but useful. Beyond the specific results,
 the paper points toward a research agenda around finite-memory design rules
@@ -49,6 +52,6 @@ for performative or action-coupled settings. Adaptive systems should not be
 evaluated only by how well they fit what they currently see. They should also be
 evaluated by how much temporal staleness they can tolerate and by how much
 intervention is required to preserve the appearance of coherence. Within the
-scope studied here, that is the main lesson: finite memory imposes a real
-tracking floor, and under feedback, raw fit is not yet a safe measure of
-adaptation.
+scope studied here, that is the main lesson: the cube-root law explains the
+tracking floor, and $CI^E$ explains why low observed error can still be the
+wrong comfort signal under feedback.
