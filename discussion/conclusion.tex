@@ -31,12 +31,16 @@ detectors such as ADWIN remain the stronger default alarms. On active and logged
 benchmarks, however, the effort-aware score becomes the right diagnostic because
 the failure mode is no longer passive drift alone. On KuaiRand, the gain of
 $CI^E$ over $CI$ is statistically stable under paired bootstrap resampling, but
-the logged benchmark still remains proxy-level evidence rather than causal
-identification of masking; within that proxy regime, KL is also the strongest
-effort proxy among the logged alternatives tested here. The most natural next
-test of the same idea is RLHF-style post-training, where policy KL already
-measures intervention burden and proxy-reward divergence provides a sharper
-external masking surface.
+ the logged benchmark still remains proxy-level evidence rather than causal
+ identification of masking; within that proxy regime, KL is also the strongest
+ effort proxy among the logged alternatives tested here. The practical tuning
+ rule is correspondingly simple: set $E_0$ to the healthy effort scale, keep
+ $\lambda$ in the empirically stable $2$--$3$ range, and use the KL proxy when
+ only logged exposure summaries are available. Those settings are not presented
+ as universal optima; they are the operating point supported by the current
+ logged benchmark. The most natural next test of the same idea is RLHF-style
+ post-training, where policy KL already measures intervention burden and
+ proxy-reward divergence provides a sharper external masking surface.
 
 The broader claim is therefore modest but useful. Beyond the specific results,
 the paper points toward a research agenda around finite-memory design rules
