@@ -38,10 +38,13 @@ test of the same idea is RLHF-style post-training, where policy KL already
 measures intervention burden and proxy-reward divergence provides a sharper
 external masking surface.
 
-The broader claim is therefore modest but useful. Adaptive systems
-should not be evaluated only by how well they fit what they currently see.
-They should also be evaluated by how much temporal staleness they can tolerate
-and by how much intervention is required to preserve the appearance of
-coherence. Within the scope studied here, that is the main lesson: finite
-memory imposes a real tracking floor, and under feedback, raw fit is not yet a
-safe measure of adaptation.
+The broader claim is therefore modest but useful. Beyond the specific results,
+the paper points toward a research agenda around finite-memory design rules
+under drift, intrinsic-dimension-aware OT estimation, and principled diagnostics
+for performative or action-coupled settings. Adaptive systems should not be
+evaluated only by how well they fit what they currently see. They should also be
+evaluated by how much temporal staleness they can tolerate and by how much
+intervention is required to preserve the appearance of coherence. Within the
+scope studied here, that is the main lesson: finite memory imposes a real
+tracking floor, and under feedback, raw fit is not yet a safe measure of
+adaptation.
