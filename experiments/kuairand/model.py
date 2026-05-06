@@ -10,6 +10,7 @@ import pandas as pd
 
 from ..core.common import threshold_crossings
 from ..core.detectors import run_river_drift_detector
+from ..core.types import SummaryRows
 
 
 @dataclass(slots=True)
@@ -63,7 +64,7 @@ class KuaiRandBenchmarkResult:
     config: KuaiRandConfig
     user_results: list[KuaiRandUserDetectionResult]
     user_signals: list[KuaiRandUserSignals]
-    summary_rows: list[dict[str, str | float | int]]
+    summary_rows: SummaryRows
 
 
 def summarize_user_detection(

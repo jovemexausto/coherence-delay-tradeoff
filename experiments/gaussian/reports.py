@@ -12,6 +12,7 @@ from .model import (
     TGT_CONDITIONS,
     UCurveResult,
 )
+from ..core.types import SummaryRows
 
 
 def summarize_tgt_result(result: TGTResult, tail_window: int = 100) -> dict[str, float]:
@@ -28,7 +29,7 @@ def summarize_tgt_result(result: TGTResult, tail_window: int = 100) -> dict[str,
     }
 
 
-def build_ablation_rows(results: dict[str, TGTResult]) -> list[dict[str, str | float]]:
+def build_ablation_rows(results: dict[str, TGTResult]) -> SummaryRows:
     rows: list[dict[str, str | float]] = []
     for condition in TGT_CONDITIONS:
         summary = summarize_tgt_result(results[condition])
@@ -48,7 +49,7 @@ def build_ablation_rows(results: dict[str, TGTResult]) -> list[dict[str, str | f
     return rows
 
 
-def export_rows_csv(rows: list[dict[str, str | float]], output_path: Path) -> None:
+def export_rows_csv(rows: SummaryRows, output_path: Path) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     if not rows:
         return
@@ -58,7 +59,7 @@ def export_rows_csv(rows: list[dict[str, str | float]], output_path: Path) -> No
         writer.writerows(rows)
 
 
-def build_ucurve_rows(result: UCurveResult) -> list[dict[str, float | int]]:
+def build_ucurve_rows(result: UCurveResult) -> SummaryRows:
     rows: list[dict[str, float | int]] = []
     for drift, n_star, e_min in zip(
         result.drift_values,
@@ -79,7 +80,7 @@ def build_ucurve_rows(result: UCurveResult) -> list[dict[str, float | int]]:
 
 def build_sample_complexity_rows(
     result: SampleComplexityResult,
-) -> list[dict[str, float | int]]:
+) -> SummaryRows:
     rows: list[dict[str, float | int]] = []
     for window_size, mean_error, std_error in zip(
         result.window_sizes,
@@ -99,7 +100,7 @@ def build_sample_complexity_rows(
 
 def build_sinkhorn_runtime_rows(
     result: SinkhornRuntimeResult,
-) -> list[dict[str, float | int]]:
+) -> SummaryRows:
     rows: list[dict[str, float | int]] = []
     for d_index, dimension in enumerate(result.dimensions):
         for n_index, window_size in enumerate(result.window_sizes):

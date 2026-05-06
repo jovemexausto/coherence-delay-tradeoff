@@ -103,11 +103,11 @@ Why this phase exists:
 
 ## Phase 16: Software Core and Benchmark Harness
 
-- [ ] Factor the repository into a clearer production-style core: scoring, detectors, calibration, adapters, evaluation, and visualization.
-- [ ] Add stable APIs and typed outputs for the main diagnostics and alerts.
-- [ ] Keep the experiment harness aligned with the core rather than duplicating logic.
-- [ ] Preserve reproducibility artifacts as first-class outputs.
-- [ ] Commit Phase 16.
+- [x] Factor the repository into a clearer production-style core: scoring, detectors, calibration, adapters, evaluation, and visualization.
+- [x] Add stable APIs and typed outputs for the main diagnostics and alerts.
+- [x] Keep the experiment harness aligned with the core rather than duplicating logic.
+- [x] Preserve reproducibility artifacts as first-class outputs.
+- [x] Commit Phase 16.
 
 Why this phase exists:
 - The project should become a software system, not only a paper with scripts.

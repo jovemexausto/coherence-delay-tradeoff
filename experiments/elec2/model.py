@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from pathlib import Path
+from collections.abc import Iterable
+from typing import cast
 
-import matplotlib.pyplot as plt
 import numpy as np
 from river import datasets
 
@@ -14,7 +14,7 @@ from ..core.baselines import (
     run_forgetting_factor_rls_detector,
     run_scalar_kalman_detector,
 )
-from ..core.common import match_warnings_to_events, rolling_mean
+from ..core.common import match_warnings_to_events
 from ..core.detectors import run_river_drift_detector
 
 
@@ -74,8 +74,9 @@ class Elec2ExperimentResult:
 
 def load_elec2_values(config: Elec2Config | None = None) -> np.ndarray:
     config = config or Elec2Config()
-    values = np.asarray(
-        [features[config.demand_key] for features, _ in datasets.Elec2()],
+    stream = cast(Iterable[tuple[dict[str, float], object]], datasets.Elec2())
+    values = np.fromiter(
+        (float(features[config.demand_key]) for features, _ in stream),
         dtype=float,
     )
     return (values - values.mean()) / values.std()
@@ -173,19 +174,15 @@ def _build_detection_result(
     config: Elec2Config,
 ) -> Elec2DetectionResult:
     warnings = _extract_warnings(sigma, config.warning_threshold)
-    matched_warnings, matched_events, lead_times = match_warnings_to_events(
-        warnings,
-        events,
-        config.max_gap,
-    )
+    match_result = match_warnings_to_events(warnings, events, config.max_gap)
     return Elec2DetectionResult(
         sigma=sigma,
         estimate=estimate,
         window_sizes=windows,
         warnings=warnings,
-        matched_warnings=matched_warnings,
-        matched_events=matched_events,
-        lead_times=lead_times,
+        matched_warnings=match_result.matched_warnings,
+        matched_events=match_result.matched_events,
+        lead_times=match_result.lead_times,
     )
 
 
@@ -195,19 +192,15 @@ def _build_detection_result_from_warnings(
     events: list[int],
     config: Elec2Config,
 ) -> Elec2DetectionResult:
-    matched_warnings, matched_events, lead_times = match_warnings_to_events(
-        warnings,
-        events,
-        config.max_gap,
-    )
+    match_result = match_warnings_to_events(warnings, events, config.max_gap)
     return Elec2DetectionResult(
         sigma=signal,
         estimate=np.full(signal.size, np.nan),
         window_sizes=np.full(signal.size, np.nan),
         warnings=warnings,
-        matched_warnings=matched_warnings,
-        matched_events=matched_events,
-        lead_times=lead_times,
+        matched_warnings=match_result.matched_warnings,
+        matched_events=match_result.matched_events,
+        lead_times=match_result.lead_times,
     )
 
 

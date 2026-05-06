@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 from pathlib import Path
+from collections.abc import Sequence
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 from ..core.common import rolling_mean
+from ..core.types import SummaryRow
 from .reports import summarize_result
 from .model import (
     ABLATION_CONDITIONS,
@@ -16,7 +18,7 @@ from .model import (
 
 
 def save_tcie_calibration_figure(
-    rows: list[dict[str, str | float | int]],
+    rows: Sequence[SummaryRow],
     output_path: Path,
 ) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -81,7 +83,7 @@ def save_tcie_calibration_figure(
 
 
 def save_masking_grid_figure(
-    summary_rows: list[dict[str, str | float | int]],
+    summary_rows: Sequence[SummaryRow],
     influences: list[float],
     lambdas: list[float],
     output_path: Path,

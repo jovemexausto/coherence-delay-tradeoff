@@ -6,12 +6,13 @@ from .model import (
     ACTIVE_BASELINE_DETECTORS,
     KuaiRandUserDetectionResult,
 )
+from ..core.types import SummaryRow, SummaryRows
 
 
 def build_kuairand_summary_rows(
     results: list[KuaiRandUserDetectionResult],
-) -> list[dict[str, str | float | int]]:
-    rows: list[dict[str, str | float | int]] = []
+) -> SummaryRows:
+    rows: list[SummaryRow] = []
     phase_labels = {
         "masking_detection": "bubble_detection",
         "collapse_detection": "collapse_detection",

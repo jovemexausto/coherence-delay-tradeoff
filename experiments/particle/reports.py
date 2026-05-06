@@ -4,6 +4,7 @@ import numpy as np
 from typing import cast
 
 from ..core.common import summarize_onset, threshold_crossings
+from ..core.types import SummaryRows
 from .model import (
     ACTIVE_BASELINE_DETECTORS,
     TPTConfig,
@@ -31,15 +32,15 @@ def summarize_result(result: TPTResult, tail_window: int = 60) -> dict[str, floa
 
 def build_active_benchmark_rows(
     results: list[TPTActiveBenchmarkResult],
-) -> list[dict[str, str | float | int]]:
+) -> SummaryRows:
     rows: list[dict[str, str | float | int]] = []
     for phase in ("masking_detection", "collapse_detection"):
         for detector in ("TCI", "TCIE", *ACTIVE_BASELINE_DETECTORS):
-            delays = []
+            delays: list[float] = []
             detections = 0
             for result in results:
                 summary = getattr(result, phase)[detector]
-                delay = summary["delay"]
+                delay = summary.delay
                 if delay is not None:
                     detections += 1
                     delays.append(float(delay))
@@ -63,7 +64,7 @@ def build_tcie_calibration_rows(
     results: list[TPTActiveBenchmarkResult],
     lambdas: list[float],
     thresholds: list[float],
-) -> list[dict[str, str | float | int]]:
+) -> SummaryRows:
     rows: list[dict[str, str | float | int]] = []
     grouped: dict[float, list[TPTActiveBenchmarkResult]] = {
         lambda_value: [] for lambda_value in lambdas
@@ -95,8 +96,8 @@ def build_tcie_calibration_rows(
                 collapse_summary = summarize_onset(
                     masking_warnings, result.config.collapse_start
                 )
-                masking_delay = masking_summary["delay"]
-                collapse_delay = collapse_summary["delay"]
+                masking_delay = masking_summary.delay
+                collapse_delay = collapse_summary.delay
                 if masking_delay is not None:
                     masking_detections += 1
                     masking_delays.append(float(masking_delay))
@@ -130,7 +131,7 @@ def build_tcie_calibration_rows(
 
 def build_masking_summary_rows(
     results: dict[str, TPTResult], tail_window: int = 60
-) -> list[dict[str, str | float | int]]:
+) -> SummaryRows:
     rows: list[dict[str, str | float | int]] = []
     for regime in ("passive", "coercive"):
         result = results[regime]
@@ -160,7 +161,7 @@ def build_masking_grid_rows(
     lambdas: list[float],
     seeds: list[int],
     tail_window: int = 60,
-) -> tuple[list[dict[str, str | float | int]], list[dict[str, str | float | int]]]:
+) -> tuple[SummaryRows, SummaryRows]:
     raw_rows: list[dict[str, str | float | int]] = []
     numeric_fields = [
         "tail_abs_error",

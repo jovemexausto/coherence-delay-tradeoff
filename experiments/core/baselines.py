@@ -35,16 +35,14 @@ def _package_result(
     events: list[int],
     max_gap: int,
 ) -> ScalarDetectionResult:
-    matched_warnings, matched_events, lead_times = match_warnings_to_events(
-        warnings, events, max_gap
-    )
+    match_result = match_warnings_to_events(warnings, events, max_gap)
     return ScalarDetectionResult(
         sigma=sigma,
         estimate=estimate,
         warnings=warnings,
-        matched_warnings=matched_warnings,
-        matched_events=matched_events,
-        lead_times=lead_times,
+        matched_warnings=match_result.matched_warnings,
+        matched_events=match_result.matched_events,
+        lead_times=match_result.lead_times,
     )
 
 

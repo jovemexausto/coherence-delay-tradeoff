@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 from pathlib import Path
+from collections.abc import Sequence
+
+from .types import SummaryRow
 
 import matplotlib.pyplot as plt
 
 
-def _lookup(rows: list[dict[str, object]], **criteria: object) -> dict[str, object]:
+def _lookup(rows: Sequence[SummaryRow], **criteria: object) -> SummaryRow:
     for row in rows:
         if all(row.get(key) == value for key, value in criteria.items()):
             return row
@@ -13,10 +16,10 @@ def _lookup(rows: list[dict[str, object]], **criteria: object) -> dict[str, obje
 
 
 def save_regime_first_summary_figure(
-    elec2_rows: list[dict[str, object]],
-    bikes_rows: list[dict[str, object]],
-    active_rows: list[dict[str, object]],
-    logged_rows: list[dict[str, object]],
+    elec2_rows: Sequence[SummaryRow],
+    bikes_rows: Sequence[SummaryRow],
+    active_rows: Sequence[SummaryRow],
+    logged_rows: Sequence[SummaryRow],
     output_path: Path,
 ) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)

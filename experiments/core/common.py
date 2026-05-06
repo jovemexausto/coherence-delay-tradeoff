@@ -1,10 +1,26 @@
 from __future__ import annotations
 
 import csv
-from collections.abc import Mapping, Sequence
+from dataclasses import dataclass
+from collections.abc import Sequence
 from pathlib import Path
 
 import numpy as np
+
+from .types import SummaryRow
+
+
+@dataclass(slots=True)
+class WarningMatchResult:
+    matched_warnings: list[int]
+    matched_events: list[int]
+    lead_times: list[int]
+
+
+@dataclass(slots=True)
+class OnsetSummary:
+    first_warning: int | None
+    delay: int | None
 
 
 def rolling_mean(values: np.ndarray, window: int) -> np.ndarray:
@@ -30,7 +46,7 @@ def threshold_crossings(values: np.ndarray, threshold: float) -> list[int]:
 
 def match_warnings_to_events(
     warnings: list[int], events: list[int], max_gap: int
-) -> tuple[list[int], list[int], list[int]]:
+) -> WarningMatchResult:
     matched_warnings: list[int] = []
     matched_events: list[int] = []
     lead_times: list[int] = []
@@ -45,15 +61,15 @@ def match_warnings_to_events(
                 matched_events.append(events[event_index])
                 lead_times.append(lead_time)
                 event_index += 1
-    return matched_warnings, matched_events, lead_times
+    return WarningMatchResult(matched_warnings, matched_events, lead_times)
 
 
-def summarize_onset(warnings: list[int], start: int) -> dict[str, float | int | None]:
+def summarize_onset(warnings: list[int], start: int) -> OnsetSummary:
     first = next((warning for warning in warnings if warning >= start), None)
-    return {"first_warning": first, "delay": None if first is None else first - start}
+    return OnsetSummary(first, None if first is None else first - start)
 
 
-def export_summary_csv(rows: Sequence[Mapping[str, object]], output_path: Path) -> None:
+def export_summary_csv(rows: Sequence[SummaryRow], output_path: Path) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     if not rows:
         return
@@ -64,7 +80,7 @@ def export_summary_csv(rows: Sequence[Mapping[str, object]], output_path: Path) 
         writer.writerows(rows)
 
 
-def format_summary_markdown(rows: Sequence[Mapping[str, object]]) -> str:
+def format_summary_markdown(rows: Sequence[SummaryRow]) -> str:
     if not rows:
         return ""
     headers = list(rows[0].keys())

@@ -3,11 +3,11 @@ masking detection,TCI,1,1,1.0,170.0,170.0
 masking detection,TCIE,1,1,1.0,0.0,0.0
 masking detection,ADWIN,1,1,1.0,119.0,119.0
 masking detection,PageHinkley,1,1,1.0,210.0,210.0
-masking detection,KSWIN,1,1,1.0,209.0,209.0
+masking detection,KSWIN,1,1,1.0,211.0,211.0
 masking detection,NoDrift,0,1,0.0,NA,NA
 collapse detection,TCI,1,1,1.0,2.0,2.0
 collapse detection,TCIE,1,1,1.0,0.0,0.0
 collapse detection,ADWIN,1,1,1.0,47.0,47.0
 collapse detection,PageHinkley,1,1,1.0,10.0,10.0
-collapse detection,KSWIN,1,1,1.0,9.0,9.0
+collapse detection,KSWIN,1,1,1.0,11.0,11.0
 collapse detection,NoDrift,0,1,0.0,NA,NA

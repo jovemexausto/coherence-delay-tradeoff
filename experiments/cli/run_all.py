@@ -4,11 +4,12 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+from typing import cast
 
 from ..bikes.artifacts import save_bikes_figure
 from ..bikes.model import BikesConfig, run_bikes_experiments
 from ..bikes.reports import build_bikes_rows
-from ..core.common import export_summary_csv
+from ..core.harness import ExperimentHarness
 from ..core.regime_map import save_regime_first_summary_figure
 from ..elec2.artifacts import save_dynamic_nstar_figure, save_elec2_figure
 from ..elec2.model import Elec2Config, run_elec2_experiments
@@ -55,6 +56,7 @@ from ..gaussian.reports import (
     build_sinkhorn_runtime_rows,
     build_ucurve_rows,
 )
+from ..core.types import SummaryRows
 
 
 def parse_args() -> argparse.Namespace:
@@ -67,138 +69,155 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
-    figures_dir = args.figures_dir
-    artifacts_dir = args.artifacts_dir
+    harness = ExperimentHarness(args.figures_dir, args.artifacts_dir)
+    harness.ensure()
 
     particle_config = ParticleConfig(seed=args.seed)
     particle_result = run_particle_experiment(particle_config)
     save_particle_tracking_figure(
-        particle_result, figures_dir / "particle" / "fig_particle_demo.pdf"
+        particle_result, harness.figure_path("particle", "fig_particle_demo.pdf")
     )
-    print(f"Saved {figures_dir / 'particle' / 'fig_particle_demo.pdf'}")
+    print(f"Saved {harness.figure_path('particle', 'fig_particle_demo.pdf')}")
 
     masking_config = ParticleConfig(seed=args.seed, influence=0.3)
     masking_results = run_particle_coercive_masking_experiment(masking_config)
     save_coercive_masking_figure(
-        masking_results, figures_dir / "particle" / "fig_particle_masking.pdf"
+        masking_results, harness.figure_path("particle", "fig_particle_masking.pdf")
     )
-    export_summary_csv(
+    harness.save_summary_csv(
         build_masking_summary_rows(masking_results),
-        artifacts_dir / "particle" / "particle_masking_summary.csv",
+        "particle",
+        "particle_masking_summary.csv",
     )
 
     ablation_results = run_particle_ablation(particle_config)
     save_particle_tracking_ablation_figure(
-        ablation_results, figures_dir / "particle" / "fig_particle_ablation.pdf"
+        ablation_results, harness.figure_path("particle", "fig_particle_ablation.pdf")
     )
 
     active_benchmark = run_particle_active_benchmark(
         ParticleActiveBenchmarkConfig(seed=args.seed), verbose=True
     )
     save_active_benchmark_figure(
-        active_benchmark, figures_dir / "particle" / "fig_particle_active_benchmark.pdf"
+        active_benchmark,
+        harness.figure_path("particle", "fig_particle_active_benchmark.pdf"),
     )
-    export_summary_csv(
+    harness.save_summary_csv(
         build_active_benchmark_rows([active_benchmark]),
-        artifacts_dir / "particle" / "particle_active_benchmark_summary.csv",
+        "particle",
+        "particle_active_benchmark_summary.csv",
     )
 
     calibration_rows = build_tcie_calibration_rows(
         [active_benchmark], [particle_config.effort_penalty_lambda], [0.8]
     )
     save_tcie_calibration_figure(
-        calibration_rows, figures_dir / "particle" / "fig_particle_tcie_calibration.pdf"
+        calibration_rows,
+        harness.figure_path("particle", "fig_particle_tcie_calibration.pdf"),
     )
 
     gaussian_results = run_gaussian_ablation(GaussianConfig(seed=args.seed))
     save_ablation_figure(
-        gaussian_results, figures_dir / "gaussian" / "fig_gaussian_ablation.pdf"
+        gaussian_results, harness.figure_path("gaussian", "fig_gaussian_ablation.pdf")
     )
-    export_summary_csv(
+    harness.save_summary_csv(
         build_ablation_rows(gaussian_results),
-        artifacts_dir / "gaussian" / "gaussian_ablation_summary.csv",
+        "gaussian",
+        "gaussian_ablation_summary.csv",
     )
 
     ucurve_result = run_ucurve_experiment()
     save_ucurve_figure(
-        ucurve_result, figures_dir / "gaussian" / "fig_gaussian_ucurve.pdf"
+        ucurve_result, harness.figure_path("gaussian", "fig_gaussian_ucurve.pdf")
     )
-    export_summary_csv(
+    harness.save_summary_csv(
         build_ucurve_rows(ucurve_result),
-        artifacts_dir / "gaussian" / "gaussian_ucurve.csv",
+        "gaussian",
+        "gaussian_ucurve.csv",
     )
 
     sample_complexity_result = run_sample_complexity_experiment()
     save_sigma_p_complexity_figure(
-        sample_complexity_result, figures_dir / "gaussian" / "fig_gaussian_sinkhorn.pdf"
+        sample_complexity_result,
+        harness.figure_path("gaussian", "fig_gaussian_sinkhorn.pdf"),
     )
-    export_summary_csv(
+    harness.save_summary_csv(
         build_sample_complexity_rows(sample_complexity_result),
-        artifacts_dir / "gaussian" / "gaussian_sinkhorn.csv",
+        "gaussian",
+        "gaussian_sinkhorn.csv",
     )
 
     runtime_result = run_sinkhorn_runtime_experiment()
     save_sinkhorn_runtime_figure(
         runtime_result,
-        figures_dir / "gaussian" / "fig_gaussian_sinkhorn_runtime.pdf",
+        harness.figure_path("gaussian", "fig_gaussian_sinkhorn_runtime.pdf"),
     )
-    export_summary_csv(
+    harness.save_summary_csv(
         build_sinkhorn_runtime_rows(runtime_result),
-        artifacts_dir / "gaussian" / "gaussian_sinkhorn_runtime.csv",
+        "gaussian",
+        "gaussian_sinkhorn_runtime.csv",
     )
 
     bikes_result = run_bikes_experiments(BikesConfig())
-    save_bikes_figure(bikes_result, figures_dir / "bikes" / "fig_bikes.pdf")
-    export_summary_csv(
-        build_bikes_rows(bikes_result), artifacts_dir / "bikes" / "bikes_summary.csv"
+    save_bikes_figure(bikes_result, harness.figure_path("bikes", "fig_bikes.pdf"))
+    harness.save_summary_csv(
+        build_bikes_rows(bikes_result),
+        "bikes",
+        "bikes_summary.csv",
     )
 
     elec2_result = run_elec2_experiments(Elec2Config())
-    save_elec2_figure(elec2_result, figures_dir / "elec2" / "fig_elec2.pdf")
+    save_elec2_figure(elec2_result, harness.figure_path("elec2", "fig_elec2.pdf"))
     save_dynamic_nstar_figure(
-        elec2_result, figures_dir / "elec2" / "fig_dynamic_nstar.pdf"
+        elec2_result, harness.figure_path("elec2", "fig_dynamic_nstar.pdf")
     )
-    export_summary_csv(
-        build_elec2_rows(elec2_result), artifacts_dir / "elec2" / "elec2_summary.csv"
+    harness.save_summary_csv(
+        build_elec2_rows(elec2_result),
+        "elec2",
+        "elec2_summary.csv",
     )
 
     try:
         kuairand_result = run_kuairand_active_benchmark(KuaiRandConfig())
     except FileNotFoundError:
         print("Skipping KuaiRand: dataset not found.")
-        kuairand_rows = [
-            {
-                "phase": "bubble_detection",
-                "detector": "TCI",
-                "rate": 0.458,
-                "median_delay": 27.0,
-            },
-            {
-                "phase": "bubble_detection",
-                "detector": "TCIE",
-                "rate": 0.692,
-                "median_delay": 31.8,
-            },
-            {
-                "phase": "collapse_detection",
-                "detector": "TCI",
-                "rate": 0.548,
-                "median_delay": 37.0,
-            },
-            {
-                "phase": "collapse_detection",
-                "detector": "TCIE",
-                "rate": 0.700,
-                "median_delay": 45.0,
-            },
-        ]
+        kuairand_rows = cast(
+            SummaryRows,
+            [
+                {
+                    "phase": "bubble_detection",
+                    "detector": "TCI",
+                    "rate": 0.458,
+                    "median_delay": 27.0,
+                },
+                {
+                    "phase": "bubble_detection",
+                    "detector": "TCIE",
+                    "rate": 0.692,
+                    "median_delay": 31.8,
+                },
+                {
+                    "phase": "collapse_detection",
+                    "detector": "TCI",
+                    "rate": 0.548,
+                    "median_delay": 37.0,
+                },
+                {
+                    "phase": "collapse_detection",
+                    "detector": "TCIE",
+                    "rate": 0.700,
+                    "median_delay": 45.0,
+                },
+            ],
+        )
     else:
         save_kuairand_figure(
-            kuairand_result, figures_dir / "kuairand" / "fig_kuairand.pdf"
+            kuairand_result, harness.figure_path("kuairand", "fig_kuairand.pdf")
         )
-        export_summary_csv(
+        harness.save_summary_csv(
             build_kuairand_summary_rows(kuairand_result.user_results),
-            artifacts_dir / "kuairand" / "kuairand_summary.csv",
+            "kuairand",
+            "kuairand_summary.csv",
         )
         kuairand_rows = build_kuairand_summary_rows(kuairand_result.user_results)
 
@@ -207,9 +226,9 @@ def main() -> None:
         build_bikes_rows(bikes_result),
         build_active_benchmark_rows([active_benchmark]),
         kuairand_rows,
-        figures_dir / "fig_regime_first_summary.pdf",
+        harness.figure_file("fig_regime_first_summary.pdf"),
     )
-    print(f"Saved {figures_dir / 'fig_regime_first_summary.pdf'}")
+    print(f"Saved {harness.figure_file('fig_regime_first_summary.pdf')}")
 
 
 if __name__ == "__main__":

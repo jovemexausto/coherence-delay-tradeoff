@@ -34,6 +34,7 @@ def sinkhorn_cost(
     kernel = np.exp(-(cost - cost_shift) / epsilon)
     u = np.ones_like(a)
     v = np.ones_like(b)
+    iteration = 0
 
     for iteration in range(1, max_iters + 1):
         u_prev = u.copy()
