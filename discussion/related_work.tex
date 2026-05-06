@@ -28,8 +28,12 @@ window-restricted estimators on the same drift class. Classical smoothers such
 as EWMA, forgetting-factor RLS, and Kalman filtering belong to the same broad
 family of variance-versus-responsiveness trade-offs, but they are typically
 studied as estimators rather than as components of a closed-loop diagnostic
-argument. Our EWMA results are included precisely to show that the cube-root
-law is a finite-memory phenomenon rather than a sliding-window artifact.
+argument. Disturbance-observer work on KF-DOB makes a closely related
+bias-variance trade-off explicit, but in a model-mismatch setting rather than a
+drift-controlled memory law \citep{LiEtAl2024}. Our EWMA results are included
+precisely to show that the cube-root law is a finite-memory phenomenon rather
+than a sliding-window artifact, and our contribution is the combination of that
+law with a closed-loop diagnostic and a practical memory selector.
 
 \paragraph{Transport-based diagnostics.}
 WATCH uses Wasserstein geometry to detect distribution shift in feature space
