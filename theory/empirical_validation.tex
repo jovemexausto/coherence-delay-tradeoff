@@ -325,7 +325,10 @@ while mean absolute bias falls from 0.6102 to 0.1383; at $d=256$ and $n=100$,
 the corresponding pair is 0.799\,ms / 1.7778 at $\varepsilon=0.05$ versus
 0.571\,ms / 0.1446 at $\varepsilon=1.0$. The practical message is that
 intrinsic-dimension-aware calibration matters even when the same $S_\varepsilon$
-machinery is used throughout.
+machinery is used throughout. These are operational drift-comparison sweeps,
+not null-calibration experiments; the empirical Sinkhorn limit theory indicates
+that null fluctuations obey a different order and should be handled separately
+when setting thresholds \citep{GoldfeldEtAl2022}.
 
 \begin{figure}[!htbp]
 \centering

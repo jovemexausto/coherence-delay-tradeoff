@@ -45,7 +45,13 @@ empirical Wasserstein distances depend on both the sample size and the intrinsic
 dimension of the support \citep{NilesWeedBach2019}; these rates inform the
 constant $C_K$ in our bounds and suggest that practitioners tuning
 $\varepsilon$ in higher dimensions should consult dimension-aware calibration
-rather than using a fixed regularization schedule.
+rather than using a fixed regularization schedule. Recent limit theorems for the
+Sinkhorn divergence also clarify the calibration split that matters here:
+bootstrap-friendly alternative-regime behavior and a different null limit order
+for threshold setting \citep{GoldfeldEtAl2022}. In the Gaussian case, exact
+entropic OT structure is even available in closed form, which helps explain why
+the prototype runtime study behaves cleanly on Gaussian clouds even when the
+constants still move with geometry \citep{AkyildizEtAl2024}.
 
 \paragraph{Kernel-based shift detection.}
 Kernel two-sample tests based on the Maximum Mean Discrepancy

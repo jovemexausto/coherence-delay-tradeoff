@@ -65,7 +65,11 @@ but it does not claim a production implementation ceiling. The current sweep
 reaches $d=256$ and $\varepsilon=0.02$, and the main practical message is that
 fixed regularization is not portable across geometry: larger $\varepsilon$ is
 consistently cheaper and more accurate on this grid, while the residual bias and
-iteration count still depend on dimension.
+iteration count still depend on dimension. The current calibration is therefore
+operational rather than asymptotically exact: it is meant to compare tracked
+drifted clouds at a chosen operating point, not to claim a null-optimal threshold
+rule. Recent Sinkhorn limit theorems make that split explicit, with distinct
+alternative-regime and null fluctuation orders \citep{GoldfeldEtAl2022}.
 
 \paragraph{Missing adaptive baselines.}
 The passive comparisons emphasize ADWIN, Page-Hinkley, KSWIN, and the NoDrift
