@@ -118,8 +118,9 @@ entropic regularization of \citet{Cuturi2013} replaces $W_2$ with the
 Sinkhorn divergence $S_\varepsilon$, computable in $O(n^2/\varepsilon^2)$
 via parallelizable matrix-scaling iterations \citep{Altschuler2017}.
 $S_\varepsilon$ converges to $W_2^2$ as $\varepsilon\to 0$ and breaks
-the curse of dimensionality of raw $W_2$ at the cost of a bias proportional
-to $\varepsilon$ \citep{GenevayEtAl2019}.
+the worst statistical scaling of raw empirical $W_2$ at the cost of a bias that
+depends on $\varepsilon$ and the ambient geometry
+\citep{GenevayEtAl2019}.
 The theoretical results hold for $W_2$; their computational realization
 in streaming contexts is demonstrated in the Gaussian-tracker experiments
 (\cref{sec:tgt}; code at \cref{app:code_repository}).

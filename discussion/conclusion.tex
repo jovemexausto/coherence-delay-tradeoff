@@ -33,7 +33,10 @@ the failure mode is no longer passive drift alone. On KuaiRand, the gain of
 $CI^E$ over $CI$ is statistically stable under paired bootstrap resampling, but
 the logged benchmark still remains proxy-level evidence rather than causal
 identification of masking; within that proxy regime, KL is also the strongest
-effort proxy among the logged alternatives tested here.
+effort proxy among the logged alternatives tested here. The most natural next
+test of the same idea is RLHF-style post-training, where policy KL already
+measures intervention burden and proxy-reward divergence provides a sharper
+external masking surface.
 
 The broader claim is therefore modest but useful. Adaptive systems
 should not be evaluated only by how well they fit what they currently see.

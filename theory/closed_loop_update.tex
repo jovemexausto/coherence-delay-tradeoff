@@ -3,11 +3,14 @@
 The next step is to justify the minimal closed-loop architecture used
 throughout the paper. The finite-memory law studied later concerns tracking
 error once a representation is already in place, but in action-effective
-systems there is a prior question: what must an update rule remember in order
-to remain coherent under feedback? In open-loop settings, combining past state
-and new observations is enough. In closed-loop settings, however, the system's
-own actions alter future observations. The update therefore needs to keep track
-of what the system did, not just of what it saw.
+systems there is a prior bookkeeping question: what must an update rule
+remember in order to remain coherent under feedback? In open-loop settings,
+combining past state and new observations is enough. In closed-loop settings,
+however, the system's own actions alter future observations. The update
+therefore needs to keep track of what the system did, not just of what it saw.
+This point is aligned with standard action-conditioned belief-state semantics;
+the contribution here is to make that dependency explicit for the diagnostic
+decomposition used later, not to claim a new filtering theorem.
 
 \subsection{External Characterization: Drift-Coherence}
 
@@ -43,7 +46,8 @@ the environmental transition law.
 
 \begin{lemma}[Belief Update Lemma]\label{lem:beliefupdate}
 Let $\IS$ be a drift-coherent, action-effective information system. Any update
-map $U$ whose repeated application preserves drift-coherence in this class must
+map $U$ whose repeated application preserves drift-coherence in this modeling
+class must
 depend on three arguments:
 \begin{enumerate}[label=\textnormal{(\roman*)}]
   \item the current internal state $p = \Pot(S,t)$,
@@ -105,7 +109,8 @@ update map.
 \end{proof}
 
 This necessity result does not yet tell us when such a three-role system is
-stable or diagnostically meaningful. It only shows that once actions affect
-future observations, a dyadic state-observation update is too small.
+stable or diagnostically meaningful. It only shows that, within the present
+action-effective modeling class, a dyadic state-observation update is too small
+unless the action term is re-encoded implicitly inside the state.
 The next section supplies the corresponding stability template under which the
 three roles can be scored.

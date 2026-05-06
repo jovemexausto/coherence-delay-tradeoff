@@ -186,7 +186,9 @@ $\zeta \in \{0.001, 0.005, 0.01, 0.05\}$, we measure the raw tracking
 error $|\mu^*(t) - \bar{s}_{t-n:t}|$ across
 $n \in \{5, 10, 20, 50, 75, 100, 150, 200, 300, 500\}$
 in a passive environment (influence $= 0$) over $T = 6{,}000$ steps and
-20 seeds.
+20 seeds. For each drift level we extract the empirical minimum over the window
+grid and then fit the log--log slope of $\mathcal{E}_{\min}$ against $\zeta$ by
+ordinary least squares.
 
 \paragraph{Results.}
 
@@ -265,7 +267,10 @@ forgetting factor follows log-log slope \textbf{0.6011}, close to the
 $2/3$ prediction from \cref{cor:ewma_cube_root}. Empirically, the optimal
 forgetting factors increase with drift exactly as finite effective memory
 theory predicts, supporting the claim that the cube-root law is a property of
-the finite-memory class rather than an artifact of uniform windows.
+the finite-memory class rather than an artifact of uniform windows. The EWMA
+slope is extracted by the same log--log fitting protocol as the sliding-window
+case, now using the minimum error over the tested $\alpha$ grid at each drift
+level.
 
 For the score estimation rate, we use slow drift ($\zeta = 0.001$, $\sigma_w = 0.035$)
 to stay near the variance-dominated regime while retaining a visible lag term at
@@ -518,7 +523,13 @@ $\ScoreE$ thresholds are calibrated only on healthy random-exposure windows,
 using the 20th percentile of the healthy score distribution, and the reported
 $E_0$ is the median healthy effort scale. We also report an EWMA-smoothed
 $\ScoreE$ baseline to distinguish genuine masking from simple temporal
-smoothing.
+smoothing. The main metric is a user-level detection rate: a user counts as
+detected for bubble or collapse if the corresponding warning fires within a
+fixed four-window neighborhood before the annotated phase boundary, and the
+reported uncertainty intervals are paired bootstrap intervals over users. The
+companion protocol appendix also records shuffled-label, random-boundary, and
+weak off-policy sanity controls; these are reported as safeguards against
+trivial exposure-shift explanations, not as causal identification.
 
 \paragraph{Results.}
 
@@ -574,7 +585,8 @@ what we want from a conservative baseline: it damps short fluctuations but does
 not match the raw effort-aware diagnostic. The passive detectors behave
 unevenly once all of them see the same effort-adjusted signal: KSWIN is the
 most sensitive generic baseline here, while ADWIN and PageHinkley stay inert
-under this calibration. The key point of the benchmark is therefore not that
+under this calibration. This is a fixed-operating-point comparison, not an
+exhaustive ROC analysis. The key point of the benchmark is therefore not that
 generic detectors fail uniformly, but that the effort term exposes a form of
 control-induced coherence that passive alarms do not encode directly.
 

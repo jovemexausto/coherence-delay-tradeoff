@@ -78,6 +78,11 @@ effort scale $E_0$ is the median healthy KL divergence. Reported metrics are:
   \item comparison against ADWIN, PageHinkley, KSWIN, NoDrift, and a
     smoothed $CI^E$ baseline (EWMA).
 \end{itemize}
+The detection metric is user-level rather than AUC-based: a user is counted as
+detected for bubble or collapse if the detector issues at least one warning
+within a fixed four-window neighborhood before the corresponding annotated phase
+boundary. Reported uncertainty intervals are paired bootstrap intervals over
+users.
 All baseline detectors consume the same effort-adjusted scalar signal,
 $1 - \ScoreE$, so the comparison is not biased by detector-specific
 inputs. The baseline hyperparameters are fixed a priori: ADWIN $\delta = 0.03$;

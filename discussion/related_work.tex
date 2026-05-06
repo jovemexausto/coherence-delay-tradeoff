@@ -15,19 +15,21 @@ replacement for generic changepoint detection.
 
 The second neighborhood is nonstationary optimization, adaptive filtering, and
 online least-squares. There the same cube-root tension between variation and
-memory already appears, but in Euclidean loss, bandit, or regret-based settings
-rather than in a distributional \(W_2\)/Sinkhorn geometry
+memory already appears, but in Euclidean loss, bandit, dynamic-regret, or
+parameter-tracking settings rather than in a distributional
+\(W_2\)/Sinkhorn geometry
 \citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,YuanLamperski2020,MazzettoUpfal2023}.
-The lower-bound layer added here sharpens that connection without collapsing the
-two problems into one. In our setting, the cube-root law is exact for causal
-averaging estimators and reappears as a minimax obstruction for arbitrary
-window-restricted estimators on a $\zeta$-Lipschitz drift class in the
-critical-window regime. Classical smoothers such as EWMA and Kalman filtering
-belong to the same broad family of variance-versus-responsiveness trade-offs,
-but they are typically studied as estimators rather than as components of a
-closed-loop diagnostic argument. Our EWMA results are included precisely to show
-that the cube-root law is a finite-memory phenomenon rather than a
-sliding-window artifact.
+We therefore do not present the $1/3$ exponent itself as wholly new. The more
+specific claim is that, in the present setting, the same balance can be written
+as an explicit finite-memory error law for causal averaging estimators under
+$W_2$-Lipschitz drift, carried through to an operational selector for window
+size or forgetting factor, and matched by a minimax obstruction for arbitrary
+window-restricted estimators on the same drift class. Classical smoothers such
+as EWMA, forgetting-factor RLS, and Kalman filtering belong to the same broad
+family of variance-versus-responsiveness trade-offs, but they are typically
+studied as estimators rather than as components of a closed-loop diagnostic
+argument. Our EWMA results are included precisely to show that the cube-root
+law is a finite-memory phenomenon rather than a sliding-window artifact.
 
 \paragraph{Transport-based diagnostics.}
 WATCH uses Wasserstein geometry to detect distribution shift in feature space
@@ -76,8 +78,8 @@ to performative prediction and feedback-loop analyses in recommendation and
 dataset construction, including
 \citep{PerdomoEtAl2020,HardtMendlerDunner2023,TaoriHashimoto2023,PaganEtAl2023,KrauthWangJordan2022,EilatRosenfeld2023}.
 The main distinction is that we are not trying to solve the full causal problem
-of performative feedback; we are proposing a diagnostic for when intervention
-effort masks stale models in active or logged systems. In that sense, the paper
-is best read not as a full theory of performativity, but as an attempt to mark a
-specific epistemic boundary: when low error should stop counting as evidence of
-good adaptation.
+of performative feedback or recommendation confounding; we are proposing a
+diagnostic for when intervention effort masks stale models in active or logged
+systems. In that sense, the paper is best read not as a full theory of
+performativity, but as an attempt to mark a specific epistemic boundary: when
+low error should stop counting as evidence of good adaptation.

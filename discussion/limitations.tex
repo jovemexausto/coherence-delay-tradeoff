@@ -46,7 +46,10 @@ The Gaussian and particle trackers validate the theory in controlled Gaussian an
 settings, and the real-data benchmarks show that the diagnostics remain useful
 outside the synthetic environment. High-dimensional state spaces, richer action
 channels, and direct measurements of intervention effort are the next natural
-tests of the framework.
+tests of the framework. A particularly sharp next benchmark is RLHF-style
+post-training, where policy-reference KL is already logged as an intervention
+burden and proxy-reward versus held-out quality divergence offers an external
+surface on which masking could be tested more directly.
 
 \paragraph{Opaque adaptation maps.}
 For black-box $\Conv_t$, the present manuscript provides only the template
