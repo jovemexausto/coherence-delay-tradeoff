@@ -221,3 +221,114 @@ def run_frechet_detector(
             below = False
 
     return _package_result(sigma, estimate, warnings, events, max_gap)
+
+
+def _rbf_kernel_matrix(x: np.ndarray, y: np.ndarray, bandwidth: float) -> np.ndarray:
+    """RBF kernel matrix between 1-D sample vectors."""
+    diff = x[:, None] - y[None, :]
+    return np.exp(-diff**2 / (2.0 * bandwidth**2))
+
+
+def _unbiased_mmd2(x: np.ndarray, y: np.ndarray, bandwidth: float) -> float:
+    """Unbiased estimate of MMD^2 with Gaussian RBF kernel."""
+    m = x.shape[0]
+    n = y.shape[0]
+    if m < 2 or n < 2:
+        return 0.0
+    kxx = _rbf_kernel_matrix(x, x, bandwidth)
+    kyy = _rbf_kernel_matrix(y, y, bandwidth)
+    kxy = _rbf_kernel_matrix(x, y, bandwidth)
+    np.fill_diagonal(kxx, 0.0)
+    np.fill_diagonal(kyy, 0.0)
+    term_xx = kxx.sum() / (m * (m - 1))
+    term_yy = kyy.sum() / (n * (n - 1))
+    term_xy = kxy.sum() / (m * n)
+    return float(term_xx + term_yy - 2.0 * term_xy)
+
+
+def run_mmd_detector(
+    values: np.ndarray,
+    events: list[int],
+    max_gap: int,
+    *,
+    warning_threshold: float,
+    prefix_length: int = 2000,
+    window_size: int = 100,
+) -> ScalarDetectionResult:
+    """Kernel MMD two-sample test baseline detector.
+
+    Compares each sliding window against a fixed-size subsample of the
+    healthy prefix using an unbiased estimate of the squared MMD with a
+    Gaussian RBF kernel.  Bandwidth is set via the median heuristic on the
+    prefix.  The reference is subsampled to ``window_size`` points and its
+    self-kernel is precomputed so that the per-step cost is O(window_size^2)
+    rather than O(prefix_length^2).  A stride of ``window_size // 4``
+    reduces the total number of evaluations on long streams; intermediate
+    steps carry forward the previous score.
+    """
+    prefix_length = max(1, min(int(prefix_length), values.size))
+    window_size = max(1, min(int(window_size), values.size))
+    reference_full = values[:prefix_length].copy()
+
+    # Median heuristic for bandwidth (on a subsample to keep it fast)
+    sub_bw = reference_full[:: max(1, prefix_length // 500)]
+    pairwise_dists = np.abs(sub_bw[:, None] - sub_bw[None, :])
+    bandwidth = max(float(np.median(pairwise_dists[pairwise_dists > 0])), 1e-6)
+
+    # Fixed-size reference subsample for all comparisons
+    rng = np.random.RandomState(42)
+    ref_idx = rng.choice(prefix_length, size=min(window_size, prefix_length), replace=False)
+    reference = reference_full[ref_idx]
+    ref_n = reference.shape[0]
+
+    # Precompute reference self-kernel term
+    k_ref = _rbf_kernel_matrix(reference, reference, bandwidth)
+    np.fill_diagonal(k_ref, 0.0)
+    ref_self_term = k_ref.sum() / (ref_n * (ref_n - 1)) if ref_n > 1 else 0.0
+
+    sigma = np.full(values.size, np.nan)
+    estimate = np.full(values.size, float(np.mean(reference_full)))
+    warnings: list[int] = []
+    below = False
+
+    # Null scale from prefix splits
+    null_mmds: list[float] = []
+    for _ in range(min(20, prefix_length // window_size)):
+        idx_a = rng.choice(prefix_length, size=window_size, replace=False)
+        idx_b = rng.choice(prefix_length, size=window_size, replace=False)
+        null_mmds.append(max(_unbiased_mmd2(reference_full[idx_a], reference_full[idx_b], bandwidth), 0.0))
+    null_scale = max(float(np.mean(null_mmds)) if null_mmds else 1e-6, 1e-6)
+
+    stride = max(1, window_size // 4)
+    last_sigma = 1.0
+
+    for index in range(window_size - 1, values.size):
+        if index < prefix_length:
+            sigma[index] = 1.0
+            estimate[index] = float(np.mean(values[index - window_size + 1 : index + 1]))
+            continue
+
+        if (index - prefix_length) % stride != 0:
+            sigma[index] = last_sigma
+            estimate[index] = float(np.mean(values[index - window_size + 1 : index + 1]))
+        else:
+            current_window = values[index - window_size + 1 : index + 1]
+            m = current_window.shape[0]
+            # Compute only the window self-kernel and cross-kernel
+            k_ww = _rbf_kernel_matrix(current_window, current_window, bandwidth)
+            np.fill_diagonal(k_ww, 0.0)
+            ww_term = k_ww.sum() / (m * (m - 1)) if m > 1 else 0.0
+            k_wr = _rbf_kernel_matrix(current_window, reference, bandwidth)
+            cross_term = k_wr.sum() / (m * ref_n)
+            mmd2 = max(ww_term + ref_self_term - 2.0 * cross_term, 0.0)
+            last_sigma = 1.0 / (1.0 + mmd2 / null_scale)
+            sigma[index] = last_sigma
+            estimate[index] = float(np.mean(current_window))
+
+        if sigma[index] < warning_threshold and not below:
+            warnings.append(index)
+            below = True
+        elif sigma[index] >= warning_threshold:
+            below = False
+
+    return _package_result(sigma, estimate, warnings, events, max_gap)

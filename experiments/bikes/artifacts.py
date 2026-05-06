@@ -94,10 +94,25 @@ def save_dynamic_nstar_figure(result: BikesExperimentResult, output_path: Path) 
         result.fixed_300.lead_times,
         result.dynamic.lead_times,
         result.adwin.lead_times,
+        result.cusum.lead_times,
+        result.rls.lead_times,
+        result.kalman.lead_times,
+        result.frechet.lead_times,
+        result.mmd.lead_times,
     ]
     axes[2].boxplot(
         lead_data,
-        labels=["fixed 50", "fixed 300", "dynamic", "ADWIN"],
+        labels=[
+            "fixed 50",
+            "fixed 300",
+            "dynamic",
+            "ADWIN",
+            "CUSUM",
+            "FF-RLS",
+            "Kalman",
+            "Fr'echet",
+            "MMD",
+        ],
         showfliers=False,
     )
     axes[2].set_ylabel("Lead time")

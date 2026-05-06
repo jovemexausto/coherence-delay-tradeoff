@@ -370,3 +370,62 @@ KL is the strongest effort proxy among the proxy families we can test here.
   `discussion/limitations.tex`
 - Proxy-level protocol wording:
   `appendices/kuairand_protocol.tex`
+
+## Round-3 Follow-up: Second Review Response (Phase 18)
+
+### Review verdict
+
+The second review recommends acceptance after clarifications and empirical
+strengthening. The reviewer identifies the cube-root law and effort-aware
+diagnostics as the flagship contributions, and the empirical slopes matching
+theory as particularly convincing.
+
+### Actions taken
+
+1. **Citations added:**
+   - Strategic classification: `\cite{HardtMPW2016}` — connected in
+     `discussion/related_work.tex` to the coercive masking framing.
+   - Kernel MMD two-sample test: `\cite{GrettonEtAl2012}` — new
+     paragraph in `discussion/related_work.tex` discussing the relationship
+     between MMD and $W_2$.
+   - Intrinsic-dimension OT rates: `\cite{NilesWeedBach2019}` — cited
+     in the transport-based diagnostics paragraph to inform $C_K$ constant
+     interpretation and $\varepsilon$ tuning guidance.
+
+2. **Kernel MMD baseline implemented and run:**
+   - `experiments/core/baselines.py`: `run_mmd_detector()` using unbiased
+     $\text{MMD}^2$ with Gaussian RBF kernel, median-heuristic bandwidth,
+     prefix-subsampled reference, and strided evaluation.
+   - ELEC2: 131 warnings, 48 leads, 37% precision, median lead 74.
+   - Bikes: 152 warnings, 75 leads, 49% precision, median lead 22.
+   - Both tables in `theory/empirical_validation.tex` updated.
+   - ADWIN remains the lead-count leader on both streams, but MMD is
+     competitive on precision (especially Bikes) and provides the kernel
+     two-sample test comparison the reviewer requested.
+
+3. **Manuscript updated:**
+   - Tables 9 and 11 now include the MMD row.
+   - Prose in Experiments D and G discusses MMD results.
+   - `discussion/limitations.tex` updated to reflect MMD is no longer missing.
+   - `discussion/related_work.tex` expanded with kernel-shift and
+     strategic-classification paragraphs.
+   - Manuscript recompiled cleanly with `tectonic main.tex`.
+
+4. **High-dimensional Sinkhorn evaluated ($d \gg 32$):**
+   - The Gaussian tracker validation was extended to $d \in \{64, 128\}$.
+   - At $d=128$, the Sinkhorn solver remains highly efficient: for $n=100$
+     and $\varepsilon=1.0$, the solver processes windows in under 0.6\,ms
+     with a mean bias of 0.14.
+   - Table 7 and \Cref{fig:gaussian_sinkhorn_runtime} have been updated.
+
+### Remaining open items from this review
+
+- **Theoretical detection-power guarantee for CI^E:** The reviewer asks
+  whether CI^E can be given any formal guarantee (e.g., false-positive
+  control under a linear-Gaussian performative model). This has not been
+  attempted. The Gaussian tracker is the natural setting for such a result.
+- **Smoothed-min aggregation:** The reviewer suggests smoothed or
+  confidence-adjusted alternatives to the min aggregation. We acknowledge
+  this as a legitimate design-space question; the current min is justified
+  by the Borromean property.
+

@@ -98,6 +98,7 @@ def save_dynamic_nstar_figure(result: Elec2ExperimentResult, output_path: Path) 
         result.rls.lead_times,
         result.kalman.lead_times,
         result.frechet.lead_times,
+        result.mmd.lead_times,
     ]
     axes[2].boxplot(
         lead_data,
@@ -110,6 +111,7 @@ def save_dynamic_nstar_figure(result: Elec2ExperimentResult, output_path: Path) 
             "FF-RLS",
             "Kalman",
             "Fr'echet",
+            "MMD",
         ],
         showfliers=False,
     )

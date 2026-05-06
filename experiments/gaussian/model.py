@@ -354,7 +354,7 @@ def run_sample_complexity_experiment() -> SampleComplexityResult:
 
 def run_sinkhorn_runtime_experiment() -> SinkhornRuntimeResult:
     window_sizes = np.asarray([25, 50, 100], dtype=int)
-    dimensions = np.asarray([2, 8, 32], dtype=int)
+    dimensions = np.asarray([2, 8, 32, 64, 128], dtype=int)
     epsilons = np.asarray([0.05, 0.2, 1.0], dtype=float)
     seeds = list(range(6))
     runtime_ms = np.zeros((dimensions.size, window_sizes.size, epsilons.size))

@@ -13,6 +13,7 @@ from ..core.baselines import (
     run_cusum_detector,
     run_forgetting_factor_rls_detector,
     run_scalar_kalman_detector,
+    run_mmd_detector,
 )
 from ..core.common import match_warnings_to_events
 from ..core.detectors import run_river_drift_detector
@@ -37,6 +38,7 @@ class Elec2Config:
     baseline_prefix_length: int = 2000
     baseline_warning_threshold: float = 0.295
     frechet_window_size: int = 100
+    mmd_window_size: int = 100
     rls_forgetting_factor: float = 0.995
     kalman_process_scale: float = 0.02
     cusum_drift_allowance: float = 0.25
@@ -68,6 +70,7 @@ class Elec2ExperimentResult:
     rls: ScalarDetectionResult
     kalman: ScalarDetectionResult
     frechet: ScalarDetectionResult
+    mmd: ScalarDetectionResult
     residual_signal: np.ndarray
     dynamic_drift_estimate: np.ndarray
 
@@ -271,6 +274,14 @@ def run_elec2_experiments(config: Elec2Config | None = None) -> Elec2ExperimentR
         prefix_length=config.baseline_prefix_length,
         window_size=config.frechet_window_size,
     )
+    mmd = run_mmd_detector(
+        values,
+        events,
+        config.max_gap,
+        warning_threshold=config.baseline_warning_threshold,
+        prefix_length=config.baseline_prefix_length,
+        window_size=config.mmd_window_size,
+    )
 
     return Elec2ExperimentResult(
         config=config,
@@ -298,6 +309,7 @@ def run_elec2_experiments(config: Elec2Config | None = None) -> Elec2ExperimentR
         rls=rls,
         kalman=kalman,
         frechet=frechet,
+        mmd=mmd,
         residual_signal=residual_signal,
         dynamic_drift_estimate=zeta_hat,
     )

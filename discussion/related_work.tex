@@ -40,7 +40,26 @@ tracking model itself: they quantify representation error, induce the
 lag--variance trade-off, and anchor the coherence diagnostics. The point is not
 simply that OT is a good shift statistic, but that in the present setting it is
 part of the geometry of what it means for a finite-memory tracker to stay
-current.
+current. On the statistical side, the finite-sample convergence rates of
+empirical Wasserstein distances depend on both the sample size and the intrinsic
+dimension of the support \citep{NilesWeedBach2019}; these rates inform the
+constant $C_K$ in our bounds and suggest that practitioners tuning
+$\varepsilon$ in higher dimensions should consult dimension-aware calibration
+rather than using a fixed regularization schedule.
+
+\paragraph{Kernel-based shift detection.}
+Kernel two-sample tests based on the Maximum Mean Discrepancy
+(MMD) \citep{GrettonEtAl2012} provide a complementary nonparametric approach
+to distribution shift detection, and several streaming drift detectors build on
+them. The MMD and $W_2$ address related but distinct aspects of distributional
+change: MMD measures discrepancy in a reproducing kernel Hilbert space and is
+straightforward to threshold for hypothesis testing, while $W_2$ inherits the
+metric geometry of the signal space and connects directly to the lag--variance
+trade-off studied here. We do not include an MMD-based detector in the current
+benchmark suite, so a direct empirical comparison remains open; however, the
+CI/CI$^E$ diagnostics operate at a different level than a shift alarm, since
+they score the structural bottleneck of a three-role system rather than testing
+whether two windows are drawn from the same distribution.
 
 \paragraph{Filtering and closed-loop control.}
 The representation--action--adaptation decomposition is motivated by standard
@@ -80,6 +99,11 @@ dataset construction, including
 The main distinction is that we are not trying to solve the full causal problem
 of performative feedback or recommendation confounding; we are proposing a
 diagnostic for when intervention effort masks stale models in active or logged
-systems. In that sense, the paper is best read not as a full theory of
-performativity, but as an attempt to mark a specific epistemic boundary: when
-low error should stop counting as evidence of good adaptation.
+systems. Strategic classification \citep{HardtMPW2016} studies a closely
+related phenomenon from the opposite side: agents modify their features to
+game a deployed classifier, creating a feedback loop between the model and the
+data it evaluates. Our coercive masking regime is the system-side analogue:
+the system modifies the environment rather than the agents modifying
+themselves. CI$^E$ does not solve the full strategic or performative problem;
+it provides a diagnostic for when low observed error should stop counting as
+evidence of good adaptation.

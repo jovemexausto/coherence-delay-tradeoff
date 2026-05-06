@@ -74,7 +74,7 @@ Why this phase exists:
 - [x] Add at least one representation-space OT / Fréchet / MMD-style baseline if it can be implemented faithfully.
 - [x] Re-evaluate ELEC2 and Bikes under the same matching rules used in the paper.
 - [x] Re-evaluate active/logged benchmarks with calibration-matched comparisons and record any losses honestly.
-- [ ] Commit Phase 13.
+- [x] Commit Phase 13.
 
 Why this phase exists:
 - The paper becomes stronger if it can win in the right regimes and lose cleanly where it should.
@@ -85,7 +85,7 @@ Why this phase exists:
 - [x] Separate theoretical sample-complexity claims from practical wall-clock behavior.
 - [x] Measure the impact of `\varepsilon`, window size, and dimension on cost and bias.
 - [x] Update the manuscript and report with the concrete computational picture.
-- [ ] Commit Phase 14.
+- [x] Commit Phase 14.
 
 Why this phase exists:
 - If the geometry is part of the contribution, the computational cost must be part of the evidence.
@@ -127,3 +127,18 @@ Why this phase exists:
 - The target is not universal dominance on passive drift detection.
 - The target is a system that is clearly stronger in intervention-aware monitoring and materially better overall through evidence-backed strengthening.
 - The preferred sequence is: review response report -> theory strengthening -> effort proxy honesty -> baselines -> runtime -> naming/visuals -> software core -> paper refresh.
+
+## Phase 18: Second Review Response and Strengthening
+
+- [x] Add strategic classification citation (Hardt et al. 2016).
+- [x] Add kernel MMD two-sample test citation (Gretton et al. 2012).
+- [x] Add intrinsic-dimension OT calibration citation (Niles-Weed & Bach 2019).
+- [x] Tighten related-work connections to performative prediction and kernel shift detection.
+- [x] Implement kernel MMD two-sample test baseline detector.
+- [x] Run MMD baseline on ELEC2 and Bikes; update manuscript tables and prose.
+- [x] Recompile manuscript and verify clean PDF.
+- [ ] Commit Phase 18.
+
+Why this phase exists:
+- The second review is favorable and recommends acceptance with clarifications.
+- Most concerns are already addressed by Phases 10--17; this phase closes the remaining citation and baseline gaps.

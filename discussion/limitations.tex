@@ -69,7 +69,9 @@ under tight regularization.
 \paragraph{Missing adaptive baselines.}
 The passive comparisons emphasize ADWIN, Page-Hinkley, KSWIN, and the NoDrift
 sanity baseline, and now also include CUSUM, forgetting-factor recursive least
-squares, and scalar Kalman predictors on the real-world streams. That does not
-exhaust the baseline space: additional representation-space or multivariate
-passive detectors remain future work, and the present calibration should still
-be read as benchmark-specific rather than universal.
+squares, scalar Kalman predictors, and a kernel MMD two-sample test
+(Gaussian RBF, median-heuristic bandwidth) on the real-world streams. That does
+not exhaust the baseline space: multivariate MMD detectors, representation-space
+shift tests, and additional online adaptive learners remain future work, and the
+present calibration should still be read as benchmark-specific rather than
+universal.

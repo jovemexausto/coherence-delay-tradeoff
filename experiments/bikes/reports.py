@@ -35,6 +35,7 @@ def build_bikes_rows(result: BikesExperimentResult) -> list[dict[str, float | st
         ("rls", result.rls),
         ("kalman", result.kalman),
         ("frechet", result.frechet),
+        ("mmd", result.mmd),
     ):
         summary = summarize_detection(detection)
         rows.append(
