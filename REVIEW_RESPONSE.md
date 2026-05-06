@@ -418,21 +418,20 @@ theory as particularly convincing.
      with a mean bias of 0.14.
    - Table 7 and \Cref{fig:gaussian_sinkhorn_runtime} have been updated.
 
-### Remaining open items from this review
-
-- **Theoretical detection-power guarantee for CI^E:** The reviewer asks
-  whether CI^E can be given any formal guarantee (e.g., false-positive
-  control under a linear-Gaussian performative model). This has not been
-  attempted. The Gaussian tracker is the natural setting for such a result.
 5. **Smoothed-min aggregation addressed:**
    - Added Remark 6.2 ("Smoothed aggregation alternatives") discussing the
      $\operatorname{softmin}$ operator as a differentiable, confidence-adjusted surrogate
      that recovers the exact $\min$ as $\beta \to \infty$.
 
+6. **Theoretical false-positive guarantee added:**
+   - Added Proposition 6.4 ("Null-State False Alarm Control for the Gaussian Tracker")
+     to `theory/coherence_diagnostics.tex`.
+   - This provides an exact characterization of $\mathbb{P}(\ScoreE(t) < \tau)$
+     under the healthy steady-state null hypothesis, directly answering the reviewer's
+     query about formal guarantees under a linear-Gaussian performative model.
+
 ### Remaining open items from this review
 
-- **Theoretical detection-power guarantee for CI^E:** The reviewer asks
-  whether CI^E can be given any formal guarantee (e.g., false-positive
-  control under a linear-Gaussian performative model). This has not been
-  attempted. The Gaussian tracker is the natural setting for such a result.
+(None! All major and minor reviewer requests from Round 3 have been successfully addressed
+in the manuscript text and codebase.)
 
