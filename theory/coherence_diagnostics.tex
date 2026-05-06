@@ -556,6 +556,14 @@ $\zeta$-Lipschitz drift class, any estimator restricted to the last $m$ samples
 faces the same cube-root obstruction in the critical-window regime
 $1 \leq (\sigma/\zeta)^{2/3} \leq m$.
 
+In deployment, $\hat\zeta_t$ should be treated as a local quantity rather than a
+global constant. A simple recipe is to estimate drift on a short trailing window
+with a robust local slope fit or median-of-slopes estimate, then smooth or clip
+the result before plugging it into $n_t^*$. Because the rule is only
+$2/3$-sensitive, a factor-of-two error in $\hat\zeta_t$ changes the recommended
+memory by about $2^{2/3} \approx 1.6\times$, so the method tolerates moderate
+estimation noise without collapsing.
+
 For small relative calibration errors, the rule is predictably sublinear:
 \[
   \frac{\Delta n_t^*}{n_t^*}
