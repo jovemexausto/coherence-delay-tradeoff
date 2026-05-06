@@ -4,7 +4,7 @@
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20041349-blue.svg)](https://doi.org/10.5281/zenodo.20041349)
 [![License: CC BY 4.0 / Apache-2.0](https://img.shields.io/badge/License-CC%20BY%204.0%20%2F%20Apache--2.0-blue.svg)](LICENSE)
 
-**The Coherence-Delay Trade-off and Coercive Masking Under Drift: Finite-Memory Tracking Limits and Effort-Aware Diagnostics**
+**The Coherence-Delay Trade-off: Finite-Memory Limits and Effort-Aware Diagnostics for Coercive Masking**
 
 Tracking under drift is a race against obsolescence: you want enough memory to be precise, but not so much that the estimate lags behind the world.
 
@@ -26,7 +26,7 @@ If you use this work, please cite:
 
 ```bibtex
 @software{parreira2026coherence_delay_tradeoff,
-  title = {The Coherence-Delay Trade-off and Coercive Masking Under Drift: Finite-Memory Tracking Limits and Effort-Aware Diagnostics},
+  title = {The Coherence-Delay Trade-off: Finite-Memory Limits and Effort-Aware Diagnostics for Coercive Masking},
   author = {Parreira, Vinicius},
   month = may,
   year = {2026},
@@ -39,7 +39,7 @@ If you use this work, please cite:
 
 This repository's v2 manuscript is titled:
 
-- `The Coherence-Delay Trade-off and Coercive Masking Under Drift: Finite-Memory Tracking Limits and Effort-Aware Diagnostics`
+- `The Coherence-Delay Trade-off: Finite-Memory Limits and Effort-Aware Diagnostics for Coercive Masking`
 
 Earlier drafts circulated under the shorter title:
 

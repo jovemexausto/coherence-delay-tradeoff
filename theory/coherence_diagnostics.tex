@@ -39,37 +39,13 @@ as $\Score(\IS,t)$ when the functional dependence must be shown explicitly, is
 \end{definition}
 
 The $\min$ aggregation is the correct choice given the Borromean property
-(\cref{thm:borromean}): system coherence is bounded by the weakest
-component, and no strength in two components compensates for failure in
-the third.
-An arithmetic mean would obscure localized failures; the $\min$ preserves
-the diagnostic identity of the bottleneck.
-
-\begin{remark}[Smoothed aggregation alternatives]
-While the exact $\min$ operator enforces the Borromean property strictly,
-it is non-smooth and can be sensitive to isolated noise spikes in a single component.
-A natural variation is a smoothed aggregation via the $\operatorname{softmin}$ operator
-\[
-  \Score_\beta(\IS, t) \;\coloneqq\;
-  -\frac{1}{\beta} \log\!\left( \frac{e^{-\beta \sigma_P(t)} + e^{-\beta \sigma_A(t)} + e^{-\beta \sigma_\Phi(t)}}{3} \right)
-\]
-for a tuning parameter $\beta > 0$. As $\beta \to \infty$, this recovers the exact $\min$,
-while finite $\beta$ provides a differentiable, confidence-adjusted surrogate that still
-penalizes severe localized failures more harshly than an arithmetic mean.
-We use the exact $\min$ for clarity in the theoretical bounds, but smoothed relaxations
-may be preferable when constructing gradient-based tuning rules or when component scores
-are highly noisy.
-\end{remark}
+(\cref{thm:borromean}): system coherence is bounded by the weakest component,
+and strength in two components does not compensate for failure in the third.
 
 \begin{remark}[Bottleneck sensitivity and effort correction]
-The use of $\min(\sigma_P, \sigma_A, \sigma_\Phi)$ is
-bottleneck-sensitive: it diagnoses the weakest active subsystem, not overall
-system quality in the round. Aggregators such as
-arithmetic or geometric means may be reported as descriptive summaries, but
-they are not valid replacements for the structural diagnostic given by
-\cref{def:tci}.
-
-In action-effective environments, however, high actuation capacity can keep
+The use of $\min(\sigma_P, \sigma_A, \sigma_\Phi)$ is bottleneck-sensitive:
+it diagnoses the weakest active subsystem, not overall system quality in the
+round. In action-effective environments, high actuation capacity can keep
 $\sigma_P$ artificially high by forcing the world toward a stale model.
 When such feedback masking is possible, a conservative extension is the
 \emph{effort-corrected score}
@@ -89,32 +65,7 @@ $\alpha |a_t - s_t^{\mathrm{free}}|$; in deployed systems, action increments,
 energy expenditure, or control-surface usage can play the same role.
 For logged recommendation benchmarks, the preferred instantiation is the
 per-user KL divergence between the current exposure-tag distribution and the
-healthy random-exposure baseline distribution, aggregated sequentially over
-time and then batched across users.
-\end{remark}
-
-\begin{remark}[Finite-memory interpretation]
-The scaling law behind \cref{prop:tci_estimation_error} is not an artifact of
-the sliding-window estimator alone. The two terms in the bound,
-$n^{-1/2}$ and $\zeta\tau$, encode the structural trade-off between variance
-reduction and delay-induced bias for the finite-memory averaging family studied
-here: the first term reflects the statistical limit of estimating a distribution
-from finitely many samples under subgaussian noise, and the second reflects the
-mismatch induced by drift when the estimator necessarily looks at stale
-information.
-
-Concretely, the paper proves the cube-root scaling for the canonical local
-averaging schemes used throughout the experiments, namely sliding windows and
-exponentially weighted averages. The same exponent reappears because these
-estimators expose the same variance-vs.-lag balance under drift. Below we also
-show a minimax lower bound for arbitrary measurable estimators that only see the
-last $m$ samples of a $\zeta$-Lipschitz drift path. We do not claim here a
-universal minimax theorem over arbitrary recursive, trend-extrapolating, or
-otherwise unconstrained adaptive estimators.
-
-Within the averaging class studied here, the $\zeta^{1/3}$ law should be read as
-a robust operational regime under the stated regularity assumptions rather than
-as a peculiarity of a single windowing scheme.
+healthy random-exposure baseline distribution.
 \end{remark}
 
 \subsection{Estimable Score}
@@ -163,22 +114,12 @@ The \emph{estimable score} is
   \ScoreHat(\IS,t) \;\coloneqq\;
   \min\!\left(\hat\sigma_P(t),\;\sigma_A(t),\;\sigma_\Phi(t)\right).
 \]
-The three components have different operational meanings. In the Gaussian
-tracker, $\sigma_A$ is exact because the action channel is deterministic. In
-the particle tracker, $\sigma_A$ is a controlled synthetic surrogate based on
-the actuation gap. In KuaiRand, $\sigma_A$ is a logged-data surrogate based on
-normalized exposure entropy, available only because the benchmark exposes the
-necessary exposure counts. Likewise, $\sigma_\Phi = 1/(1+V_\Phi)$ is exact
-only when the convergence subsystem's Lyapunov functional is available or
-constructively specified.
-
-We therefore treat action observability as a three-level ladder: `exact` when
-the action channel is deterministic or constructively known, `identified` when
-the channel is logged richly enough to estimate the target quantity with a
-direct estimator, and `proxy` when the benchmark only supports an operational
-surrogate. The Gaussian tracker sits at the exact level, the synthetic particle
-benchmark sits at the identified/surrogate boundary, and KuaiRand sits at the
-proxy level.
+Operationally, the three components sit on an observability ladder: `exact`
+when the action channel or Lyapunov functional is constructively known,
+`identified` when logging is rich enough for a direct estimator, and `proxy`
+when the benchmark supports only an operational surrogate. In the present
+experiments, the Gaussian tracker is exact, the particle tracker is near the
+identified/surrogate boundary, and KuaiRand is proxy-level.
 \end{definition}
 
 \begin{remark}[Null and alternative calibration for Sinkhorn scores]
@@ -205,17 +146,8 @@ rate $\zeta \geq 0$: for all $s,t \geq 0$,
 \]
 \end{assumption}
 
-\begin{remark}[Verification in the Gaussian tracker]
-For the Gaussian family
-$\Pot^*(S,t)=\mathcal{N}(\mu^*(t),\Sigma)$ with common covariance $\Sigma$,
-the Wasserstein distance reduces to translation of the mean:
-\[
-  W_2\!\left(\mathcal{N}(\mu_s,\Sigma),\mathcal{N}(\mu_t,\Sigma)\right)
-  = \|\mu_s-\mu_t\|_2.
-\]
-Hence the Gaussian tracker satisfies \cref{ass:adrift} whenever
-$\|\dot\mu^*\|_\infty \leq \zeta$.
-\end{remark}
+For the Gaussian family with common covariance, \cref{ass:adrift} reduces to a
+Lipschitz bound on the mean trajectory.
 
 \begin{proposition}[Estimation Error Bound for $\hat\sigma_P$]%
 \label{prop:tci_estimation_error}
@@ -278,18 +210,10 @@ The cube-root balance therefore reflects a real finite-memory limitation rather
 than a proof-only looseness.
 \end{remark}
 
-\cref{prop:tci_estimation_error} grounds $\ScoreHat$: the
-estimation error decreases as the window
-$n$ grows and increases proportionally to drift rate $\zeta$.
-The required window size for target error $\eta$ is therefore controlled by the
-same $n^{-1/2}$ versus $\zeta\tau$ trade-off, with intrinsic-dimension and
-regularization effects absorbed into $C_K$ rather than the displayed exponent.
-
-
-
-
-
-This characterization also yields the tracking limit used throughout the paper.
+\Cref{prop:tci_estimation_error} grounds $\ScoreHat$: the estimation error
+decreases with window size and increases with drift. This same
+$n^{-1/2}$ versus $\zeta\tau$ trade-off yields the tracking limit used
+throughout the paper.
 When window lag is accounted for explicitly ($\tau = n/2$ for a centred window),
 the total estimation error decomposes as a sum of two opposing terms.
 Minimising over $n$ yields the cube-root optimum for the averaging class,
@@ -575,142 +499,10 @@ the problem is noise-dominated, and above it the available window is too short
 for the minimax obstruction to reach the balancing scale.
 
 \begin{remark}[Interpretation: a finite-memory floor]\label{rem:cdfloor}
-\Cref{prop:coherence_delay} establishes that perfect coherence
-($V_P = 0$) is \emph{impossible} under continuous drift for the finite-memory
-averaging class analyzed here.
-Every drift-coherent system must carry a residual tracking error at least
-$\mathcal{E}_{\min} \propto \zeta^{1/3}$.
-This can be read as a finite-memory limitation: the two sources of error
-(variance and lag) trade against each other with no joint optimum of zero.
-The cube-root scaling has a concrete engineering consequence: a
-fifty-fold increase in drift rate $\zeta$ raises the minimum error floor
-by only $50^{1/3} \approx 3.7\times$, while simultaneously forcing the
-optimal window $n^*$ to contract by $50^{2/3} \approx 14\times$.
-The optimal window $n^* = (C_K/\zeta)^{2/3}$ provides a
-\emph{self-tuning rule}: given a real-time estimate $\hat\zeta_t$ of the
-local drift rate, the system should maintain window size
-$n_t^* = (C_K/\hat\zeta_t)^{2/3}$ to operate at the minimum of the
-error U-curve at every step.
-This turns the coherence-delay law into a practical self-tuning rule for the
-windowed estimators analyzed here. \Cref{prop:window_minimax} shows that this
-is not only an artifact of linear averaging: over the broader
-$\zeta$-Lipschitz drift class, any estimator restricted to the last $m$ samples
-faces the same cube-root obstruction in the critical-window regime
-$1 \leq (\sigma/\zeta)^{2/3} \leq m$.
-
-In deployment, $\hat\zeta_t$ should be treated as a local quantity rather than a
-global constant. A simple recipe is to estimate drift on a short trailing window
-with a robust local slope fit or median-of-slopes estimate, then smooth or clip
-the result before plugging it into $n_t^*$. Because the rule is only
-$2/3$-sensitive, a factor-of-two error in $\hat\zeta_t$ changes the recommended
-memory by about $2^{2/3} \approx 1.6\times$, so the method tolerates moderate
-estimation noise without collapsing.
-
-For small relative calibration errors, the rule is predictably sublinear:
-\[
-  \frac{\Delta n_t^*}{n_t^*}
-  \approx
-  \frac{2}{3}\left(
-    \frac{\Delta C_K}{C_K} - \frac{\Delta \hat\zeta_t}{\hat\zeta_t}
-  \right),
-  \qquad
-  \frac{\Delta \mathcal{E}_{\min}}{\mathcal{E}_{\min}}
-  \approx
-  \frac{2}{3}\frac{\Delta C_K}{C_K}
-  + \frac{1}{3}\frac{\Delta \hat\zeta_t}{\hat\zeta_t}.
-\]
-Thus moderate multiplicative misspecification in $\hat\zeta_t$ or $C_K$ moves
-the operating point in the expected $2/3$-power fashion rather than causing a
-linear blow-up.
-In practice, this implies that improvements in apparent tracking performance
-must be interpreted relative to this baseline, particularly in systems where
-actions influence observations.
+\Cref{prop:coherence_delay} says that continuous drift imposes a nonzero floor
+for the finite-memory averaging class: $\mathcal{E}_{\min} \propto \zeta^{1/3}$
+and $n^* \propto \zeta^{-2/3}$. In practice this becomes a self-tuning rule,
+$n_t^* = (C_K/\hat\zeta_t)^{2/3}$, with the critical-window lower bound in
+\cref{prop:window_minimax} showing that the same obstruction persists for any
+estimator restricted to the last $m$ samples.
 \end{remark}
-
-
-
-\begin{remark}[Practical estimation of $V_\Phi$ for black-box $\Conv_t$]%
-\label{rem:cegis}
-The estimable score requires $\sigma_\Phi = 1/(1+V_\Phi)$, where $V_\Phi$
-is the ISS-Lyapunov functional for the convergence subsystem.
-When $\Conv_t$ is a black box, with internal dynamics unknown and ISS
-comparison functions $(\alpha_{1\Phi}, \alpha_{2\Phi}, \alpha_{3\Phi},
-\chi_\Phi)$ unavailable, $V_\Phi$ admits no closed-form derivation.
-One possible route is Counterexample-Guided Inductive Synthesis (CEGIS), in
-which a learner proposes a candidate $\hat{V}_\Phi$ from observed state
-trajectories and a verifier attempts to falsify its dissipation inequality on
-sampled trajectories. We have not implemented that pipeline in the present
-codebase, so it should be read as future work rather than as a validated part
-of the current diagnostic. For opaque adaptation maps, the present paper should
-therefore be interpreted as providing the template requirement on $V_\Phi$, not
-an operational estimator for every black-box $\Conv_t$.
-\end{remark}
-
-\subsection{Architecture and Behavior Are Not Equivalent}%
-\label{sec:asymmetry}
-
-A structural asymmetry in the framework deserves explicit statement.
-
-\textbf{Drift-coherence implies the need for all three roles.}
-By \cref{lem:beliefupdate} and \cref{thm:irreducibility}, any
-drift-coherent, action-effective system must implement the three
-functional roles $(\Pot, \Act, \Conv)$.
-Drift-coherence is the stronger behavioral condition; the decomposition is its
-architectural consequence in action-effective settings.
-
-\textbf{Implementing the decomposition is not enough.}
-A system may implement $(\Pot, \Act, \Conv)$ structurally while failing
-to satisfy the ISS hypotheses (H-ISS-P/A/$\Phi$/Env) required for
-\cref{thm:borromean}. The components may be present but improperly tuned,
-have inadequate bandwidth, or lack sufficient expressiveness.
-
-\begin{proposition}[The Score Characterizes Component-Level Failure]\label{prop:tci_characterization}
-Let $\IS$ be a three-role system under hypotheses
-(H-ISS-P/A/$\Phi$/Env). Then:
-\begin{enumerate}[label=\textnormal{(\roman*)}]
-  \item $\Score(\IS,t) = 1$ if and only if $V_P(t)=0$,
-    $H(\Act_t\mid\Pot)=0$, and $V_\Phi(t)=0$ simultaneously.
-  \item $\Score(\IS,t)\to 0$ if and only if at least one of the
-    three failure modes is active:
-    $V_P(t)\to\infty$ \emph{(FM-1)},
-    $H(\Act_t\mid\Pot)\to\infty$ \emph{(FM-2)}, or
-    $V_\Phi(t)\to\infty$ \emph{(FM-3)}.
-  \item The identity of $\arg\min(\sigma_P, \sigma_A, \sigma_\Phi)$
-    names the bottleneck component.
-\end{enumerate}
-\end{proposition}
-
-\begin{proof}
-(i) Each score is a strictly decreasing function of its Lyapunov functional or
-conditional entropy: $\sigma_P=1\Leftrightarrow V_P=0$,
-$\sigma_A=1\Leftrightarrow H(\Act_t\mid\Pot)=0$,
-$\sigma_\Phi=1\Leftrightarrow V_\Phi=0$.
-The min equals~$1$ iff all three equal~$1$ simultaneously.
-
-(ii) As $V_P(t)\to\infty$, $\sigma_P(t)\to 0$, so $\Score\to 0$;
-similarly for $V_\Phi(t)\to\infty$.
-As $H(\Act_t\mid\Pot)\to\infty$, $\sigma_A(t)=e^{-H}\to 0$, so
-$\Score\to 0$.
-The converse holds because $\Score\to 0$ requires at least one
-$\sigma_i\to 0$, which by the above requires the corresponding
-functional to diverge.
-
-(iii) $\Score = \min_i \sigma_i$; the argmin identifies which
-subsystem's functional is largest, i.e., which component is furthest from its
-reference state.
-\end{proof}
-
-\begin{proposition}[Null-State False Alarm Control for the Gaussian Tracker]\label{prop:gaussian_false_alarm}
-Consider the effort-corrected score $\ScoreE(\IS, t)$ evaluated on the linear-Gaussian tracking environment introduced in \cref{sec:tgt_formal}. Under the null hypothesis of healthy tracking without coercive masking ($\zeta_t = \zeta$, action exactly targets the latent state), the variance of the optimal prediction error converges to a steady-state value $P_\infty$. At steady state, the false positive rate for a warning threshold $\tau \in (0, 1)$ is strictly controlled by:
-\[
-  \mathbb{P}(\ScoreE(\IS, t) < \tau) \;\le\; 2 \Phi^c\!\left( \sqrt{\frac{2}{P_\infty}\left(\frac{1}{\tau} - 1\right)} \right)
-\]
-where $\Phi^c$ is the complementary CDF of the standard normal distribution.
-\end{proposition}
-
-\begin{proof}
-By definition, $\ScoreE(t) = \min(\sigma_P(t), \sigma_A^E(t), \sigma_\Phi(t))$. Under the optimal tracking null hypothesis without coercive masking, the environment acts on the true target without excess correction effort ($\Delta_A = 0 \implies \sigma_A^E = 1$) and the variance estimator is perfectly calibrated ($V_\Phi = 0 \implies \sigma_\Phi = 1$). The index thus reduces exactly to the prediction component $\sigma_P(t) = (1 + V_P(t))^{-1}$, where $V_P(t) = \frac{1}{2}(\hat{\mu}_t - \mu_t)^2$.
-
-In the steady state of the scalar Kalman filter, the tracking error $\hat{\mu}_t - \mu_t$ is distributed as $\mathcal{N}(0, P_\infty)$. Consequently, $V_P(t)$ is distributed as $\frac{P_\infty}{2} \chi^2_1$.
-The false-alarm event $\ScoreE(t) < \tau$ reduces to $V_P(t) > \frac{1}{\tau} - 1$. Taking the square root, this evaluates directly to the two-sided normal tail probability $2 \Phi^c\!\left(\sqrt{\frac{2}{P_\infty}(\frac{1}{\tau} - 1)}\right)$, establishing the bound.
-\end{proof}

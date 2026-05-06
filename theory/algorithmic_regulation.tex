@@ -1,32 +1,11 @@
-\section{Relation to Algorithmic Regulation}\label{sec:ruffini}
+\section{Coercive Masking and Effort-Aware Correction}\label{sec:ruffini}
 
-\citet{Ruffini2026} reformulates the good regulator principle in algorithmic
-terms: a regulator that materially simplifies the realized world trajectory is
-unlikely to be independent of that world. In Ruffini's setting, regulation is
-read through compression of the regulated output. The question here is
-different: not how much compression a regulator achieves on a realized episode,
-but how long a compressed internal model remains valid when the world itself
-drifts.
-
-Tracking under drift can be interpreted
-as \emph{online compression of a non-stationary process}. A finite-memory model
-compresses recent observations into a compact state, but that compression ages.
-The cube-root law in \cref{prop:coherence_delay} quantifies the resulting
-trade-off between statistical efficiency and temporal validity.
-
-The decomposition $(\Pot,\Act,\Conv)$ then serves as an explicit model of the
-three channels that matter in closed-loop regulation: what the system currently
-represents, what it does, and how it updates. Ruffini studies the compression
-value of regulation on individual episodes, whereas the analysis here tracks
-the stability of that compression under drift and feedback.
-
-\subsection{Coercive Masking}\label{sec:coercive}
-
-The central point of contact with algorithmic regulation is the masking
-regime. A controller can keep the realized trajectory simple either because it
-tracks the world well or because it pushes the world toward a stale model. The
-latter mechanism is invisible to a diagnostic that looks only at model-world
-fit.
+Closed-loop systems admit a specific failure mode beyond ordinary drift. A
+controller can keep the realized trajectory simple either because it tracks the
+world well or because it pushes the world toward a stale model. The latter
+mechanism is invisible to a diagnostic that looks only at model-world fit. This
+section defines that masking regime and the effort-aware correction used in the
+active and logged benchmarks.
 
 \begin{definition}[Coercive Regime]\label{def:coercive}
 An information system $\IS = (\Pot, \Act, \Conv)$ operates in the
@@ -59,7 +38,7 @@ $t_{\mathrm{mask}} = O(\alpha^{-1} \log(\alpha/\zeta))$ is the
 the coercive capacity and $V_P$ diverges.
 \end{corollary}
 
-\begin{proof}[Proof sketch]
+\paragraph{Proof sketch.}
 Under condition (iii) of \cref{def:coercive}, the gap
 $\delta_t = \mu^*(t) - \hat\mu_0$ satisfies
 $\delta_{t+1} = (1 - \alpha)\delta_t + \zeta$. The fixed point is
@@ -68,7 +47,6 @@ $V_P(t) \leq \tfrac{1}{2}(\zeta/\alpha)^2 + \sigma_w^2/(2\alpha)$ in
 expectation, masking FM-1 while the coercive condition holds. Once the drift
 accumulates beyond the available control authority, the frozen model can no
 longer hold the environment in place and the underlying mismatch reappears.
-\end{proof}
 
 \begin{remark}[Compression by adaptation vs. compression by forcing]
 From the algorithmic-regulation viewpoint, coercive masking matters because it

@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-title: "The Coherence-Delay Trade-off and Coercive Masking Under Drift"
+title: "The Coherence-Delay Trade-off: Finite-Memory Limits and Effort-Aware Diagnostics for Coercive Masking"
 message: "If you use this repository, please cite the v2 preprint title recorded below. Earlier citations under the old title refer to the same project lineage."
 type: software
 authors:
@@ -8,7 +8,7 @@ authors:
     email: "figueiredo@pm.me"
     orcid: "https://orcid.org/0009-0005-0201-9308"
 repository-code: "https://github.com/jovemexausto/coherence-delay-tradeoff"
-abstract: "LaTeX source and experiment code for the v2 preprint 'The Coherence-Delay Trade-off and Coercive Masking Under Drift: Finite-Memory Tracking Limits and Effort-Aware Diagnostics'. Earlier drafts circulated under the title 'The Coherence-Delay Trade-off in Tracking Under Drift: A Cube-Root Law for Finite-Memory Estimation'."
+abstract: "LaTeX source and experiment code for the v2 preprint 'The Coherence-Delay Trade-off: Finite-Memory Limits and Effort-Aware Diagnostics for Coercive Masking'. Earlier drafts circulated under the title 'The Coherence-Delay Trade-off in Tracking Under Drift: A Cube-Root Law for Finite-Memory Estimation'."
 doi: "10.5281/zenodo.20041349"
 date-released: "2026-05-05"
 keywords:
@@ -19,7 +19,7 @@ keywords:
   - coercive masking
 preferred-citation:
   type: software
-  title: "The Coherence-Delay Trade-off and Coercive Masking Under Drift: Finite-Memory Tracking Limits and Effort-Aware Diagnostics"
+  title: "The Coherence-Delay Trade-off: Finite-Memory Limits and Effort-Aware Diagnostics for Coercive Masking"
   authors:
     - family-names: "Parreira"
       given-names: "Vinicius"

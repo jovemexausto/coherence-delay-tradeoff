@@ -2,7 +2,7 @@
 
 ## Current v2 Title
 
-`The Coherence-Delay Trade-off and Coercive Masking Under Drift: Finite-Memory Tracking Limits and Effort-Aware Diagnostics`
+`The Coherence-Delay Trade-off: Finite-Memory Limits and Effort-Aware Diagnostics for Coercive Masking`
 
 ## Earlier Draft Title
 

@@ -1,0 +1,49 @@
+\section{Main Results at a Glance}\label{sec:glance}
+
+Two claims organize the rest of the paper. First, for the averaging class studied
+here, tracking error under drift obeys the coherence-delay balance
+$\mathcal{E}(n) \lesssim C_K n^{-1/2} + \zeta n/2$, which yields the cube-root
+scaling $\mathcal{E}_{\min} \propto \zeta^{1/3}$ and the memory rule
+$n^* \propto \zeta^{-2/3}$. Second, in action-coupled
+settings, apparent fit can remain high because the system is actively forcing
+the world toward a stale model. CI$^E$ is designed to expose that maintenance
+cost.
+
+Those two claims are borne out by the current evidence bundle. The Gaussian
+tracking experiments recover slopes $0.316$ (sliding window) and $0.317$
+(EWMA), close to the predicted $1/3$ law. In the logged KuaiRand benchmark,
+healthy-only calibration raises bubble detection from $0.458$ with CI to $0.692$
+with CI$^E$, while paired bootstrap intervals exclude zero for the user-level
+improvement. In the particle masking benchmark at moderate coupling
+($\alpha=0.3$, $\lambda=3.0$), the stale controller reaches CI $= 0.949 \pm 0.012$
+but CI$^E = 0.697 \pm 0.046$, producing masking gap $M_t \approx 0.252$.
+Passive streams remain a separate regime: on ELEC2 and Bikes, generic passive
+detectors such as ADWIN remain the stronger default alarms.
+
+\begin{center}
+\small
+\begin{tabular}{@{}p{0.29\linewidth}p{0.27\linewidth}p{0.36\linewidth}@{}}
+\toprule
+Claim & Evidence & Reading \\
+\midrule
+Finite-memory law & Gaussian U-curve slopes $0.316$ / $0.317$ & Supports the cube-root scaling for sliding windows and EWMA. \\
+Logged masking & KuaiRand bubble detection $0.458 \to 0.692$ (CI to CI$^E$) & Effort-aware coherence improves onset detection under matched healthy-only calibration. \\
+Closed-loop masking & Particle benchmark: CI $= 0.949$, CI$^E = 0.697$, $M_t \approx 0.252$ & Apparent coherence can be purchased by control effort. \\
+Passive regime split & ADWIN remains stronger on ELEC2 and Bikes & The method is not presented as a universal passive changepoint replacement. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The detailed protocols, proofs, and benchmark-specific caveats appear in the
+sections that follow. The essential regime split is simple:
+passive streams motivate the finite-memory law, whereas active and logged systems
+motivate the effort-aware diagnostic.
+
+Operationally, the workflow is simple. First,
+estimate CI through $\hat\sigma_P$ with a healthy-window reference and a reported
+Sinkhorn regularization $\varepsilon$. Second, choose the strongest available
+effort signal on the observability ladder: exact actuator burden in simulation,
+identified action logs when available, and proxy exposure or policy divergence in
+logged benchmarks. Third, calibrate thresholds and the effort scale $E_0$ on
+healthy windows only, then choose $\lambda$ to hit an acceptable healthy false
+positive budget rather than by hindsight on drift windows.

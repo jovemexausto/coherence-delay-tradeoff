@@ -1,0 +1,83 @@
+\section{Diagnostic Characterization}\label{sec:diagnostic_characterization}
+
+A structural asymmetry in the framework deserves explicit statement.
+
+\textbf{Drift-coherence implies the need for all three roles.}
+By \cref{lem:beliefupdate} and \cref{thm:irreducibility}, any
+drift-coherent, action-effective system must implement the three
+functional roles $(\Pot, \Act, \Conv)$. Drift-coherence is the stronger
+behavioral condition; the decomposition is its architectural consequence in
+action-effective settings.
+
+\textbf{Implementing the decomposition is not enough.}
+A system may implement $(\Pot, \Act, \Conv)$ structurally while failing
+to satisfy the ISS hypotheses (H-ISS-P/A/$\Phi$/Env) required for
+\cref{thm:borromean}. The components may be present but improperly tuned,
+have inadequate bandwidth, or lack sufficient expressiveness.
+
+\begin{proposition}[The Score Characterizes Component-Level Failure]\label{prop:tci_characterization}
+Let $\IS$ be a three-role system under hypotheses
+(H-ISS-P/A/$\Phi$/Env). Then:
+\begin{enumerate}[label=\textnormal{(\roman*)}]
+  \item $\Score(\IS,t) = 1$ if and only if $V_P(t)=0$,
+    $H(\Act_t\mid\Pot)=0$, and $V_\Phi(t)=0$ simultaneously.
+  \item $\Score(\IS,t)\to 0$ if and only if at least one of the
+    three failure modes is active:
+    $V_P(t)\to\infty$ \emph{(FM-1)},
+    $H(\Act_t\mid\Pot)\to\infty$ \emph{(FM-2)}, or
+    $V_\Phi(t)\to\infty$ \emph{(FM-3)}.
+  \item The identity of $\arg\min(\sigma_P, \sigma_A, \sigma_\Phi)$
+    names the bottleneck component.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i) Each score is a strictly decreasing function of its Lyapunov functional or
+conditional entropy: $\sigma_P=1\Leftrightarrow V_P=0$,
+$\sigma_A=1\Leftrightarrow H(\Act_t\mid\Pot)=0$,
+$\sigma_\Phi=1\Leftrightarrow V_\Phi=0$.
+The min equals~$1$ iff all three equal~$1$ simultaneously.
+
+(ii) As $V_P(t)\to\infty$, $\sigma_P(t)\to 0$, so $\Score\to 0$;
+similarly for $V_\Phi(t)\to\infty$.
+As $H(\Act_t\mid\Pot)\to\infty$, $\sigma_A(t)=e^{-H}\to 0$, so
+$\Score\to 0$.
+The converse holds because $\Score\to 0$ requires at least one
+$\sigma_i\to 0$, which by the above requires the corresponding
+functional to diverge.
+
+(iii) $\Score = \min_i \sigma_i$; the argmin identifies which
+subsystem's functional is largest, i.e., which component is furthest from its
+reference state.
+\end{proof}
+
+\begin{proposition}[Null-State False Alarm Control for the Gaussian Tracker]\label{prop:gaussian_false_alarm}
+Consider the effort-corrected score $\ScoreE(\IS, t)$ evaluated on the
+linear-Gaussian tracking environment introduced in \cref{sec:tgt_formal}. Under
+the null hypothesis of healthy tracking without coercive masking ($\zeta_t = \zeta$,
+action exactly targets the latent state), the variance of the optimal prediction
+error converges to a steady-state value $P_\infty$. At steady state, the false
+positive rate for a warning threshold $\tau \in (0, 1)$ is strictly controlled by:
+\[
+  \mathbb{P}(\ScoreE(\IS, t) < \tau) \;\le\; 2 \Phi^c\!\left( \sqrt{\frac{2}{P_\infty}\left(\frac{1}{\tau} - 1\right)} \right)
+\]
+where $\Phi^c$ is the complementary CDF of the standard normal distribution.
+\end{proposition}
+
+\begin{proof}
+By definition, $\ScoreE(t) = \min(\sigma_P(t), \sigma_A^E(t), \sigma_\Phi(t))$.
+Under the optimal tracking null hypothesis without coercive masking, the
+environment acts on the true target without excess correction effort
+($\Delta_A = 0 \implies \sigma_A^E = 1$) and the variance estimator is perfectly
+calibrated ($V_\Phi = 0 \implies \sigma_\Phi = 1$). The index thus reduces
+exactly to the prediction component $\sigma_P(t) = (1 + V_P(t))^{-1}$, where
+$V_P(t) = \frac{1}{2}(\hat{\mu}_t - \mu_t)^2$.
+
+In the steady state of the scalar Kalman filter, the tracking error
+$\hat{\mu}_t - \mu_t$ is distributed as $\mathcal{N}(0, P_\infty)$. Consequently,
+$V_P(t)$ is distributed as $\frac{P_\infty}{2} \chi^2_1$. The false-alarm event
+$\ScoreE(t) < \tau$ reduces to $V_P(t) > \frac{1}{\tau} - 1$. Taking the square
+root, this evaluates directly to the two-sided normal tail probability
+$2 \Phi^c\!\left(\sqrt{\frac{2}{P_\infty}(\frac{1}{\tau} - 1)}\right)$,
+establishing the bound.
+\end{proof}

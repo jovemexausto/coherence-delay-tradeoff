@@ -1,0 +1,114 @@
+\section{Mathematical Definitions}\label{sec:definitions}
+
+We collect the full formal setup here after the main diagnostic and empirical
+claims have been stated. The paper itself uses only the minimum needed in the
+early sections: a representation $\Pot$, an actuation rule $\Act$, and an
+adaptation operator $\Conv$ evolving under drift.
+
+\subsection{State Spaces and Information State}
+
+\begin{definition}[State space]\label{def:statespace}
+Let $S$ be a non-empty measurable space (the \emph{signal space}).
+The \emph{information state space} $\Info$ is the space of all probability
+measures on $S$ equipped with a metric $d_\Info$ compatible with weak
+convergence.
+Unless otherwise specified, $d_\Info$ denotes the $L^2$-Wasserstein
+distance $W_2$.
+\end{definition}
+
+\begin{definition}[Potentiality]\label{def:potentiality}
+The \emph{Potentiality} at time $t$ is a measurable map
+\[
+  \Pot(S,t) \in \Info,
+\]
+representing the system's current probability measure over possible world
+states.
+$\Pot$ is \emph{$\varepsilon$-coherent} at time $t$ if
+$W_2\!\left(\Pot(S,t),\,\Pot^*(S,t)\right)\leq\varepsilon$,
+where $\Pot^*(S,t)$ denotes the true marginal distribution of the
+environment at time $t$.
+\end{definition}
+
+\begin{remark}[Computational realization of $W_2$]\label{rem:sinkhorn}
+The $L^2$-Wasserstein distance $W_2$ is chosen as the metric on $\Info$
+for its geometric faithfulness: unlike $f$-divergences such as KL
+divergence, $W_2$ inherits the geometry of the underlying signal space $S$
+and behaves well under spatial translations of the distribution support,
+a desirable property when concept drift shifts the support of $\Pot^*$.
+In high-dimensional signal spaces, exact computation of $W_2$ costs
+$O(n^3\log n)$ via network-flow solvers.
+For streaming applications requiring real-time $\Conv_t$ updates, the
+entropic regularization of \citet{Cuturi2013} replaces $W_2$ with the
+Sinkhorn divergence $S_\varepsilon$, computable in $O(n^2/\varepsilon^2)$
+via parallelizable matrix-scaling iterations \citep{Altschuler2017}.
+$S_\varepsilon$ converges to $W_2^2$ as $\varepsilon\to 0$ and breaks
+the worst statistical scaling of raw empirical $W_2$ at the cost of a bias that
+depends on $\varepsilon$ and the ambient geometry
+\citep{GenevayEtAl2019}.
+The theoretical results hold for $W_2$; their computational realization
+in streaming contexts is demonstrated in the Gaussian-tracker experiments
+(\cref{sec:tgt}; code at \cref{app:code_repository}).
+\end{remark}
+
+\begin{definition}[Actuation]\label{def:actuation}
+The \emph{Actuation operator} is a measurable map
+\[
+  \Act_t\colon \Info \to \mathcal{O},
+\]
+where $\mathcal{O}$ is the output space (distinct from lowercase $o$,
+which denotes a specific output element $o \in \mathcal{O}$).
+$\Act_t$ is \emph{$\delta$-reproducible} if for any $p\in\Info$ and any two
+executions $\omega,\omega'$,
+$d_\mathcal{O}\!\left(\Act_t(p;\omega),\Act_t(p;\omega')\right)\leq\delta$.
+A deterministic actuation is $0$-reproducible.
+\end{definition}
+
+\begin{definition}[Convergence operator]\label{def:convergence}
+The \emph{Convergence operator} is a measurable map
+\[
+  \Conv_t\colon \Info \times \mathcal{O} \times S \to \Info,
+\]
+mapping the current information state, the most recent actuation, and an
+incoming signal to an updated information state.
+$\Conv_t$ is \emph{coherence-restoring} if there exist
+$\beta\in\mathcal{KL}$ and $\gamma\in\mathcal{K}$ such that for all $t\geq 0$,
+\[
+  W_2\!\left(\Pot(S,t),\Pot^*(S,t)\right)
+  \;\leq\;
+  \beta\!\left(W_2\!\left(\Pot(S,0),\Pot^*(S,0)\right),t\right)
+  \;+
+  \gamma\!\left(\sup_{s\leq t}\norm{u(s)}\right),
+\]
+where $u(s)$ represents the environmental drift input at time $s$.
+\end{definition}
+
+\begin{definition}[Three-Role System]\label{def:tcccompliant}
+An information system $\IS$ is a \emph{three-role system} if it is equipped
+with all three operators $(\Pot,\Act,\Conv)$ satisfying
+\cref{def:potentiality,def:actuation,def:convergence} respectively.
+The composite information state is
+\[
+  \IS \coloneqq \bigl(\Pot(S,t),\Act_t,\Conv_t\bigr)
+  \in \Info\times\mathcal{F}_\mathcal{O}\times\mathcal{F}_\Info.
+\]
+\end{definition}
+
+\subsection{ISS Definitions}
+
+\begin{definition}[Class $\mathcal{K}$, $\mathcal{KL}$]
+A function $\gamma\colon\reals_{\geq 0}\to\reals_{\geq 0}$ is class
+$\mathcal{K}$ if it is continuous, strictly increasing, and $\gamma(0)=0$.
+A function $\beta\colon\reals_{\geq 0}^2\to\reals_{\geq 0}$ is class
+$\mathcal{KL}$ if $\beta(\cdot,t)\in\mathcal{K}$ for each $t$ and
+$\beta(r,\cdot)\to 0$ as $t\to\infty$ for each $r>0$.
+\end{definition}
+
+\begin{definition}[Input-to-State Stability]\label{def:iss}
+A dynamical system $\dot x = f(x,u)$ is \emph{input-to-state stable} (ISS)
+if there exist $\beta\in\mathcal{KL}$ and $\gamma\in\mathcal{K}$ such that
+for every initial state $x(0)$, every essentially bounded input $u$, and all
+$t\ge 0$,
+\[
+  \norm{x(t)} \le \beta(\norm{x(0)},t) + \gamma(\norm{u}_\infty).
+\]
+\end{definition}

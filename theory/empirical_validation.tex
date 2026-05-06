@@ -1,17 +1,33 @@
 \section{Empirical Validation}\label{sec:tgt}
 
-A Gaussian tracker provides an analytically tractable
-closed-loop tracking model that instantiates the three roles
-$(\Pot,\Act,\Conv)$ and admits
-closed-form computation of all Lyapunov functionals.
+A Gaussian tracker provides an analytically tractable closed-loop tracking model
+that instantiates the three roles $(\Pot,\Act,\Conv)$ and admits closed-form
+computation of all Lyapunov functionals.
 
-The experiments verify the component-wise stability template by controlled
-ablation of each component under pure drift (\cref{sec:tgt_exp_a}), validate
-the estimation error bound of \cref{prop:tci_estimation_error} numerically and
-characterize the lag-drift tradeoff (\cref{sec:tgt_exp_b}), and demonstrate
-the score as a pre-failure early-warning diagnostic on a real concept-drift
-dataset (\cref{sec:tgt_exp_c}).
-Code and reproduction instructions are provided in \cref{app:code_repository}.
+The empirical section is organized in the same order as the paper's main claims.
+We start with the flagship active and logged results, where effort-aware
+diagnostics are the point of the paper. We then return to the supporting
+validation studies that recover the cube-root scaling, ablate the three-role
+diagnostic, and situate the method honestly against passive drift alarms. Code and
+reproduction instructions are provided in \cref{app:code_repository}.
+
+\subsection{Flagship Results: Logged and Active Masking}\label{sec:tgt_flagship}
+
+Two results are the empirical center of gravity. On KuaiRand, healthy-only
+calibration raises bubble detection from $0.458$ with CI to $0.692$ with CI$^E$,
+with paired bootstrap intervals excluding zero for the user-level gain; all
+generic detectors in that comparison consume the same effort-adjusted scalar
+signal, so the comparison is about detector behavior rather than detector-specific
+inputs. On the active particle benchmark, CI$^E$ detects masking onset in all
+12 runs with median delay $5.0$, whereas ADWIN detects 7 of 12 runs with median
+delay $279.0$.
+
+These are the regimes in which the paper's diagnostic claim matters: low observed
+error can be maintained by intervention, and passive alarms do not directly price
+that intervention burden. The detailed logged and active protocols appear in
+\cref{sec:tgt_exp_e,sec:particle_tracking_masking}; the remaining subsections explain why those
+results are not isolated anecdotes by validating the finite-memory law, the score
+construction, and the passive-regime split.
 
 \subsection{Formalization}\label{sec:tgt_formal}
 
@@ -65,31 +81,10 @@ steady-state Kalman gain $K_\infty = \hat\sigma_\infty^2 /
 (\hat\sigma_\infty^2 + \sigma_{\mathrm{obs}}^2)$.
 \end{proof}
 
-\begin{table}[ht]
-\centering
-\small
-\caption{Gaussian-tracker experimental parameters.
-  All experiments use \texttt{uv sync} from the repository for
-  exact environment reproduction.}\label{tab:params}
-\begin{tabular}{@{}llll@{}}
-\toprule
-\textbf{Parameter} & \textbf{Exp A} & \textbf{Exp B} & \textbf{Exp C/D} \\
-\midrule
-$T$ (steps)           & 500       & 5,000      & 45,312 (ELEC2) \\
-Seeds                 & 42        & 0--49      & fixed           \\
-$\sigma_{\mathrm{obs}}$ & 1.0     & 1.0        & 1.0             \\
-$\zeta$               & 0.02      & 0.001      & estimated       \\
-$\sigma_w$            & 0.1       & 0.0 / 0.035 & N/A            \\
-$\varepsilon$ (Sinkhorn) & 0.1   & 0.1        & 0.1             \\
-Window $n$            & N/A       & 5--100     & 100             \\
-EMA $\alpha$          & N/A       & 0.005--0.5 & 0.05            \\
-PH threshold          & N/A       & N/A        & 84              \\
-PH $\delta$           & N/A       & N/A        & 0.01            \\
-Warning level         & N/A       & N/A        & 0.295           \\
-Max lead gap          & N/A       & N/A        & adaptive (166)  \\
-\bottomrule
-\end{tabular}
-\end{table}
+All experiments use \texttt{uv sync} from the repository for exact environment
+reproduction. The controlled Gaussian studies use the parameter values stated in
+their protocol paragraphs below, while the ELEC2 benchmark keeps the same fixed
+warning level and Page-Hinkley calibration throughout.
 
 \subsection{Experiment A: Component Ablation}\label{sec:tgt_exp_a}
 
@@ -391,6 +386,170 @@ $d=256$, $n=100$, $\varepsilon=1.0$ & 0.571 & 0.1446 & 6.2 & 17{,}519{,}521 \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\subsection{Experiment F: Feedback Masking in the Particle Tracker}\label{sec:particle_tracking_masking}
+
+This experiment instantiates \cref{cor:coercive,def:tci_effort} in the
+non-Gaussian, non-linear particle tracker. The environment evolves according to the scalar
+particle-filter simulator implemented in \texttt{experiments/particle/model.py}, but now
+with an explicit action-coupling parameter $\alpha \in [0,1]$ so that the
+actuation can pull the latent state toward the stale controller output. In
+the synthetic setting we operationalise the effort proxy as the \emph{realized
+coercive effort}
+\[
+  E_t^{\mathrm{sim}} = \alpha\,|a_t - s_t^{\mathrm{free}}|,
+\]
+where $s_t^{\mathrm{free}}$ is the latent state that would have arisen at
+time $t$ before applying control. This distinguishes mere action-world
+mismatch from actual world-forcing.
+
+\paragraph{Protocol.}
+We freeze $\Pot$ (FM-1) and compare two regimes: passive ($\alpha = 0$)
+and coercive ($\alpha > 0$). The main single-run diagnostic uses
+$\alpha = 0.3$ and effort penalty $\lambda = 3.0$. We then sweep
+$\alpha \in \{0.1,0.2,0.3,0.5,0.7,0.9\}$ and
+$\lambda \in \{0.5,1.0,2.0,3.0,4.0\}$ over 8 seeds, exporting all raw and
+aggregated metrics from the experiment harness. To keep the main text readable,
+\cref{tab:particle_tracking_masking} reports a five-regime masking matrix at
+the default $\lambda = 3.0$: passive, weak, mild, moderate, and strong
+coercive coupling.
+
+\paragraph{Results.}
+
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=\linewidth]{figures/fig_particle_tracking_masking}
+\caption{Synthetic feedback masking in the particle tracker.
+  Left column: passive FM-1, where effort remains at zero and CI and $CI^E$
+  coincide. Right column: coercive FM-1, where the action gap remains
+  nonzero, realized coercive effort appears once influence is positive, and
+  $CI^E$ drops once effort is penalized.}
+\label{fig:particle_tracking_masking}
+\end{figure}
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Five-regime masking matrix for frozen-$\Pot$ FM-1 in the particle
+  tracker at $\lambda = 3.0$ (8 seeds). Cells report tail means.}
+\label{tab:particle_tracking_masking}
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Regime & $\alpha$ & effort & CI & CI$^E$ & $M_t$ \\
+\midrule
+Passive & 0.0 & 0.000 & 0.795 & 0.795 & 0.000 \\
+Weak coercion & 0.1 & 0.054 & 0.872 & 0.757 & 0.115 \\
+Mild coercion & 0.2 & 0.090 & 0.920 & 0.726 & 0.194 \\
+Moderate coercion & 0.3 & 0.118 & 0.949 & 0.697 & 0.252 \\
+Strong coercion & 0.9 & 0.266 & 0.999 & 0.518 & 0.481 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The matrix makes the masking mechanism explicit. As coupling increases, the
+stale FM-1 controller looks progressively healthier under the plain score:
+CI rises from $0.795$ in the passive regime to $0.999$ under strong
+coercion. The effort-aware diagnostic moves in the opposite direction:
+CI$^E$ falls from $0.795$ to $0.518$, and the masking gap grows from $0$ to
+$0.481$. This is the closed-loop signature we care about: apparent coherence is
+improving while effort-aware coherence is deteriorating.
+
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=\linewidth]{figures/fig_particle_tracking_masking_grid}
+\caption{Multi-seed parameter sweep for feedback masking in the particle tracker
+  (8 seeds). Left: mean CI. Middle: mean $CI^E$. Right: masking gap
+  $M_t = CI - CI^E$. The standard index monotonically rises with
+  influence, while the masking gap widens with both influence and effort
+  penalty $\lambda$.}
+\label{fig:particle_tracking_masking_grid}
+\end{figure}
+
+The sweep confirms that the correction is not an artifact of one parameter
+choice. At fixed $\lambda = 3.0$, the masking gap increases from $0.115$
+at $\alpha = 0.1$ to $0.481$ at $\alpha = 0.9$, with a clear intermediate
+effect already at $\alpha = 0.2$ (gap $= 0.194$). At fixed
+$\alpha = 0.3$, increasing $\lambda$ from $0.5$ to $4.0$ expands the gap
+from $0.051$ to $0.313$. Thus, stronger coercive capacity and stronger
+effort penalisation separate apparent from genuine coherence in the expected
+direction. The particle tracker closes the empirical loop on
+\cref{cor:coercive}: the standard score can be masked by control, whereas
+CI$^E$ remains sensitive to the intervention cost that creates the
+mask. Combined with the calibration grid in
+\cref{fig:particle_tracking_tcie_calibration}, this supports the practical rule
+used throughout the paper: set $E_0$ to the healthy effort scale and choose
+$\lambda$ in the range $2$--$3$, with $\lambda = 3$ as a strong default.
+
+To test whether this advantage survives comparison with a generic change
+detector, we build an active benchmark with two known regime transitions:
+healthy tracking for $t<200$, feedback masking for $200 \le t < 400$, and
+coercive collapse for $t \ge 400$. The masking phase freezes $\Pot$ while
+maintaining moderate coupling ($\alpha = 0.3$); the collapse phase sharply
+increases exogenous drift. We compare thresholded CI, thresholded
+CI$^E$, ADWIN, PageHinkley, KSWIN, and NoDrift on the raw
+observation stream, giving the generic detectors a fully observable signal
+rather than a model-derived residual.
+
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=\linewidth]{figures/fig_particle_tracking_active_benchmark}
+\caption{Active benchmark in the particle tracker with two known phase changes.
+  Orange line: masking onset at $t=200$. Red line: collapse onset at
+  $t=400$. ADWIN receives the raw observation stream. CI and $CI^E$ are
+  thresholded at $0.8$.}
+\label{fig:particle_tracking_active_benchmark}
+\end{figure}
+
+\begin{table}[ht]
+\centering
+\caption{Active benchmark summary in the particle tracker (12 seeds).
+  Detection is measured against the known onset of feedback masking and the
+  known onset of coercive collapse.}
+\label{tab:particle_tracking_active_benchmark}
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+Phase & Detector & Detections & Rate & Median delay \\
+\midrule
+Masking onset & CI & 12/12 & 1.00 & 25.5 \\
+Masking onset & CI$^E$ & 12/12 & 1.00 & 5.0 \\
+Masking onset & ADWIN & 7/12 & 0.58 & 279.0 \\
+Masking onset & PageHinkley & 12/12 & 1.00 & 68.5 \\
+Masking onset & KSWIN & 1/12 & 0.08 & 118.0 \\
+Masking onset & NoDrift & 0/12 & 0.00 & NA \\
+Collapse onset & CI & 12/12 & 1.00 & 2.0 \\
+Collapse onset & CI$^E$ & 12/12 & 1.00 & 0.0 \\
+Collapse onset & ADWIN & 5/12 & 0.42 & 111.0 \\
+Collapse onset & PageHinkley & 12/12 & 1.00 & 37.5 \\
+Collapse onset & KSWIN & 0/12 & 0.00 & NA \\
+Collapse onset & NoDrift & 0/12 & 0.00 & NA \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The benchmark isolates the point that passive ELEC2 cannot address. ADWIN is
+stronger on passive streams because it is a generic changepoint detector.
+PageHinkley is reliable but slower, KSWIN is too conservative on this signal,
+and NoDrift is the sanity baseline. In the active setting, however, the
+relevant anomaly is not merely distributional change but coercive maintenance
+of an apparently healthy world-model fit. Here CI$^E$ detects masking onset
+in all 12 runs with median delay $5.0$, whereas ADWIN detects only 7 of 12
+masking onsets and does so with median delay $279.0$. For the collapse
+transition the same ordering persists: ADWIN detects only 5 of 12 runs, while
+CI and CI$^E$ detect all of them, with CI$^E$ firing earliest.
+This is the regime in which the effort-corrected index provides information that
+a generic passive detector does not encode.
+
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=0.95\linewidth]{figures/fig_particle_tracking_tcie_calibration}
+\caption{Calibration grid for $CI^E$ over effort penalty $\lambda$
+  and threshold. The rate panel is omitted because it saturates across most of
+  the grid; the figure instead reports masking delay, collapse delay, and
+  healthy false positives, which are the informative calibration axes.
+  The default setting ($\lambda = 3.0$, threshold $0.80$) remains a low-delay
+  compromise.}
+\label{fig:particle_tracking_tcie_calibration}
+\end{figure}
 
 \subsection{Experiment C: ELEC2 Early-Warning Lead Time}\label{sec:tgt_exp_c}
 
@@ -701,16 +860,6 @@ masking-gap sweep.
 \toprule
 Setting & Perturbation / $\lambda$ & Primary metric & Auxiliary metric \\
 \midrule
-ELEC2 dyn. $n_t^*$ & baseline & 29 matched leads & mean window 47.7 \\
-ELEC2 dyn. $n_t^*$ & $\hat\zeta_t \times 0.75$ & 22 matched leads & mean window 57.8 \\
-ELEC2 dyn. $n_t^*$ & $\hat\zeta_t \times 1.5$ & 21 matched leads & mean window 36.7 \\
-ELEC2 dyn. $n_t^*$ & $C_K \times 0.75$ & 25 matched leads & mean window 39.5 \\
-ELEC2 dyn. $n_t^*$ & $C_K \times 1.5$ & 18 matched leads & mean window 62.5 \\
-Bikes dyn. $n_t^*$ & baseline & 85 matched leads & mean window 113.3 \\
-Bikes dyn. $n_t^*$ & $\hat\zeta_t \times 0.75$ & 92 matched leads & mean window 136.1 \\
-Bikes dyn. $n_t^*$ & $\hat\zeta_t \times 1.5$ & 76 matched leads & mean window 86.9 \\
-Bikes dyn. $n_t^*$ & $C_K \times 1.5$ & 98 matched leads & mean window 146.3 \\
-Bikes dyn. $n_t^*$ & $C_K \times 2.0$ & 110 matched leads & mean window 173.4 \\
 Particle ($\alpha=0.3$) & $\lambda = 0.5$ & CI$^E = 0.898$ & $M_t = 0.051$ \\
 Particle ($\alpha=0.3$) & $\lambda = 2.0$ & CI$^E = 0.768$ & $M_t = 0.181$ \\
 Particle ($\alpha=0.3$) & $\lambda = 3.0$ & CI$^E = 0.697$ & $M_t = 0.252$ \\
@@ -725,173 +874,19 @@ KuaiRand & $E_0 \times 2.0$ & bubble rate 0.529 & healthy FP/u 1.019 \\
 KuaiRand & proxy = KL & bubble rate 0.692 & healthy FP/u 1.387 \\
 KuaiRand & proxy = TV & bubble rate 0.569 & healthy FP/u 1.014 \\
 KuaiRand & proxy = Gini & bubble rate 0.556 & healthy FP/u 1.008 \\
+ELEC2 dyn. $n_t^*$ & baseline & 29 matched leads & mean window 47.7 \\
+ELEC2 dyn. $n_t^*$ & $\hat\zeta_t \times 0.75$ & 22 matched leads & mean window 57.8 \\
+ELEC2 dyn. $n_t^*$ & $\hat\zeta_t \times 1.5$ & 21 matched leads & mean window 36.7 \\
+ELEC2 dyn. $n_t^*$ & $C_K \times 0.75$ & 25 matched leads & mean window 39.5 \\
+ELEC2 dyn. $n_t^*$ & $C_K \times 1.5$ & 18 matched leads & mean window 62.5 \\
+Bikes dyn. $n_t^*$ & baseline & 85 matched leads & mean window 113.3 \\
+Bikes dyn. $n_t^*$ & $\hat\zeta_t \times 0.75$ & 92 matched leads & mean window 136.1 \\
+Bikes dyn. $n_t^*$ & $\hat\zeta_t \times 1.5$ & 76 matched leads & mean window 86.9 \\
+Bikes dyn. $n_t^*$ & $C_K \times 1.5$ & 98 matched leads & mean window 146.3 \\
+Bikes dyn. $n_t^*$ & $C_K \times 2.0$ & 110 matched leads & mean window 173.4 \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-\subsection{Experiment F: Feedback Masking in the Particle Tracker}\label{sec:particle_tracking_masking}
-
-This experiment instantiates \cref{cor:coercive,def:tci_effort} in the
-non-Gaussian, non-linear particle tracker. The environment evolves according to the scalar
-particle-filter simulator implemented in \texttt{experiments/particle/model.py}, but now
-with an explicit action-coupling parameter $\alpha \in [0,1]$ so that the
-actuation can pull the latent state toward the stale controller output. In
-the synthetic setting we operationalise the effort proxy as the \emph{realized
-coercive effort}
-\[
-  E_t^{\mathrm{sim}} = \alpha\,|a_t - s_t^{\mathrm{free}}|,
-\]
-where $s_t^{\mathrm{free}}$ is the latent state that would have arisen at
-time $t$ before applying control. This distinguishes mere action-world
-mismatch from actual world-forcing.
-
-\paragraph{Protocol.}
-We freeze $\Pot$ (FM-1) and compare two regimes: passive ($\alpha = 0$)
-and coercive ($\alpha > 0$). The main single-run diagnostic uses
-$\alpha = 0.3$ and effort penalty $\lambda = 3.0$. We then sweep
-$\alpha \in \{0.1,0.2,0.3,0.5,0.7,0.9\}$ and
-$\lambda \in \{0.5,1.0,2.0,3.0,4.0\}$ over 8 seeds, exporting all raw and
-aggregated metrics from the experiment harness. To keep the main text readable,
-\cref{tab:particle_tracking_masking} reports a five-regime masking matrix at
-the default $\lambda = 3.0$: passive, weak, mild, moderate, and strong
-coercive coupling.
-
-\paragraph{Results.}
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=\linewidth]{figures/fig_particle_tracking_masking}
-\caption{Synthetic feedback masking in the particle tracker.
-  Left column: passive FM-1, where effort remains at zero and CI and $CI^E$
-  coincide. Right column: coercive FM-1, where the action gap remains
-  nonzero, realized coercive effort appears once influence is positive, and
-  $CI^E$ drops once effort is penalized.}
-\label{fig:particle_tracking_masking}
-\end{figure}
-
-\begin{table}[ht]
-\centering
-\small
-\caption{Five-regime masking matrix for frozen-$\Pot$ FM-1 in the particle
-  tracker at $\lambda = 3.0$ (8 seeds). Cells report tail means.}
-\label{tab:particle_tracking_masking}
-\begin{tabular}{@{}lrrrrr@{}}
-\toprule
-Regime & $\alpha$ & effort & CI & CI$^E$ & $M_t$ \\
-\midrule
-Passive & 0.0 & 0.000 & 0.795 & 0.795 & 0.000 \\
-Weak coercion & 0.1 & 0.054 & 0.872 & 0.757 & 0.115 \\
-Mild coercion & 0.2 & 0.090 & 0.920 & 0.726 & 0.194 \\
-Moderate coercion & 0.3 & 0.118 & 0.949 & 0.697 & 0.252 \\
-Strong coercion & 0.9 & 0.266 & 0.999 & 0.518 & 0.481 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The matrix makes the masking mechanism explicit. As coupling increases, the
-stale FM-1 controller looks progressively healthier under the plain score:
-CI rises from $0.795$ in the passive regime to $0.999$ under strong
-coercion. The effort-aware diagnostic moves in the opposite direction:
-CI$^E$ falls from $0.795$ to $0.518$, and the masking gap grows from $0$ to
-$0.481$. This is the closed-loop signature we care about: apparent coherence is
-improving while effort-aware coherence is deteriorating.
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=\linewidth]{figures/fig_particle_tracking_masking_grid}
-\caption{Multi-seed parameter sweep for feedback masking in the particle tracker
-  (8 seeds). Left: mean CI. Middle: mean $CI^E$. Right: masking gap
-  $M_t = CI - CI^E$. The standard index monotonically rises with
-  influence, while the masking gap widens with both influence and effort
-  penalty $\lambda$.}
-\label{fig:particle_tracking_masking_grid}
-\end{figure}
-
-The sweep confirms that the correction is not an artifact of one parameter
-choice. At fixed $\lambda = 3.0$, the masking gap increases from $0.115$
-at $\alpha = 0.1$ to $0.481$ at $\alpha = 0.9$, with a clear intermediate
-effect already at $\alpha = 0.2$ (gap $= 0.194$). At fixed
-$\alpha = 0.3$, increasing $\lambda$ from $0.5$ to $4.0$ expands the gap
-from $0.051$ to $0.313$. Thus, stronger coercive capacity and stronger
-effort penalisation separate apparent from genuine coherence in the expected
-direction. The particle tracker closes the empirical loop on
-\cref{cor:coercive}: the standard score can be masked by control, whereas
-CI$^E$ remains sensitive to the intervention cost that creates the
-mask. Combined with the calibration grid in
-\cref{fig:particle_tracking_tcie_calibration}, this supports the practical rule
-used throughout the paper: set $E_0$ to the healthy effort scale and choose
-$\lambda$ in the range $2$--$3$, with $\lambda = 3$ as a strong default.
-
-To test whether this advantage survives comparison with a generic change
-detector, we build an active benchmark with two known regime transitions:
-healthy tracking for $t<200$, feedback masking for $200 \le t < 400$, and
-coercive collapse for $t \ge 400$. The masking phase freezes $\Pot$ while
-maintaining moderate coupling ($\alpha = 0.3$); the collapse phase sharply
-increases exogenous drift. We compare thresholded CI, thresholded
-CI$^E$, ADWIN, PageHinkley, KSWIN, and NoDrift on the raw
-observation stream, giving the generic detectors a fully observable signal
-rather than a model-derived residual.
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=\linewidth]{figures/fig_particle_tracking_active_benchmark}
-\caption{Active benchmark in the particle tracker with two known phase changes.
-  Orange line: masking onset at $t=200$. Red line: collapse onset at
-  $t=400$. ADWIN receives the raw observation stream. CI and $CI^E$ are
-  thresholded at $0.8$.}
-\label{fig:particle_tracking_active_benchmark}
-\end{figure}
-
-\begin{table}[ht]
-\centering
-\caption{Active benchmark summary in the particle tracker (12 seeds).
-  Detection is measured against the known onset of feedback masking and the
-  known onset of coercive collapse.}
-\label{tab:particle_tracking_active_benchmark}
-\begin{tabular}{@{}llrrr@{}}
-\toprule
-Phase & Detector & Detections & Rate & Median delay \\
-\midrule
-Masking onset & CI & 12/12 & 1.00 & 25.5 \\
-Masking onset & CI$^E$ & 12/12 & 1.00 & 5.0 \\
-Masking onset & ADWIN & 7/12 & 0.58 & 279.0 \\
-Masking onset & PageHinkley & 12/12 & 1.00 & 68.5 \\
-Masking onset & KSWIN & 1/12 & 0.08 & 118.0 \\
-Masking onset & NoDrift & 0/12 & 0.00 & NA \\
-Collapse onset & CI & 12/12 & 1.00 & 2.0 \\
-Collapse onset & CI$^E$ & 12/12 & 1.00 & 0.0 \\
-Collapse onset & ADWIN & 5/12 & 0.42 & 111.0 \\
-Collapse onset & PageHinkley & 12/12 & 1.00 & 37.5 \\
-Collapse onset & KSWIN & 0/12 & 0.00 & NA \\
-Collapse onset & NoDrift & 0/12 & 0.00 & NA \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The benchmark isolates the point that passive ELEC2 cannot address. ADWIN is
-stronger on passive streams because it is a generic changepoint detector.
-PageHinkley is reliable but slower, KSWIN is too conservative on this signal,
-and NoDrift is the sanity baseline. In the active setting, however, the
-relevant anomaly is not merely distributional change but coercive maintenance
-of an apparently healthy world-model fit. Here CI$^E$ detects masking onset
-in all 12 runs with median delay $5.0$, whereas ADWIN detects only 7 of 12
-masking onsets and does so with median delay $279.0$. For the collapse
-transition the same ordering persists: ADWIN detects only 5 of 12 runs, while
-CI and CI$^E$ detect all of them, with CI$^E$ firing earliest.
-This is the regime in which the effort-corrected index provides information that
-a generic passive detector does not encode.
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=0.95\linewidth]{figures/fig_particle_tracking_tcie_calibration}
-\caption{Calibration grid for $CI^E$ over effort penalty $\lambda$
-  and threshold. The rate panel is omitted because it saturates across most of
-  the grid; the figure instead reports masking delay, collapse delay, and
-  healthy false positives, which are the informative calibration axes.
-  The default setting ($\lambda = 3.0$, threshold $0.80$) remains a low-delay
-  compromise.}
-\label{fig:particle_tracking_tcie_calibration}
-\end{figure}
 
 \subsection{Experiment G: Bikes Early-Warning Lead Time}\label{sec:tgt_exp_g}
 
