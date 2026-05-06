@@ -97,8 +97,8 @@ Current operational stance:
 Current answer: largely resolved for the current passive benchmark set.
 
 What we will do:
-- CUSUM, forgetting-factor RLS, and scalar Kalman baselines are now added on
-  ELEC2 and Bikes under the same matching discipline;
+- CUSUM, forgetting-factor RLS, scalar Kalman, and kernel MMD baselines are
+  now added on ELEC2 and Bikes under the same matching discipline;
 - benchmark any new baseline under the same calibration discipline.
 
 Current evidence:
@@ -107,7 +107,9 @@ Current evidence:
 - FF-RLS and Kalman sit between the fixed-window score and ADWIN, but do not
   overturn the passive-stream ordering;
 - the Fr\'echet baseline is useful on Bikes but inactive on ELEC2 at the current
-  calibration.
+  calibration;
+- the kernel MMD baseline is competitive but still does not beat ADWIN on the
+  passive benchmark set.
 
 ### 8. What about Sinkhorn runtime and practical cost?
 
