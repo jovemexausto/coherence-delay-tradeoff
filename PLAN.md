@@ -114,10 +114,10 @@ Why this phase exists:
 
 ## Phase 17: Paper Refresh and Release Candidate
 
-- [ ] Refresh the manuscript so it reflects the best surviving names, strongest proofs, new baselines, and new computational evidence.
-- [ ] Remove or narrow any claim that later phases weaken.
-- [ ] Rebuild the PDF and verify the release state against `REVIEW_RESPONSE.md`.
-- [ ] Commit Phase 17.
+- [x] Refresh the manuscript so it reflects the best surviving names, strongest proofs, new baselines, and new computational evidence.
+- [x] Remove or narrow any claim that later phases weaken.
+- [x] Rebuild the PDF and verify the release state against `REVIEW_RESPONSE.md`.
+- [x] Commit Phase 17.
 
 Why this phase exists:
 - The paper must remain the truthful public face of the current system.

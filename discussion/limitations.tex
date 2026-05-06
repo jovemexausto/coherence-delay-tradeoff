@@ -7,7 +7,7 @@ windows and closely related effective-memory schemes, but they do not amount
 to a universal minimax result over all adaptive estimators.
 
 \paragraph{Geometry and observability.}
-The current formulation uses $W_2$ and its debiased Sinkhorn approximation to
+The present formulation uses $W_2$ and its debiased Sinkhorn approximation to
 measure model drift. Extending the same trade-off cleanly to other geometries,
 such as $f$-divergences or kernel MMD, remains open. Likewise,
 $\ScoreE$ (the Effort-Adjusted Coherence Index, $CI^E$) requires an observable
@@ -35,7 +35,7 @@ estimate of $e^{-H(\Act\mid\Pot)}$. The logged benchmark should therefore be
 read as operational evidence for effort-aware diagnostics, not as full causal
 identification of intervention dynamics.
 
-\paragraph{Scaling beyond current validation.}
+\paragraph{Scaling beyond present validation.}
 The Gaussian and particle trackers validate the theory in controlled Gaussian and non-Gaussian
 settings, and the real-data benchmarks show that the diagnostics remain useful
 outside the synthetic environment. High-dimensional state spaces, richer action
@@ -43,7 +43,7 @@ channels, and direct measurements of intervention effort are the next natural
 tests of the framework.
 
 \paragraph{Opaque adaptation maps.}
-For black-box $\Conv_t$, the paper currently provides only the template
+For black-box $\Conv_t$, the present manuscript provides only the template
 requirement that an ISS-Lyapunov functional $V_\Phi$ exist. The CEGIS-based
 recovery idea mentioned in \cref{rem:cegis} is not implemented or validated in
 this repository, so diagnosing $\sigma_\Phi$ for opaque adaptation subsystems
@@ -58,9 +58,9 @@ bias trade-off, while higher-dimensional settings mainly affect estimator bias
 under tight regularization.
 
 \paragraph{Missing adaptive baselines.}
-The current passive comparisons emphasize ADWIN, Page-Hinkley, KSWIN, and the
-NoDrift sanity baseline, and now also include CUSUM, forgetting-factor
-recursive least squares, and scalar Kalman predictors on the real-world
-streams. That does not exhaust the baseline space: additional representation-
-space or multivariate passive detectors remain future work, and the present
-calibration should still be read as benchmark-specific rather than universal.
+The passive comparisons emphasize ADWIN, Page-Hinkley, KSWIN, and the NoDrift
+sanity baseline, and now also include CUSUM, forgetting-factor recursive least
+squares, and scalar Kalman predictors on the real-world streams. That does not
+exhaust the baseline space: additional representation-space or multivariate
+passive detectors remain future work, and the present calibration should still
+be read as benchmark-specific rather than universal.

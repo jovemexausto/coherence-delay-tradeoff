@@ -5,9 +5,9 @@ continuously changing. In recommender systems, adaptive control, and streaming
 prediction, the system must estimate a time-varying state of the world from
 finite data while continuing to act on that same world. Those actions can
 change future observations, so the system faces a joint problem of inference,
-staleness, and feedback. This paper focuses on the two resulting questions:
-what finite memory can achieve under drift, and how to detect when apparent
-coherence is being maintained by intervention rather than by adaptation.
+staleness, and feedback. We ask two questions: what finite memory can achieve
+under drift, and how to detect when apparent coherence is being maintained by
+intervention rather than by adaptation.
 
 A finite-memory estimator benefits from using more observations, because more data reduces
 statistical uncertainty. But larger windows also make the estimate older.
@@ -30,15 +30,15 @@ world keeps moving.
 This finite-memory baseline is also the right reference point for evaluating
 closed-loop diagnostics. In action-coupled systems, lower observed error need
 not mean better estimation, because interventions can reduce error by steering
-the environment toward a stale model. The Coherence Index (CI), written here as
+the environment toward a stale model. The Coherence Index (CI), denoted here by
 $\Score$, measures the apparent state-update bottleneck, while the
-Effort-Adjusted Coherence Index ($CI^E$), written here as $\ScoreE$, is the
+Effort-Adjusted Coherence Index ($CI^E$), denoted here by $\ScoreE$, is the
 main diagnostic for the active masking regime because it discounts alignment
 purchased through intervention rather than adaptation.
 
 In closed-loop settings, raw tracking error is not always enough. A system may
 appear well aligned with its environment because its actions are pushing the
-environment toward a stale model rather than because the model remains current.
+environment toward a stale model rather than because the model remains valid.
 This is the phenomenon of \emph{feedback masking}. In the synthetic control
 regime studied below, the same effect is called coercive masking. A useful
 decomposition has three functional roles: a representation of the world
@@ -56,7 +56,7 @@ confounding.
 
 \Cref{sec:tci} derives the coherence-delay trade-off and the finite-memory
 cube-root law. \Cref{sec:necessity} shows that action-effective environments
-require the update to depend on the current state, the most recent action, and
+require the update to depend on the present state, the most recent action, and
 the incoming signal, which motivates the decomposition $(\Pot,\Act,\Conv)$.
 \Cref{sec:tci,sec:ruffini} introduces $\Score$ and the effort-aware
 $\ScoreE$. \Cref{sec:tgt} validates both claims: passive benchmarks test the
