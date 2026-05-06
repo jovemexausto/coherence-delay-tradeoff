@@ -835,7 +835,7 @@ in precision but not in lead count. The new CUSUM, FF-RLS, Kalman, and
 Fr\'echet baselines remain weaker than ADWIN under this calibration, which
 confirms that the passive-stream caveat is not ELEC2-specific.
 
-\subsection{Regime-First Summary}\label{sec:tgt_regime_summary}
+\subsection{Diagnostic Regime Map}\label{sec:tgt_regime_summary}
 
 \begin{figure}[!htbp]
 \centering
@@ -844,7 +844,7 @@ confirms that the passive-stream caveat is not ELEC2-specific.
   Passive streams favor generic drift alarms, active feedback exposes the need
   for $CI^E$, and logged recommendation data reward proxy-aware effort
   correction. The figure places each diagnostic in the regime where it is most
-  informative.}
+  informative; a median delay of $0.0$ means same-timestep detection.}
 \label{fig:regime_first_summary}
 \end{figure}
 

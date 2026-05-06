@@ -125,6 +125,6 @@ def save_regime_first_summary_figure(
         axis.text(i + width / 2, value + 0.03, f"{value:.3f}", ha="center", fontsize=8)
     axis.grid(axis="y", alpha=0.2)
 
-    fig.suptitle("Regime-first diagnostic summary")
+    fig.suptitle("Diagnostic regime map")
     fig.savefig(output_path)
     plt.close(fig)
