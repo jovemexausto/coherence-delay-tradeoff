@@ -5,9 +5,12 @@ finite-memory averaging class obeys a sharp limit. When total error is written a
 sum of estimation variance and drift-induced staleness, optimizing over memory
 yields the cube-root law
 $\mathcal{E}_{\min} = \tfrac{3}{2}C_K^{2/3}\zeta^{1/3}$ for the estimator class
-analyzed here. In that sense, tracking under drift is constrained by the same
-object that makes online compression useful: memory. More memory reduces noise,
-but it also increases the age of the compressed model.
+analyzed here. A broader minimax lower bound now shows that the same exponent is
+unavoidable for any estimator restricted to the last $m$ samples on a
+$\zeta$-Lipschitz drift class in the critical-window regime. In that sense, tracking under drift is
+constrained by the same object that makes online compression useful: memory.
+More memory reduces noise, but it also increases the age of the compressed
+model.
 
 Second, action-coupled settings admit a specific diagnostic failure mode:
 apparent coherence can be maintained by intervention rather than by model

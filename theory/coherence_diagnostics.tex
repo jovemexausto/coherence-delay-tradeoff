@@ -89,9 +89,11 @@ information.
 Concretely, the paper proves the cube-root scaling for the canonical local
 averaging schemes used throughout the experiments, namely sliding windows and
 exponentially weighted averages. The same exponent reappears because these
-estimators expose the same variance-vs.-lag balance under drift. We do not claim
-here a universal minimax theorem over arbitrary adaptive estimators; a broader
-lower bound for all causal finite-memory kernels remains an open strengthening.
+estimators expose the same variance-vs.-lag balance under drift. Below we also
+show a minimax lower bound for arbitrary measurable estimators that only see the
+last $m$ samples of a $\zeta$-Lipschitz drift path. We do not claim here a
+universal minimax theorem over arbitrary recursive, trend-extrapolating, or
+otherwise unconstrained adaptive estimators.
 
 Within the averaging class studied here, the $\zeta^{1/3}$ law should be read as
 a robust operational regime under the stated regularity assumptions rather than
@@ -334,7 +336,7 @@ Its effective size and effective lag are
 \]
 \end{definition}
 
-\begin{proposition}[Kernel-Level Lower Bound]\label{prop:kernel_lower_bound}
+\begin{proposition}[Averaging-Kernel Lower Bound]\label{prop:kernel_lower_bound}
 Let $X_t = \mu_t + \xi_t$ with $\xi_t \sim \mathcal{N}(0,\sigma^2)$ i.i.d.
 and let the drift trajectory be the monotone translation model
 $\mu_t = \zeta t$ with $\zeta \geq 0$. For any causal averaging kernel
@@ -381,6 +383,138 @@ Optimizing the resulting trade-off over the averaging family recovers the same
 $2/3$ window scaling and $1/3$ error exponent as the upper bound.
 \end{proof}
 
+The kernel result above is exact but still tied to linear averaging. The next
+proposition removes that linearity assumption on the estimator side by moving to
+the minimax problem over all measurable rules that only observe a finite recent
+window. The price is that the signal class is now the full discrete
+$\zeta$-Lipschitz family rather than the single monotone translation witness.
+
+\begin{proposition}[Window-Restricted Minimax Lower Bound]
+\label{prop:window_minimax}
+Fix an integer $m \geq 1$ and suppose the estimator only observes the last $m$
+samples
+\[
+  X_{t-m+1},\dots,X_t,
+  \qquad
+  X_s = \mu_s + \xi_s,
+  \qquad
+  \xi_s \stackrel{\mathrm{i.i.d.}}{\sim} \mathcal{N}(0,\sigma^2).
+\]
+Let $\mathcal{L}_m(\zeta)$ be the discrete $\zeta$-Lipschitz class
+\[
+  \mathcal{L}_m(\zeta)
+  \coloneqq
+  \left\{(\mu_{t-m+1},\dots,\mu_t):
+    |\mu_i-\mu_j| \leq \zeta |i-j|\ \text{for all}\ i,j
+  \right\}.
+\]
+For any measurable estimator $\hat\mu_t = \delta_m(X_{t-m+1:t})$, define the
+worst-case root risk
+\[
+  R_m(\delta_m)
+  \coloneqq
+  \sup_{\mu \in \mathcal{L}_m(\zeta)}
+  \Bigl(\mathbb{E}_\mu (\hat\mu_t - \mu_t)^2\Bigr)^{1/2}.
+\]
+Then there exists a universal constant $c>0$ such that
+\[
+  \inf_{\delta_m} R_m(\delta_m)
+  \;\geq\;
+  c\,\max\!\left\{
+    \sigma m^{-1/2},\;
+    \sup_{1\leq h\leq m}\min\!\left(\sigma h^{-1/2},\; \zeta h\right)
+  \right\}.
+\]
+In particular, if $1 \leq (\sigma/\zeta)^{2/3} \leq m$, then
+\[
+  \inf_{\delta_m} R_m(\delta_m)
+  \;\geq\;
+  c\,\sigma^{2/3}\zeta^{1/3}.
+\]
+\end{proposition}
+
+\begin{proof}
+Write $R_m^* \coloneqq \inf_{\delta_m} R_m(\delta_m)$.
+
+We exhibit two independent obstructions. The first is the ordinary
+finite-sample estimation floor, obtained by restricting to the constant-path
+subclass $\mu_s \equiv \theta$, which is contained in
+$\mathcal{L}_m(\zeta)$. For the two hypotheses
+$\theta_\pm = \pm \sigma /(2\sqrt{m})$, the induced product-Gaussian laws have
+Kullback--Leibler divergence
+\[
+  \mathrm{KL}(P_+,P_-)
+  = \frac{1}{2\sigma^2} \sum_{j=1}^{m} (\theta_+ - \theta_-)^2
+  = \frac{1}{2\sigma^2} m\left(\frac{\sigma}{\sqrt{m}}\right)^2
+  = \frac{1}{2}.
+\]
+Le Cam's two-point lemma therefore gives
+\[
+  R_m^* \;\geq\; c_0\,\sigma m^{-1/2}
+\]
+for a universal constant $c_0>0$.
+
+The second obstruction is local drift. Fix any $1\leq h\leq m$ and define
+\[
+  \beta_h \coloneqq \min\!\left\{\zeta,\; \frac{\sigma}{4h^{3/2}}\right\},
+  \qquad
+  \mu^{\pm,h}_{t-j} \coloneqq \pm \,\beta_h\,(h-j)_+,
+  \qquad 0\leq j\leq m-1,
+\]
+where $(u)_+ \coloneqq \max\{u,0\}$. Each path belongs to
+$\mathcal{L}_m(\zeta)$ because its slope magnitude is at most $\beta_h \leq
+\zeta$. The endpoint gap is
+\[
+  |\mu_t^{+,h} - \mu_t^{-,h}| = 2\beta_h h.
+\]
+The corresponding Gaussian product laws satisfy
+\[
+  \mathrm{KL}(P_{+,h},P_{-,h})
+  = \frac{1}{2\sigma^2} \sum_{j=0}^{m-1}
+    \bigl(2\beta_h (h-j)_+\bigr)^2
+  \leq \frac{2\beta_h^2}{\sigma^2} \sum_{r=1}^{h} r^2
+  \leq \frac{2\beta_h^2}{\sigma^2} h^3
+  \leq \frac{1}{8}.
+\]
+Applying Le Cam again yields
+\[
+  R_m^* \;\geq\; c_1\,\beta_h h
+  \;\geq\;
+  \frac{c_1}{4}\,\min\!\left\{\zeta h,\; \sigma h^{-1/2}\right\}
+\]
+for another universal constant $c_1>0$. Since $h$ was arbitrary,
+\[
+  R_m^* \;\geq\;
+  \frac{c_1}{4}\,\sup_{1\leq h\leq m}
+  \min\!\left\{\zeta h,\; \sigma h^{-1/2}\right\}.
+\]
+
+Taking the maximum of the constant-path and ramp bounds proves the displayed
+lower bound. For the cube-root regime, assume
+$1 \leq h_\star \coloneqq (\sigma/\zeta)^{2/3} \leq m$. Choose an integer
+$\bar h \in [h_\star/2, h_\star]$. Then
+\[
+  \zeta \bar h \geq \frac{1}{2}\,\zeta h_\star
+  = \frac{1}{2}\,\sigma^{2/3}\zeta^{1/3},
+\]
+and
+\[
+  \sigma \bar h^{-1/2}
+  \geq \sigma h_\star^{-1/2}
+  = \sigma^{2/3}\zeta^{1/3}.
+\]
+Therefore
+\[
+  \min\!\left\{\sigma \bar h^{-1/2},\; \zeta \bar h\right\}
+  \geq \frac{1}{2}\,\sigma^{2/3}\zeta^{1/3},
+\]
+and the ramp bound gives
+\[
+  R_m^* \geq c\,\sigma^{2/3}\zeta^{1/3}
+\]
+after absorbing constants. This proves the claim.
+\end{proof}
+
 \begin{remark}[Interpretation: a finite-memory floor]\label{rem:cdfloor}
 \Cref{prop:coherence_delay} establishes that perfect coherence
 ($V_P = 0$) is \emph{impossible} under continuous drift for the finite-memory
@@ -399,7 +533,11 @@ local drift rate, the system should maintain window size
 $n_t^* = (C_K/\hat\zeta_t)^{2/3}$ to operate at the minimum of the
 error U-curve at every step.
 This turns the coherence-delay law into a practical self-tuning rule for the
-windowed estimator class analyzed here.
+windowed estimators analyzed here. \Cref{prop:window_minimax} shows that this
+is not only an artifact of linear averaging: over the broader
+$\zeta$-Lipschitz drift class, any estimator restricted to the last $m$ samples
+faces the same cube-root obstruction in the critical-window regime
+$1 \leq (\sigma/\zeta)^{2/3} \leq m$.
 
 For small relative calibration errors, the rule is predictably sublinear:
 \[

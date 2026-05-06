@@ -17,17 +17,19 @@ The project remains centered on two flagship ideas:
 
 ### 1. How general is the cube-root law?
 
-Current answer: the clean derivation is rigorous for the finite-memory averaging class already written in the paper, with sliding windows and EWMA as the verified cases. The current text is too broad if it suggests a universal minimax statement over all adaptive estimators.
+Current answer: the clean derivation is rigorous for the finite-memory averaging class already written in the paper, with sliding windows and EWMA as the verified cases. The paper now also proves a minimax lower bound for arbitrary measurable estimators restricted to the last $m$ samples on a discrete $\zeta$-Lipschitz drift class, which recovers the same cube-root exponent in the critical-window regime. The current text would still be too broad if it suggested a universal minimax statement over all recursive or extrapolative adaptive estimators.
 
 What we will do:
 - either prove a formal minimax lower bound for an explicit class of finite-memory kernels, or
 - narrow the theorem language to a precise estimator class if the stronger proof does not close.
 
 Preferred route:
-- prove a lower bound for a class of causal, finite-memory averaging kernels with effective size and effective lag parameters.
+- prove a lower bound for a class of causal, finite-memory averaging kernels with effective size and effective lag parameters;
+- then broaden the lower-bound side to arbitrary window-limited estimators on a Lipschitz drift class if the proof closes cleanly.
 
 Status update:
-- the paper now includes a kernel-level lower bound for the causal averaging family, so the cube-root law is exact for the class actually studied.
+- the paper includes a kernel-level lower bound for the causal averaging family, so the cube-root law is exact for the class actually studied;
+- it now also includes a minimax lower bound for arbitrary measurable estimators with access only to the last $m$ samples of a discrete $\zeta$-Lipschitz drift path, which broadens the theorem beyond linear averaging and recovers the same cube-root exponent in the critical-window regime without claiming universality for all adaptive estimators.
 
 ### 2. Is there a sign error in Proposition 6.12?
 

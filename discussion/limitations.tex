@@ -1,10 +1,13 @@
 \section{Limitations and Open Directions}\label{sec:open}
 
 \paragraph{Finite-memory scope.}
-The cube-root law of \cref{prop:coherence_delay} is derived for the
-finite-memory estimator class analyzed here. The experiments cover sliding
-windows and closely related effective-memory schemes, but they do not amount
-to a universal minimax result over all adaptive estimators.
+The cube-root law of \cref{prop:coherence_delay} is exact for the
+finite-memory averaging class analyzed here, and \cref{prop:window_minimax}
+extends the lower-bound side to arbitrary measurable estimators that only see
+the last $m$ samples of a $\zeta$-Lipschitz drift path. The cube-root exponent
+therefore survives beyond linear averaging in the critical-window regime,
+but this still falls short of a universal minimax result over arbitrary
+recursive or extrapolative adaptive estimators.
 
 \paragraph{Geometry and observability.}
 The present formulation uses $W_2$ and its debiased Sinkhorn approximation to
