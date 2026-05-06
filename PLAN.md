@@ -81,10 +81,10 @@ Why this phase exists:
 
 ## Phase 14: Computational Budget and Sinkhorn Cost
 
-- [ ] Measure runtime / latency / throughput for the estimator and transport machinery under the streaming settings used in the paper.
-- [ ] Separate theoretical sample-complexity claims from practical wall-clock behavior.
-- [ ] Measure the impact of `\varepsilon`, window size, and dimension on cost and bias.
-- [ ] Update the manuscript and report with the concrete computational picture.
+- [x] Measure runtime / latency / throughput for the estimator and transport machinery under the streaming settings used in the paper.
+- [x] Separate theoretical sample-complexity claims from practical wall-clock behavior.
+- [x] Measure the impact of `\varepsilon`, window size, and dimension on cost and bias.
+- [x] Update the manuscript and report with the concrete computational picture.
 - [ ] Commit Phase 14.
 
 Why this phase exists:

@@ -7,6 +7,7 @@ import numpy as np
 
 from .model import (
     SampleComplexityResult,
+    SinkhornRuntimeResult,
     TGTResult,
     TGT_CONDITIONS,
     UCurveResult,
@@ -93,4 +94,41 @@ def build_sample_complexity_rows(
                 "std_absolute_error": round(float(std_error), 4),
             }
         )
+    return rows
+
+
+def build_sinkhorn_runtime_rows(
+    result: SinkhornRuntimeResult,
+) -> list[dict[str, float | int]]:
+    rows: list[dict[str, float | int]] = []
+    for d_index, dimension in enumerate(result.dimensions):
+        for n_index, window_size in enumerate(result.window_sizes):
+            for e_index, epsilon in enumerate(result.epsilons):
+                rows.append(
+                    {
+                        "dimension": int(dimension),
+                        "window_size": int(window_size),
+                        "epsilon": round(float(epsilon), 3),
+                        "mean_runtime_ms": round(
+                            float(result.mean_runtime_ms[d_index, n_index, e_index]),
+                            3,
+                        ),
+                        "mean_abs_bias": round(
+                            float(result.mean_abs_bias[d_index, n_index, e_index]),
+                            4,
+                        ),
+                        "mean_iterations": round(
+                            float(result.mean_iterations[d_index, n_index, e_index]),
+                            1,
+                        ),
+                        "mean_pairwise_evals_per_s": round(
+                            float(
+                                result.mean_pairwise_evals_per_s[
+                                    d_index, n_index, e_index
+                                ]
+                            ),
+                            1,
+                        ),
+                    }
+                )
     return rows

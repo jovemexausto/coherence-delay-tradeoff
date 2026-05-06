@@ -48,6 +48,14 @@ recovery idea mentioned in \cref{rem:cegis} is not implemented or validated in
 this repository, so diagnosing $\sigma_\Phi$ for opaque adaptation subsystems
 remains an open engineering problem.
 
+\paragraph{Computational profile.}
+The Sinkhorn runtime study is a prototype-level NumPy benchmark on Gaussian
+clouds. It is useful for separating statistical accuracy from wall-clock cost,
+but it does not claim a production implementation ceiling. The main practical
+message is that regularization $\varepsilon$ and window size dominate the cost--
+bias trade-off, while higher-dimensional settings mainly affect estimator bias
+under tight regularization.
+
 \paragraph{Missing adaptive baselines.}
 The current passive comparisons emphasize ADWIN, Page-Hinkley, KSWIN, and the
 NoDrift sanity baseline, and now also include CUSUM, forgetting-factor

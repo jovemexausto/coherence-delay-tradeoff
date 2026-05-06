@@ -304,6 +304,44 @@ $n$ & MAE $|\sigma_P - \hat\sigma_P|$ & std \\
 \end{tabular}
 \end{table}
 
+\paragraph{Computational budget.}
+To separate statistical accuracy from wall-clock behavior, we also benchmarked
+the debiased Sinkhorn solver on matched Gaussian clouds with window sizes
+$n \in \{25,50,100\}$, ambient dimensions $d \in \{2,8,32\}$, and
+regularization strengths $\varepsilon \in \{0.05,0.2,1.0\}$. The low-$\varepsilon$
+regime is the expensive one: at $d=8$ and $n=100$, mean solve time drops from
+7.498\,ms at $\varepsilon=0.05$ to 0.652\,ms at $\varepsilon=1.0$, while the mean
+absolute bias drops from 0.6102 to 0.1383. The corresponding pairwise-evaluation
+throughput rises from 1.33\,M/s to 15.34\,M/s. Window size increases cost in the
+expected direction; dimension mainly changes the bias profile, with tighter
+regularization amplifying the bias on higher-dimensional clouds.
+
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=0.95\linewidth]{figures/fig_gaussian_sinkhorn_runtime}
+\caption{Sinkhorn runtime and bias trade-off on Gaussian clouds.
+  \emph{Left:} mean runtime versus window size for each combination of
+  dimension and regularization.
+  \emph{Right:} mean absolute bias versus regularization at the largest window
+  size ($n=100$).}\label{fig:sinkhorn_runtime}
+\end{figure}
+
+\begin{table}[ht]
+\centering
+\scriptsize
+\caption{Representative Sinkhorn runtime points (Gaussian clouds).}\label{tab:sinkhorn_runtime}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Setting & Mean runtime (ms) & Mean abs. bias & Mean iters & Pairwise/s \\
+\midrule
+$d=8$, $n=25$, $\varepsilon=0.05$ & 4.107 & 0.9639 & 250.0 & 152{,}179 \\
+$d=8$, $n=100$, $\varepsilon=0.05$ & 7.498 & 0.6102 & 250.0 & 1{,}333{,}689 \\
+$d=8$, $n=100$, $\varepsilon=1.0$ & 0.652 & 0.1383 & 14.5 & 15{,}337{,}423 \\
+$d=32$, $n=100$, $\varepsilon=0.05$ & 2.862 & 1.2240 & 249.2 & 3{,}494{,}060 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \subsection{Experiment C: ELEC2 Early-Warning Lead Time}\label{sec:tgt_exp_c}
 
 \paragraph{Dataset.}

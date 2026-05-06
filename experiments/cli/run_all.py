@@ -16,11 +16,13 @@ from ..gaussian import (
     GaussianConfig,
     run_gaussian_ablation,
     run_sample_complexity_experiment,
+    run_sinkhorn_runtime_experiment,
     run_ucurve_experiment,
 )
 from ..gaussian.artifacts import (
     save_ablation_figure,
     save_sigma_p_complexity_figure,
+    save_sinkhorn_runtime_figure,
     save_ucurve_figure,
 )
 from ..kuairand.artifacts import save_kuairand_figure
@@ -49,6 +51,7 @@ from ..particle.reports import (
 from ..gaussian.reports import (
     build_ablation_rows,
     build_sample_complexity_rows,
+    build_sinkhorn_runtime_rows,
     build_ucurve_rows,
 )
 
@@ -131,6 +134,16 @@ def main() -> None:
     export_summary_csv(
         build_sample_complexity_rows(sample_complexity_result),
         artifacts_dir / "gaussian" / "gaussian_sinkhorn.csv",
+    )
+
+    runtime_result = run_sinkhorn_runtime_experiment()
+    save_sinkhorn_runtime_figure(
+        runtime_result,
+        figures_dir / "gaussian" / "fig_gaussian_sinkhorn_runtime.pdf",
+    )
+    export_summary_csv(
+        build_sinkhorn_runtime_rows(runtime_result),
+        artifacts_dir / "gaussian" / "gaussian_sinkhorn_runtime.csv",
     )
 
     bikes_result = run_bikes_experiments(BikesConfig())

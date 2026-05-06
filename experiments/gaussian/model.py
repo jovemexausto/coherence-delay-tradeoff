@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import time
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -8,6 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from ..core.common import rolling_mean
+from ..core.sinkhorn import debiased_sinkhorn_divergence
 
 TGT_CONDITIONS = ("full", "fm1", "fm2", "fm3")
 TGT_LABELS = {
@@ -77,6 +79,17 @@ class SampleComplexityResult:
     mean_absolute_error: np.ndarray
     std_absolute_error: np.ndarray
     slope: float
+
+
+@dataclass(slots=True)
+class SinkhornRuntimeResult:
+    window_sizes: np.ndarray
+    dimensions: np.ndarray
+    epsilons: np.ndarray
+    mean_runtime_ms: np.ndarray
+    mean_abs_bias: np.ndarray
+    mean_iterations: np.ndarray
+    mean_pairwise_evals_per_s: np.ndarray
 
 
 def _steady_state_variance(process_scale: float, observation_scale: float) -> float:
@@ -338,4 +351,53 @@ def run_sample_complexity_experiment() -> SampleComplexityResult:
         mean_absolute_error=mean_absolute_error,
         std_absolute_error=std_absolute_error,
         slope=slope,
+    )
+
+
+def run_sinkhorn_runtime_experiment() -> SinkhornRuntimeResult:
+    window_sizes = np.asarray([25, 50, 100], dtype=int)
+    dimensions = np.asarray([2, 8, 32], dtype=int)
+    epsilons = np.asarray([0.05, 0.2, 1.0], dtype=float)
+    seeds = list(range(6))
+    runtime_ms = np.zeros((dimensions.size, window_sizes.size, epsilons.size))
+    abs_bias = np.zeros_like(runtime_ms)
+    iterations = np.zeros_like(runtime_ms)
+    throughput = np.zeros_like(runtime_ms)
+
+    true_w2_sq = 0.25
+
+    for d_index, dimension in enumerate(dimensions):
+        scale = 1.0 / np.sqrt(dimension)
+        shift = np.zeros(dimension)
+        shift[0] = 0.5
+        for n_index, n in enumerate(window_sizes):
+            for e_index, epsilon in enumerate(epsilons):
+                runtimes = []
+                biases = []
+                iters = []
+                for seed in seeds:
+                    rng = np.random.default_rng(seed + 1000 * d_index + 100 * n_index)
+                    x = rng.normal(scale=scale, size=(n, dimension))
+                    y = rng.normal(scale=scale, size=(n, dimension)) + shift
+                    start = time.perf_counter()
+                    result = debiased_sinkhorn_divergence(x, y, epsilon)
+                    elapsed_ms = (time.perf_counter() - start) * 1000.0
+                    runtimes.append(elapsed_ms)
+                    biases.append(abs(result.cost - true_w2_sq))
+                    iters.append(float(result.iterations))
+                runtime_ms[d_index, n_index, e_index] = float(np.mean(runtimes))
+                abs_bias[d_index, n_index, e_index] = float(np.mean(biases))
+                iterations[d_index, n_index, e_index] = float(np.mean(iters))
+                throughput[d_index, n_index, e_index] = float(
+                    (n * n) / max(runtime_ms[d_index, n_index, e_index] / 1000.0, 1e-9)
+                )
+
+    return SinkhornRuntimeResult(
+        window_sizes=window_sizes,
+        dimensions=dimensions,
+        epsilons=epsilons,
+        mean_runtime_ms=runtime_ms,
+        mean_abs_bias=abs_bias,
+        mean_iterations=iterations,
+        mean_pairwise_evals_per_s=throughput,
     )

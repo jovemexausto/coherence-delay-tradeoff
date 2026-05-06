@@ -12,6 +12,7 @@ from .model import (
     TGT_CONDITIONS,
     TGT_LABELS,
     TGTResult,
+    SinkhornRuntimeResult,
     UCurveResult,
 )
 
@@ -158,3 +159,49 @@ def save_sigma_p_complexity_figure(
 
 def save_sinkhorn_figure(result: SampleComplexityResult, output_path: Path) -> None:
     save_sigma_p_complexity_figure(result, output_path)
+
+
+def save_sinkhorn_runtime_figure(
+    result: SinkhornRuntimeResult,
+    output_path: Path,
+) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4.8))
+
+    for d_index, dimension in enumerate(result.dimensions):
+        for e_index, epsilon in enumerate(result.epsilons):
+            axes[0].plot(
+                result.window_sizes,
+                result.mean_runtime_ms[d_index, :, e_index],
+                marker="o",
+                linewidth=1.3,
+                label=rf"d={dimension}, $\varepsilon$={epsilon:.2f}",
+            )
+    axes[0].set_xscale("log")
+    axes[0].set_yscale("log")
+    axes[0].set_xlabel("Window size n")
+    axes[0].set_ylabel("Mean runtime (ms)")
+    axes[0].set_title("Sinkhorn runtime scaling")
+    axes[0].legend(loc="upper left", fontsize=8, ncol=2)
+
+    for d_index, dimension in enumerate(result.dimensions):
+        axes[1].plot(
+            result.epsilons,
+            result.mean_abs_bias[d_index, -1, :],
+            marker="o",
+            linewidth=1.3,
+            label=rf"d={dimension}, n={result.window_sizes[-1]}",
+        )
+    axes[1].set_xscale("log")
+    axes[1].set_yscale("log")
+    axes[1].set_xlabel(r"Regularization $\varepsilon$")
+    axes[1].set_ylabel("Mean absolute bias")
+    axes[1].set_title("Bias vs regularization")
+    axes[1].legend(loc="upper right")
+
+    for axis in axes:
+        axis.grid(alpha=0.2, linewidth=0.5)
+
+    fig.tight_layout()
+    fig.savefig(output_path)
+    plt.close(fig)

@@ -109,12 +109,17 @@ Current evidence:
 
 ### 8. What about Sinkhorn runtime and practical cost?
 
-Current answer: the paper says enough to justify the geometry, but not enough to justify deployment cost.
+Current answer: the runtime cost is now measured on the NumPy Sinkhorn prototype.
 
 What we will do:
-- measure throughput and latency,
-- record dimension / window / epsilon trade-offs,
+- keep the runtime/bias trade-off explicit in the manuscript;
+- record the measured throughput and latency as prototype-level evidence;
 - distinguish theoretical rate from deployed runtime.
+
+Current evidence:
+- runtime drops sharply as regularization increases;
+- window size increases cost in the expected direction;
+- the measured cost should be read as a prototype profile, not a deployment ceiling.
 
 ### 9. Should we rename the diagnostics and the project?
 
@@ -138,7 +143,7 @@ We will not force a rename if it weakens the paper or obscures the math.
 
 ## Main Gaps That Still Need Work
 
-- runtime / latency of the Sinkhorn pipeline
+- deployment-grade optimization of the Sinkhorn pipeline
 - stronger controls for KuaiRand / logged data
 
 ## Implementation Rule
