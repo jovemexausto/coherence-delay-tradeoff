@@ -7,8 +7,8 @@ systems, adaptive control, and streaming prediction, tracking under drift is not
 just a filtering problem. It is the question of how much of the past can still
 be trusted before it turns stale.
 
-That combination creates two distinct difficulties. The first is statistical.
-A finite-memory estimator improves when it can average more data, but every
+From that setting follow two distinct difficulties. The first is statistical. A
+finite-memory estimator improves when it can average more data, but every
 additional observation also comes from a more distant past. Under drift, memory
 reduces variance and increases staleness at the same time. The second is
 epistemic. In action-coupled systems, low observed error need not mean the model
@@ -16,15 +16,15 @@ is current, because the system may be pushing the environment toward the model
 rather than updating the model to match the environment. A tracker can look
 coherent for the wrong reason.
 
-This paper studies those two difficulties as parts of the same story. We first
-ask what finite memory can achieve when the target itself is moving. We then ask
-how to diagnose the special failure mode in which apparent coherence is being
-maintained by intervention rather than by adaptation. The first question gives
-the paper its finite-memory law; the second gives it its central diagnostic.
+These two difficulties belong to the same story. One asks what finite memory can
+achieve when the target itself is moving. The other asks how to diagnose the
+special failure mode in which apparent coherence is being maintained by
+intervention rather than by adaptation. The first yields a finite-memory law;
+the second yields a diagnostic for coercive masking.
 
-The first answer is a structural coherence-delay trade-off. When observations
+The first result is a structural coherence-delay trade-off. When observations
 are aggregated over time, total tracking error decomposes into a variance term
-that falls with memory length and a lag term that rises with drift and with the
+that falls with memory length and a lag term that rises with drift and the
 effective age of the data. Optimizing that balance yields a cube-root law for
 the finite-memory averaging class analyzed here:
 $\mathcal{E}_{\min} = \tfrac{3}{2}C_K^{2/3}\zeta^{1/3}$ with
@@ -35,47 +35,35 @@ bound for arbitrary estimators restricted to the last $m$ samples of a
 $\zeta$-Lipschitz drift path. In that sense, tracking under drift is limited by
 the same object that makes online compression useful: memory itself.
 
-The second answer concerns feedback masking. In closed-loop settings, good fit
+The second result concerns feedback masking. In closed-loop settings, good fit
 can be purchased by control effort. The system may appear well aligned with its
 environment because its actions are holding the environment near a stale model.
-In the synthetic control regime studied below, we call this \emph{coercive
-masking}. To analyze it, we separate three functional roles: a representation of
-the world ($\Pot$), an actuation rule ($\Act$), and an adaptation operator
-($\Conv$). This is a modeling decomposition for action-effective tracking
-systems, not a claim about every information process.
+In the synthetic control regime, we call this \emph{coercive masking}. To
+analyze it, we separate three functional roles: a representation of the world
+($\Pot$), an actuation rule ($\Act$), and an adaptation operator ($\Conv$).
+This is a modeling decomposition for action-effective tracking systems, not a
+claim about every information process.
 
-That decomposition yields two diagnostics. We refer to them throughout as the
-Coherence Index (CI) and the Effort-Adjusted Coherence Index ($CI^E$). When
-explicit functional notation is needed, we write $\Score(\IS,t)$ and
-$\ScoreE(\IS,t)$. CI measures the apparent bottleneck of the update loop, while
-$CI^E$ discounts alignment that is purchased through intervention rather than
-through model adaptation. This intervention-aware layer is the paper's main
-diagnostic addition. The point is not to replace generic changepoint
-detectors on passive streams. On passive benchmarks, such detectors remain the
-stronger default alarms. The point is to expose a failure mode that passive
-alarms do not encode: the regime in which the world looks stable because the
-system is forcing it to look stable.
-
-The paper is organized to expose the main claim early. \Cref{sec:tci} first
-introduces the coherence diagnostics and derives the coherence-delay trade-off
-for finite-memory tracking. \Cref{sec:ruffini} then defines coercive masking and
-the effort-aware correction. Before the full experimental protocols, we give a
-compact summary of the main empirical findings so that the finite-memory law,
-the masking diagnostic, and their regime split can be read together. The
-complete experiment sections and the more detailed architectural and stability
-setup then follow, including the passive benchmarks that situate the method
-honestly against generic drift alarms.
+That decomposition yields two diagnostics: the Coherence Index (CI) and the
+Effort-Adjusted Coherence Index ($CI^E$). When explicit functional notation is
+needed, we write $\Score(\IS,t)$ and $\ScoreE(\IS,t)$. CI measures the
+apparent bottleneck of the update loop, while $CI^E$ discounts alignment that
+is purchased through intervention rather than through model adaptation. Generic
+changepoint detectors remain the stronger default alarms on passive streams. The
+diagnostic role of $CI^E$ is narrower and sharper: it targets a failure mode
+that passive alarms do not encode, namely the regime in which the world looks
+stable because the system is forcing it to look stable.
 
 The scope is intentionally narrower than the opening contrast might suggest. The
 cube-root law is exact for the finite-memory averaging class analyzed here, not
 for every recursive or extrapolative architecture. The decomposition is
 motivated only for \emph{action-effective} systems; passive observers are a
-genuine boundary case. The paper therefore does not claim universal superiority
-over generic drift detectors on passive streams, and the experiments do not show
-that. The stability results remain conditional on explicit ISS hypotheses, with
-the Gaussian tracker serving as the constructive reference instance. The logged
-recommendation benchmark is likewise interpreted at the proxy level: it is
-evidence for the usefulness of effort-aware diagnostics under logged exposure
-concentration, not a causal identification result about masking. Within that
-scope, however, the picture is sharp: temporal staleness imposes a real
-tracking floor, and under feedback, raw fit is not yet a safe diagnostic.
+genuine boundary case. Universal superiority over generic drift detectors on
+passive streams is neither claimed nor observed. The stability results remain
+conditional on explicit ISS hypotheses, with the Gaussian tracker serving as the
+constructive reference instance. The logged recommendation benchmark is
+interpreted at the proxy level: it is evidence for the usefulness of
+effort-aware diagnostics under logged exposure concentration, not a causal
+identification result about masking. Within that scope, temporal staleness
+imposes a real tracking floor, and under feedback, raw fit is not yet a safe
+diagnostic.

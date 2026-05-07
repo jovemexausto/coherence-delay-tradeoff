@@ -58,20 +58,19 @@ RLHF pipelines \citep{StiennonEtAl2020,BaiEtAl2022}, making it a much cleaner
 effort proxy than the exposure surrogates available in logged recommendation
 data. At the same time, reward-model or proxy-reward improvement can be compared
 against held-out or human-grounded quality, creating an external masking surface
-that the present KuaiRand benchmark does not have. In the language of this
-paper, RLHF is therefore a natural next test bed for the masking gap
-$M_t = CI - CI^E$ (formally, $\Score(\IS,t) - \ScoreE(\IS,t)$): the system may maintain high proxy
+that the present KuaiRand benchmark does not have. RLHF is therefore a natural
+next test bed for the masking gap $M_t = CI - CI^E$ (formally,
+$\Score(\IS,t) - \ScoreE(\IS,t)$): the system may maintain high proxy
 coherence while paying increasing KL cost and drifting away from the external
-target. Practical simulation frameworks such as AlpacaFarm \citep{DuboisEtAl2024}
-make that direction especially plausible without requiring full-scale LLM
-training in the loop.
+target. Practical simulation frameworks such as AlpacaFarm
+\citep{DuboisEtAl2024} make that direction especially plausible without
+requiring full-scale LLM training in the loop.
 
 \paragraph{Opaque adaptation maps.}
-For black-box $\Conv_t$, the present manuscript provides only the template
-requirement that an ISS-Lyapunov functional $V_\Phi$ exist. A CEGIS-style
-recovery route is not implemented or validated in
-this repository, so diagnosing $\sigma_\Phi$ for opaque adaptation subsystems
-remains an open engineering problem.
+For black-box $\Conv_t$, the framework provides only the template requirement
+that an ISS-Lyapunov functional $V_\Phi$ exist. A CEGIS-style recovery route is
+not implemented or validated in this repository, so diagnosing $\sigma_\Phi$
+for opaque adaptation subsystems remains an open engineering problem.
 
 \paragraph{Computational profile.}
 The Sinkhorn runtime study is a prototype-level NumPy benchmark on Gaussian

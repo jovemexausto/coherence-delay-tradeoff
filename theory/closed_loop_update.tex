@@ -1,16 +1,15 @@
 \section{Why Action Enters the Update in Closed-Loop Tracking}\label{sec:necessity}
 
-The next step is to justify the minimal closed-loop architecture used
-throughout the paper. The finite-memory law studied later concerns tracking
-error once a representation is already in place, but in action-effective
-systems there is a prior bookkeeping question: what must an update rule
-remember in order to remain coherent under feedback? In open-loop settings,
-combining past state and new observations is enough. In closed-loop settings,
-however, the system's own actions alter future observations. The update
-therefore needs to keep track of what the system did, not just of what it saw.
-This point is aligned with standard action-conditioned belief-state semantics;
-the contribution here is to make that dependency explicit for the diagnostic
-decomposition used later, not to claim a new filtering theorem.
+In closed-loop tracking, the finite-memory law concerns error once a
+representation is already in place, but action-effective systems face a prior
+bookkeeping question: what must an update rule remember in order to remain
+coherent under feedback? In open-loop settings, combining past state and new
+observations is enough. In closed-loop settings, however, the system's own
+actions alter future observations. The update therefore needs to keep track of
+what the system did, not just of what it saw. This point is aligned with
+standard action-conditioned belief-state semantics; the role here is to make
+that dependency explicit for the diagnostic decomposition, without claiming a
+new filtering theorem.
 
 \subsection{External Characterization: Drift-Coherence}
 
@@ -111,6 +110,5 @@ update map.
 This necessity result does not yet tell us when such a three-role system is
 stable or diagnostically meaningful. It only shows that, within the present
 action-effective modeling class, a dyadic state-observation update is too small
-unless the action term is re-encoded implicitly inside the state.
-The next section supplies the corresponding stability template under which the
-three roles can be scored.
+unless the action term is re-encoded implicitly inside the state. The stability
+template that follows supplies the corresponding sufficient conditions.
