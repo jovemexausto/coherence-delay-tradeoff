@@ -56,15 +56,34 @@ def save_benchmark_figure(result: UMRBenchmarkResult, output_path: Path) -> None
     axes[1].set_ylabel("Memory horizon")
     axes[1].legend(loc="upper left", ncol=3)
 
-    for t in rep.adwin_drift_detected:
-        axes[2].axvline(t, color="tab:blue", alpha=0.35, linewidth=0.8)
-    for t in rep.cube_drift_detected:
-        axes[2].axvline(t, color="tab:orange", alpha=0.35, linewidth=0.8)
-    for t in rep.cube_cap_triggered:
-        axes[2].axvline(t, color="tab:green", alpha=0.45, linewidth=1.0)
+    axes[2].vlines(
+        rep.adwin_drift_detected,
+        0.70,
+        0.92,
+        color="tab:blue",
+        alpha=0.75,
+        linewidth=1.1,
+    )
+    axes[2].vlines(
+        rep.cube_drift_detected,
+        0.42,
+        0.64,
+        color="tab:orange",
+        alpha=0.75,
+        linewidth=1.1,
+    )
+    axes[2].vlines(
+        rep.cube_cap_triggered,
+        0.14,
+        0.36,
+        color="tab:green",
+        alpha=0.85,
+        linewidth=1.3,
+    )
     axes[2].set_ylabel("Events")
     axes[2].set_xlabel("Time step")
     axes[2].set_yticks([])
+    axes[2].set_ylim(0, 1)
     axes[2].text(0.01, 0.75, "blue=ADWIN drift", transform=axes[2].transAxes)
     axes[2].text(0.01, 0.55, "orange=ADWIN + UMR drift", transform=axes[2].transAxes)
     axes[2].text(0.01, 0.35, "green=ADWIN + UMR cap", transform=axes[2].transAxes)

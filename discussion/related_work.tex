@@ -1,121 +1,65 @@
 \section{Related Work}\label{sec:related}
 
 \paragraph{Tracking under nonstationarity.}
-Dynamic regret, online least-squares, and adaptive filtering all ask a closely
-related question: how much past evidence should remain relevant once the target
-is moving \citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,YuanLamperski2020,
-MazzettoUpfal2023}. The present paper keeps that question in distributional form
-and makes the memory horizon itself the main object of analysis.
+Dynamic regret, online least-squares, and adaptive filtering ask how much past
+evidence should remain relevant once the target is moving
+\citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,YuanLamperski2020,
+MazzettoUpfal2023}. Here the same question is kept in distributional form, with
+the memory horizon as the main object of analysis.
 
-Uncertainty-aware multi-horizon ensembles attack the same practical issue from a
-different angle: they train learners on several historical windows and then use
-calibrated uncertainty to weight the horizon-specific predictions
-\citep{RajputSchramSammuliLin2025}. That framework is complementary to the
-present one. In our setting, the cube-root horizon can serve as a horizon prior
-or cap, but only within the same expert-mixing logic; the effect is
-benchmark-dependent and modest.
+\paragraph{Variation budgets and horizon selection.}
+The $\zeta^{1/3}$ exponent also appears in non-stationary stochastic
+optimization and bandits \citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,
+WangXieChenLuiZhou2024,YuanLamperski2020}. Those results concern gradient-based
+methods on convex losses in Euclidean space. Here, drift is
+$\mathsf{W}_2$-Lipschitz on measures, the estimator class is causal averaging
+kernels, and Proposition~\ref{prop:window_minimax} makes the $\zeta^{1/3}$ rate a
+minimax lower bound for arbitrary window-restricted estimators.
 
-\begin{remark}[Distinction from dynamic-regret analyses]
- The $\zeta^{1/3}$ exponent also appears in non-stationary stochastic
- optimization~\citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019} and modern
- variance-dependent non-stationary bandits~\citep{WangXieChenLuiZhou2024} and online
- tracking with path variation~\citep{YuanLamperski2020}. Those results concern
-gradient-based methods on sequences of convex losses in Euclidean parameter
-space, where drift is measured by a variation budget on loss functions. The
-present law operates in a distinct setting: (i) drift is $\mathsf{W}_2$-Lipschitz
-on the space of probability measures, not on a Euclidean loss gradient;
-(ii) the estimator class is causal averaging kernels, not parametric gradient
-methods; (iii) Proposition~\ref{prop:window_minimax} establishes the
-$\zeta^{1/3}$ rate as a minimax lower bound for arbitrary window-restricted
-estimators, not only for averaging---an obstruction from finite memory itself,
-rather than from variation-budget constraints.
-
-Jiang, Li, and Zhang analyze online stochastic optimization with a Wasserstein-
-based nonstationarity measure and obtain distribution-aware regret guarantees
-\citep{JiangLiZhang2020}. Our paper takes that geometry as background and
-specializes the question to finite-memory tracking, where the core object is the
-usable horizon rather than policy regret.
-
-Taken together, this prior work makes the framing clear: the cube-root regime is
-not new as a scaling law in Wasserstein OCO, but here it becomes a structural
-limit of finite-memory tracking under drift, with practical consequences for
-window regulators and horizon-weighted ensembles.
-\end{remark}
+Jiang, Li, and Zhang study online stochastic optimization under a Wasserstein
+nonstationarity measure and obtain distribution-aware regret guarantees
+\citep{JiangLiZhang2020}. Keehan, Anderson, and Wiesemann analyze a related
+drift-aware weighting problem in Wasserstein distributionally robust
+optimization \citep{KeehanAndersonWiesemann2025}. The present focus is narrower:
+when memory itself is finite, how long can retained evidence remain useful
+before age becomes the dominant source of error?
 
 \paragraph{Transport geometry.}
-Wasserstein distance and Sinkhorn-type estimators are natural because they respect
-the geometry of the signal space and behave well under transport of mass and
-support. Recent finite-sample results clarify how the constants depend on
-geometry and regularization, while leaving the exponent structure intact
+Wasserstein distance and Sinkhorn-type estimators are natural because they
+respect the geometry of the signal space
 \citep{GenevayEtAl2019,NilesWeedBach2019,GoldfeldEtAl2022,AkyildizEtAl2024}.
-Here, the geometry quantifies how much old evidence can be retained before it
-becomes stale.
+In our setting, geometry quantifies how much old evidence can be retained before
+it becomes stale.
 
-\paragraph{Adaptive forgetting and horizon control.}
-Classical smoothers such as EWMA, forgetting-factor RLS, and Kalman filtering all
-instantiate the same tension between variance reduction and responsiveness. What
-they often leave implicit is the temporal validity of the retained memory. The
-cube-root law makes that validity visible by turning the coherence-lag
-trade-off into an operational horizon selector.
+\paragraph{Adaptive forgetting and detection.}
+EWMA, forgetting-factor RLS, and Kalman filtering all balance variance reduction
+against responsiveness. The cube-root law makes temporal validity explicit. The
+asymmetry result is adjacent to changepoint detection and EMA-based control, but
+the contribution here is the gap between those questions: once drift evidence is
+mapped into a horizon rule, re-expansion can be slower than contraction.
 
-The asymmetry result below is adjacent to this literature but not covered by it:
-EMA-based control papers typically analyze smoothing as a parameter-regularizing
-device, while changepoint methods such as ADWIN give detection guarantees rather
-than recovery-time guarantees. Our contribution is the gap between those two
-questions: once drift evidence is mapped into a horizon rule, re-expansion can be
-provably slower than contraction.
+This also connects to the concept-drift literature more broadly
+\citep{Gama2004,GamaSurvey2014}. In particular, the ``Window Dilemma'' argument
+of \citet{hinder2023window} emphasizes that drift detection is ill-posed when
+the window scale is itself uncertain. The same issue appears here in a different
+form: temporal validity is not fixed in advance, so the horizon becomes part of
+the object that must be estimated.
 
-Classic variation-budget analyses in nonstationary OCO and bandits already
-exhibit the same cube-root lineage: optimal windows or step sizes scale with a
-two-thirds exponent, while the variation term enters with a one-thirds exponent
-in the resulting regret or tracking trade-off~\citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,WangXieChenLuiZhou2024,YuanLamperski2020}.
-The present paper should be read as a Wasserstein-distributional analogue of that
-line, not as a claim to invent the exponent structure itself.
-In that sense, it bridges statistical geometry (Wasserstein/Sinkhorn) and
-operational streaming policies: the geometry sets the measurement layer, while
-the horizon law sets the control layer.
+\paragraph{Public-stream baselines.}
+Window-Dilemma-style and MELO-style baselines widen the empirical comparison.
+The comparison is broader, but the claim stays the same: the cube-root
+regulator is a structural limit of finite-memory tracking under drift, not a new
+exponent invented here.
 
-This also complements the ``Window Dilemma'' view that concept-drift detection is
-ill-posed once the window scale itself is part of the problem~\citep{hinder2023window}:
-instead of treating windowing as a nuisance, we make temporal coherence explicit
-and use it to regulate the scale under continuous drift.
+Multi-horizon ensembles attack the same practical issue from another angle by
+maintaining several historical windows and combining their predictions through
+uncertainty or expert weighting. The public-stream experiments use that family
+only as a neighboring design point, not as the main object of analysis
+\citep{RajputSchramSammuliLin2025}.
 
-Keehan, Anderson, and Wiesemann~\citep{KeehanAndersonWiesemann2025} study a
-closely related drift-aware weighting problem in Wasserstein distributionally
-robust optimization. Their result balances effective sample size against drift in
-the weighted empirical distribution. The present paper differs in object and
-goal: it asks when memory remains temporally valid, rather than how to optimize a
-robust weighting rule, and the relevant comparison with drift detection is the
-gap between when change becomes statistically detectable and when retained
-memory stops being operationally current.
-
-The empirical section now includes a Window-Dilemma-style switcher and a
-MELO-style multi-horizon hedge as direct comparison baselines. Those additions
-do not replace the main claim of the paper, but they make the practical
-positioning sharper: the cube-root regulator is being compared not only to fixed
-windows and detectors, but also to explicit horizon-selection and expert-mixing
-alternatives.
-
-Appendix~\ref{app:real_stream_arena} further adds a Rajput-style uncertainty-
-weighted horizon ensemble analogue on the public streams. There, UMR functions as
-a horizon cap rather than a new weighting rule, and the observed effect remains
-small and benchmark-dependent.
-
-This makes the design choice explicit: single-horizon regulation is the natural
-fit when one believes there is a single locally meaningful memory scale and the
-main issue is keeping that scale temporally valid, whereas multi-horizon ensembles
-are more appropriate when different windows carry complementary uncertainty or
-the stream alternates between regimes. In our public-stream analogue, the gains
-from adding UMR to the ensemble are modest, so the comparison reads as
-complementary rather than substitutive.
-
-\paragraph{Freshness and the Age of Information.}
+\paragraph{Freshness and Age of Information.}
 The Age-of-Information literature asks how old the last received update is and
 how update policies should balance communication cost against information
-staleness~\citep{KaulYatesGruteser2012,YatesEtAl2021AoI}. That question is posed
-for status signals transmitted over communication channels. The present paper
-answers the distributional analogue: when a target law evolves under
-$\mathsf{W}_2$ drift, useful memory has a finite horizon and that horizon obeys
-the cube-root law. The connection is interpretive rather than formal, but it
-suggests a natural extension: policies for refreshing a distributional estimate,
-not only a scalar status signal.
+staleness~\citep{KaulYatesGruteser2012,YatesEtAl2021AoI}. The distributional
+analogue is the same question under $\mathsf{W}_2$ drift: useful memory has a
+finite horizon, and that horizon obeys the cube-root law.

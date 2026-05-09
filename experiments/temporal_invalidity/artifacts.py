@@ -23,7 +23,7 @@ def save_temporal_invalidity_figure(
     trace = result.representative
     time = result.time
 
-    fig, axes = plt.subplots(3, 1, figsize=(12, 10), sharex=True)
+    fig, axes = plt.subplots(3, 1, figsize=(11, 8.5), sharex=True)
 
     axes[0].plot(time, trace.true_zeta, color="tab:purple", linewidth=1.4)
     axes[0].set_ylabel(r"$\zeta_{true}(t)$")

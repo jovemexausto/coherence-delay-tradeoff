@@ -1,87 +1,30 @@
-\section{Full Real-Stream Arena}\label{app:real_stream_arena}
+\section{Additional Public-Stream Summary}\label{app:real_stream_arena}
 
-This appendix collects the complete public-stream robustness check summarized in
-the main text. ELEC2 appears there as the representative case study; here we add
-the Bikes counterpart and the paired summary table for both datasets.
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=0.95\linewidth]{figures/bikes/fig_umr_arena}
-\caption{Bikes counterpart in the full real-stream arena. The same paired
-precision and median-lead comparison appears here, but the result is read as a
-robustness check rather than a benchmark claim.}
-\label{fig:bikes_real}
-\end{figure}
+ELEC2 is the representative public-stream case in the main text. The only
+additional summary retained here is the Bikes counterpart, included to show that
+the same temporal-validity gap is not unique to one stream.
 
 \begin{table}[!htbp]
 \centering
 \small
-\caption{Full real-stream robustness summary. Precision is matched-warning
-precision against Page-Hinkley events; median lead is the median warning lead in
-steps. Each row compares a backend with and without UMR.}
+\caption{Bikes public-stream summary. Precision is matched-warning precision
+against Page-Hinkley events; median lead is the median warning lead in steps.}
 \label{tab:real_world_umr}
-\begin{tabular}{llrrr}
+\begin{tabular}{lrrr}
 \toprule
-Dataset & Method & Precision & Median lead & Leads \\
+Method & Precision & Median lead & Leads \\
 \midrule
-ELEC2 & EWMA & 1.000 & 97.0 & 1 \\
-ELEC2 & EWMA + UMR & 1.000 & 97.0 & 1 \\
-ELEC2 & Window Dilemma & 0.446 & 54.0 & 29 \\
-ELEC2 & Window Dilemma + UMR & 0.305 & 101.0 & 29 \\
-ELEC2 & MELO-style & 0.458 & 91.0 & 11 \\
-ELEC2 & MELO-style + UMR & 0.419 & 101.0 & 18 \\
-ELEC2 & ADWIN & 0.478 & 84.5 & 54 \\
-ELEC2 & ADWIN + UMR & 0.345 & 72.5 & 10 \\
-Bikes & EWMA & 0.146 & 132.0 & 59 \\
-Bikes & EWMA + UMR & 0.146 & 132.0 & 59 \\
-Bikes & Window Dilemma & 0.127 & 108.5 & 76 \\
-Bikes & Window Dilemma + UMR & 0.128 & 125.0 & 76 \\
-Bikes & MELO-style & 0.141 & 147.5 & 76 \\
-Bikes & MELO-style + UMR & 0.129 & 147.0 & 71 \\
-Bikes & ADWIN & 0.526 & 92.0 & 251 \\
-Bikes & ADWIN + UMR & 0.520 & 82.0 & 141 \\
+EWMA & 0.146 & 132.0 & 59 \\
+EWMA + UMR & 0.146 & 132.0 & 59 \\
+Window Dilemma & 0.127 & 108.5 & 76 \\
+Window Dilemma + UMR & 0.128 & 125.0 & 76 \\
+MELO-style & 0.141 & 147.5 & 76 \\
+MELO-style + UMR & 0.129 & 147.0 & 71 \\
+ADWIN & 0.526 & 92.0 & 251 \\
+ADWIN + UMR & 0.520 & 82.0 & 141 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The table shows the same mixed story across both streams: UMR can improve the
-temporal-validity side of the comparison, but the precision effect is backend-
-dependent and sometimes negative. That is why the full arena is supporting
-evidence rather than the core argument.
-
-\subsection{Rajput-style uncertainty-weighted horizon ensemble}
-We also implemented a faithful algorithmic analogue of the Rajput et al. setup
-using fixed random-feature Bayesian regressors trained on rolling windows of
-historical context. The ensemble combines horizon-specific learners with inverse
-variance weighting, and the UMR regulator enters as a horizon cap over the active
-buffers. This is not the exact DIII-D/DGPA stack from the paper, but it is the
-closest compatible benchmark available in this repository.
-
-\begin{table}[!htbp]
-\centering
-\small
-\caption{Rajput-style public-stream analogue. MAE is reported on the held-out test
-segment after prequential calibration. UMR acts as a horizon cap inside the
-ensemble. The effect is small and benchmark-dependent.}
-\label{tab:rajput_ensemble}
-\begin{tabular}{llrr}
-\toprule
-Dataset & Method & MAE & Relative change vs single \\
-\midrule
-ELEC2 & Single horizon & 0.7565 & 0.0\% \\
-ELEC2 & Naive ensemble & 0.7681 & +1.5\% \\
-ELEC2 & UQ ensemble & 0.7662 & +1.3\% \\
-ELEC2 & UQ ensemble + UMR & 0.7648 & +1.1\% \\
-Bikes & Single horizon & 0.8212 & 0.0\% \\
-Bikes & Naive ensemble & 0.8109 & -1.3\% \\
-Bikes & UQ ensemble & 0.8091 & -1.5\% \\
-Bikes & UQ ensemble + UMR & 0.8092 & -1.5\% \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The takeaway is consistent with the main text: UMR is compatible with a
-multi-horizon uncertainty-weighted ensemble, but in this public-stream analogue
-it acts as a weak horizon prior rather than a dominant improvement. On ELEC2, the
-single best horizon remains best; on Bikes, uncertainty weighting helps slightly,
-and UMR changes the outcome only marginally.
+The qualitative picture is the same as in ELEC2: coarse horizon adaptation still
+matters on public data, but the payoff remains backend-dependent.

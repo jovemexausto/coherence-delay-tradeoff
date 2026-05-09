@@ -352,26 +352,11 @@ operational range when the drift regime changes discretely.
 \subsection{Representative Real-Stream Case Study}\label{sec:validation_real_world}
 
 The synthetic experiments isolate the geometry of horizon control and carry the
-main claim of the paper. The real-data section plays a different role. Here we
-keep a single representative public stream, ELEC2, to check that the same
-temporal-validity story still appears once the drift process is no longer under
-experimental control. It is read as a case study, not as a ranking exercise.
-The full ELEC2/Bikes arena is provided in \cref{app:real_stream_arena}.
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=0.95\linewidth]{figures/elec2/fig_umr_arena}
-\caption{ELEC2 representative case study. The paired precision and median-lead
-comparison shows the same temporal-validity gap seen in the synthetic setting,
-but here the effect is read as a public-stream illustration rather than a
-leaderboard result.}
-\label{fig:elec2_real}
-\end{figure}
-
-The real-data picture is consistent with the synthetic one, but the effect is
-mixed enough that it should not carry the main narrative. The point is simply
-that coarse horizon adaptation still matters on public data, while the payoff
-remains backend dependent.
+main claim of the paper. The public-stream evidence is therefore kept light:
+ELEC2 remains the representative case study, while a short Bikes summary is
+provided in \cref{app:real_stream_arena}. The main point is simply that coarse
+horizon adaptation still matters on public data, but the payoff remains backend
+dependent.
 
 \subsection{Controlled Downstream Check}\label{sec:validation_downstream}
 

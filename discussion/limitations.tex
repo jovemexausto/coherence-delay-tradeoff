@@ -18,27 +18,23 @@ parameter. Better local geometry estimators may therefore sharpen horizon
 recovery without changing the law.
 
 \paragraph{Geometry beyond the current metric.}
-The present formulation uses Wasserstein geometry and a debiased Sinkhorn
-measurement layer when samples must be compared computationally. Other geometries
-may admit analogous trade-offs, but the constants and the calibration of useful
-memory may change.
+The formulation uses Wasserstein geometry and a debiased Sinkhorn measurement
+layer when samples must be compared computationally. Other geometries may admit
+analogous trade-offs, but the constants and the calibration of useful memory may
+change.
 
 \paragraph{What the experiments show.}
 The current experiments are not a leaderboard over drift detectors. The public
-stream result is a representative case study, not a ranking exercise. It shows a
-specific operational distinction: a tracker can still have statistically
-insufficient changepoint evidence while already being stale in the sense of
-useful memory.
+stream result is a representative case study. It shows a specific operational
+distinction: a tracker can still have statistically insufficient changepoint
+evidence while already being stale in the sense of useful memory.
 
 \paragraph{Scope of the comparison suite.}
 The benchmark suite now includes a Window-Dilemma-style switcher and a
 MELO-style multi-horizon hedge, but it is still not a full survey of adaptive
-tracking methods. The present paper remains centered on the cube-root law and on
-the temporal-validity interpretation of memory, rather than on an exhaustive
-aggregation benchmark zoo.
+tracking methods. The analysis remains centered on the cube-root law and on the
+temporal-validity interpretation of memory.
 
-On the current ELEC2 and Bikes arenas, adding UMR to the multi-horizon hedge,
-including the Rajput-style uncertainty-weighted analogue in Appendix~\ref{app:real_stream_arena},
-changes results only modestly and in a benchmark-dependent way; it is therefore
-best read as a horizon prior, not as a universal replacement for uncertainty
-weighting.
+On the current ELEC2 and Bikes arenas, adding UMR to the multi-horizon hedge
+changes results only modestly and in a benchmark-dependent way; it acts as a
+horizon prior, not a universal replacement for uncertainty weighting.

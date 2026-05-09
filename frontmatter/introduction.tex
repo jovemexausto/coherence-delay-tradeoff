@@ -11,7 +11,7 @@ sampling noise, but it also increases the age of the information being used to
 track the present. Under drift, memory is simultaneously helpful and harmful:
 short windows are fresh but noisy, while long windows are stable but stale. The
 constraint is temporal rather than parametric: one cannot overparameterize time.
-The central claim of this paper is that this tension defines a coherence-lag
+The central claim here is that this tension defines a coherence-lag
 trade-off and induces a quantitative law for finite-memory tracking under
 Wasserstein nonstationarity. The cube-root exponents themselves are not unique
 to this paper; what is new here is the finite-memory horizon interpretation and
@@ -29,46 +29,49 @@ for window-restricted estimators in the critical-window regime, establishing
 that the finite-memory floor is structural rather than a quirk of one specific
 rule.
 
-This viewpoint also gives the paper its interpretive layer. The limiting factor
-is the age of the information that finite memory forces the estimator to retain,
-alongside the usual finite-sample cost. The result can therefore be read as a
-temporal-coherence law: the learner pays for variance reduction by carrying
-older evidence, and optimal tracking occurs at a memory horizon that balances
-statistical stability against operational staleness.
+The same decomposition also has a simple interpretation: the limiting factor is
+the age of the information that finite memory forces the estimator to retain,
+alongside the usual finite-sample cost. The learner pays for variance reduction
+by carrying older evidence, and optimal tracking occurs at a memory horizon that
+balances statistical stability against operational staleness.
 
-The empirical story is more nuanced than a dominance claim. Some regimes reward
-a short fixed window as a strong operational compromise, even when the local
-oracle horizon moves over time; what the cube-root regulator adds is a way to
-track horizon validity, not a guarantee of lower error everywhere. This
-separates horizon geometry, horizon tracking, and predictive payoff.
+Horizon geometry, horizon tracking, and predictive payoff are not the same
+object. A regulator can be geometrically right and still be operationally
+limited; it can also preserve temporal validity without dominating every
+backend. The empirical sequence asks when the memory horizon is locally right,
+when it becomes stale, and how much that staleness costs.
 
-The empirical section follows the same logic in four steps. Continuous-drift
-experiments recover the `U`-curve and expose the gap between temporal validity
-and detection. The temporal-validity check measures the delay between cap
-activation and ADWIN detection, the alternating-timescales check exposes
-horizon instability, and the gap-cost analysis quantifies how misalignment
-translates into predictive cost. Sinkhorn-based tracking scores serve as the
-measurement layer, and the cube-root cap shows how the same law can act as an
-online regulator as well as a retrospective explanation.
+Every backend need not collapse to the same horizon. Short fixed windows can
+remain strong compromises even when the local oracle horizon moves over time.
+What the cube-root regulator contributes is a notion of validity: it tells us
+when remembered evidence is still current enough to matter, and when it has
+become stale before a detector has enough evidence to complain.
+
+The empirical section follows that logic in stages. The first checks recover the
+`U`-curve and show that the finite-memory optimum is not a fitting artifact. The
+next checks separate temporal validity from changepoint evidence, and the
+alternating-timescales benchmark shows that contraction is easier to induce than
+re-expansion. The gap-cost analysis then asks how a mismatch between the chosen
+horizon and the local oracle translates into predictive loss.
+
+ELEC2 stays in the main text as the representative real-stream case, while a
+short Bikes summary moves to the appendix. The controlled downstream check in
+Appendix~\ref{app:downstream_temporal_invalidity} adds a synthetic classification
+test of the same cap-only logic. The order is geometry first, temporal validity
+second, predictive payoff third.
 
 The theoretical results are stated in $W_2$; the Sinkhorn divergence is the
-computational realization used in the synthetic measurement layer.
-
-We also keep one representative public-stream case study in the main text,
-ELEC2, while the full ELEC2/Bikes arena is provided in \cref{app:real_stream_arena}
-as a robustness check rather than a leaderboard.
-
-Within that last benchmark, we also isolate a secondary formal effect: an
-asymmetric horizon-recovery law for EMA-smoothed drift-to-horizon maps, where
-contraction after bursts is faster than re-expansion after low-drift stretches.
+computational realization used in the synthetic measurement layer. In the
+public-stream arena, a secondary effect remains visible: EMA-based horizon
+recovery is asymmetric, with contraction after bursts faster than re-expansion
+after low-drift stretches.
 
 The window size is a fundamental parameter whose mischoice can create spurious
 or missed detections~\cite{hinder2023window}; the coherence-lag law provides a
 principled answer when the drift rate is estimable.
 
-The scope of the paper is deliberately narrow. We study finite-memory tracking
-under drift, a lower bound for restricted estimators, and the associated
-temporal-coherence interpretation, together with experiments chosen to test that
-story.
-The paper asks a single question: what tracking accuracy is possible when the
-learner's memory is finite and the target distribution keeps moving?
+The scope of the paper is deliberately narrow: finite-memory tracking under
+drift, a lower bound for restricted estimators, and the temporal-coherence
+interpretation that ties them together. The question is simple: what tracking
+accuracy is possible when the learner's memory is finite and the target
+distribution keeps moving?

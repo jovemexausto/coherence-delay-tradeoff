@@ -22,25 +22,20 @@ Empirically, the signature regime is `cap-only`: the memory horizon becomes
 operationally stale before there is enough statistical evidence for a changepoint
 alarm. That separation between evidence of change and temporal validity of
 memory is the main conceptual payoff of the paper. The alternating-timescales
-benchmark adds a second operational lesson: horizon contraction is typically
-easier to induce than horizon re-expansion, revealing an asymmetric form of
-memory hysteresis. That asymmetry is a secondary formal contribution: a
-recoverability gap in EMA-driven horizon regulators, separate from the cube-root
-law itself. A third operational lesson is implementation-level: the regulator is
-sensitive to the drift proxy, but that sensitivity is calibratable from
-observable prefix data rather than only by manual tuning.
+benchmark adds a secondary lesson: contraction is easier to induce than
+re-expansion, so EMA-driven horizon regulators have a recoverability gap.
 
-The real-stream evidence is intentionally lighter: a representative ELEC2 case
-study in the main text, while the full ELEC2/Bikes arena is detailed in the appendix.
-It serves as a supporting check that the temporal-validity gap is not
-synthetic-only, but it is not the main evidential load of the paper.
+The real-stream evidence stays lighter: a representative ELEC2 case study in the
+main text, with the full ELEC2/Bikes arena detailed in the appendix. It keeps
+the temporal-validity gap from being synthetic-only, but it is not the main
+evidential load.
 
 Finite-memory systems are best judged by how long their retained evidence remains
-current enough to matter. The design consequence is clear: regulate useful
+current enough to matter. The design consequence is simple: regulate useful
 memory and track the age at which evidence stops being current.
 
 Final claim: useful memory under drift has geometry, but its predictive value is
 policy-dependent.
 
 Code and reproducibility artifacts are available in the project repository
-\citep{coherence_delay_repo}.
+\citep{parreira2026useful_memory_horizon}.

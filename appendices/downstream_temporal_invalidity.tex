@@ -1,11 +1,7 @@
 \section{Controlled Downstream Check}\label{app:downstream_temporal_invalidity}
 
-This appendix records the controlled synthetic downstream benchmark used to
-probe the predictive cost of temporal invalidity. The setup is intentionally
-minimal: a phasewise drifting binary classification stream, a windowed logistic
-backend, and four policies comparing long memory, short memory, ADWIN-driven
-memory, and UMR-regulated memory. The comparison is restricted to the phase-2
-cap-only interval, where UMR has already contracted but ADWIN remains silent.
+The controlled synthetic downstream benchmark focuses on the phase-2 cap-only
+window: UMR has already contracted, while ADWIN remains silent.
 
 \begin{figure}[!htbp]
 \centering
@@ -21,7 +17,8 @@ Fixed-400 within the cap-only window.}
 \centering
 \small
 \caption{Controlled downstream benchmark summary. The reported delta is UMR
-minus Fixed-400 within the cap-only interval, averaged across six seeds.}
+minus Fixed-400 within the cap-only interval, averaged across six seeds. The
+effect is consistent in direction but modest in magnitude.}
 \label{tab:temporal_invalidity}
 \begin{tabular}{lrrrr}
 \toprule
@@ -34,7 +31,3 @@ UMR & 0.9415 & 0.9205 & +1.66 & 293.3 \\
 \bottomrule
 \end{tabular}
 \end{table}
-
-The result is consistent in direction across all six seeds, but the effect is
-modest in magnitude. We therefore treat it as mechanistic supporting evidence
-rather than as a central claim.

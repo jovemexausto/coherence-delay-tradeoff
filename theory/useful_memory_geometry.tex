@@ -100,36 +100,17 @@ Combining the two bounds yields the stated inequality.
 The paper's theorem is stated in $W_2$, so $\varepsilon$ does not enter the
 mathematical drift law itself. In the synthetic measurement layer, however, the
 observable geometry is often a debiased Sinkhorn divergence with fixed
-$\varepsilon$, and then the effective finite-sample constant should be read as
-$C_K^{\mathrm{eff}} = C_{d_\mathrm{eff},R} + L(D,\varepsilon)$: the raw
-Wasserstein part depends on intrinsic dimension, while the Sinkhorn part is
-dimension-free at fixed $\varepsilon$ but worsens as $\varepsilon\downarrow 0$.
+$\varepsilon$, which makes the finite-sample constant calibration-dependent.
+In the synthetic benchmarks, $\hat\zeta_t$ is estimated from short-window block
+differences using an EMA update and $C_K$ is calibrated from a stationary
+prefix; Appendix~\ref{app:zeta} records the sensitivity check and the
+prequential calibration rule.
 
-In the synthetic benchmarks, $\hat\zeta_t$ is estimated from short-window
-block differences using an EMA update, $C_K$ is calibrated from a stationary
-prefix, and $\varepsilon$ is held fixed within each experiment family, with
-runtime sensitivity to $\varepsilon$ reported separately. The benchmark-specific
-drift proxy, robustness check, and sensitivity sweep are detailed in
-Appendix~\ref{app:zeta}.
-The same appendix also validates an observable prequential calibration rule for
-choosing $\alpha$ and the block scale, so the online regulator is not tied to a
-fixed manual setting.
-For the horizon constant itself, the prefix calibration is the simple stationary
-baseline used to estimate the scale in the synthetic stream; it is not a tuned
-oracle, but it is also not arbitrary.
-
-The Sinkhorn-to-$W_2$ gap is therefore treated as an empirical calibration
-constant. In the tested Gaussian shift sweep, the high-dimensional slice shows
-that this gap is nearly flat in sample size for small $\varepsilon$ and decays
-with $n$ only when $\varepsilon$ is large; the resulting horizon inflation in the
-sampled grid ranges from about $1.36\times$ to $4.24\times$. This supports the
-paper's use of fixed-$\varepsilon$ Sinkhorn as a measurement layer while keeping
-the theoretical law in $W_2$. For fixed $\varepsilon$ on bounded domains, the
-debiased Sinkhorn divergence converges at rate $n^{-1/2}$ with
-$\varepsilon$-dependent constants~\citep{GenevayEtAl2019}; the approximation gap
-to $W_2^2$ is $O(\varepsilon)$ and vanishes as $\varepsilon\to 0$. We therefore
-treat the Sinkhorn layer as a calibration proxy rather than part of the law
-itself.
+For fixed $\varepsilon$ on bounded domains, the debiased Sinkhorn divergence
+converges at rate $n^{-1/2}$ with $\varepsilon$-dependent constants
+\citep{GenevayEtAl2019}, while the approximation gap to $W_2^2$ is $O(\varepsilon)$
+and vanishes as $\varepsilon\to 0$. We therefore treat Sinkhorn as a calibration
+proxy rather than part of the law itself.
 \end{remark}
 
 \begin{corollary}[EWMA Analogue]\label{cor:ewma_cube_root}

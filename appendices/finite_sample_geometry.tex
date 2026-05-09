@@ -35,45 +35,9 @@ with an $n^{-1/2}$ term, while the Sinkhorn proxy behaves as a fixed-$\varepsilo
 measurement layer with a calibration constant that depends on geometry and on
 regularization.
 
-\subsection{Sinkhorn $\varepsilon$ Ablation and Implied $n^*$ Inflation}
-
-The same measurement layer also clarifies how $\varepsilon$ and sample size
-affect the cube-root calibration constant. In the Gaussian shift experiment used
-for the Sinkhorn runtime figure, the debiased Sinkhorn estimator overestimates the
-true $W_2^2=0.25$ by an amount that is strongly dimension dependent and decreases
-with sample size only when $\varepsilon$ is not too small.
-
-In the high-dimensional $d=256$ slice, the empirical bias is nearly flat in
-$n$ for $\varepsilon\in\{0.02,0.05,0.2\}$, whereas at $\varepsilon=1.0$ it decays
-noticeably with $n$ (roughly from $0.479$ at $n=25$ to $0.145$ at $n=100$). On
-the same slice, the implied cube-root horizon inflation is about $1.36\times$ to
-$4.24\times$ across the tested grid, with the smallest inflation occurring at
-large $\varepsilon$ and larger sample size.
-
-If the signed bias is propagated linearly into the horizon rule, then the induced
-calibration error scales as $n^*_{\mathrm{hat}}/n^* \approx (1+b)^{2/3}$ when
-the proxy overestimates the underlying $W_2^2$ by a factor $(1+b)$. Under this
-approximation, the tested $d=256$ slice gives an $n^*$ inflation between about
-$1.36\times$ and $4.24\times$ over the sampled grid.
-
-\begin{table}[!htbp]
-\centering
-\small
-\caption{Sinkhorn $\varepsilon$ ablation on the Gaussian shift calibration
-experiment. Reported values are signed biases relative to the true $W_2^2=0.25$
-and the corresponding multiplicative inflation of the cube-root horizon under the
-linearized approximation $n^*_{\mathrm{hat}}/n^* \approx (1+b)^{2/3}$.}
-\label{tab:sinkhorn_eps_nstar}
-\begin{tabular}{lrrr}
-\toprule
-Setting & Signed bias & Estimated $W_2^2$ & Implied $n^*$ factor \\
-\midrule
-$d=256,\,n=25,\,\varepsilon=1.0$ & $+0.460$ & $0.710$ & $2.01\times$ \\
-$d=256,\,n=100,\,\varepsilon=1.0$ & $+0.139$ & $0.389$ & $1.34\times$ \\
-$d=256,\,n=200,\,\varepsilon=1.0$ & $+0.073$ & $0.323$ & $1.19\times$ \\
-$d=256,\,n=25,\,\varepsilon=0.05$ & $+1.797$ & $2.047$ & $4.06\times$ \\
-$d=256,\,n=100,\,\varepsilon=0.05$ & $+1.765$ & $2.015$ & $4.02\times$ \\
-$d=256,\,n=200,\,\varepsilon=0.05$ & $+1.748$ & $1.998$ & $4.00\times$ \\
-\bottomrule
-\end{tabular}
-\end{table}
+The Sinkhorn $\varepsilon$ ablation shows that fixed-$\varepsilon$ bias can
+substantially inflate the implied horizon constant in high dimension, with the
+tested $d=256$ slice ranging from about $1.36\times$ to $4.24\times$ in the
+linearized horizon factor. The point is not a sharp asymptotic theorem; it is to
+show that the calibration constant can move materially with regularization even
+when the exponent structure stays the same.
