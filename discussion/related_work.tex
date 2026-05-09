@@ -35,6 +35,11 @@ based nonstationarity measure and obtain distribution-aware regret guarantees
 \citep{JiangLiZhang2020}. Our paper takes that geometry as background and
 specializes the question to finite-memory tracking, where the core object is the
 usable horizon rather than policy regret.
+
+Taken together, this prior work makes the framing clear: the cube-root regime is
+not new as a scaling law in Wasserstein OCO, but here it becomes a structural
+limit of finite-memory tracking under drift, with practical consequences for
+window regulators and horizon-weighted ensembles.
 \end{remark}
 
 \paragraph{Transport geometry.}
@@ -60,6 +65,21 @@ than recovery-time guarantees. Our contribution is the gap between those two
 questions: once drift evidence is mapped into a horizon rule, re-expansion can be
 provably slower than contraction.
 
+Classic variation-budget analyses in nonstationary OCO and bandits already
+exhibit the same cube-root lineage: optimal windows or step sizes scale with a
+two-thirds exponent, while the variation term enters with a one-thirds exponent
+in the resulting regret or tracking trade-off~\citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,WangXieChenLuiZhou2024,YuanLamperski2020}.
+The present paper should be read as a Wasserstein-distributional analogue of that
+line, not as a claim to invent the exponent structure itself.
+In that sense, it bridges statistical geometry (Wasserstein/Sinkhorn) and
+operational streaming policies: the geometry sets the measurement layer, while
+the horizon law sets the control layer.
+
+This also complements the ``Window Dilemma'' view that concept-drift detection is
+ill-posed once the window scale itself is part of the problem~\citep{hinder2023window}:
+instead of treating windowing as a nuisance, we make temporal coherence explicit
+and use it to regulate the scale under continuous drift.
+
 Keehan, Anderson, and Wiesemann~\citep{KeehanAndersonWiesemann2025} study a
 closely related drift-aware weighting problem in Wasserstein distributionally
 robust optimization. Their result balances effective sample size against drift in
@@ -80,6 +100,14 @@ Appendix~\ref{app:real_stream_arena} further adds a Rajput-style uncertainty-
 weighted horizon ensemble analogue on the public streams. There, UMR functions as
 a horizon cap rather than a new weighting rule, and the observed effect remains
 small and benchmark-dependent.
+
+This makes the design choice explicit: single-horizon regulation is the natural
+fit when one believes there is a single locally meaningful memory scale and the
+main issue is keeping that scale temporally valid, whereas multi-horizon ensembles
+are more appropriate when different windows carry complementary uncertainty or
+the stream alternates between regimes. In our public-stream analogue, the gains
+from adding UMR to the ensemble are modest, so the comparison reads as
+complementary rather than substitutive.
 
 \paragraph{Freshness and the Age of Information.}
 The Age-of-Information literature asks how old the last received update is and

@@ -12,6 +12,9 @@ from ..bikes.artifacts import (
 )
 from ..bikes.model import BikesConfig, run_bikes_experiments
 from ..bikes.reports import build_bikes_arena_rows, build_bikes_rows
+from ..airlines.artifacts import save_airlines_figure
+from ..airlines.model import AirlinesConfig, run_airlines_benchmark
+from ..airlines.reports import build_airlines_rows
 from ..core.harness import ExperimentHarness
 from ..core.regime_map import save_regime_first_summary_figure
 from ..elec2.artifacts import (
@@ -367,6 +370,18 @@ def main() -> None:
         build_bikes_arena_rows(bikes_result),
         "bikes",
         "bikes_arena_summary.csv",
+    )
+
+    airlines_result = run_airlines_benchmark(
+        AirlinesConfig(cache_path=harness.artifact_path("airlines", "airlines.arff"))
+    )
+    save_airlines_figure(
+        airlines_result, harness.figure_path("airlines", "fig_airlines.pdf")
+    )
+    harness.save_summary_csv(
+        build_airlines_rows(airlines_result),
+        "airlines",
+        "airlines_summary.csv",
     )
 
     elec2_result = run_elec2_experiments(Elec2Config())

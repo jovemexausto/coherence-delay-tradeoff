@@ -124,7 +124,12 @@ that this gap is nearly flat in sample size for small $\varepsilon$ and decays
 with $n$ only when $\varepsilon$ is large; the resulting horizon inflation in the
 sampled grid ranges from about $1.36\times$ to $4.24\times$. This supports the
 paper's use of fixed-$\varepsilon$ Sinkhorn as a measurement layer while keeping
-the theoretical law in $W_2$.
+the theoretical law in $W_2$. For fixed $\varepsilon$ on bounded domains, the
+debiased Sinkhorn divergence converges at rate $n^{-1/2}$ with
+$\varepsilon$-dependent constants~\citep{GenevayEtAl2019}; the approximation gap
+to $W_2^2$ is $O(\varepsilon)$ and vanishes as $\varepsilon\to 0$. We therefore
+treat the Sinkhorn layer as a calibration proxy rather than part of the law
+itself.
 \end{remark}
 
 \begin{corollary}[EWMA Analogue]\label{cor:ewma_cube_root}
@@ -309,6 +314,9 @@ containing that subclass, including the paper's general $W_2$-Lipschitz path
 class. So the proposition is not claiming that every path is Gaussian; it is
 claiming that the worst case already appears inside the Gaussian mean-shift
 subproblem.
+Equivalently, since the Gaussian location family is a subfamily of the ambient
+$W_2$-Lipschitz class at the same drift rate $\zeta$, any lower bound proven on
+that subclass is automatically a lower bound for the larger class.
 \end{remark}
 
 \begin{remark}[Measurement layer]
