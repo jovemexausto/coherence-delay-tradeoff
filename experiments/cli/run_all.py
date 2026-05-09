@@ -22,10 +22,12 @@ from ..gaussian import (
     run_ucurve_experiment,
 )
 from ..cuberoot_adwin.artifacts import save_benchmark_figure
+from ..cuberoot_adwin.artifacts import save_delay_figure
 from ..cuberoot_adwin.artifacts import save_frontier_figure
 from ..cuberoot_adwin.model import CubeRootADWINBenchmarkConfig, run_benchmark
 from ..cuberoot_adwin.reports import (
     build_event_rows,
+    build_delay_rows,
     build_frontier_rows,
     build_oracle_phase_rows,
     build_phase_rows,
@@ -180,6 +182,21 @@ def main() -> None:
             drift_window=100,
         )
     )
+    delay_results = [
+        run_benchmark(
+            CubeRootADWINBenchmarkConfig(
+                drift=drift,
+                fixed_window=100,
+                fixed_long_window=500,
+                ewma_alpha=0.05,
+                adwin_delta=0.002,
+                Ck=1.0,
+                drift_window=100,
+                seeds=tuple(range(args.seed, args.seed + 20)),
+            )
+        )
+        for drift in (0.0003, 0.0005, 0.001, 0.002, 0.003, 0.005)
+    ]
     save_benchmark_figure(
         cuberoot_result,
         harness.figure_path("cuberoot_adwin", "fig_cuberoot_adwin.pdf"),
@@ -187,6 +204,10 @@ def main() -> None:
     save_frontier_figure(
         cuberoot_result,
         harness.figure_path("cuberoot_adwin", "fig_lag_variance_frontier.pdf"),
+    )
+    save_delay_figure(
+        delay_results,
+        harness.figure_path("cuberoot_adwin", "fig_cap_vs_detection_delay.pdf"),
     )
     harness.save_summary_csv(
         build_summary_rows(cuberoot_result),
@@ -197,6 +218,11 @@ def main() -> None:
         build_frontier_rows(cuberoot_result),
         "cuberoot_adwin",
         "cuberoot_adwin_frontier.csv",
+    )
+    harness.save_summary_csv(
+        [row for r in delay_results for row in build_delay_rows(r)],
+        "cuberoot_adwin",
+        "cuberoot_adwin_delay.csv",
     )
     harness.save_summary_csv(
         build_event_rows(cuberoot_result),

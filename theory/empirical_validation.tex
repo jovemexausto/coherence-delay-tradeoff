@@ -45,7 +45,7 @@ whereas CubeRootADWIN lies close to the frontier knee.}\label{fig:lag_variance_f
 
 \subsection{Over-Memory Under Continuous Drift}\label{sec:validation_continuous}
 
-The next benchmark isolates the operational failure mode. We compare four
+The next benchmark isolates the operational failure mode. We compare five
 methods on a smooth drifting stream: a short fixed window, a long fixed window,
 EWMA, ADWIN, and the cube-root capped variant. The point of the comparison is
 not detector leaderboard performance; it is to reveal when memory becomes stale
@@ -84,6 +84,24 @@ changepoint evidence appears.}\label{fig:cuberoot_adwin}
 The important phenomenon here is not that a new detector fires more often. It is
 that the cap can activate while the Hoeffding test remains silent, separating the
 validity of memory from the evidence threshold for abrupt change.
+
+\subsection{Temporal Validity Gap}\label{sec:validation_delay}
+
+The gap becomes more explicit when the drift rate varies. The next figure plots
+the first cap activation of the cube-root regulator and the first changepoint
+decision of ADWIN as the drift rate changes. In the smooth-drift regime, the cap
+activates much earlier than the detector; as the drift becomes faster, the gap
+shrinks but does not disappear.
+
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=0.95\linewidth]{figures/cuberoot_adwin/fig_cap_vs_detection_delay}
+\caption{Temporal validity gap across drift rates. The top panel compares the
+first cube-root cap activation with the first ADWIN detection. The bottom panel
+shows the resulting lead time. Under slow drift, memory becomes operationally
+stale long before changepoint evidence is available; under faster drift, the gap
+narrows but remains positive.}\label{fig:cap_vs_detection_delay}
+\end{figure}
 
 \subsection{Piecewise Horizon Recovery}\label{sec:validation_piecewise}
 

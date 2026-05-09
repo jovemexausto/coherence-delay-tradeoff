@@ -232,3 +232,28 @@ def build_frontier_rows(
         )
 
     return rows
+
+
+def build_delay_rows(result: CubeRootADWINBenchmarkResult) -> SummaryRows:
+    cube = result.summaries["cube"]
+    adwin = result.summaries["adwin"]
+    lead_time = (
+        None
+        if cube.first_cap_time_mean is None or adwin.first_drift_time_mean is None
+        else float(adwin.first_drift_time_mean - cube.first_cap_time_mean)
+    )
+    return [
+        {
+            "drift": round(float(result.config.drift), 6),
+            "cube_first_cap_time_mean": ""
+            if cube.first_cap_time_mean is None
+            else round(cube.first_cap_time_mean, 2),
+            "adwin_first_drift_time_mean": ""
+            if adwin.first_drift_time_mean is None
+            else round(adwin.first_drift_time_mean, 2),
+            "lead_time_mean": "" if lead_time is None else round(lead_time, 2),
+            "cube_cap_only_count_mean": ""
+            if cube.cap_only_count_mean is None
+            else round(cube.cap_only_count_mean, 2),
+        }
+    ]

@@ -6,11 +6,13 @@ import argparse
 from pathlib import Path
 
 from ..cuberoot_adwin.artifacts import save_benchmark_figure
+from ..cuberoot_adwin.artifacts import save_delay_figure
 from ..cuberoot_adwin.artifacts import save_frontier_figure
 from ..cuberoot_adwin.model import CubeRootADWINBenchmarkConfig, run_benchmark
 from ..cuberoot_adwin.reports import (
     build_event_rows,
     build_frontier_rows,
+    build_delay_rows,
     build_oracle_phase_rows,
     build_phase_rows,
     build_summary_rows,
@@ -60,9 +62,28 @@ def main() -> None:
     )
     result = run_benchmark(constant_config)
     piecewise_result = run_benchmark(piecewise_config)
+    drift_grid = (0.0003, 0.0005, 0.001, 0.002, 0.003, 0.005)
+    delay_results = [
+        run_benchmark(
+            CubeRootADWINBenchmarkConfig(
+                drift=drift,
+                fixed_window=100,
+                fixed_long_window=500,
+                ewma_alpha=0.05,
+                adwin_delta=0.002,
+                Ck=1.0,
+                drift_window=100,
+                seeds=tuple(range(args.seed_offset, args.seed_offset + 20)),
+            )
+        )
+        for drift in drift_grid
+    ]
 
     save_benchmark_figure(result, args.figures_dir / "fig_cuberoot_adwin.pdf")
     save_frontier_figure(result, args.figures_dir / "fig_lag_variance_frontier.pdf")
+    save_delay_figure(
+        delay_results, args.figures_dir / "fig_cap_vs_detection_delay.pdf"
+    )
     save_benchmark_figure(
         piecewise_result,
         args.figures_dir / "fig_cuberoot_adwin_piecewise.pdf",
@@ -72,6 +93,10 @@ def main() -> None:
     )
     export_summary_csv(
         build_frontier_rows(result), args.artifacts_dir / "cuberoot_adwin_frontier.csv"
+    )
+    export_summary_csv(
+        [row for r in delay_results for row in build_delay_rows(r)],
+        args.artifacts_dir / "cuberoot_adwin_delay.csv",
     )
     export_summary_csv(
         build_event_rows(result), args.artifacts_dir / "cuberoot_adwin_events.csv"
@@ -102,9 +127,11 @@ def main() -> None:
 
     print(f"Saved {args.figures_dir / 'fig_cuberoot_adwin.pdf'}")
     print(f"Saved {args.figures_dir / 'fig_lag_variance_frontier.pdf'}")
+    print(f"Saved {args.figures_dir / 'fig_cap_vs_detection_delay.pdf'}")
     print(f"Saved {args.figures_dir / 'fig_cuberoot_adwin_piecewise.pdf'}")
     print(f"Saved {args.artifacts_dir / 'cuberoot_adwin_summary.csv'}")
     print(f"Saved {args.artifacts_dir / 'cuberoot_adwin_frontier.csv'}")
+    print(f"Saved {args.artifacts_dir / 'cuberoot_adwin_delay.csv'}")
     print(f"Saved {args.artifacts_dir / 'cuberoot_adwin_events.csv'}")
     print(f"Saved {args.artifacts_dir / 'cuberoot_adwin_phases.csv'}")
     print(f"Saved {args.artifacts_dir / 'cuberoot_adwin_oracle_phases.csv'}")

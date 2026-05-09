@@ -7,7 +7,7 @@ import numpy as np
 
 from ..core.common import rolling_mean
 from .model import CubeRootADWINBenchmarkResult
-from .reports import build_frontier_rows
+from .reports import build_delay_rows, build_frontier_rows
 
 
 def save_benchmark_figure(
@@ -148,6 +148,77 @@ def save_frontier_figure(
     ax.set_title("Lag-variance frontier for useful memory")
     ax.grid(alpha=0.2, linewidth=0.5)
     ax.legend(loc="upper right", frameon=False, ncols=2)
+    fig.tight_layout()
+    fig.savefig(output_path, bbox_inches="tight")
+    plt.close(fig)
+
+
+def save_delay_figure(
+    results: list[CubeRootADWINBenchmarkResult], output_path: Path
+) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    rows: list[dict[str, float | int | str]] = []
+    for result in results:
+        rows.extend(dict(row) for row in build_delay_rows(result))
+
+    drifts = np.asarray([float(row["drift"]) for row in rows])
+    cap_times = np.asarray([float(row["cube_first_cap_time_mean"]) for row in rows])
+    adwin_times = np.asarray(
+        [float(row["adwin_first_drift_time_mean"]) for row in rows]
+    )
+    lead_times = np.asarray([float(row["lead_time_mean"]) for row in rows])
+
+    order = np.argsort(drifts)
+    drifts = drifts[order]
+    cap_times = cap_times[order]
+    adwin_times = adwin_times[order]
+    lead_times = lead_times[order]
+
+    fig, axes = plt.subplots(2, 1, figsize=(9.5, 7.0), sharex=True)
+
+    axes[0].plot(
+        drifts,
+        cap_times,
+        color="tab:green",
+        linewidth=2.0,
+        marker="o",
+        label="CubeRootADWIN cap",
+    )
+    axes[0].plot(
+        drifts,
+        adwin_times,
+        color="tab:orange",
+        linewidth=2.0,
+        marker="o",
+        label="ADWIN detection",
+    )
+    axes[0].fill_between(
+        drifts,
+        cap_times,
+        adwin_times,
+        color="gold",
+        alpha=0.14,
+        label="temporal validity gap",
+    )
+    axes[0].set_ylabel("First event time")
+    axes[0].set_title("Cap-before-detection gap under continuous drift")
+    axes[0].legend(loc="upper right", frameon=False)
+    axes[0].grid(alpha=0.2, linewidth=0.5)
+    axes[0].set_xscale("log")
+
+    axes[1].plot(
+        drifts,
+        lead_times,
+        color="black",
+        linewidth=2.0,
+        marker="o",
+    )
+    axes[1].axhline(0.0, color="black", linestyle="--", linewidth=1.0, alpha=0.6)
+    axes[1].set_xlabel("Drift rate")
+    axes[1].set_ylabel("Lead time")
+    axes[1].grid(alpha=0.2, linewidth=0.5)
+    axes[1].set_xscale("log")
+
     fig.tight_layout()
     fig.savefig(output_path, bbox_inches="tight")
     plt.close(fig)
