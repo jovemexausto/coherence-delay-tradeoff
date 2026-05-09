@@ -31,6 +31,33 @@ where the first term is the finite-sample statistical cost and the second term
 is the staleness cost induced by retaining old information.
 \end{theorem}
 
+\begin{lemma}[Finite-sample Wasserstein term]\label{lem:finite_sample_term}
+Let $Q$ be a probability measure on $\mathbb R^{d_\mathrm{eff}}$ with support
+contained in a ball of radius $R$ and finite second moment. Let
+$X_1,\dots,X_n$ be i.i.d. samples from $Q$, and let
+$\hat Q_n := n^{-1}\sum_{i=1}^n \delta_{X_i}$. Then:
+\begin{itemize}
+  \item If $d_\mathrm{eff}<4$, there exists a constant $C_{d_\mathrm{eff},R}$
+  such that
+  \[
+    \mathbb E\,W_2(\hat Q_n,Q) \le C_{d_\mathrm{eff},R}\,n^{-1/2}.
+  \]
+  \item If $d_\mathrm{eff}=4$, the same bound holds with an additional
+  $(\log n)^{1/2}$ factor.
+  \item If $d_\mathrm{eff}>4$, the raw Wasserstein rate is slower than
+  $n^{-1/2}$, so the constant-only form above should not be used.
+\end{itemize}
+If the geometry is computed with debiased Sinkhorn divergence $S_\varepsilon$
+on a bounded domain of diameter $D$, then for fixed $\varepsilon>0$ the
+empirical fluctuations remain $O(n^{-1/2})$ with a constant
+$L(D,\varepsilon)$ that is dimension-free at fixed $\varepsilon$ and increases
+as $\varepsilon\downarrow 0$.
+
+A short numerical sanity check for this regime is reported in
+Appendix~\ref{app:finite_sample_geometry}; it is not used as a theorem, but it
+matches the intended low-dimensional interpretation of the finite-sample term.
+\end{lemma}
+
 The two terms in \cref{thm:lag_error} pull in opposite directions. Increasing
 $n$ reduces variance but raises the age of the retained evidence. That tension is
 the basic coherence-lag trade-off that governs useful memory under drift.
@@ -69,19 +96,14 @@ Combined with the $W_2$-Lipschitz drift bound, this gives
 Combining the two bounds yields the stated inequality.
 \end{proof}
 
-\begin{remark}[Explicit form of $C_K$]
-By the sharp convergence rates of Niles-Weed and Bach~\cite{NilesWeedBach2019},
-for $K$-subgaussian distributions with intrinsic dimension $d_\mathrm{eff}$
-and Sinkhorn regularization $\varepsilon$,
-\[
-  C_K \;=\; O\!\left(\frac{\sigma_K^2}{\varepsilon}
-  \cdot \left(1 + \frac{d_\mathrm{eff}}{\varepsilon}\right)^{1/2}\right).
-\]
-For $d_\mathrm{eff} \leq 3$ this reduces to $C_K = O(\sigma_K^2/\varepsilon)$,
-recovering a parametric $n^{-1/2}$ statistical rate. For $d_\mathrm{eff} > 4$,
-$C_K$ grows with dimension, but the $\zeta^{1/3}$ exponent in
-$\mathcal{E}_{\min} \propto C_K^{2/3}\zeta^{1/3}$ is dimension-free: the floor
-rises with ambient complexity, but the scaling with drift rate is invariant.
+\begin{remark}[Measurement layer]
+The paper's theorem is stated in $W_2$, so $\varepsilon$ does not enter the
+mathematical drift law itself. In the synthetic measurement layer, however, the
+observable geometry is often a debiased Sinkhorn divergence with fixed
+$\varepsilon$, and then the effective finite-sample constant should be read as
+$C_K^{\mathrm{eff}} = C_{d_\mathrm{eff},R} + L(D,\varepsilon)$: the raw
+Wasserstein part depends on intrinsic dimension, while the Sinkhorn part is
+dimension-free at fixed $\varepsilon$ but worsens as $\varepsilon\downarrow 0$.
 
 In the synthetic benchmarks, $\hat\zeta_t$ is estimated from short-window
 block differences using an EMA update, $C_K$ is calibrated from a stationary

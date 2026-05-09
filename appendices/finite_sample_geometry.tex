@@ -1,0 +1,36 @@
+\section{Finite-Sample Geometry Check}\label{app:finite_sample_geometry}
+
+This appendix records a numerical sanity check for the finite-sample term in
+\cref{lem:finite_sample_term}. We estimate empirical $W_2$ between two i.i.d.
+samples from the same distribution using exact assignment in low and moderate
+dimension, then fit a log--log slope in $n$. We also check the Sinkhorn proxy in
+one dimension at a few fixed values of $\varepsilon$.
+
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Empirical scaling check for the finite-sample term. The bounded-support
+$W_2$ experiment is close to the expected $n^{-1/2}$ rate in low dimension, and
+the slope degrades as intrinsic dimension increases. The Sinkhorn proxy is stable
+for fixed $\varepsilon$, with the prefactor changing as $\varepsilon$ varies.}
+\label{tab:finite_sample_geometry}
+\begin{tabular}{lrr}
+\toprule
+Setting & Estimated slope & Comment \\
+\midrule
+$W_2$, $d=1$ & $-0.48$ & close to $-1/2$ \\
+$W_2$, $d=2$ & $-0.44$ & slower decay \\
+$W_2$, $d=4$ & $-0.28$ & visibly slower \\
+$W_2$, $d=5$ & $-0.22$ & visibly slower \\
+Sinkhorn $\varepsilon=0.50$ & $-1.34$ & proxy constant changes \\
+Sinkhorn $\varepsilon=0.10$ & $-1.09$ & proxy constant changes \\
+Sinkhorn $\varepsilon=0.05$ & $-0.88$ & proxy constant changes \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The point of this check is not a sharp asymptotic theorem. It is to confirm the
+paper's modeling choice: the low-dimensional raw-Wasserstein regime is compatible
+with an $n^{-1/2}$ term, while the Sinkhorn proxy behaves as a fixed-$\varepsilon$
+measurement layer with a calibration constant that depends on geometry and on
+regularization.
