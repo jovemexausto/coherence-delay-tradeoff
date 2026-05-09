@@ -81,7 +81,7 @@ Consequently, the cube-root horizon is not merely the optimum of one estimator;
 it is the structural floor of finite memory on this drift class.
 \end{proposition}
 
-\begin{proof}[Proof sketch]
+\paragraph{Proof sketch.}
 The lower bound combines a finite-sample concentration term with a lag term
 induced by the Lipschitz drift of the oracle trajectory. The concentration part
 is inherited from debiased Sinkhorn estimation, while the lag term follows from
@@ -89,7 +89,6 @@ the fact that any estimator restricted to the last $m$ samples must average over
 observations whose oracle law has moved by order $\zeta m$. The two terms are
 additive at the level of the bound, so the same cube-root balance governs the
 critical regime.
-\end{proof}
 
 \begin{remark}[Measurement layer]
 Debiased Sinkhorn divergence serves as a practical measurement layer when the

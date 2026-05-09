@@ -7,7 +7,12 @@ import numpy as np
 
 from ..core.common import rolling_mean
 from .model import CubeRootADWINBenchmarkResult
-from .reports import build_delay_rows, build_frontier_rows
+from .reports import (
+    build_delay_rows,
+    build_frontier_rows,
+    build_horizon_instability_rows,
+    build_horizon_gap_curve_rows,
+)
 
 
 def save_benchmark_figure(
@@ -219,6 +224,168 @@ def save_delay_figure(
     axes[1].grid(alpha=0.2, linewidth=0.5)
     axes[1].set_xscale("log")
 
+    fig.tight_layout()
+    fig.savefig(output_path, bbox_inches="tight")
+    plt.close(fig)
+
+
+def save_horizon_instability_figure(
+    result: CubeRootADWINBenchmarkResult, output_path: Path
+) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    rep = result.representative
+    rows = build_horizon_instability_rows(result)
+    time = np.asarray([int(row["time"]) for row in rows])
+    drift = np.asarray([float(row["drift"]) for row in rows])
+    oracle_horizon = np.asarray([float(row["oracle_horizon"]) for row in rows])
+    fixed_100 = np.asarray([float(row["fixed_100"]) for row in rows])
+    fixed_200 = np.asarray([float(row["fixed_200"]) for row in rows])
+    adwin_width = np.asarray([float(row["adwin_width"]) for row in rows])
+    cube_n_star = np.asarray([float(row["cube_n_star"]) for row in rows])
+    cube_width = np.asarray([float(row["cube_width"]) for row in rows])
+    fixed_100_regret = np.asarray([float(row["fixed_100_regret"]) for row in rows])
+    fixed_200_regret = np.asarray([float(row["fixed_200_regret"]) for row in rows])
+    adwin_regret = np.asarray([float(row["adwin_regret"]) for row in rows])
+    cube_regret = np.asarray([float(row["cube_regret"]) for row in rows])
+    oracle_delta = np.asarray([float(row["oracle_horizon_delta"]) for row in rows])
+
+    fig, axes = plt.subplots(3, 1, figsize=(11.0, 9.0), sharex=True)
+
+    axes[0].plot(time, drift, color="tab:purple", linewidth=2.0)
+    axes[0].set_ylabel("Drift rate")
+    axes[0].set_title("Alternating timescales and horizon instability")
+    axes[0].grid(alpha=0.2, linewidth=0.5)
+
+    axes[1].plot(time, oracle_horizon, color="black", linewidth=2.2, label="oracle")
+    axes[1].plot(time, fixed_100, color="tab:gray", linewidth=1.5, label="fixed-100")
+    axes[1].plot(time, fixed_200, color="tab:brown", linewidth=1.5, label="fixed-200")
+    axes[1].plot(time, adwin_width, color="tab:orange", linewidth=1.4, label="ADWIN")
+    axes[1].plot(
+        time, cube_n_star, color="tab:green", linewidth=1.8, label="CubeRoot n*"
+    )
+    axes[1].plot(
+        time,
+        cube_width,
+        color="tab:green",
+        linestyle="--",
+        linewidth=1.0,
+        alpha=0.8,
+        label="CubeRoot width",
+    )
+    axes[1].set_ylabel("Horizon")
+    axes[1].legend(loc="upper right", frameon=False, ncols=2)
+    axes[1].grid(alpha=0.2, linewidth=0.5)
+
+    axes[2].plot(
+        time, fixed_100_regret, color="tab:gray", linewidth=1.5, label="fixed-100"
+    )
+    axes[2].plot(
+        time, fixed_200_regret, color="tab:brown", linewidth=1.5, label="fixed-200"
+    )
+    axes[2].plot(time, adwin_regret, color="tab:orange", linewidth=1.4, label="ADWIN")
+    axes[2].plot(time, cube_regret, color="tab:green", linewidth=2.0, label="CubeRoot")
+    axes[2].set_ylabel("|n_t - n_t^*|")
+    axes[2].grid(alpha=0.2, linewidth=0.5)
+    axes[2].legend(loc="upper right", frameon=False, ncols=3)
+
+    regret_axis = axes[2].twinx()
+    regret_axis.plot(
+        time,
+        oracle_delta,
+        color="black",
+        linestyle=":",
+        linewidth=1.2,
+        alpha=0.8,
+        label=r"|\Delta n_t^*|",
+    )
+    regret_axis.set_ylabel(r"|\Delta n_t^*|")
+    regret_axis.set_ylim(bottom=0)
+
+    for t in rep.cube_cap_triggered:
+        axes[2].axvline(t, color="tab:green", alpha=0.08, linewidth=0.8)
+    for t in rep.adwin_drift_detected:
+        axes[2].axvline(t, color="tab:blue", alpha=0.08, linewidth=0.8)
+    for t in rep.cube_drift_detected:
+        axes[2].axvline(t, color="tab:orange", alpha=0.08, linewidth=0.8)
+
+    axes[2].set_xlabel("Time step")
+    axes[2].text(0.01, 0.83, "green=cube cap", transform=axes[2].transAxes)
+    axes[2].text(0.01, 0.71, "blue=ADWIN drift", transform=axes[2].transAxes)
+    axes[2].text(0.01, 0.59, "orange=CubeRoot drift", transform=axes[2].transAxes)
+
+    fig.tight_layout()
+    fig.savefig(output_path, bbox_inches="tight")
+    plt.close(fig)
+
+
+def save_horizon_gap_figure(
+    result: CubeRootADWINBenchmarkResult, output_path: Path
+) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    rows = build_horizon_gap_curve_rows(result)
+    abs_rows = [row for row in rows if row["gap_kind"] == "absolute"]
+    rel_rows = [row for row in rows if row["gap_kind"] == "relative"]
+
+    colors = {
+        "fixed": "tab:gray",
+        "fixed_long": "tab:brown",
+        "ewma": "tab:blue",
+        "adwin": "tab:orange",
+        "cube": "tab:green",
+    }
+    labels = {
+        "fixed": "fixed-100",
+        "fixed_long": "fixed-500",
+        "ewma": "EWMA",
+        "adwin": "ADWIN",
+        "cube": "CubeRootADWIN",
+    }
+
+    def _plot_panel(axis, panel_rows, title, xlabel, log_x=False):
+        for method in ("fixed", "fixed_long", "ewma", "adwin", "cube"):
+            method_rows = [row for row in panel_rows if row["method"] == method]
+            if not method_rows:
+                continue
+            x = np.asarray([float(row["gap_center"]) for row in method_rows])
+            median = np.asarray(
+                [float(row["median_excess_error"]) for row in method_rows]
+            )
+            q10 = np.asarray([float(row["q10_excess_error"]) for row in method_rows])
+            q90 = np.asarray([float(row["q90_excess_error"]) for row in method_rows])
+            order = np.argsort(x)
+            x = x[order]
+            median = median[order]
+            q10 = q10[order]
+            q90 = q90[order]
+            axis.plot(
+                x, median, color=colors[method], linewidth=2.0, label=labels[method]
+            )
+            axis.fill_between(x, q10, q90, color=colors[method], alpha=0.12)
+
+        axis.axhline(0.0, color="black", linestyle="--", linewidth=1.0, alpha=0.6)
+        axis.set_title(title)
+        axis.set_xlabel(xlabel)
+        axis.grid(alpha=0.2, linewidth=0.5)
+        if log_x:
+            axis.set_xscale("log")
+
+    fig, axes = plt.subplots(1, 2, figsize=(12.0, 5.2), sharey=True)
+    _plot_panel(
+        axes[0],
+        abs_rows,
+        "Cost of absolute horizon misalignment",
+        r"$|n_t - n_t^*|$",
+        log_x=True,
+    )
+    _plot_panel(
+        axes[1],
+        rel_rows,
+        "Cost of relative horizon misalignment",
+        r"$|\log(n_t / n_t^*)|$",
+        log_x=False,
+    )
+    axes[0].set_ylabel("Excess error vs local oracle")
+    axes[1].legend(loc="upper left", frameon=False)
     fig.tight_layout()
     fig.savefig(output_path, bbox_inches="tight")
     plt.close(fig)

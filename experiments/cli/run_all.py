@@ -24,11 +24,16 @@ from ..gaussian import (
 from ..cuberoot_adwin.artifacts import save_benchmark_figure
 from ..cuberoot_adwin.artifacts import save_delay_figure
 from ..cuberoot_adwin.artifacts import save_frontier_figure
+from ..cuberoot_adwin.artifacts import save_horizon_gap_figure
+from ..cuberoot_adwin.artifacts import save_horizon_instability_figure
 from ..cuberoot_adwin.model import CubeRootADWINBenchmarkConfig, run_benchmark
 from ..cuberoot_adwin.reports import (
     build_event_rows,
     build_delay_rows,
     build_frontier_rows,
+    build_horizon_gap_curve_rows,
+    build_horizon_instability_rows,
+    build_horizon_transition_rows,
     build_oracle_phase_rows,
     build_phase_rows,
     build_summary_rows,
@@ -182,6 +187,31 @@ def main() -> None:
             drift_window=100,
         )
     )
+    piecewise_result = run_benchmark(
+        CubeRootADWINBenchmarkConfig(
+            seeds=tuple(range(args.seed, args.seed + 20)),
+            piecewise_drifts=(0.0005, 0.003, 0.001),
+            fixed_window=100,
+            fixed_long_window=500,
+            ewma_alpha=0.05,
+            adwin_delta=0.002,
+            Ck=1.0,
+            drift_window=100,
+        )
+    )
+    alternating_result = run_benchmark(
+        CubeRootADWINBenchmarkConfig(
+            piecewise_drifts=(0.0002, 0.0045, 0.00015, 0.007, 0.00025),
+            piecewise_lengths=(900, 140, 700, 70, 1190),
+            fixed_window=100,
+            fixed_long_window=200,
+            ewma_alpha=0.05,
+            adwin_delta=0.002,
+            Ck=1.0,
+            drift_window=100,
+            seeds=tuple(range(args.seed, args.seed + 20)),
+        )
+    )
     delay_results = [
         run_benchmark(
             CubeRootADWINBenchmarkConfig(
@@ -201,6 +231,10 @@ def main() -> None:
         cuberoot_result,
         harness.figure_path("cuberoot_adwin", "fig_cuberoot_adwin.pdf"),
     )
+    save_benchmark_figure(
+        piecewise_result,
+        harness.figure_path("cuberoot_adwin", "fig_cuberoot_adwin_piecewise.pdf"),
+    )
     save_frontier_figure(
         cuberoot_result,
         harness.figure_path("cuberoot_adwin", "fig_lag_variance_frontier.pdf"),
@@ -208,6 +242,14 @@ def main() -> None:
     save_delay_figure(
         delay_results,
         harness.figure_path("cuberoot_adwin", "fig_cap_vs_detection_delay.pdf"),
+    )
+    save_horizon_instability_figure(
+        alternating_result,
+        harness.figure_path("cuberoot_adwin", "fig_horizon_instability.pdf"),
+    )
+    save_horizon_gap_figure(
+        cuberoot_result,
+        harness.figure_path("cuberoot_adwin", "fig_horizon_gap_cost.pdf"),
     )
     harness.save_summary_csv(
         build_summary_rows(cuberoot_result),
@@ -225,6 +267,21 @@ def main() -> None:
         "cuberoot_adwin_delay.csv",
     )
     harness.save_summary_csv(
+        build_horizon_instability_rows(alternating_result),
+        "cuberoot_adwin",
+        "cuberoot_adwin_horizon_instability.csv",
+    )
+    harness.save_summary_csv(
+        build_horizon_transition_rows(alternating_result),
+        "cuberoot_adwin",
+        "cuberoot_adwin_horizon_transition_ablation.csv",
+    )
+    harness.save_summary_csv(
+        build_horizon_gap_curve_rows(cuberoot_result),
+        "cuberoot_adwin",
+        "cuberoot_adwin_horizon_gap_cost.csv",
+    )
+    harness.save_summary_csv(
         build_event_rows(cuberoot_result),
         "cuberoot_adwin",
         "cuberoot_adwin_events.csv",
@@ -238,6 +295,26 @@ def main() -> None:
         build_oracle_phase_rows(cuberoot_result),
         "cuberoot_adwin",
         "cuberoot_adwin_oracle_phases.csv",
+    )
+    harness.save_summary_csv(
+        build_summary_rows(piecewise_result),
+        "cuberoot_adwin",
+        "cuberoot_adwin_piecewise_summary.csv",
+    )
+    harness.save_summary_csv(
+        build_event_rows(piecewise_result),
+        "cuberoot_adwin",
+        "cuberoot_adwin_piecewise_events.csv",
+    )
+    harness.save_summary_csv(
+        build_phase_rows(piecewise_result),
+        "cuberoot_adwin",
+        "cuberoot_adwin_piecewise_phases.csv",
+    )
+    harness.save_summary_csv(
+        build_oracle_phase_rows(piecewise_result),
+        "cuberoot_adwin",
+        "cuberoot_adwin_piecewise_oracle_phases.csv",
     )
 
     bikes_result = run_bikes_experiments(BikesConfig())

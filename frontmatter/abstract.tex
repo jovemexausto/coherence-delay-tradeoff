@@ -18,15 +18,18 @@ finite-memory floor is structural rather than estimator-specific.
 
 The experiments follow the same pattern. Gaussian drift experiments produce the
 predicted `U`-curve, sliding-window and EWMA estimators recover the cube-root
-scaling closely, and dynamic-window illustrations show how the best memory
-horizon shifts with drift strength over time. A cube-root cap then turns the law
-into an operational horizon regulator, keeping the effective window near the
-oracle scale across drift regimes.
+scaling closely, and the drift-regime benchmarks show that the optimal horizon
+changes over time. A cube-root cap then turns the law into an operational
+horizon regulator, keeping the effective window near the oracle scale across
+drift regimes. A final gap-cost analysis shows that horizon misalignment induces
+nonlinear predictive cost, but that the transfer from misalignment to error is
+method-dependent and regime-dependent.
 
-The resulting picture is theorem-first and operational: under drift, optimal
-tracking requires memory that is neither too short nor too old. Viewed through
-an Age-of-Information lens, the law quantifies how much freshness a finite-memory
-learner can preserve while tracking a changing world.
+The resulting picture is theorem-first and operational: under drift, useful
+memory obeys a finite temporal horizon, and the predictive value of that horizon
+depends on the interaction between the drift geometry and the memory policy.
+Viewed through an Age-of-Information lens, the law quantifies how much freshness
+a finite-memory learner can preserve while tracking a changing world.
 
 \end{abstract}
 

@@ -33,11 +33,19 @@ evidence, and optimal tracking occurs at a memory horizon that balances noise
 against informational aging. In Age-of-Information terms, timeliness belongs to
 the estimation problem itself.
 
-The empirical section follows the same logic in three steps. Gaussian tracking
-experiments exhibit the predicted `U`-curve, ablations over drift strength show
-how the best window shifts with nonstationarity, and dynamic-window
-illustrations make the operational memory law visible when the local drift rate
-changes over time. Sinkhorn-based tracking scores serve as the practical
+The empirical story is more nuanced than a universal dominance claim. Some
+regimes reward a short fixed window as a strong operational compromise, even when
+the local oracle horizon moves over time; what the cube-root regulator adds is a
+way to track horizon validity, not a guarantee of lower error everywhere. The
+paper therefore separates horizon geometry, horizon tracking, and predictive
+payoff.
+
+The empirical section follows the same logic in four steps. Continuous-drift
+benchmarks show the `U`-curve and the gap between freshness and lag; the
+temporal-validity benchmark measures the delay between cap activation and drift
+detection; the alternating-timescales benchmark exposes horizon instability; and
+the gap-cost benchmark quantifies how horizon misalignment translates into
+predictive cost. Sinkhorn-based tracking scores serve as the practical
 measurement layer for this error surface, and the cube-root cap shows how the
 same law can be used as an online horizon regulator as well as a retrospective
 explanation.

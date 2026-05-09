@@ -13,7 +13,9 @@ class CubeRootADWINBenchmarkConfig:
     steps: int = 3000
     seeds: tuple[int, ...] = tuple(range(20))
     drift: float = 0.001
+    drift_acceleration: float = 0.0
     piecewise_drifts: tuple[float, ...] = ()
+    piecewise_lengths: tuple[int, ...] = ()
     observation_scale: float = 1.0
     process_scale: float = 0.0
     fixed_window: int = 100
@@ -42,6 +44,7 @@ class MethodSeries:
 class SeedTrace:
     latent_mean: np.ndarray
     observations: np.ndarray
+    drift_path: np.ndarray
     fixed_estimate: np.ndarray
     fixed_long_estimate: np.ndarray
     ewma_estimate: np.ndarray
@@ -97,18 +100,32 @@ def _simulate_stream(
     seed: int,
     steps: int,
     drift: float,
+    drift_acceleration: float,
     piecewise_drifts: tuple[float, ...],
+    piecewise_lengths: tuple[int, ...],
     process_scale: float,
     observation_scale: float,
-) -> tuple[np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     rng = np.random.default_rng(seed)
     latent = np.zeros(steps)
     obs = np.zeros(steps)
     if piecewise_drifts:
-        phase_edges = np.linspace(0, steps, len(piecewise_drifts) + 1, dtype=int)
+        if piecewise_lengths:
+            if len(piecewise_lengths) != len(piecewise_drifts):
+                raise ValueError("piecewise_lengths must match piecewise_drifts")
+            phase_edges = [0]
+            for length in piecewise_lengths:
+                phase_edges.append(min(steps, phase_edges[-1] + max(0, int(length))))
+            phase_edges[-1] = steps
+            phase_edges = np.asarray(phase_edges, dtype=int)
+        else:
+            phase_edges = np.linspace(0, steps, len(piecewise_drifts) + 1, dtype=int)
         drift_path = np.zeros(steps)
         for phase, phase_drift in enumerate(piecewise_drifts):
             drift_path[phase_edges[phase] : phase_edges[phase + 1]] = phase_drift
+    elif drift_acceleration != 0.0:
+        progress = np.linspace(0.0, 1.0, steps)
+        drift_path = drift + drift_acceleration * progress
     else:
         drift_path = np.full(steps, drift)
     for step in range(1, steps):
@@ -116,7 +133,7 @@ def _simulate_stream(
             latent[step - 1] + drift_path[step] + rng.normal(scale=process_scale)
         )
     obs = latent + rng.normal(scale=observation_scale, size=steps)
-    return latent, obs
+    return latent, obs, drift_path
 
 
 def _fixed_window_estimate(
@@ -326,11 +343,13 @@ def run_benchmark(
     cube_n_stars: list[np.ndarray] = []
 
     for seed in config.seeds:
-        latent, obs = _simulate_stream(
+        latent, obs, drift_path = _simulate_stream(
             seed=seed,
             steps=config.steps,
             drift=config.drift,
+            drift_acceleration=config.drift_acceleration,
             piecewise_drifts=config.piecewise_drifts,
+            piecewise_lengths=config.piecewise_lengths,
             process_scale=config.process_scale,
             observation_scale=config.observation_scale,
         )
@@ -375,6 +394,7 @@ def run_benchmark(
             SeedTrace(
                 latent_mean=latent,
                 observations=obs,
+                drift_path=drift_path,
                 fixed_estimate=fixed_estimate,
                 fixed_long_estimate=fixed_long_estimate,
                 ewma_estimate=ewma_estimate,

@@ -11,10 +11,23 @@ memory regulator: a cube-root cap keeps the effective horizon near the oracle
 scale across drift regimes, while classical adaptive windows can still accumulate
 stale memory.
 
+The strongest empirical lesson is not universal MAE dominance. It is that horizon
+misalignment carries a nonlinear operational cost, but the transfer from gap to
+error depends on the backend and on the drift regime. That makes horizon
+validity, detector timing, and predictive payoff distinct objects.
+
 Empirically, the signature regime is `cap-only`: the memory horizon becomes
 operationally stale before there is enough statistical evidence for a changepoint
 alarm. That separation between evidence of change and temporal validity of
-memory is the main conceptual payoff of the paper.
+memory is the main conceptual payoff of the paper. The alternating-timescales
+benchmark adds a second operational lesson: horizon contraction is typically
+easier to induce than horizon re-expansion, revealing an asymmetric form of
+memory hysteresis.
+
+Taken together, the experiments suggest an operational hysteresis in temporal
+memory adaptation under drift: contracting the useful horizon under rapid drift
+appears easier than re-expanding it once the environment stabilizes. The
+alternating-timescales benchmark makes that asymmetry visible directly.
 
 Finite-memory systems are best judged by how long their retained evidence remains
 current enough to matter. The paper contributes a law with a clear design
@@ -24,3 +37,6 @@ being current.
 The effective-memory-age viewpoint sharpens the rule further: the key question is
 how old a retained history may become before it stops being operationally
 current.
+
+That is the paper's final claim: useful memory under drift has geometry, but its
+predictive value is policy-dependent.

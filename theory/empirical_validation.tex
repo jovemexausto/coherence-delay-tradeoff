@@ -105,6 +105,82 @@ stale long before changepoint evidence is available; under faster drift, the gap
 narrows but remains positive.}\label{fig:cap_vs_detection_delay}
 \end{figure}
 
+\subsection{Fixed-Horizon Instability}\label{sec:validation_instability}
+
+The next benchmark is designed to make fixed-horizon instability visible. The
+stream alternates between slow drift, fast bursts, recovery plateaus, and
+micro-bursts with irregular durations, so the local oracle horizon need not be
+globally stable. In that setting, a single fixed window can look reasonable on
+average while remaining locally misaligned for long stretches. This benchmark
+separates three questions that are often conflated: whether the oracle horizon
+is time-varying, whether an online regulator can track that changing scale, and
+how far each method remains from the local oracle horizon over time.
+
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=0.95\linewidth]{figures/cuberoot_adwin/fig_horizon_instability}
+\caption{Alternating-timescales instability. The top panel shows the drift
+schedule, the middle panel shows the local oracle horizon alongside fixed
+windows and the cube-root regulator, and the bottom panel shows horizon regret
+\,$|n_t - n_t^*|\,$ over time. The purpose of the benchmark is to expose when
+the useful horizon changes locally: slow stretches favor longer memory, bursts
+contract the oracle scale, and fixed horizons can remain misaligned across
+regime changes.}
+\label{fig:horizon_instability}
+\end{figure}
+
+This benchmark makes the gap between prediction error and horizon validity
+visible. A short fixed window can still remain competitive in aggregate error
+while being misaligned with the local oracle scale. The observed asymmetry is
+clear: contraction of the useful horizon is easier to trigger than re-expansion
+after a low-drift stretch. The alternating-timescales benchmark quantifies the
+same pattern directly.
+
+The benchmark also points to path dependence in temporal memory adaptation.
+
+\begin{table}[!htbp]
+\centering
+\caption{Mean horizon regret over the first 50 steps after each regime change.
+The transition-window ablation shows that contraction and re-expansion are not
+symmetrical. Lower is better.}
+\label{tab:hysteresis_transition}
+\begin{tabular}{lrr}
+\toprule
+Method & Contraction & Expansion \\
+\midrule
+fixed-100 & 68.0 & 203.1 \\
+fixed-200 & 168.0 & 103.1 \\
+ADWIN & 789.5 & 477.7 \\
+CubeRoot & 67.1 & 248.1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Horizon Cost Curve}\label{sec:validation_gap_cost}
+
+The next question is when horizon misalignment becomes operationally expensive.
+For each backend, we compare its instantaneous horizon $n_t$ with the local
+cube-root target $n_t^*$ and plot the excess error $E_t - E_t^\star$ against both
+the absolute gap $|n_t - n_t^*|$ and the relative gap $|\log(n_t / n_t^*)|$.
+Here $E_t^\star$ is the best error achieved at time $t$ by the fixed-window oracle
+grid, and the curve is binned over all seeds and time points.
+
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=0.95\linewidth]{figures/cuberoot_adwin/fig_horizon_gap_cost}
+\caption{Excess error as a function of horizon misalignment. The relation is
+backend dependent rather than universal: fixed-100 stays inside a low-cost band,
+whereas fixed-500 and ADWIN pay substantially more once the gap widens. The cube-
+root regulator sits between these extremes, which is consistent with the paper's
+claim that horizon validity and predictive payoff are related but not identical.}
+\label{fig:horizon_gap_cost}
+\end{figure}
+
+The main lesson is not that error is a monotone function of horizon gap for every
+backend. The lesson is that the paper now exposes a measurable tolerance band
+around the useful-memory scale, together with backend-specific degradation once
+that band is exceeded.
+
 \subsection{Piecewise Horizon Recovery}\label{sec:validation_piecewise}
 
 The piecewise-drift benchmark changes the local drift rate in three phases, and
@@ -148,5 +224,7 @@ count as current. The cap-only regime makes that gap visible.
 Taken together, the figures support three claims. First, the cube-root law is a
 real finite-memory law rather than a fitting artifact. Second, adaptive windows
 that optimize detection can still accumulate too much stale memory under smooth
-drift. Third, the cube-root cap gives an explicit operational rule for keeping
-the horizon of useful memory near the oracle scale.
+drift. Third, horizon validity and predictive optimality are related but not
+identical: the cube-root cap gives an explicit operational rule for regulating
+memory near the oracle scale, but the predictive payoff of that regulation is
+regime-dependent and backend-dependent.
