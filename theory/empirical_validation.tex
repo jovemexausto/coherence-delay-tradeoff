@@ -20,6 +20,33 @@ by variance; for large windows, error is dominated by staleness. The empirical
 minimum follows the predicted cube-root scaling, and EWMA behaves as the natural
 finite-memory analogue rather than as a competing theory.
 
+To make the comparison statistically explicit, we also ran a paired bootstrap
+over the 20 synthetic seeds (50{,}000 resamples). Table~\ref{tab:bootstrap_tail_mae}
+reports the tail-MAE mean and 95\% interval for each method, together with the
+paired difference relative to ADWIN+$\,$UMR. The cube-cap remains better than
+ADWIN, EWMA, and the long fixed window on this benchmark, while the short fixed
+window remains the strongest baseline.
+
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Seed-wise bootstrap summary for the main synthetic benchmark. The first
+column block reports tail-MAE means with 95\% bootstrap intervals across the 20
+seeds; the second block reports paired differences versus ADWIN+$\,$UMR.}
+\label{tab:bootstrap_tail_mae}
+\begin{tabular}{lrr}
+\toprule
+Method & Tail MAE [95\% CI] & $\Delta$ vs cube [95\% CI] \\
+\midrule
+Fixed-100 & 0.0849 [0.0815, 0.0884] & $-0.0130$ [$-0.0144$, $-0.0115$] \\
+Fixed-500 & 0.2388 [0.2274, 0.2501] & $+0.1409$ [$+0.1319$, $+0.1504$] \\
+EWMA & 0.1292 [0.1263, 0.1319] & $+0.0313$ [$+0.0278$, $+0.0350$] \\
+ADWIN & 0.1757 [0.1662, 0.1853] & $+0.0779$ [$+0.0704$, $+0.0857$] \\
+ADWIN + UMR & 0.0978 [0.0942, 0.1016] & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.92\linewidth]{figures/fig_ucurve}

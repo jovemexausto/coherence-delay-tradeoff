@@ -3,7 +3,7 @@
 This is a historical execution plan for the standalone memory-horizon manuscript.
 Older plans tied to the hybrid masking paper are superseded.
 
-The manuscript identity is now locked as `Useful Memory Has a Horizon: A Cube-Root Law for Tracking Under Drift`.
+The manuscript identity is now locked as `Useful Memory Has a Horizon: Structural Limits of Drift Tracking`.
 
 ## Working Rule
 

@@ -3,7 +3,7 @@
 Historical note:
 
 - This document records the revision path that produced the current standalone drift paper.
-- The manuscript identity is now locked as `Useful Memory Has a Horizon: A Cube-Root Law for Tracking Under Drift`.
+- The manuscript identity is now locked as `Useful Memory Has a Horizon: Structural Limits of Drift Tracking`.
 
 ## Objective
 

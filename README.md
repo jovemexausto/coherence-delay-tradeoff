@@ -4,7 +4,7 @@
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20041349-blue.svg)](https://doi.org/10.5281/zenodo.20041349)
 [![License: CC BY 4.0 / Apache-2.0](https://img.shields.io/badge/License-CC%20BY%204.0%20%2F%20Apache--2.0-blue.svg)](LICENSE)
 
-**Useful Memory Has a Horizon: A Cube-Root Law for Tracking Under Drift**
+**Useful Memory Has a Horizon: Structural Limits of Drift Tracking**
 
 Tracking under drift is a race against obsolescence: you want enough memory to be precise, but not so much that retained evidence becomes temporally misaligned with the present.
 
@@ -33,7 +33,7 @@ If you cite the repository artifact, please use:
 
 ```bibtex
 @software{parreira2026useful_memory_horizon,
-  title = {Useful Memory Has a Horizon: A Cube-Root Law for Tracking Under Drift},
+  title = {Useful Memory Has a Horizon: Structural Limits of Drift Tracking},
   author = {Parreira, Vinicius},
   month = may,
   year = {2026},

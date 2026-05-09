@@ -3,7 +3,7 @@
 Historical note:
 
 - This report preserves an earlier review-response trail, including branches that are no longer central to the current manuscript.
-- The active paper is now the standalone drift paper `Useful Memory Has a Horizon: A Cube-Root Law for Tracking Under Drift`.
+- The active paper is now the standalone drift paper `Useful Memory Has a Horizon: Structural Limits of Drift Tracking`.
 
 ## Purpose
 

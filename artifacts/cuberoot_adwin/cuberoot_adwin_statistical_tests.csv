@@ -1,0 +1,10 @@
+kind,comparison,mean_tail_mae,std_tail_mae,ci_low,ci_high,p_value,mean_diff,diff_ci_low,diff_ci_high
+method,fixed,0.084892,0.008159,0.081466,0.088423,,,,
+method,fixed_long,0.238769,0.026911,0.22741,0.250129,,,,
+method,ewma,0.12915,0.006497,0.126342,0.131867,,,,
+method,adwin,0.175731,0.0225,0.166237,0.185335,,,,
+method,cube,0.09783,0.008668,0.094228,0.101578,,,,
+paired_vs_cube,fixed-cube,,,,,0.0,-0.012939,-0.014427,-0.011476
+paired_vs_cube,fixed_long-cube,,,,,0.0,0.140939,0.131886,0.150422
+paired_vs_cube,ewma-cube,,,,,0.0,0.03132,0.027819,0.034987
+paired_vs_cube,adwin-cube,,,,,0.0,0.077901,0.070362,0.085689

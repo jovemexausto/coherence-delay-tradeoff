@@ -1,6 +1,6 @@
 # Reproducibility
 
-This repository currently supports the manuscript titled *Useful Memory Has a Horizon: A Cube-Root Law for Tracking Under Drift*.
+This repository currently supports the manuscript titled *Useful Memory Has a Horizon: Structural Limits of Drift Tracking*.
 The active evidence bundle is the Gaussian law validation plus the `cuberoot_adwin` synthetic benchmark suite.
 
 ## Setup
