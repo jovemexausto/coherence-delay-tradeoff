@@ -8,7 +8,7 @@ authors:
     given-names: "Vinicius"
     email: "figueiredo@pm.me"
     orcid: "https://orcid.org/0009-0005-0201-9308"
-repository-code: "https://github.com/jovemexausto/coherence-delay-tradeoff"
+repository-code: "https://github.com/jovemexausto/useful-memory-horizon"
 abstract: "LaTeX source and experiment code for the preprint 'Useful Memory Has a Horizon: A Cube-Root Law for Tracking Under Drift'."
 doi: "10.5281/zenodo.20041349"
 date-released: "2026-05-09"
