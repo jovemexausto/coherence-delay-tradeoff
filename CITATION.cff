@@ -1,5 +1,6 @@
 cff-version: 1.2.0
-title: "The Coherence-Delay Trade-off in Tracking Under Drift: A Cube-Root Law for Finite-Memory Estimation"
+title: "Useful Memory Has a Horizon: A Cube-Root Law for Tracking Under Drift"
+version: "v2"
 message: "If you use this repository, please cite the title recorded below."
 type: software
 authors:
@@ -8,22 +9,24 @@ authors:
     email: "figueiredo@pm.me"
     orcid: "https://orcid.org/0009-0005-0201-9308"
 repository-code: "https://github.com/jovemexausto/coherence-delay-tradeoff"
-abstract: "LaTeX source and experiment code for the preprint 'The Coherence-Delay Trade-off in Tracking Under Drift: A Cube-Root Law for Finite-Memory Estimation'."
+abstract: "LaTeX source and experiment code for the preprint 'Useful Memory Has a Horizon: A Cube-Root Law for Tracking Under Drift'."
 doi: "10.5281/zenodo.20041349"
-date-released: "2026-05-05"
+date-released: "2026-05-09"
 keywords:
   - tracking under drift
-  - finite-memory estimation
+  - useful memory
+  - coherence lag
   - concept drift
-  - coherence diagnostics
-  - coercive masking
+  - temporal coherence
+  - adaptive memory
 preferred-citation:
   type: software
-  title: "The Coherence-Delay Trade-off in Tracking Under Drift: A Cube-Root Law for Finite-Memory Estimation"
+  title: "Useful Memory Has a Horizon: A Cube-Root Law for Tracking Under Drift"
   authors:
     - family-names: "Parreira"
       given-names: "Vinicius"
       orcid: "https://orcid.org/0009-0005-0201-9308"
+  version: "v2"
   year: 2026
   month: may
   doi: "10.5281/zenodo.20041349"
