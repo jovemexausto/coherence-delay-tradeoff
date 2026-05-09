@@ -43,15 +43,17 @@ closely related drift-aware weighting problem in Wasserstein distributionally
 robust optimization. Their result balances effective sample size against drift in
 the weighted empirical distribution. The present paper differs in object and
 goal: it asks when memory remains temporally valid, rather than how to optimize a
-robust weighting rule.
+robust weighting rule. The key distinction from drift detection is between when
+change becomes statistically detectable and when retained memory stops being
+operationally current.
 
-\paragraph{Freshness and timeliness.}
-The Age-of-Information literature gives a useful interpretive bridge: recent
-information is more timely, and timeliness carries a cost. That viewpoint fits
-the argument here, while AoI remains an interpretation rather than a modeling
-target.
-
-\paragraph{What is different here.}
-The result sits next to drift detection, but its organizing distinction is a
-different one: statistical evidence of change versus the horizon at which the
-retained memory remains current.
+\paragraph{Freshness and the Age of Information.}
+The Age-of-Information literature asks how old the last received update is and
+how update policies should balance communication cost against information
+staleness~\citep{KaulYatesGruteser2012,YatesEtAl2021AoI}. That question is posed
+for status signals transmitted over communication channels. The present paper
+answers the distributional analogue: when a target law evolves under
+$\mathsf{W}_2$ drift, useful memory has a finite horizon and that horizon obeys
+the cube-root law. The connection is interpretive rather than formal, but it
+suggests a natural extension: policies for refreshing a distributional estimate,
+not only a scalar status signal.
