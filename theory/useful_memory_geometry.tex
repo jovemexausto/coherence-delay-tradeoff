@@ -55,6 +55,14 @@ and its corresponding freshness score is the monotone transform
 $F(w) = 1/(1+A(w))$. For a uniform window, $A(w)=(n-1)/2$.
 \end{definition}
 
+\begin{definition}[Temporal Coherence]\label{def:temporal_coherence}
+For an estimator with effective age $A(w)$ and lag-inclusive error
+$\mathcal{E}(n)$, its \emph{temporal coherence} is the extent to which retained
+evidence remains aligned with the current distribution. Here, coherence is
+operationalized through the same lag-inclusive error that controls tracking:
+coherence decreases as age and lag increase.
+\end{definition}
+
 The quantity $A(w)$ gives a compact description of the temporal geometry of a
 finite-memory estimator. Short windows buy freshness at the cost of variance;
 long windows buy variance at the cost of age. The cube-root horizon marks the
