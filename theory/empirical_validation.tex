@@ -31,23 +31,19 @@ that underlies the rest of the paper.}\label{fig:ucurve}
 The U-curve becomes more informative when it is viewed as a frontier in horizon
 space. The next figure plots tail error against effective memory horizon for a
 fixed-window sweep and overlays the operating points of the main methods. The
-left side is variance-dominated, the right side is stale-memory dominated, and
-the knee marks the region where useful memory is best preserved.
-Read through the lens of effective memory age, the same curve says when older
-evidence stops buying accuracy.
-The frontier is asymmetric because the variance term decays sublinearly while the
-staleness term grows linearly. On the left, extra memory still buys a noticeable
-drop in noise; on the right, extra memory mainly adds age. The knee therefore
-appears sharper on the stale side than on the variance side.
+curve is asymmetric: on the left, extra memory still buys a visible reduction in
+noise; on the right, extra memory mainly adds age. The knee is where that trade
+stops paying off.
 
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.95\linewidth]{figures/cuberoot_adwin/fig_lag_variance_frontier}
 \caption{Lag--variance frontier for useful memory. The fixed-window sweep traces
 the empirical frontier: short horizons are noisy, long horizons are stale, and
-the knee marks the useful-memory optimum. The frontier is asymmetric because
-variance decays sublinearly while staleness grows linearly. ADWIN sits far to the
-stale side, whereas CubeRootADWIN lies close to the frontier knee.}\label{fig:lag_variance_frontier}
+the knee marks the useful-memory optimum. The frontier is asymmetric because the
+gain from more memory saturates while the cost of age keeps accumulating. ADWIN
+sits far to the stale side, whereas CubeRootADWIN lies close to the frontier
+knee.}\label{fig:lag_variance_frontier}
 \end{figure}
 
 \subsection{Over-Memory Under Continuous Drift}\label{sec:validation_continuous}
