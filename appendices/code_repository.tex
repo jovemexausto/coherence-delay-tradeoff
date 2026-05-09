@@ -3,12 +3,17 @@
 All implementations are publicly available in the project repository
 \citep{parreira2026useful_memory_horizon}.
 
+For reproducibility, the repository also includes a short numerical check for
+Proposition~2.8, Proposition~3.1, and Theorem~2.1 against the simulation code
+used in the paper.
+
 The repository contains:
 \begin{itemize}[noitemsep]
   \item \texttt{experiments/run.py} --- single entry point for all experiment domains;
   \item \texttt{experiments/gaussian/} and \texttt{experiments/particle/} --- core experiment logic;
   \item \texttt{experiments/bikes/}, \texttt{experiments/elec2/}, and \texttt{experiments/kuairand/} --- domain-specific benchmarks;
   \item \texttt{experiments/temporal_invalidity/} --- controlled downstream benchmark for cap-only classification cost;
+  \item \texttt{scripts/numerical\_validation.py} --- numerical checks for the main propositions;
   \item \texttt{REPRODUCIBILITY.md} --- setup and run instructions.
 \end{itemize}
 

@@ -272,7 +272,8 @@ $n_b$ and $n_s$.
 If clipping at $n_{\min}$ is active near the burst side, then contraction can only
 be faster. The observed asymmetry is therefore conservative: clipping weakens the
 theoretical barrier in the burst regime, but it cannot eliminate the longer slow-
-side recovery.
+side recovery. In streams with gradual bursts, the observed ratio can exceed the
+step-burst threshold because $\hat\zeta_{\mathrm{end}}$ does not reach $M$.
 \end{remark}
 
 \begin{table}[!htbp]
@@ -304,6 +305,9 @@ throughout the sweep and is higher at the larger $\alpha$ values.
 Appendix~\ref{app:zeta} then shows that this sensitivity can be reduced by an
 observable prefix-validation study for $(d,\alpha)$, which shifts the operating
 point of the regulator and helps interpret the sensitivity of the drift proxy.
+To keep the closed-form claims auditable, the repository also includes a short
+numerical check for Proposition~2.8, Proposition~3.1, and Theorem~2.1 against
+the simulation code used in the paper.
 
 \begin{figure}[!htbp]
 \centering
