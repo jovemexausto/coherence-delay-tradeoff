@@ -20,14 +20,14 @@ becomes stale.
 Classical smoothers such as EWMA, forgetting-factor RLS, and Kalman filtering all
 instantiate the same tension between variance reduction and responsiveness. What
 they often leave implicit is the temporal validity of the retained memory. The
-cube-root law makes that validity visible by turning the trade-off into an
-operational horizon selector.
+cube-root law makes that validity visible by turning the coherence-delay
+trade-off into an operational horizon selector.
 
 \paragraph{Freshness and timeliness.}
 The Age-of-Information literature gives a useful interpretive bridge: recent
 information is more timely, and timeliness carries a cost. That viewpoint fits
-the argument here well, while AoI remains an interpretation rather than a
-modeling target.
+the argument here, while AoI remains an interpretation rather than a modeling
+target.
 
 \paragraph{What is different here.}
 The result sits next to drift detection, but its organizing distinction is a

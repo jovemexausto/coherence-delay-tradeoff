@@ -1,0 +1,5 @@
+event,method,count,first_time
+drift_detected,adwin,4,799
+drift_detected,cube,0,
+cap_triggered,cube,1343,205
+cap_only,cube,1343,205

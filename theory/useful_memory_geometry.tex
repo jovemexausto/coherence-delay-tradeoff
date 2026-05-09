@@ -18,7 +18,7 @@ is the staleness cost induced by retaining old information.
 
 The two terms in \cref{def:lag_error} pull in opposite directions. Increasing
 $n$ reduces variance but raises the age of the retained evidence. That tension is
-the basic geometry of useful memory under drift.
+the basic coherence-delay trade-off that governs useful memory under drift.
 
 \begin{proposition}[Optimal Window Under Drift]\label{prop:coherence_delay}
 Under \cref{def:lag_error}, the error $\mathcal{E}(n)$ is minimised at
@@ -51,22 +51,43 @@ observations, with $\sum_j w_j = 1$. Its \emph{effective memory age} is
 \[
   A(w) \;=\; \sum_{j=0}^{n-1} j\,w_j,
 \]
-and its corresponding freshness score is the monotone transform
-$F(w) = 1/(1+A(w))$. For a uniform window, $A(w)=(n-1)/2$.
+and its corresponding freshness proxy is the monotone transform
+$F(w) = 1/(1+A(w))$. The role of $F(w)$ is purely geometric: it records how old
+the retained evidence is before any local drift scale is specified. For a
+uniform window, $A(w)=(n-1)/2$.
 \end{definition}
 
 \begin{definition}[Temporal Coherence]\label{def:temporal_coherence}
-For an estimator with effective age $A(w)$ and lag-inclusive error
-$\mathcal{E}(n)$, its \emph{temporal coherence} is the extent to which retained
-evidence remains aligned with the current distribution. Here, coherence is
-operationalized through the same lag-inclusive error that controls tracking:
-coherence decreases as age and lag increase.
+For an estimator with weights $w$ at time $t$, define its \emph{operational
+staleness}
+\[
+  S_t(w) \;=\; \sum_{j=0}^{n-1} w_j\,
+  W_2\!\left(\Pot^*(S,t-j),\Pot^*(S,t)\right).
+\]
+Its \emph{temporal coherence} is the inverse alignment score
+\[
+  C_t(w) \;=\; \frac{1}{1 + S_t(w)}.
+\]
+If the target path is locally $W_2$-Lipschitz at rate $\zeta_t$, in the sense
+that $W_2\!\left(\Pot^*(S,t-j),\Pot^*(S,t)\right) \leq \zeta_t j$ for the
+relevant lags, then
+\[
+  S_t(w) \;\leq\; \zeta_t A(w),
+  \qquad
+  C_t(w) \;\geq\; \frac{1}{1+\zeta_t A(w)}.
+\]
+In that sense, $F(w)$ is the rate-free freshness proxy, while $C_t(w)$ measures
+operational alignment with the current distribution.
 \end{definition}
 
 The quantity $A(w)$ gives a compact description of the temporal geometry of a
-finite-memory estimator. Short windows buy freshness at the cost of variance;
-long windows buy variance at the cost of age. The cube-root horizon marks the
-point where that exchange stops improving.
+finite-memory estimator. Short windows preserve temporal coherence at the cost
+of variance; long windows reduce variance at the cost of staleness. The
+cube-root horizon marks the point where that exchange stops improving. For a
+uniform window under
+approximately constant local drift, the induced staleness scales as
+$S_t(w)\approx \zeta(n-1)/2$, which is the same age term that appears in
+\cref{def:lag_error} up to constants.
 
 \begin{proposition}[Finite-Memory Floor]\label{prop:window_minimax}
 Let the target trajectory satisfy a $W_2$-Lipschitz drift bound with rate
@@ -86,9 +107,8 @@ The lower bound combines a finite-sample concentration term with a lag term
 induced by the Lipschitz drift of the oracle trajectory. The concentration part
 is inherited from debiased Sinkhorn estimation, while the lag term follows from
 the fact that any estimator restricted to the last $m$ samples must average over
-observations whose oracle law has moved by order $\zeta m$. The two terms are
-additive at the level of the bound, so the same cube-root balance governs the
-critical regime.
+observations whose oracle law has moved by order $\zeta m$. The terms add at the
+level of the bound, so the same cube-root balance governs the critical regime.
 
 \begin{remark}[Measurement layer]
 Debiased Sinkhorn divergence serves as a practical measurement layer when the

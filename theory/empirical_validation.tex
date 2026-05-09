@@ -1,12 +1,13 @@
 \section{Empirical Validation}\label{sec:validation}
 
 The experiments test a single claim: under continuous drift, memory must be
-regulated by temporal usefulness rather than by statistical evidence of abrupt
-change alone. The empirical story has three parts. First, the Gaussian sweep
-recovers the cube-root law itself. Second, continuous-drift benchmarks show that
-classical adaptive windows can keep too much stale memory. Third, the
-piecewise-drift benchmark shows that a cube-root cap can recover the local
-oracle horizon across regimes.
+regulated by temporal validity rather than by statistical evidence of abrupt
+change alone. Empirically, the paper separates three layers that are often
+collapsed: horizon geometry, horizon tracking, and predictive payoff. The
+Gaussian sweep and lag--variance frontier validate geometry. The
+continuous-drift, temporal-validity, and alternating-timescales benchmarks probe
+tracking. The horizon cost curve assesses predictive payoff. A compact piecewise
+benchmark is retained only as a phase-wise calibration check.
 
 \subsection{Law Validation}\label{sec:validation_law}
 
@@ -28,12 +29,12 @@ that underlies the rest of the paper.}\label{fig:ucurve}
 
 \subsection{Lag--Variance Frontier}\label{sec:validation_frontier}
 
-The U-curve becomes more informative when it is viewed as a frontier in horizon
-space. The next figure plots tail error against effective memory horizon for a
+The U-curve becomes more informative when viewed as a frontier in horizon space.
+The next figure plots tail error against effective memory horizon for a
 fixed-window sweep and overlays the operating points of the main methods. The
-curve is asymmetric: on the left, extra memory still buys a visible reduction in
-noise; on the right, extra memory mainly adds age. The knee is where that trade
-stops paying off.
+curve is asymmetric: on the left, extra memory still buys visible noise
+reduction; on the right, extra memory mainly adds age. The knee is where that
+trade stops paying off.
 
 \begin{figure}[!htbp]
 \centering
@@ -50,13 +51,13 @@ knee.}\label{fig:lag_variance_frontier}
 
 The next benchmark focuses on the operational failure mode. We compare five
 methods on a smooth drifting stream: a short fixed window, a long fixed window,
-EWMA, ADWIN, and the cube-root capped variant. The comparison asks when memory
-becomes stale before classical changepoint evidence accumulates.
+EWMA, ADWIN, and the cube-root capped variant. The question is when memory
+becomes stale before changepoint evidence accumulates.
 
 \begin{table}[!htbp]
 \centering
 \caption{Continuous-drift benchmark under a smooth drift rate. The key gap is
-between statistical evidence and operational freshness: ADWIN keeps a much wider
+between statistical evidence and temporal validity: ADWIN keeps a much wider
 window than the cube-root regulator, while the long fixed window collapses under
 lag.}
 \label{tab:continuous_benchmark}
@@ -83,9 +84,9 @@ pulls the effective horizon toward the useful-memory scale and exposes a
 changepoint evidence appears.}\label{fig:cuberoot_adwin}
 \end{figure}
 
-The important phenomenon here is the separation between cap activation and the
-Hoeffding test. The cap can activate while the test remains silent, which keeps
-memory validity distinct from the evidence threshold for abrupt change.
+The key phenomenon is the separation between cap activation and the Hoeffding
+test. The cap can activate while the test remains silent, which makes memory
+validity distinct from the evidence threshold for abrupt change.
 
 \subsection{Temporal Validity Gap}\label{sec:validation_delay}
 
@@ -107,7 +108,7 @@ narrows but remains positive.}\label{fig:cap_vs_detection_delay}
 
 \subsection{Fixed-Horizon Instability}\label{sec:validation_instability}
 
-The next benchmark is designed to make fixed-horizon instability visible. The
+The next benchmark makes fixed-horizon instability visible. The
 stream alternates between slow drift, fast bursts, recovery plateaus, and
 micro-bursts with irregular durations, so the local oracle horizon need not be
 globally stable. In that setting, a single fixed window can look reasonable on
@@ -125,18 +126,16 @@ windows and the cube-root regulator, and the bottom panel shows horizon regret
 \,$|n_t - n_t^*|\,$ over time. The purpose of the benchmark is to expose when
 the useful horizon changes locally: slow stretches favor longer memory, bursts
 contract the oracle scale, and fixed horizons can remain misaligned across
-regime changes.}
+regime changes. The figure makes the temporal-validity problem visible
+directly.}
 \label{fig:horizon_instability}
 \end{figure}
 
-This benchmark makes the gap between prediction error and horizon validity
-visible. A short fixed window can still remain competitive in aggregate error
-while being misaligned with the local oracle scale. The observed asymmetry is
-clear: contraction of the useful horizon is easier to trigger than re-expansion
-after a low-drift stretch. The alternating-timescales benchmark quantifies the
-same pattern directly.
-
-The benchmark also points to path dependence in temporal memory adaptation.
+This benchmark makes two things visible. First, horizon validity can vary even
+when aggregate prediction error stays competitive. Second, the adjustment is
+asymmetric: contraction of the useful horizon is easier to trigger than
+re-expansion after a low-drift stretch. The pattern is operational evidence of
+path dependence in temporal memory adaptation.
 
 \begin{table}[!htbp]
 \centering
@@ -171,60 +170,28 @@ grid, and the curve is binned over all seeds and time points.
 \caption{Excess error as a function of horizon misalignment. The relation is
 backend dependent rather than universal: fixed-100 stays inside a low-cost band,
 whereas fixed-500 and ADWIN pay substantially more once the gap widens. The cube-
-root regulator sits between these extremes, which is consistent with the paper's
-claim that horizon validity and predictive payoff are related but not identical.}
+root regulator sits between these extremes.}
 \label{fig:horizon_gap_cost}
 \end{figure}
 
-The main lesson is not that error is a monotone function of horizon gap for every
-backend. The lesson is that the paper now exposes a measurable tolerance band
-around the useful-memory scale, together with backend-specific degradation once
-that band is exceeded.
+The main lesson is that the paper exposes a measurable tolerance band around the
+useful-memory scale, together with backend-specific degradation once that band
+is exceeded.
 
-\subsection{Piecewise Horizon Recovery}\label{sec:validation_piecewise}
+\subsection{Phase-Wise Recovery Check}\label{sec:validation_piecewise}
 
 The piecewise-drift benchmark changes the local drift rate in three phases, and
 the adaptive horizon is compared with the offline oracle fixed window for each
 phase. The calibration is held fixed across phases; only the stream changes.
-
-\begin{table}[!htbp]
-\centering
-\caption{Oracle horizon recovery on piecewise drift. The same calibrated cap
-tracks the oracle scale across regimes: it is close in the fast-drift phase and
-remains within the right order of magnitude in the smoother phases.}
-\label{tab:piecewise_oracle}
-\begin{tabular}{lrrrr}
-\toprule
-Drift & Oracle window & Cube $n^*$ & Oracle MAE & Cube MAE \\
-\midrule
-$0.0005$ & 200 & 191.2 & 0.0741 & 0.0874 \\
-$0.003$ & 50 & 58.1 & 0.1258 & 0.1381 \\
-$0.001$ & 100 & 89.7 & 0.0876 & 0.1033 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=0.95\linewidth]{figures/cuberoot_adwin/fig_cuberoot_adwin_piecewise}
-\caption{Piecewise-drift recovery. The same cube-root calibration follows the
-phase-dependent oracle window closely enough to preserve the right operational
-scale in each regime. The result is not a claim of universal superiority; it is
-evidence that the law can be turned into a usable horizon regulator.}
-\label{fig:cuberoot_adwin_piecewise}
-\end{figure}
-
-The central distinction is between statistical detection and temporal validity.
-Statistical detection asks whether there is enough evidence to declare a change.
-Temporal validity asks whether the memory being used is still fresh enough to
-count as current. The cap-only regime makes that gap visible.
+The detailed calibration check is reported in \cref{app:piecewise_recovery}. In
+the main text, the point is simply that one calibration remains in the right
+operational range when the drift regime changes discretely.
 
 \subsection{What the Figures Show}\label{sec:validation_summary}
 
 Taken together, the figures support three claims. First, the cube-root law is a
-real finite-memory law rather than a fitting artifact. Second, adaptive windows
-that optimize detection can still accumulate too much stale memory under smooth
-drift. Third, horizon validity and predictive optimality are related but not
-identical: the cube-root cap gives an explicit operational rule for regulating
-memory near the oracle scale, but the predictive payoff of that regulation is
-regime-dependent and backend-dependent.
+real geometric law for useful memory rather than a fitting artifact. Second,
+horizon tracking is distinct from changepoint detection: memory can become stale
+before statistical evidence is strong enough to declare a change. Third,
+horizon control has operational value, but its predictive payoff depends on the
+backend and on the drift regime.

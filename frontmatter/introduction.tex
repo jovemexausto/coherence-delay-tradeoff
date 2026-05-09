@@ -10,8 +10,9 @@ That question creates a structural trade-off. Using more past data reduces
 sampling noise, but it also increases the age of the information being used to
 track the present. Under drift, memory is simultaneously helpful and harmful:
 short windows are fresh but noisy, while long windows are stable but stale. The
-central claim of this paper is that this tension induces a quantitative law for
-finite-memory tracking under Wasserstein nonstationarity.
+central claim of this paper is that this tension defines a coherence-delay
+trade-off and induces a quantitative law for finite-memory tracking under
+Wasserstein nonstationarity.
 
 For the finite-memory averaging class analyzed here, the tracking error splits
 into a statistical term that decreases with memory length and a staleness term
@@ -28,30 +29,29 @@ rule.
 This viewpoint also gives the paper its interpretive layer. The limiting factor
 is the age of the information that finite memory forces the estimator to retain,
 alongside the usual finite-sample cost. The result can therefore be read as a
-freshness law: the learner pays for variance reduction by carrying older
-evidence, and optimal tracking occurs at a memory horizon that balances noise
-against informational aging. In Age-of-Information terms, timeliness belongs to
-the estimation problem itself.
+temporal-coherence law: the learner pays for variance reduction by carrying
+older evidence, and optimal tracking occurs at a memory horizon that balances
+statistical stability against operational staleness. In Age-of-
+Information terms, timeliness belongs to the estimation problem itself.
 
-The empirical story is more nuanced than a universal dominance claim. Some
-regimes reward a short fixed window as a strong operational compromise, even when
-the local oracle horizon moves over time; what the cube-root regulator adds is a
-way to track horizon validity, not a guarantee of lower error everywhere. The
-paper therefore separates horizon geometry, horizon tracking, and predictive
-payoff.
+The empirical story is more nuanced than a dominance claim. Some regimes reward
+a short fixed window as a strong operational compromise, even when the local
+oracle horizon moves over time; what the cube-root regulator adds is a way to
+track horizon validity, not a guarantee of lower error everywhere. The paper
+therefore separates horizon geometry, horizon tracking, and predictive payoff.
 
 The empirical section follows the same logic in four steps. Continuous-drift
-benchmarks show the `U`-curve and the gap between freshness and lag; the
-temporal-validity benchmark measures the delay between cap activation and drift
-detection; the alternating-timescales benchmark exposes horizon instability; and
-the gap-cost benchmark quantifies how horizon misalignment translates into
-predictive cost. Sinkhorn-based tracking scores serve as the practical
-measurement layer for this error surface, and the cube-root cap shows how the
-same law can be used as an online horizon regulator as well as a retrospective
-explanation.
+benchmarks recover the `U`-curve and expose the gap between temporal validity
+and detection. The temporal-validity benchmark measures the delay between cap
+activation and ADWIN detection, the alternating-timescales benchmark exposes
+horizon instability, and the gap-cost benchmark quantifies how misalignment
+translates into predictive cost. Sinkhorn-based tracking scores serve as the
+measurement layer, and the cube-root cap shows how the same law can act as an
+online regulator as well as a retrospective explanation.
 
 The scope of the paper is deliberately narrow. We study finite-memory tracking
 under drift, a lower bound for restricted estimators, and the associated
-freshness interpretation, together with experiments chosen to validate that
-story. The paper asks a single question: what tracking accuracy is possible when
-the learner's memory is finite and the target distribution keeps moving?
+temporal-coherence interpretation, together with experiments chosen to test that
+story.
+The paper asks a single question: what tracking accuracy is possible when the
+learner's memory is finite and the target distribution keeps moving?

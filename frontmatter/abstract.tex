@@ -1,10 +1,10 @@
 \begin{abstract}
 Finite-memory tracking under drift is governed by a coherence-delay trade-off:
-retaining more past information reduces statistical noise, but it also pushes
-the estimate further away from the present. As the target distribution moves,
-each additional sample becomes at once useful and increasingly old, so the
-problem is not simply how much to remember, but how long remembered evidence
-should remain operationally current.
+retaining more past information reduces statistical noise, but it also increases
+the temporal misalignment between retained evidence and the current
+distribution. As the target law moves, each additional sample becomes both
+useful and increasingly stale, so the problem is not simply how much to
+remember, but how long remembered evidence should remain operationally current.
 
 We study this trade-off under Wasserstein nonstationarity. For the finite-memory
 averaging class analyzed here, the tracking error splits into a statistical term
@@ -16,27 +16,29 @@ $\boldsymbol{\mathcal{E}_{\min} \asymp C_K^{2/3}\zeta^{1/3}}$. In the
 critical-window regime, we also prove a minimax lower bound, showing that this
 finite-memory floor is structural rather than estimator-specific.
 
-The experiments follow the same pattern. Gaussian drift experiments produce the
-predicted `U`-curve, sliding-window and EWMA estimators recover the cube-root
-scaling closely, and the drift-regime benchmarks show that the optimal horizon
-changes over time. A cube-root cap then turns the law into an operational
-horizon regulator, keeping the effective window near the oracle scale across
-drift regimes. A final gap-cost analysis shows that horizon misalignment induces
-nonlinear predictive cost, but that the transfer from misalignment to error is
-method-dependent and regime-dependent.
+The experiments separate three empirical layers: horizon geometry, horizon
+tracking, and predictive payoff. Gaussian drift experiments recover the
+predicted `U`-curve and the cube-root scaling. Continuous-drift benchmarks
+expose a temporal-validity gap: memory can become operationally stale before
+changepoint evidence is available. Alternating-timescales benchmarks show that
+the useful horizon moves locally and that contraction is easier than
+re-expansion. A final gap-cost analysis shows that horizon misalignment induces
+nonlinear predictive cost, while the transfer from misalignment to error remains
+method- and regime-dependent.
 
-The resulting picture is theorem-first and operational: under drift, useful
-memory obeys a finite temporal horizon, and the predictive value of that horizon
-depends on the interaction between the drift geometry and the memory policy.
-Viewed through an Age-of-Information lens, the law quantifies how much freshness
-a finite-memory learner can preserve while tracking a changing world.
+The resulting picture is theorem-first and operational: useful memory under
+drift has geometry, temporal coherence is not the same object as changepoint
+evidence, and the predictive value of horizon control depends on the interaction
+between drift geometry and memory policy. Viewed through an Age-of-Information
+lens, the law quantifies how much temporally coherent evidence a finite-memory
+learner can preserve while tracking a changing world.
 
 \end{abstract}
 
 \bigskip
 \noindent\textbf{Keywords:}
-tracking under drift; finite-memory estimation; Wasserstein distance;
-Sinkhorn divergence; concept drift; information freshness;
+tracking under drift; useful memory; temporal coherence;
+Wasserstein distance; Sinkhorn divergence; concept drift;
 Age of Information; adaptive memory.
 
 \noindent\textbf{MSC~2020:} 93D05, 93D30, 68P99.

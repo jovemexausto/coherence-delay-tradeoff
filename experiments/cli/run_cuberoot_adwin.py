@@ -1,4 +1,4 @@
-"""Synthetic benchmark for the cube-root ADWIN detector."""
+"""Synthetic benchmark suite for useful memory under drift."""
 
 from __future__ import annotations
 

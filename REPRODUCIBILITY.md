@@ -1,5 +1,8 @@
 # Reproducibility
 
+This repository currently supports the manuscript titled *The Coherence-Delay Trade-off: Temporal Geometry of Useful Memory Under Drift*.
+The active evidence bundle is the Gaussian law validation plus the `cuberoot_adwin` synthetic benchmark suite.
+
 ## Setup
 
 Prerequisites: `tectonic`, `uv`.
@@ -8,29 +11,33 @@ Prerequisites: `tectonic`, `uv`.
 uv sync
 ```
 
-## KuaiRand data
+## Active paper experiments
+
+```bash
+uv run python -m experiments.cli.run_gaussian
+uv run python -m experiments.cli.run_cuberoot_adwin
+```
+
+These commands regenerate the figures and CSV artifacts used by the current manuscript.
+
+## Full artifact refresh
+
+```bash
+uv run python -m experiments.cli.run_all
+```
+
+## Legacy / archival experiments
+
+Earlier masking, KuaiRand, Bikes, and ELEC2 pipelines remain in the repository as archival artifacts. They are not the central evidence bundle for the current paper.
+
+If you need the old KuaiRand data pipeline:
 
 ```bash
 ./scripts/fetch_kuairand.sh
 ```
 
-This populates `data/kuairand/KuaiRand-Pure/data`.
-
-## Experiments
-
-From `experiments/`:
-
-```bash
-uv run python run.py particle --experiment masking --output ../figures/particle/fig_particle_masking.pdf
-uv run python run.py gaussian --figures-dir ../figures/gaussian
-uv run python run.py bikes --figures-dir ../figures/bikes
-uv run python run.py elec2 --figures-dir ../figures/elec2
-uv run python run.py kuairand --figures-dir ../figures/kuairand
-uv run python run.py all
-```
-
 ## Manuscript
 
 ```bash
-tectonic main.tex
+tectonic --outdir . main.tex
 ```

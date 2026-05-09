@@ -1,0 +1,6 @@
+method,tail_mae_mean,tail_mae_std,tail_rmse_mean,tail_rmse_std,tail_width_mean,tail_width_std,event_count_mean,event_count_std,cap_count_mean,cap_only_count_mean,first_cap_time_mean,first_drift_time_mean,cap_before_drift_delay_mean
+fixed,0.0849,0.008,0.1055,0.0107,100.0,0.0,0.0,0.0,0.0,,,,
+fixed_long,0.2388,0.0262,0.2417,0.0254,500.0,0.0,0.0,0.0,0.0,,,,
+ewma,0.1291,0.0063,0.1614,0.0075,39.0,0.0,0.0,0.0,0.0,,,,
+adwin,0.1757,0.0219,0.2072,0.0228,335.78,30.74,3.9,0.3,0.0,,,696.6,
+cube,0.0978,0.0084,0.1206,0.01,88.88,5.24,0.0,0.0,1374.7,1374.7,207.2,,
