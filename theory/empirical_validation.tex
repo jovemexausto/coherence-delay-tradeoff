@@ -1,12 +1,12 @@
 \section{Empirical Validation}\label{sec:validation}
 
-The experiments are designed to validate the paper's central claim: under
-continuous drift, memory must be regulated by temporal usefulness rather than by
-statistical evidence of abrupt change alone. The empirical story has three
-parts. First, the Gaussian sweep recovers the cube-root law itself. Second,
-continuous-drift benchmarks show that classical adaptive windows can keep too
-much stale memory. Third, the piecewise-drift benchmark shows that a cube-root
-cap can recover the local oracle horizon across regimes.
+The experiments test a single claim: under continuous drift, memory must be
+regulated by temporal usefulness rather than by statistical evidence of abrupt
+change alone. The empirical story has three parts. First, the Gaussian sweep
+recovers the cube-root law itself. Second, continuous-drift benchmarks show that
+classical adaptive windows can keep too much stale memory. Third, the
+piecewise-drift benchmark shows that a cube-root cap can recover the local
+oracle horizon across regimes.
 
 \subsection{Law Validation}\label{sec:validation_law}
 
@@ -114,5 +114,4 @@ Taken together, the figures support three claims. First, the cube-root law is a
 real finite-memory law rather than a fitting artifact. Second, adaptive windows
 that optimize detection can still accumulate too much stale memory under smooth
 drift. Third, the cube-root cap gives an explicit operational rule for keeping
-the horizon of useful memory near the oracle scale. That is the paper's main
-empirical contribution.
+the horizon of useful memory near the oracle scale.

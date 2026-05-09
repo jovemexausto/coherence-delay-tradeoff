@@ -1,9 +1,9 @@
 \section{Useful Memory Geometry}\label{sec:memory_geometry}
 
-This section isolates the formal heart of the paper: under continuous drift,
-memory is not only a statistical resource but also a temporal liability. The
-core question is therefore not whether one can react to change, but how long a
-sample should remain operationally useful before it becomes stale.
+Under continuous drift, memory is not only a statistical resource but also a
+temporal liability. The core question is therefore not whether one can react to
+change, but how long a sample should remain operationally useful before it
+becomes stale.
 
 \begin{definition}[Lag-Inclusive Estimation Error]\label{def:lag_error}
 For a finite-memory estimator with effective window size $n$ and drift rate
@@ -17,8 +17,8 @@ is the staleness cost induced by retaining old information.
 \end{definition}
 
 The two terms in \cref{def:lag_error} pull in opposite directions. Increasing
-$n$ reduces variance but raises the age of the retained evidence. The resulting
-trade-off is the basic geometry that governs the paper.
+$n$ reduces variance but raises the age of the retained evidence. That tension is
+the basic geometry of useful memory under drift.
 
 \begin{proposition}[Optimal Window Under Drift]\label{prop:coherence_delay}
 Under \cref{def:lag_error}, the error $\mathcal{E}(n)$ is minimised at
@@ -69,8 +69,8 @@ critical regime.
 \end{proof}
 
 \begin{remark}[Measurement layer]
-The paper uses debiased Sinkhorn divergence as a practical measurement layer
-when the underlying geometry must be estimated from samples. That computational
-choice supports the tracking law, but the law itself is about the horizon of
-useful memory, not about any particular OT solver.
+Debiased Sinkhorn divergence serves as a practical measurement layer when the
+underlying geometry must be estimated from samples. That computational choice
+supports the tracking law, but the law itself is about the horizon of useful
+memory, not about any particular OT solver.
 \end{remark}
