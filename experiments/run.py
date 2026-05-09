@@ -9,6 +9,7 @@ COMMANDS = {
     "particle": "experiments.cli.run_particle",
     "gaussian": "experiments.cli.run_gaussian",
     "cuberoot_adwin": "experiments.cli.run_cuberoot_adwin",
+    "rajput": "experiments.cli.run_rajput",
     "bikes": "experiments.cli.run_bikes",
     "elec2": "experiments.cli.run_elec2",
     "kuairand": "experiments.cli.run_kuairand",

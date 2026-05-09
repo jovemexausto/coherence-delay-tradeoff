@@ -1,0 +1,128 @@
+\section{Backend $+$ UMR Protocol}\label{app:backend_umr_protocol}
+
+This appendix gives the concrete protocol used by the paper whenever a backend
+is paired with the useful-memory regulator (UMR). The code paths are:
+\texttt{drift/umr.py} for the drift proxy and horizon rule,
+\texttt{experiments/core/horizon\_baselines.py} for horizon-capped estimators,
+\texttt{experiments/core/detectors.py} for the ADWIN+$\,$UMR reset logic, and
+\texttt{experiments/core/umr\_arena.py} for the shared arena composition.
+
+\subsection{Shared Regulator}
+
+At each time step, the regulator maintains a local drift estimate and a target
+horizon:
+\[
+  \Delta_t = \frac{|\bar x_t^{(d)} - \bar x_{t-d}^{(d)}|}{d},
+  \qquad
+  \hat\zeta_t = \alpha\Delta_t + (1-\alpha)\hat\zeta_{t-1},
+\]
+\[
+  n_t^* = \operatorname{clip}\!\left(
+    \left(\frac{C_K}{\max(\hat\zeta_t,10^{-9})}\right)^{2/3},
+    n_{\min}, n_{\max}
+  \right).
+\]
+There is no explicit cooldown parameter. The only stabilization is clipping
+through $n_{\min}$ and $n_{\max}$, plus the EMA smoothing in $\hat\zeta_t$.
+
+\subsection{Horizon-Capped Backends}
+
+For estimators whose natural state is a window size or effective horizon
+(fixed-window mean, EWMA, Window-Dilemma-style switching, MELO-style expert
+mixing), the runtime horizon is simply clipped by the regulator:
+\[
+  h_t^{\mathrm{eff}} = \min(h_t^{\mathrm{backend}}, n_t^*).
+\]
+The backend then computes its estimate using $h_t^{\mathrm{eff}}$ exactly as it
+would have used $h_t^{\mathrm{backend}}$.
+
+\subsection{ADWIN $+$ UMR Event Logic}
+
+For the detector wrapper, the backend is ADWIN on a scalar signal. The regulated
+version maintains a rolling buffer of the last $n_{\max}$ observations and
+applies the following logic:
+
+\begin{enumerate}[leftmargin=1.5em]
+  \item Update the drift proxy and compute $n_t^*$.
+  \item Feed the new observation to ADWIN.
+  \item Read the current ADWIN width $w_t$.
+  \item If $w_t > n_t^*$, record a cap event, reset ADWIN, and re-feed the most
+  recent $n_t^*$ buffered observations to the fresh detector.
+  \item If the detector then reports drift, record a warning.
+\end{enumerate}
+
+The cap event is therefore a horizon event, not a detector event. The detector
+warning is still ADWIN's own decision after the reset path.
+
+\subsection{Hyperparameters}
+
+The paper uses three parameter families.
+
+\paragraph{Synthetic core suite.}
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Synthetic benchmark defaults used by \texttt{run\_cuberoot\_adwin.py}.}
+\label{tab:backend_umr_synth_defaults}
+\begin{tabular}{p{0.18\linewidth}p{0.74\linewidth}}
+\toprule
+Scenario & Default hyperparameters \\
+\midrule
+Constant & $\texttt{drift}=0.001$, $\texttt{fixed\_window}=100$, $\texttt{fixed\_long\_window}=500$, $\texttt{ewma\_alpha}=0.05$, $\texttt{adwin\_delta}=0.002$, $\texttt{Ck}=1.0$, $\texttt{drift\_window}=100$ \\
+Piecewise & $\texttt{piecewise\_drifts}=(0.0005,0.003,0.001)$ with the same window, EWMA, ADWIN, and $C_K$ settings as above \\
+Alternating & $\texttt{piecewise\_drifts}=(0.0002,0.0045,0.00015,0.007,0.00025)$, $\texttt{piecewise\_lengths}=(900,140,700,70,1190)$, $\texttt{fixed\_long\_window}=200$, and the same remaining defaults \\
+Common & $n_{\min}=10$, $n_{\max}=500$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Real-stream arenas.}
+The ELEC2 and Bikes arenas use the shared arena builder in
+\texttt{experiments/core/umr\_arena.py} with:
+\begin{itemize}
+  \item $\texttt{fixed\_window}=100$, $\texttt{fixed\_short\_window}=50$,
+  $\texttt{fixed\_long\_window}=300$;
+  \item $\texttt{ewma\_alpha}=0.05$;
+  \item $\texttt{block\_size}=24$, $\texttt{ema\_alpha}=0.03$;
+  \item $\texttt{min\_window}=30$, $\texttt{max\_window}=300$,
+  $\texttt{scale}=1.25$;
+  \item $\texttt{baseline\_window}=100$, $\texttt{prefix\_length}=2000$;
+  \item $\texttt{adwin\_delta}=0.03$;
+  \item Page-Hinkley event detector: $\delta=0.01$, threshold $84.0$,
+  $\alpha=0.9999$;
+  \item Window-Dilemma windows $(50,100,300)$ with quantiles $(0.33,0.67)$;
+  \item MELO-style expert windows $(30,50,100,200,300)$ with learning rate $6.0$
+  and discount $0.995$.
+\end{itemize}
+
+\paragraph{Drift-proxy calibration.}
+When $C_K$ is not fixed externally, the code estimates it from a stationary
+prefix via \texttt{calibrate\_umr\_constant}, i.e. standard deviation times the
+square root of prefix length. The drift-proxy appendix additionally reports the
+prefix-validated $(d,\alpha)$ sensitivity study, but that is a robustness study
+rather than a replacement for the fixed-regulator core.
+
+\subsection{Reproducibility Pseudocode}
+
+\begin{enumerate}[leftmargin=1.5em]
+  \item \textbf{Input:} stream $x_{1:T}$, backend $B$, prefix length $m$, block
+  size $d$, EMA coefficient $\alpha$, bounds $[n_{\min},n_{\max}]$, constant
+  $C_K$.
+  \item For each $t=1,\dots,T$:
+  \begin{enumerate}[leftmargin=1.2em]
+    \item Update $\Delta_t$ from the last two blocks of length $d$.
+    \item Update $\hat\zeta_t = \alpha\Delta_t + (1-\alpha)\hat\zeta_{t-1}$.
+    \item Compute
+    $n_t^* = \mathrm{clip}((C_K/\max(\hat\zeta_t,10^{-9}))^{2/3},n_{\min},n_{\max})$.
+    \item If $B$ is horizon-based, set the effective horizon to
+    $\min(h_t^{B},n_t^*)$ and evaluate the backend with that horizon.
+    \item If $B$ is ADWIN, update the detector; if its width exceeds $n_t^*$,
+    reset it and re-feed the last $n_t^*$ buffered observations; then record any
+    ADWIN warning.
+  \end{enumerate}
+  \item \textbf{Output:} backend estimate, warnings, $n_t^*$, drift proxy, and
+  cap events.
+\end{enumerate}
+
+The exact implementation details are in the source files listed at the top of
+this appendix.

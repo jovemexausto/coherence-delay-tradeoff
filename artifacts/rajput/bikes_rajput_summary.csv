@@ -1,0 +1,5 @@
+dataset,method,mae,rmse,calibration_proxy,best_single_buffer,mean_cap,cap_fraction,single_buffer_calibration_mae,single_buffer_alpha
+bikes,single,0.82116,1.002212,1.061857,1,167.87,0.484,0.567976,0.7071
+bikes,naive_ensemble,0.810908,0.99915,0.925812,1,167.87,0.484,0.567976,0.7071
+bikes,uq_ensemble,0.809134,0.997068,2.222534,1,167.87,0.484,0.567976,0.7071
+bikes,uq_ensemble_umr,0.809193,0.997156,2.139326,1,167.87,0.484,0.567976,0.7071

@@ -1,0 +1,5 @@
+dataset,method,mae,rmse,calibration_proxy,best_single_buffer,mean_cap,cap_fraction,single_buffer_calibration_mae,single_buffer_alpha
+elec2,single,0.756468,0.933185,0.728476,1,165.43,0.594,0.747349,0.8909
+elec2,naive_ensemble,0.768107,0.95066,0.711377,1,165.43,0.594,0.747349,0.8909
+elec2,uq_ensemble,0.76615,0.948661,1.665663,1,165.43,0.594,0.747349,0.8909
+elec2,uq_ensemble_umr,0.7648,0.946929,1.566183,1,165.43,0.594,0.747349,0.8909

@@ -43,15 +43,18 @@ for the Sinkhorn runtime figure, the debiased Sinkhorn estimator overestimates t
 true $W_2^2=0.25$ by an amount that is strongly dimension dependent and decreases
 with sample size only when $\varepsilon$ is not too small.
 
-For instance, in dimension $d=256$ the signed bias drops from about $0.460$ at
-$n=25,\,\varepsilon=1.0$ to about $0.073$ at $n=200,\,\varepsilon=1.0$, but it
-stays around $1.75$--$1.80$ for $\varepsilon=0.05$ across the same sample sizes.
+In the high-dimensional $d=256$ slice, the empirical bias is nearly flat in
+$n$ for $\varepsilon\in\{0.02,0.05,0.2\}$, whereas at $\varepsilon=1.0$ it decays
+noticeably with $n$ (roughly from $0.479$ at $n=25$ to $0.145$ at $n=100$). On
+the same slice, the implied cube-root horizon inflation is about $1.36\times$ to
+$4.24\times$ across the tested grid, with the smallest inflation occurring at
+large $\varepsilon$ and larger sample size.
+
 If the signed bias is propagated linearly into the horizon rule, then the induced
 calibration error scales as $n^*_{\mathrm{hat}}/n^* \approx (1+b)^{2/3}$ when
 the proxy overestimates the underlying $W_2^2$ by a factor $(1+b)$. Under this
-approximation, the high-dimensional $d=256$ shift gives an $n^*$ inflation of
-about $1.19\times$ at $n=200,\,\varepsilon=1.0$, but about $4.0\times$ at
-$n=200,\,\varepsilon=0.05$.
+approximation, the tested $d=256$ slice gives an $n^*$ inflation between about
+$1.36\times$ and $4.24\times$ over the sampled grid.
 
 \begin{table}[!htbp]
 \centering

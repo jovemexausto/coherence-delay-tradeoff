@@ -3,8 +3,10 @@
 \paragraph{Scope of the law.}
 The cube-root law is exact for the finite-memory averaging class analyzed in
 this paper, and the lower bound is stated for window-restricted estimators on a
-$W_2$-Lipschitz drift class. It captures a structural finite-memory phenomenon,
-though not a universal minimax theorem over all possible online estimators.
+$W_2$-Lipschitz drift class. The lower bound itself is proved through a Gaussian
+location subclass and endpoint $W_2$ error, so its structural claim is worst-case
+and subclass-based rather than a universal theorem over all possible online
+estimators.
 
 \paragraph{Dependence on local drift estimation.}
 The operational regulator depends on a local estimate of drift. The current
@@ -34,3 +36,9 @@ MELO-style multi-horizon hedge, but it is still not a full survey of adaptive
 tracking methods. The present paper remains centered on the cube-root law and on
 the temporal-validity interpretation of memory, rather than on an exhaustive
 aggregation benchmark zoo.
+
+On the current ELEC2 and Bikes arenas, adding UMR to the multi-horizon hedge,
+including the Rajput-style uncertainty-weighted analogue in Appendix~\ref{app:real_stream_arena},
+changes results only modestly and in a benchmark-dependent way; it is therefore
+best read as a horizon prior, not as a universal replacement for uncertainty
+weighting.

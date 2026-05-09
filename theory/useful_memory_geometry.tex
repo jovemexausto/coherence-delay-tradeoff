@@ -117,6 +117,14 @@ fixed manual setting.
 For the horizon constant itself, the prefix calibration is the simple stationary
 baseline used to estimate the scale in the synthetic stream; it is not a tuned
 oracle, but it is also not arbitrary.
+
+The Sinkhorn-to-$W_2$ gap is therefore treated as an empirical calibration
+constant. In the tested Gaussian shift sweep, the high-dimensional slice shows
+that this gap is nearly flat in sample size for small $\varepsilon$ and decays
+with $n$ only when $\varepsilon$ is large; the resulting horizon inflation in the
+sampled grid ranges from about $1.36\times$ to $4.24\times$. This supports the
+paper's use of fixed-$\varepsilon$ Sinkhorn as a measurement layer while keeping
+the theoretical law in $W_2$.
 \end{remark}
 
 \begin{corollary}[EWMA Analogue]\label{cor:ewma_cube_root}
@@ -171,19 +179,19 @@ approximately constant local drift, the induced staleness scales as
 $S_t(w)\approx \zeta(n-1)/2$, which is the same age term that appears in
 \cref{thm:lag_error} up to constants.
 
-\begin{proposition}[Finite-Memory Floor]\label{prop:window_minimax}
+\begin{proposition}[Finite-Memory Floor via Gaussian Location Subclass]\label{prop:window_minimax}
 Let $\mathcal P_{\zeta,m}$ be the class of length-$m$ distribution paths for
 which the following hold:
 \begin{enumerate}
   \item the path is $W_2$-Lipschitz with rate at most $\zeta$;
-  \item the proof is tested on the Gaussian location subclass
-  $X_t \sim \mathcal N(\mu_t,\sigma^2 I_d)$ with
+  \item the lower-bound construction is carried out on the Gaussian location
+  subclass $X_t \sim \mathcal N(\mu_t,\sigma^2 I_d)$ with
   $\|\mu_t-\mu_s\|_2 \le \zeta |t-s|$;
   \item the estimator at time $m$ only uses the last $m$ samples.
 \end{enumerate}
-Measure risk by the endpoint $W_2$ error (equivalently, Euclidean endpoint
-error in the Gaussian location subclass). Then, in the critical-window regime,
-the minimax tracking error over that class cannot beat the same
+Measure risk by the endpoint $W_2$ error, which coincides with Euclidean
+endpoint error in the Gaussian location subclass. Then, in the critical-window
+regime, the minimax tracking error over that class cannot beat the same
 variance-plus-staleness scaling:
 \[
   \inf_{\hat\Pot_m}\sup_{\Pot^*}\,\mathbb{E}\,d\bigl(\hat\Pot_m,\Pot^*\bigr)
@@ -294,11 +302,13 @@ $c = 3/64$.
 
 \begin{remark}[Scope of the lower bound]\label{rem:lower_bound_scope}
 The lower bound is parametric only in the testing construction: it uses a
-Gaussian location subclass whose mean path is itself $W_2$-Lipschitz. That is
-enough to make the result minimax for any larger class containing that subclass,
-including the paper's general $W_2$-Lipschitz path class. So the proposition is
-not claiming that every path is Gaussian; it is claiming that the worst case
-already appears inside the Gaussian mean-shift subproblem.
+Gaussian location subclass whose mean path is itself $W_2$-Lipschitz, and the
+distance in the lower bound is the endpoint $W_2$ error (Euclidean on that
+subclass). That is enough to make the result minimax for any larger class
+containing that subclass, including the paper's general $W_2$-Lipschitz path
+class. So the proposition is not claiming that every path is Gaussian; it is
+claiming that the worst case already appears inside the Gaussian mean-shift
+subproblem.
 \end{remark}
 
 \begin{remark}[Measurement layer]

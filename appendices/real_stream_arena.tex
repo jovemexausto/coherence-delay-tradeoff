@@ -48,3 +48,40 @@ The table shows the same mixed story across both streams: UMR can improve the
 temporal-validity side of the comparison, but the precision effect is backend-
 dependent and sometimes negative. That is why the full arena is supporting
 evidence rather than the core argument.
+
+\subsection{Rajput-style uncertainty-weighted horizon ensemble}
+We also implemented a faithful algorithmic analogue of the Rajput et al. setup
+using fixed random-feature Bayesian regressors trained on rolling windows of
+historical context. The ensemble combines horizon-specific learners with inverse
+variance weighting, and the UMR regulator enters as a horizon cap over the active
+buffers. This is not the exact DIII-D/DGPA stack from the paper, but it is the
+closest compatible benchmark available in this repository.
+
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Rajput-style public-stream analogue. MAE is reported on the held-out test
+segment after prequential calibration. UMR acts as a horizon cap inside the
+ensemble. The effect is small and benchmark-dependent.}
+\label{tab:rajput_ensemble}
+\begin{tabular}{llrr}
+\toprule
+Dataset & Method & MAE & Relative change vs single \\
+\midrule
+ELEC2 & Single horizon & 0.7565 & 0.0\% \\
+ELEC2 & Naive ensemble & 0.7681 & +1.5\% \\
+ELEC2 & UQ ensemble & 0.7662 & +1.3\% \\
+ELEC2 & UQ ensemble + UMR & 0.7648 & +1.1\% \\
+Bikes & Single horizon & 0.8212 & 0.0\% \\
+Bikes & Naive ensemble & 0.8109 & -1.3\% \\
+Bikes & UQ ensemble & 0.8091 & -1.5\% \\
+Bikes & UQ ensemble + UMR & 0.8092 & -1.5\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The takeaway is consistent with the main text: UMR is compatible with a
+multi-horizon uncertainty-weighted ensemble, but in this public-stream analogue
+it acts as a weak horizon prior rather than a dominant improvement. On ELEC2, the
+single best horizon remains best; on Bikes, uncertainty weighting helps slightly,
+and UMR changes the outcome only marginally.

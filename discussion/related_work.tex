@@ -7,10 +7,19 @@ is moving \citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,YuanLamperski2020,
 MazzettoUpfal2023}. The present paper keeps that question in distributional form
 and makes the memory horizon itself the main object of analysis.
 
+Uncertainty-aware multi-horizon ensembles attack the same practical issue from a
+different angle: they train learners on several historical windows and then use
+calibrated uncertainty to weight the horizon-specific predictions
+\citep{RajputSchramSammuliLin2025}. That framework is complementary to the
+present one. In our setting, the cube-root horizon can serve as a horizon prior
+or cap, but only within the same expert-mixing logic; the effect is
+benchmark-dependent and modest.
+
 \begin{remark}[Distinction from dynamic-regret analyses]
-The $\zeta^{1/3}$ exponent also appears in non-stationary stochastic
-optimization~\citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019} and online
-tracking with path variation~\citep{YuanLamperski2020}. Those results concern
+ The $\zeta^{1/3}$ exponent also appears in non-stationary stochastic
+ optimization~\citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019} and modern
+ variance-dependent non-stationary bandits~\citep{WangXieChenLuiZhou2024} and online
+ tracking with path variation~\citep{YuanLamperski2020}. Those results concern
 gradient-based methods on sequences of convex losses in Euclidean parameter
 space, where drift is measured by a variation budget on loss functions. The
 present law operates in a distinct setting: (i) drift is $\mathsf{W}_2$-Lipschitz
@@ -20,6 +29,12 @@ methods; (iii) Proposition~\ref{prop:window_minimax} establishes the
 $\zeta^{1/3}$ rate as a minimax lower bound for arbitrary window-restricted
 estimators, not only for averaging---an obstruction from finite memory itself,
 rather than from variation-budget constraints.
+
+Jiang, Li, and Zhang analyze online stochastic optimization with a Wasserstein-
+based nonstationarity measure and obtain distribution-aware regret guarantees
+\citep{JiangLiZhang2020}. Our paper takes that geometry as background and
+specializes the question to finite-memory tracking, where the core object is the
+usable horizon rather than policy regret.
 \end{remark}
 
 \paragraph{Transport geometry.}
@@ -60,6 +75,11 @@ do not replace the main claim of the paper, but they make the practical
 positioning sharper: the cube-root regulator is being compared not only to fixed
 windows and detectors, but also to explicit horizon-selection and expert-mixing
 alternatives.
+
+Appendix~\ref{app:real_stream_arena} further adds a Rajput-style uncertainty-
+weighted horizon ensemble analogue on the public streams. There, UMR functions as
+a horizon cap rather than a new weighting rule, and the observed effect remains
+small and benchmark-dependent.
 
 \paragraph{Freshness and the Age of Information.}
 The Age-of-Information literature asks how old the last received update is and

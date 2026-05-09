@@ -1,37 +1,32 @@
 \begin{abstract}
 Useful memory under drift has a finite horizon: retaining more past information
-reduces statistical noise, but it also increases the temporal misalignment
-between retained evidence and the current distribution. As the target law
-moves, each additional sample becomes both useful and increasingly stale, so the
-problem is not simply how much to remember, but how long remembered evidence
-should remain operationally current.
+reduces statistical noise, but also increases temporal misalignment with the
+current distribution. As the target law moves, each additional sample becomes
+useful and increasingly stale, so the problem is not simply how much to
+remember, but how long remembered evidence should remain operationally current.
 
-We study this trade-off under Wasserstein nonstationarity. For the finite-memory
-averaging class analyzed here, the tracking error splits into a statistical term
-that decreases with memory and a staleness term that grows with drift. Balancing
-those two forces yields a \textbf{cube-root law}: the \textbf{optimal memory
+We study this trade-off under Wasserstein nonstationarity. Cube-root scalings
+already appear in nonstationary optimization and bandit literature, but here the
+object is the finite-memory horizon itself. For the finite-memory averaging
+class analyzed here, the tracking error splits into a statistical term that
+decreases with memory and a staleness term that grows with drift, yielding a
+\textbf{cube-root law}: the \textbf{optimal memory
 horizon} scales as $\boldsymbol{n^* \asymp (C_K/\zeta)^{2/3}}$, while the
 corresponding \textbf{minimum tracking error} scales as
 $\boldsymbol{\mathcal{E}_{\min} \asymp C_K^{2/3}\zeta^{1/3}}$. In the
 critical-window regime, we also prove a minimax lower bound, showing that this
 finite-memory floor is structural rather than estimator-specific.
 
-The experiments separate three empirical layers: horizon geometry, horizon
-tracking, and predictive payoff. Gaussian drift experiments recover the
-predicted `U`-curve and the cube-root scaling. Continuous-drift benchmarks then
-expose a temporal-validity gap: memory can become operationally stale before
-changepoint evidence is available. Alternating-timescales benchmarks show that
-the useful horizon moves locally and that contraction is easier than
-re-expansion. Finally, a gap-cost analysis shows that horizon misalignment
-induces nonlinear predictive cost, while the transfer from misalignment to error
-remains method- and regime-dependent.
+Empirically, Gaussian drift experiments recover the predicted $U$-curve and
+cube-root scaling. Continuous-drift benchmarks expose a gap between temporal
+validity and changepoint evidence; alternating-timescales benchmarks show that
+contraction is easier than re-expansion; and gap-cost experiments show that
+horizon misalignment induces nonlinear predictive cost.
 
-The resulting picture is theorem-first and operational: useful memory under
-drift has geometry, temporal coherence is not the same object as changepoint
-evidence, and the predictive value of horizon control depends on the interaction
-between drift geometry and memory policy. The cube-root law quantifies how much
-temporally coherent evidence a finite-memory learner can preserve while tracking
-a changing world.
+The resulting picture is operational: useful memory under drift has geometry,
+temporal coherence is not the same object as changepoint evidence, and the
+predictive value of horizon control depends on the interaction between drift
+geometry and memory policy.
 
 \end{abstract}
 
