@@ -18,18 +18,13 @@ finite-memory floor is structural rather than estimator-specific.
 
 The experiments separate three empirical layers: horizon geometry, horizon
 tracking, and predictive payoff. Gaussian drift experiments recover the
-predicted `U`-curve and the cube-root scaling. Continuous-drift benchmarks
+predicted `U`-curve and the cube-root scaling. Continuous-drift benchmarks then
 expose a temporal-validity gap: memory can become operationally stale before
 changepoint evidence is available. Alternating-timescales benchmarks show that
 the useful horizon moves locally and that contraction is easier than
-re-expansion. A final gap-cost analysis shows that horizon misalignment induces
-nonlinear predictive cost, while the transfer from misalignment to error remains
-method- and regime-dependent.
-
-The alternating-timescales benchmark also yields a secondary formal result: an
-asymmetric horizon-recovery law, where contraction after bursts is faster than
-re-expansion after low-drift stretches once drift-to-horizon control is driven by
-an EMA-smoothed estimate.
+re-expansion. Finally, a gap-cost analysis shows that horizon misalignment
+induces nonlinear predictive cost, while the transfer from misalignment to error
+remains method- and regime-dependent.
 
 The resulting picture is theorem-first and operational: useful memory under
 drift has geometry, temporal coherence is not the same object as changepoint

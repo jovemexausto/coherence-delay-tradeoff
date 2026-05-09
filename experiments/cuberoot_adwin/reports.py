@@ -6,6 +6,17 @@ from ..core.types import SummaryRows
 from .model import UMRBenchmarkResult, _fixed_window_estimate
 
 
+def _display_method(method: str) -> str:
+    labels = {
+        "fixed": "fixed-100",
+        "fixed_long": "fixed-500",
+        "ewma": "EWMA",
+        "adwin": "ADWIN",
+        "cube": "ADWIN + UMR",
+    }
+    return labels.get(method, method)
+
+
 def _phase_edges(
     result: UMRBenchmarkResult,
 ) -> tuple[np.ndarray, tuple[float, ...]]:
@@ -27,7 +38,7 @@ def build_summary_rows(result: UMRBenchmarkResult) -> SummaryRows:
     for method, summary in result.summaries.items():
         rows.append(
             {
-                "method": method,
+                "method": _display_method(method),
                 "tail_mae_mean": round(summary.tail_mae_mean, 4),
                 "tail_mae_std": round(summary.tail_mae_std, 4),
                 "tail_rmse_mean": round(summary.tail_rmse_mean, 4),
@@ -61,7 +72,7 @@ def build_event_rows(result: UMRBenchmarkResult) -> SummaryRows:
     return [
         {
             "event": "drift_detected",
-            "method": "adwin",
+            "method": _display_method("adwin"),
             "count": len(representative.adwin_drift_detected),
             "first_time": representative.adwin_drift_detected[0]
             if representative.adwin_drift_detected
@@ -69,7 +80,7 @@ def build_event_rows(result: UMRBenchmarkResult) -> SummaryRows:
         },
         {
             "event": "drift_detected",
-            "method": "cube",
+            "method": _display_method("cube"),
             "count": len(representative.cube_drift_detected),
             "first_time": representative.cube_drift_detected[0]
             if representative.cube_drift_detected
@@ -77,7 +88,7 @@ def build_event_rows(result: UMRBenchmarkResult) -> SummaryRows:
         },
         {
             "event": "cap_triggered",
-            "method": "cube",
+            "method": _display_method("cube"),
             "count": len(representative.cube_cap_triggered),
             "first_time": representative.cube_cap_triggered[0]
             if representative.cube_cap_triggered
@@ -85,7 +96,7 @@ def build_event_rows(result: UMRBenchmarkResult) -> SummaryRows:
         },
         {
             "event": "cap_only",
-            "method": "cube",
+            "method": _display_method("cube"),
             "count": len(
                 set(representative.cube_cap_triggered)
                 - set(representative.cube_drift_detected)
@@ -116,7 +127,7 @@ def build_phase_rows(result: UMRBenchmarkResult) -> SummaryRows:
                     "start": start,
                     "stop": stop,
                     "drift": float(drift),
-                    "method": method,
+                    "method": _display_method(method),
                     "mean_abs_error": round(
                         float(np.mean(series.absolute_error_mean[start:stop])),
                         4,

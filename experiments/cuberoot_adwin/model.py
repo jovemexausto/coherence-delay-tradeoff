@@ -5,7 +5,9 @@ from dataclasses import dataclass
 import numpy as np
 from river import drift as river_drift
 
-from drift.cube_root_adwin import UMR, calibrate_Ck
+from drift.umr import calibrate_umr_constant
+
+from ..core.detectors import run_umr_drift_detector
 
 
 @dataclass(slots=True)
@@ -188,7 +190,15 @@ def _cube_root_estimate(
     n_min: int,
     n_max: int,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, list[int], list[int]]:
-    detector = UMR(
+    (
+        warnings,
+        width,
+        n_star,
+        _,
+        caps,
+        estimate,
+    ) = run_umr_drift_detector(
+        values,
         delta=delta,
         Ck=Ck,
         drift_window=drift_window,
@@ -196,20 +206,6 @@ def _cube_root_estimate(
         n_min=n_min,
         n_max=n_max,
     )
-    estimate = np.zeros(values.size)
-    width = np.zeros(values.size)
-    n_star = np.zeros(values.size)
-    warnings: list[int] = []
-    caps: list[int] = []
-    for index, value in enumerate(values):
-        detector.update(float(value))
-        estimate[index] = detector.mean
-        width[index] = float(detector.width)
-        n_star[index] = float(detector.n_star)
-        if detector.drift_detected:
-            warnings.append(index)
-        if detector.cap_triggered:
-            caps.append(index)
     return estimate, width, n_star, warnings, caps
 
 
@@ -356,7 +352,7 @@ def run_benchmark(
         Ck = (
             float(config.Ck)
             if config.Ck is not None
-            else calibrate_Ck(list(obs[: config.calibration_prefix]))
+            else calibrate_umr_constant(list(obs[: config.calibration_prefix]))
         )
         fixed_estimate, fixed_width = _fixed_window_estimate(obs, config.fixed_window)
         fixed_long_estimate, fixed_long_width = _fixed_window_estimate(

@@ -75,7 +75,7 @@ def export_summary_csv(rows: Sequence[SummaryRow], output_path: Path) -> None:
         return
     fieldnames = list(rows[0].keys())
     with output_path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 

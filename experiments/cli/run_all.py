@@ -6,14 +6,21 @@ import argparse
 from pathlib import Path
 from typing import cast
 
-from ..bikes.artifacts import save_bikes_figure
+from ..bikes.artifacts import (
+    save_bikes_figure,
+    save_umr_arena_figure as save_bikes_umr_arena_figure,
+)
 from ..bikes.model import BikesConfig, run_bikes_experiments
-from ..bikes.reports import build_bikes_rows
+from ..bikes.reports import build_bikes_arena_rows, build_bikes_rows
 from ..core.harness import ExperimentHarness
 from ..core.regime_map import save_regime_first_summary_figure
-from ..elec2.artifacts import save_dynamic_nstar_figure, save_elec2_figure
+from ..elec2.artifacts import (
+    save_dynamic_nstar_figure,
+    save_elec2_figure,
+    save_umr_arena_figure as save_elec2_umr_arena_figure,
+)
 from ..elec2.model import Elec2Config, run_elec2_experiments
-from ..elec2.reports import build_elec2_rows
+from ..elec2.reports import build_elec2_arena_rows, build_elec2_rows
 from ..gaussian import (
     GaussianConfig,
     run_gaussian_ablation,
@@ -201,19 +208,18 @@ def main() -> None:
             drift_window=100,
         )
     )
-    alternating_result = run_benchmark(
-        UMRBenchmarkConfig(
-            piecewise_drifts=(0.0002, 0.0045, 0.00015, 0.007, 0.00025),
-            piecewise_lengths=(900, 140, 700, 70, 1190),
-            fixed_window=100,
-            fixed_long_window=200,
-            ewma_alpha=0.05,
-            adwin_delta=0.002,
-            Ck=1.0,
-            drift_window=100,
-            seeds=tuple(range(args.seed, args.seed + 20)),
-        )
+    alternating_config = UMRBenchmarkConfig(
+        piecewise_drifts=(0.0002, 0.0045, 0.00015, 0.007, 0.00025),
+        piecewise_lengths=(900, 140, 700, 70, 1190),
+        fixed_window=100,
+        fixed_long_window=200,
+        ewma_alpha=0.05,
+        adwin_delta=0.002,
+        Ck=1.0,
+        drift_window=100,
+        seeds=tuple(range(args.seed, args.seed + 20)),
     )
+    alternating_result = run_benchmark(alternating_config)
     drift_ema_alphas = (0.01, 0.02, 0.05, 0.1, 0.2)
     drift_ema_results = [
         run_benchmark(
@@ -349,10 +355,18 @@ def main() -> None:
 
     bikes_result = run_bikes_experiments(BikesConfig())
     save_bikes_figure(bikes_result, harness.figure_path("bikes", "fig_bikes.pdf"))
+    save_bikes_umr_arena_figure(
+        bikes_result, harness.figure_path("bikes", "fig_umr_arena.pdf")
+    )
     harness.save_summary_csv(
         build_bikes_rows(bikes_result),
         "bikes",
         "bikes_summary.csv",
+    )
+    harness.save_summary_csv(
+        build_bikes_arena_rows(bikes_result),
+        "bikes",
+        "bikes_arena_summary.csv",
     )
 
     elec2_result = run_elec2_experiments(Elec2Config())
@@ -360,10 +374,18 @@ def main() -> None:
     save_dynamic_nstar_figure(
         elec2_result, harness.figure_path("elec2", "fig_dynamic_nstar.pdf")
     )
+    save_elec2_umr_arena_figure(
+        elec2_result, harness.figure_path("elec2", "fig_umr_arena.pdf")
+    )
     harness.save_summary_csv(
         build_elec2_rows(elec2_result),
         "elec2",
         "elec2_summary.csv",
+    )
+    harness.save_summary_csv(
+        build_elec2_arena_rows(elec2_result),
+        "elec2",
+        "elec2_arena_summary.csv",
     )
 
     try:

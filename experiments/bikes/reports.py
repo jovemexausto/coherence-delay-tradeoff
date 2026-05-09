@@ -6,6 +6,14 @@ from .model import BikesExperimentResult
 from ..core.types import DetectionSummaryLike
 
 
+ARENA_BASELINES: tuple[str, ...] = (
+    "ewma",
+    "window_dilemma",
+    "melo",
+    "adwin",
+)
+
+
 def summarize_detection(
     result: DetectionSummaryLike,
 ) -> dict[str, float]:
@@ -29,8 +37,12 @@ def build_bikes_rows(result: BikesExperimentResult) -> list[dict[str, float | st
         ("fixed_50", result.fixed_50),
         ("fixed_100", result.fixed_100),
         ("fixed_300", result.fixed_300),
-        ("dynamic", result.dynamic),
+        ("ewma", result.ewma),
+        ("umr", result.dynamic),
+        ("window_dilemma", result.window_dilemma),
+        ("melo", result.melo),
         ("adwin", result.adwin),
+        ("adwin_umr", result.adwin_umr),
         ("cusum", result.cusum),
         ("rls", result.rls),
         ("kalman", result.kalman),
@@ -50,4 +62,35 @@ def build_bikes_rows(result: BikesExperimentResult) -> list[dict[str, float | st
                 "max_lead": round(summary["max_lead"], 1),
             }
         )
+    return rows
+
+
+def build_bikes_arena_rows(
+    result: BikesExperimentResult,
+) -> list[dict[str, float | str]]:
+    rows: list[dict[str, float | str]] = []
+    for baseline in ARENA_BASELINES:
+        base_result = result.arena[baseline]
+        regulated_result = result.arena[f"{baseline}_umr"]
+        base_summary = summarize_detection(base_result)
+        regulated_summary = summarize_detection(regulated_result)
+        for condition, summary in (("base", base_summary), ("umr", regulated_summary)):
+            rows.append(
+                {
+                    "baseline": baseline,
+                    "condition": condition,
+                    "strategy": baseline if condition == "base" else f"{baseline}_umr",
+                    "warnings": int(summary["warnings"]),
+                    "leads": int(summary["leads"]),
+                    "precision": round(summary["precision"], 3),
+                    "median_lead": round(summary["median_lead"], 1),
+                    "mean_lead": round(summary["mean_lead"], 1),
+                    "delta_precision_vs_base": round(
+                        summary["precision"] - base_summary["precision"], 3
+                    ),
+                    "delta_median_lead_vs_base": round(
+                        summary["median_lead"] - base_summary["median_lead"], 1
+                    ),
+                }
+            )
     return rows

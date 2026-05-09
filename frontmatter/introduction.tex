@@ -41,13 +41,20 @@ track horizon validity, not a guarantee of lower error everywhere. The paper
 therefore separates horizon geometry, horizon tracking, and predictive payoff.
 
 The empirical section follows the same logic in four steps. Continuous-drift
-benchmarks recover the `U`-curve and expose the gap between temporal validity
-and detection. The temporal-validity benchmark measures the delay between cap
-activation and ADWIN detection, the alternating-timescales benchmark exposes
-horizon instability, and the gap-cost benchmark quantifies how misalignment
+experiments recover the `U`-curve and expose the gap between temporal validity
+and detection. The temporal-validity check measures the delay between cap
+activation and ADWIN detection, the alternating-timescales check exposes
+horizon instability, and the gap-cost analysis quantifies how misalignment
 translates into predictive cost. Sinkhorn-based tracking scores serve as the
 measurement layer, and the cube-root cap shows how the same law can act as an
 online regulator as well as a retrospective explanation.
+
+The theoretical results are stated in $W_2$; the Sinkhorn divergence is the
+computational realization used in the synthetic measurement layer.
+
+We also keep one representative public-stream case study in the main text,
+ELEC2, and move the full ELEC2/Bikes arena to Appendix~\cref{app:real_stream_arena}
+as a robustness check rather than a leaderboard.
 
 Within that last benchmark, we also isolate a secondary formal effect: an
 asymmetric horizon-recovery law for EMA-smoothed drift-to-horizon maps, where

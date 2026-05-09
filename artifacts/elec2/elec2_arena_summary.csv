@@ -1,0 +1,9 @@
+baseline,condition,strategy,warnings,leads,precision,median_lead,mean_lead,delta_precision_vs_base,delta_median_lead_vs_base
+ewma,base,ewma,1,1,1.0,97.0,97.0,0.0,0.0
+ewma,umr,ewma_umr,1,1,1.0,97.0,97.0,0.0,0.0
+window_dilemma,base,window_dilemma,65,29,0.446,54.0,61.7,0.0,0.0
+window_dilemma,umr,window_dilemma_umr,95,29,0.305,101.0,97.4,-0.141,47.0
+melo,base,melo,24,11,0.458,91.0,84.5,0.0,0.0
+melo,umr,melo_umr,43,18,0.419,101.0,95.2,-0.04,10.0
+adwin,base,adwin,113,54,0.478,84.5,83.5,0.0,0.0
+adwin,umr,adwin_umr,29,10,0.345,72.5,82.9,-0.133,-12.0

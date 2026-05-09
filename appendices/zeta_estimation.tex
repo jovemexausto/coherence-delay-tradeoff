@@ -1,0 +1,49 @@
+\section{Online Drift Estimation and Sensitivity}\label{app:zeta}
+
+The dynamic horizon regulator uses a short-window drift proxy built from block
+differences. For block length $d$, let $\bar x_t^{(d)}$ denote the mean of the
+most recent block and $\bar x_{t-d}^{(d)}$ the mean of the previous block. The
+instantaneous drift proxy is
+\[
+  \Delta_t \,=\, \frac{\left|\bar x_t^{(d)} - \bar x_{t-d}^{(d)}\right|}{d},
+\]
+and the smoothed estimate follows the EMA recursion
+\[
+  \widehat\zeta_t \,=\, \alpha\,\Delta_t + (1-\alpha)\,\widehat\zeta_{t-1}.
+\]
+The regulator then sets
+\[
+  n_t^* \,=\, \operatorname{clip}\!\left(
+    \left(\frac{C_K}{\max(\widehat\zeta_t,10^{-9})}\right)^{2/3},
+    n_{\min}, n_{\max}
+  \right).
+\]
+
+Table~\ref{tab:zeta_sweep} reports the sensitivity sweep already used in the
+paper. Larger $\alpha$ makes the horizon react faster to bursts, which lowers
+contraction regret but leaves expansion regret larger; the expansion-to-
+contraction ratio stays above one throughout.
+
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Drift-EMA sensitivity on the alternating-timescales benchmark. The
+ratio remains above one across the sweep, so re-expansion is slower than
+contraction for every tested $\alpha$.}
+\label{tab:zeta_sweep}
+\begin{tabular}{lrrrr}
+\toprule
+$\alpha$ & Contraction & Expansion & Ratio & Tail MAE \\
+\midrule
+0.01 & 65.73 & 234.18 & 3.56 & 0.0938 \\
+0.02 & 68.51 & 241.03 & 3.52 & 0.0923 \\
+0.05 & 67.10 & 248.12 & 3.70 & 0.0925 \\
+0.10 & 61.86 & 251.57 & 4.07 & 0.0934 \\
+0.20 & 56.48 & 253.70 & 4.49 & 0.0940 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The appendix complements the main-text proposition by giving the concrete
+estimator used in the benchmarks and the empirical sweep used to check that the
+asymmetry persists as the drift filter is retuned.

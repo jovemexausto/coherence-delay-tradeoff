@@ -17,6 +17,7 @@ from ..core.baselines import (
 )
 from ..core.common import match_warnings_to_events
 from ..core.detectors import run_river_drift_detector
+from ..core.umr_arena import build_horizon_arena
 
 
 @dataclass(slots=True)
@@ -27,6 +28,7 @@ class BikesConfig:
     warning_threshold: float = 0.295
     max_gap: int = 5000
     fixed_window: int = 100
+    ewma_alpha: float = 0.05
     dynamic_alpha: float = 0.03
     dynamic_window_delta: int = 24
     dynamic_min_window: int = 30
@@ -42,6 +44,12 @@ class BikesConfig:
     kalman_process_scale: float = 0.02
     cusum_drift_allowance: float = 0.25
     cusum_alarm_scale: float = 8.0
+    window_dilemma_windows: tuple[int, int, int] = (50, 100, 300)
+    window_dilemma_low_quantile: float = 0.33
+    window_dilemma_high_quantile: float = 0.67
+    melo_expert_windows: tuple[int, int, int, int, int] = (30, 50, 100, 200, 300)
+    melo_learning_rate: float = 6.0
+    melo_discount: float = 0.995
 
 
 @dataclass(slots=True)
@@ -63,13 +71,18 @@ class BikesExperimentResult:
     fixed_100: BikesDetectionResult
     fixed_50: BikesDetectionResult
     fixed_300: BikesDetectionResult
+    ewma: BikesDetectionResult
     dynamic: BikesDetectionResult
+    window_dilemma: BikesDetectionResult
+    melo: BikesDetectionResult
     adwin: BikesDetectionResult
+    adwin_umr: BikesDetectionResult
     cusum: ScalarDetectionResult
     rls: ScalarDetectionResult
     kalman: ScalarDetectionResult
     frechet: ScalarDetectionResult
     mmd: ScalarDetectionResult
+    arena: dict[str, BikesDetectionResult]
     residual_signal: np.ndarray
     dynamic_drift_estimate: np.ndarray
 
@@ -96,59 +109,6 @@ def detect_page_hinkley_events(
         kswin_stat_size=10,
         kswin_alpha=0.001,
     )
-
-
-def _compute_sigma_fixed(
-    values: np.ndarray, window: int
-) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    sigma = np.full(values.size, np.nan)
-    estimate = np.full(values.size, np.nan)
-    windows = np.full(values.size, float(window))
-    for index in range(window - 1, values.size):
-        mean_value = float(np.mean(values[index - window + 1 : index + 1]))
-        estimate[index] = mean_value
-        sigma[index] = 1.0 / (1.0 + 0.5 * (values[index] - mean_value) ** 2)
-    return sigma, estimate, windows
-
-
-def _compute_sigma_dynamic(
-    values: np.ndarray,
-    config: BikesConfig,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-    sigma = np.full(values.size, np.nan)
-    estimate = np.full(values.size, np.nan)
-    windows = np.full(values.size, float(config.dynamic_baseline_window))
-    zeta_hat = np.zeros(values.size)
-
-    d = config.dynamic_window_delta
-    ck = float(
-        np.mean(np.abs(values[:2000] - np.mean(values[:2000])))
-        * np.sqrt(config.dynamic_baseline_window)
-        * config.dynamic_scale
-    )
-    ema = 0.0
-
-    for index in range(values.size):
-        if index >= 2 * d:
-            recent_mean = float(np.mean(values[index - d : index]))
-            previous_mean = float(np.mean(values[index - 2 * d : index - d]))
-            local_drift = abs(recent_mean - previous_mean) / d
-            ema = (
-                config.dynamic_alpha * local_drift + (1.0 - config.dynamic_alpha) * ema
-            )
-            zeta_hat[index] = ema
-            windows[index] = np.clip(
-                (ck / max(ema, 1e-9)) ** (2.0 / 3.0),
-                config.dynamic_min_window,
-                config.dynamic_max_window,
-            )
-        window = int(round(windows[index]))
-        if index >= window - 1:
-            mean_value = float(np.mean(values[index - window + 1 : index + 1]))
-            estimate[index] = mean_value
-            sigma[index] = 1.0 / (1.0 + 0.5 * (values[index] - mean_value) ** 2)
-
-    return sigma, estimate, windows, zeta_hat
 
 
 def _extract_warnings(sigma: np.ndarray, threshold: float) -> list[int]:
@@ -190,12 +150,16 @@ def _build_detection_result_from_warnings(
     warnings: list[int],
     events: list[int],
     config: BikesConfig,
+    *,
+    window_sizes: np.ndarray | None = None,
 ) -> BikesDetectionResult:
     match_result = match_warnings_to_events(warnings, events, config.max_gap)
     return BikesDetectionResult(
         sigma=signal,
         estimate=np.full(signal.size, np.nan),
-        window_sizes=np.full(signal.size, np.nan),
+        window_sizes=np.full(signal.size, np.nan)
+        if window_sizes is None
+        else window_sizes,
         warnings=warnings,
         matched_warnings=match_result.matched_warnings,
         matched_events=match_result.matched_events,
@@ -214,28 +178,31 @@ def run_bikes_experiments(config: BikesConfig | None = None) -> BikesExperimentR
     )
     config.max_gap = min(config.max_gap, adaptive_gap)
 
-    sigma_100, estimate_100, windows_100 = _compute_sigma_fixed(
-        values, config.fixed_window
-    )
-    sigma_50, estimate_50, windows_50 = _compute_sigma_fixed(values, 50)
-    sigma_300, estimate_300, windows_300 = _compute_sigma_fixed(values, 300)
-    sigma_dynamic, estimate_dynamic, windows_dynamic, zeta_hat = _compute_sigma_dynamic(
+    arena_result = build_horizon_arena(
         values,
-        config,
-    )
-    residual_signal = np.abs(estimate_100 - values)
-    residual_signal = np.nan_to_num(residual_signal, nan=0.0)
-    adwin_warnings = run_river_drift_detector(
-        residual_signal,
-        "ADWIN",
+        fixed_window=config.fixed_window,
+        fixed_short_window=50,
+        fixed_long_window=300,
+        ewma_alpha=config.ewma_alpha,
+        block_size=config.dynamic_window_delta,
+        ema_alpha=config.dynamic_alpha,
+        min_window=config.dynamic_min_window,
+        max_window=config.dynamic_max_window,
+        scale=config.dynamic_scale,
+        baseline_window=config.dynamic_baseline_window,
+        prefix_length=config.baseline_prefix_length,
         adwin_delta=config.adwin_delta,
         page_hinkley_delta=config.page_hinkley_delta,
         page_hinkley_threshold=config.page_hinkley_threshold,
         page_hinkley_alpha=config.page_hinkley_alpha,
-        kswin_window_size=30,
-        kswin_stat_size=10,
-        kswin_alpha=0.001,
+        window_dilemma_windows=config.window_dilemma_windows,
+        window_dilemma_low_quantile=config.window_dilemma_low_quantile,
+        window_dilemma_high_quantile=config.window_dilemma_high_quantile,
+        melo_expert_windows=config.melo_expert_windows,
+        melo_learning_rate=config.melo_learning_rate,
+        melo_discount=config.melo_discount,
     )
+    residual_signal = arena_result.residual_signal
 
     cusum = run_cusum_detector(
         values,
@@ -284,28 +251,104 @@ def run_bikes_experiments(config: BikesConfig | None = None) -> BikesExperimentR
         values=values,
         events=events,
         fixed_100=_build_detection_result(
-            sigma_100, estimate_100, windows_100, events, config
+            arena_result.strategies["fixed_100"].sigma,
+            arena_result.strategies["fixed_100"].estimate,
+            arena_result.strategies["fixed_100"].window_sizes,
+            events,
+            config,
         ),
         fixed_50=_build_detection_result(
-            sigma_50, estimate_50, windows_50, events, config
+            arena_result.strategies["fixed_50"].sigma,
+            arena_result.strategies["fixed_50"].estimate,
+            arena_result.strategies["fixed_50"].window_sizes,
+            events,
+            config,
         ),
         fixed_300=_build_detection_result(
-            sigma_300, estimate_300, windows_300, events, config
+            arena_result.strategies["fixed_300"].sigma,
+            arena_result.strategies["fixed_300"].estimate,
+            arena_result.strategies["fixed_300"].window_sizes,
+            events,
+            config,
+        ),
+        ewma=_build_detection_result(
+            arena_result.strategies["ewma"].sigma,
+            arena_result.strategies["ewma"].estimate,
+            arena_result.strategies["ewma"].window_sizes,
+            events,
+            config,
         ),
         dynamic=_build_detection_result(
-            sigma_dynamic, estimate_dynamic, windows_dynamic, events, config
+            arena_result.strategies["umr"].sigma,
+            arena_result.strategies["umr"].estimate,
+            arena_result.strategies["umr"].window_sizes,
+            events,
+            config,
+        ),
+        window_dilemma=_build_detection_result(
+            arena_result.strategies["window_dilemma"].sigma,
+            arena_result.strategies["window_dilemma"].estimate,
+            arena_result.strategies["window_dilemma"].window_sizes,
+            events,
+            config,
+        ),
+        melo=_build_detection_result(
+            arena_result.strategies["melo"].sigma,
+            arena_result.strategies["melo"].estimate,
+            arena_result.strategies["melo"].window_sizes,
+            events,
+            config,
         ),
         adwin=_build_detection_result_from_warnings(
             residual_signal,
-            adwin_warnings,
+            arena_result.adwin_warnings,
             events,
             config,
+        ),
+        adwin_umr=_build_detection_result_from_warnings(
+            residual_signal,
+            arena_result.adwin_umr_warnings,
+            events,
+            config,
+            window_sizes=arena_result.adwin_umr_widths,
         ),
         cusum=cusum,
         rls=rls,
         kalman=kalman,
         frechet=frechet,
         mmd=mmd,
+        arena={
+            name: _build_detection_result(
+                arena_result.strategies[name].sigma,
+                arena_result.strategies[name].estimate,
+                arena_result.strategies[name].window_sizes,
+                events,
+                config,
+            )
+            for name in (
+                "ewma",
+                "ewma_umr",
+                "window_dilemma",
+                "window_dilemma_umr",
+                "melo",
+                "melo_umr",
+            )
+        }
+        | {
+            "adwin": _build_detection_result_from_warnings(
+                residual_signal,
+                arena_result.adwin_warnings,
+                events,
+                config,
+            ),
+            "adwin_umr": _build_detection_result_from_warnings(
+                residual_signal,
+                arena_result.adwin_umr_warnings,
+                events,
+                config,
+                window_sizes=arena_result.adwin_umr_widths,
+            ),
+        },
         residual_signal=residual_signal,
-        dynamic_drift_estimate=zeta_hat,
+        dynamic_drift_estimate=arena_result.regulator.drift_estimate,
     )

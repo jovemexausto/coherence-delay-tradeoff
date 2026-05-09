@@ -5,23 +5,38 @@ temporal liability. The core question is therefore not whether one can react to
 change, but how long a sample should remain operationally useful before it
 becomes stale.
 
-\begin{definition}[Lag-Inclusive Estimation Error]\label{def:lag_error}
-For a finite-memory estimator with effective window size $n$ and drift rate
-$\zeta$, we write the expected tracking error as
+\begin{theorem}[Lag-Inclusive Tracking Error Bound]\label{thm:lag_error}
+Let $X_{t-j} \sim P^*_{t-j}$ and let
 \[
-  \mathcal{E}(n) \;=\; C_K\,n^{-1/2} \;+
+  \widehat P_t^{(n)} \,=\, \frac{1}{n}\sum_{j=0}^{n-1} \delta_{X_{t-j}}
+\]
+be the uniform-window empirical estimator. Assume the target path is locally
+$W_2$-Lipschitz with rate $\zeta$, so that
+\[
+  W_2\!\left(P^*_{t-j}, P^*_t\right) \leq \zeta j
+  \qquad \text{for all } 0 \leq j < n,
+\]
+and assume the finite-sample term obeys
+\[
+  \mathbb{E}\!\left[W_2\!\left(\widehat P_t^{(n)}, \bar P_t^{(n)}\right)\right]
+  \leq C_K n^{-1/2},
+\]
+where $\bar P_t^{(n)} := n^{-1}\sum_{j=0}^{n-1} P^*_{t-j}$. Then the expected
+tracking error satisfies
+\[
+  \mathcal{E}(n) \;\leq\; C_K\,n^{-1/2} \;+
   \tfrac{1}{2}\,\zeta\,n,
 \]
 where the first term is the finite-sample statistical cost and the second term
 is the staleness cost induced by retaining old information.
-\end{definition}
+\end{theorem}
 
-The two terms in \cref{def:lag_error} pull in opposite directions. Increasing
+The two terms in \cref{thm:lag_error} pull in opposite directions. Increasing
 $n$ reduces variance but raises the age of the retained evidence. That tension is
 the basic coherence-lag trade-off that governs useful memory under drift.
 
 \begin{proposition}[Optimal Window Under Drift]\label{prop:coherence_delay}
-Under \cref{def:lag_error}, the error $\mathcal{E}(n)$ is minimised at
+Under \cref{thm:lag_error}, the error $\mathcal{E}(n)$ is minimised at
 \[
   n^* \;=\; \left(\frac{C_K}{\zeta}\right)^{2/3},
 \]
@@ -32,9 +47,26 @@ with minimum value
 \end{proposition}
 
 \begin{proof}
-Differentiate $\mathcal{E}(n)$ with respect to $n$ and solve
-\(d\mathcal{E}/dn = 0\). The unique positive critical point gives the stated
-window. Substituting back yields the minimum value.
+Apply the triangle inequality for $W_2$:
+\[
+  W_2\!\left(\widehat P_t^{(n)}, P_t^*\right)
+  \leq
+  W_2\!\left(\widehat P_t^{(n)}, \bar P_t^{(n)}\right)
+  + W_2\!\left(\bar P_t^{(n)}, P_t^*\right).
+\]
+The first term is controlled by the assumed finite-sample bound.
+For the second term, let $\pi_j$ be an optimal coupling between
+$P^*_{t-j}$ and $P_t^*$. Then the averaged coupling
+$\bar\pi := n^{-1}\sum_{j=0}^{n-1} \pi_j$ couples $\bar P_t^{(n)}$ with
+$P_t^*$, so the transport cost is at most the average of the individual costs.
+Combined with the $W_2$-Lipschitz drift bound, this gives
+\[
+  W_2\!\left(\bar P_t^{(n)}, P_t^*\right)
+  \leq \frac{1}{n}\sum_{j=0}^{n-1} W_2\!\left(P^*_{t-j}, P_t^*\right)
+  \leq \frac{1}{n}\sum_{j=0}^{n-1} \zeta j
+  \leq \tfrac{1}{2}\,\zeta n.
+\]
+Combining the two bounds yields the stated inequality.
 \end{proof}
 
 \begin{remark}[Explicit form of $C_K$]
@@ -50,6 +82,12 @@ recovering a parametric $n^{-1/2}$ statistical rate. For $d_\mathrm{eff} > 4$,
 $C_K$ grows with dimension, but the $\zeta^{1/3}$ exponent in
 $\mathcal{E}_{\min} \propto C_K^{2/3}\zeta^{1/3}$ is dimension-free: the floor
 rises with ambient complexity, but the scaling with drift rate is invariant.
+
+In the synthetic benchmarks, $\hat\zeta_t$ is estimated from short-window
+block differences using an EMA update, $C_K$ is calibrated from a stationary
+prefix, and $\varepsilon$ is held fixed within each experiment family, with
+runtime sensitivity to $\varepsilon$ reported separately. The benchmark-specific
+drift proxy and sensitivity sweep are detailed in Appendix~\ref{app:zeta}.
 \end{remark}
 
 \begin{corollary}[EWMA Analogue]\label{cor:ewma_cube_root}
@@ -102,7 +140,7 @@ cube-root horizon marks the point where that exchange stops improving. For a
 uniform window under
 approximately constant local drift, the induced staleness scales as
 $S_t(w)\approx \zeta(n-1)/2$, which is the same age term that appears in
-\cref{def:lag_error} up to constants.
+\cref{thm:lag_error} up to constants.
 
 \begin{proposition}[Finite-Memory Floor]\label{prop:window_minimax}
 Let the target trajectory satisfy a $W_2$-Lipschitz drift bound with rate
@@ -111,7 +149,7 @@ samples. Then, in the critical-window regime, the minimax tracking error over
 that class cannot beat the same variance-plus-staleness scaling:
 \[
   \inf_{\hat\Pot_m}\sup_{\Pot^*}\,\mathbb{E}\,d\bigl(\hat\Pot_m,\Pot^*\bigr)
-  \;\gtrsim\; C_K\,m^{-1/2} + \tfrac{1}{2}\,\zeta\,m.
+  \;\gtrsim\; \max\!\left\{C_K\,m^{-1/2},\; c\,\sigma^{2/3}\zeta^{1/3}\right\}.
 \]
 Consequently, the cube-root horizon is not merely the optimum of one estimator;
 it is the structural floor of finite memory on this drift class.

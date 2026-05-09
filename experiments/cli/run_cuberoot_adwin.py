@@ -32,7 +32,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--figures-dir",
         type=Path,
-        default=Path("../figures/cuberoot_adwin"),
+        default=Path("figures/cuberoot_adwin"),
         help="Directory where PDF figures will be written",
     )
     parser.add_argument(

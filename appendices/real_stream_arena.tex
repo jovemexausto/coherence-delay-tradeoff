@@ -1,0 +1,50 @@
+\section{Full Real-Stream Arena}\label{app:real_stream_arena}
+
+This appendix collects the complete public-stream robustness check summarized in
+the main text. ELEC2 appears there as the representative case study; here we add
+the Bikes counterpart and the paired summary table for both datasets.
+
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=0.95\linewidth]{figures/bikes/fig_umr_arena}
+\caption{Bikes counterpart in the full real-stream arena. The same paired
+precision and median-lead comparison appears here, but the result is read as a
+robustness check rather than a benchmark claim.}
+\label{fig:bikes_real}
+\end{figure}
+
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Full real-stream robustness summary. Precision is matched-warning
+precision against Page-Hinkley events; median lead is the median warning lead in
+steps. Each row compares a backend with and without UMR.}
+\label{tab:real_world_umr}
+\begin{tabular}{llrrr}
+\toprule
+Dataset & Method & Precision & Median lead & Leads \\
+\midrule
+ELEC2 & EWMA & 1.000 & 97.0 & 1 \\
+ELEC2 & EWMA + UMR & 1.000 & 97.0 & 1 \\
+ELEC2 & Window Dilemma & 0.446 & 54.0 & 29 \\
+ELEC2 & Window Dilemma + UMR & 0.305 & 101.0 & 29 \\
+ELEC2 & MELO-style & 0.458 & 91.0 & 11 \\
+ELEC2 & MELO-style + UMR & 0.419 & 101.0 & 18 \\
+ELEC2 & ADWIN & 0.478 & 84.5 & 54 \\
+ELEC2 & ADWIN + UMR & 0.345 & 72.5 & 10 \\
+Bikes & EWMA & 0.146 & 132.0 & 59 \\
+Bikes & EWMA + UMR & 0.146 & 132.0 & 59 \\
+Bikes & Window Dilemma & 0.127 & 108.5 & 76 \\
+Bikes & Window Dilemma + UMR & 0.128 & 125.0 & 76 \\
+Bikes & MELO-style & 0.141 & 147.5 & 76 \\
+Bikes & MELO-style + UMR & 0.129 & 147.0 & 71 \\
+Bikes & ADWIN & 0.526 & 92.0 & 251 \\
+Bikes & ADWIN + UMR & 0.520 & 82.0 & 141 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The table shows the same mixed story across both streams: UMR can improve the
+temporal-validity side of the comparison, but the precision effect is backend-
+dependent and sometimes negative. That is why the full arena is supporting
+evidence rather than the core argument.

@@ -54,6 +54,13 @@ robust weighting rule, and the relevant comparison with drift detection is the
 gap between when change becomes statistically detectable and when retained
 memory stops being operationally current.
 
+The empirical section now includes a Window-Dilemma-style switcher and a
+MELO-style multi-horizon hedge as direct comparison baselines. Those additions
+do not replace the main claim of the paper, but they make the practical
+positioning sharper: the cube-root regulator is being compared not only to fixed
+windows and detectors, but also to explicit horizon-selection and expert-mixing
+alternatives.
+
 \paragraph{Freshness and the Age of Information.}
 The Age-of-Information literature asks how old the last received update is and
 how update policies should balance communication cost against information

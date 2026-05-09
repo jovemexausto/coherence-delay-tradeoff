@@ -26,8 +26,8 @@
 \DeclareMathOperator{\ev}{ev}
 
 \newcommand{\safeincludegraphics}[2][]{%
-  \IfFileExists{#2.png}{\includegraphics[#1]{#2.png}}{%
-    \IfFileExists{#2.pdf}{\includegraphics[#1]{#2.pdf}}{%
+  \IfFileExists{#2.pdf}{\includegraphics[#1]{#2.pdf}}{%
+    \IfFileExists{#2.png}{\includegraphics[#1]{#2.png}}{%
       \fbox{%
         \begin{minipage}[c][0.22\textheight][c]{0.88\linewidth}
           \centering
