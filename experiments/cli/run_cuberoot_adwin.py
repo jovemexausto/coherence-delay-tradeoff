@@ -8,6 +8,7 @@ from pathlib import Path
 from ..cuberoot_adwin.artifacts import save_benchmark_figure
 from ..cuberoot_adwin.artifacts import save_delay_figure
 from ..cuberoot_adwin.artifacts import save_frontier_figure
+from ..cuberoot_adwin.artifacts import save_drift_ema_ablation_figure
 from ..cuberoot_adwin.artifacts import save_horizon_gap_figure
 from ..cuberoot_adwin.artifacts import save_horizon_instability_figure
 from ..cuberoot_adwin.model import CubeRootADWINBenchmarkConfig, run_benchmark
@@ -15,6 +16,7 @@ from ..cuberoot_adwin.reports import (
     build_event_rows,
     build_frontier_rows,
     build_delay_rows,
+    build_drift_ema_ablation_rows,
     build_horizon_gap_curve_rows,
     build_horizon_instability_rows,
     build_horizon_transition_rows,
@@ -79,6 +81,24 @@ def main() -> None:
         drift_window=100,
     )
     alternating_result = run_benchmark(alternating_config)
+    drift_ema_alphas = (0.01, 0.02, 0.05, 0.1, 0.2)
+    drift_ema_results = [
+        run_benchmark(
+            CubeRootADWINBenchmarkConfig(
+                piecewise_drifts=alternating_config.piecewise_drifts,
+                piecewise_lengths=alternating_config.piecewise_lengths,
+                fixed_window=alternating_config.fixed_window,
+                fixed_long_window=alternating_config.fixed_long_window,
+                ewma_alpha=alternating_config.ewma_alpha,
+                adwin_delta=alternating_config.adwin_delta,
+                Ck=alternating_config.Ck,
+                drift_window=alternating_config.drift_window,
+                drift_ema_alpha=alpha,
+                seeds=tuple(range(args.seed_offset, args.seed_offset + 20)),
+            )
+        )
+        for alpha in drift_ema_alphas
+    ]
     drift_grid = (0.0003, 0.0005, 0.001, 0.002, 0.003, 0.005)
     delay_results = [
         run_benchmark(
@@ -106,6 +126,11 @@ def main() -> None:
         args.figures_dir / "fig_horizon_instability.pdf",
     )
     save_horizon_gap_figure(result, args.figures_dir / "fig_horizon_gap_cost.pdf")
+    save_drift_ema_ablation_figure(
+        drift_ema_results,
+        list(drift_ema_alphas),
+        args.figures_dir / "fig_drift_ema_ablation.pdf",
+    )
     save_benchmark_figure(
         piecewise_result,
         args.figures_dir / "fig_cuberoot_adwin_piecewise.pdf",
@@ -131,6 +156,10 @@ def main() -> None:
     export_summary_csv(
         build_horizon_gap_curve_rows(result),
         args.artifacts_dir / "cuberoot_adwin_horizon_gap_cost.csv",
+    )
+    export_summary_csv(
+        build_drift_ema_ablation_rows(drift_ema_results, list(drift_ema_alphas)),
+        args.artifacts_dir / "cuberoot_adwin_drift_ema_ablation.csv",
     )
     export_summary_csv(
         build_event_rows(result), args.artifacts_dir / "cuberoot_adwin_events.csv"
@@ -164,6 +193,7 @@ def main() -> None:
     print(f"Saved {args.figures_dir / 'fig_cap_vs_detection_delay.pdf'}")
     print(f"Saved {args.figures_dir / 'fig_horizon_instability.pdf'}")
     print(f"Saved {args.figures_dir / 'fig_horizon_gap_cost.pdf'}")
+    print(f"Saved {args.figures_dir / 'fig_drift_ema_ablation.pdf'}")
     print(f"Saved {args.figures_dir / 'fig_cuberoot_adwin_piecewise.pdf'}")
     print(f"Saved {args.artifacts_dir / 'cuberoot_adwin_summary.csv'}")
     print(f"Saved {args.artifacts_dir / 'cuberoot_adwin_frontier.csv'}")
@@ -173,6 +203,7 @@ def main() -> None:
         f"Saved {args.artifacts_dir / 'cuberoot_adwin_horizon_transition_ablation.csv'}"
     )
     print(f"Saved {args.artifacts_dir / 'cuberoot_adwin_horizon_gap_cost.csv'}")
+    print(f"Saved {args.artifacts_dir / 'cuberoot_adwin_drift_ema_ablation.csv'}")
     print(f"Saved {args.artifacts_dir / 'cuberoot_adwin_events.csv'}")
     print(f"Saved {args.artifacts_dir / 'cuberoot_adwin_phases.csv'}")
     print(f"Saved {args.artifacts_dir / 'cuberoot_adwin_oracle_phases.csv'}")

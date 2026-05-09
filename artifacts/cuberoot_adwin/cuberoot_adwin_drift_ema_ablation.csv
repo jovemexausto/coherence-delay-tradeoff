@@ -1,0 +1,6 @@
+drift_ema_alpha,contraction_regret_mean,contraction_regret_std,expansion_regret_mean,expansion_regret_std,expansion_to_contraction_ratio,tail_mae_mean,tail_mae_std,cap_count_mean,cap_only_count_mean,first_cap_time_mean,first_drift_time_mean,cap_before_drift_delay_mean
+0.01,65.73,5.25,234.18,60.35,3.56,0.0938,0.0093,2314.3,2314.3,228.65,,
+0.02,68.51,7.69,241.03,60.91,3.52,0.0923,0.0104,1889.85,1889.85,218.1,,
+0.05,67.1,8.71,248.12,59.56,3.7,0.0925,0.0109,1348.25,1348.25,210.85,,
+0.1,61.86,7.79,251.57,57.98,4.07,0.0934,0.011,1116.5,1116.5,205.5,,
+0.2,56.48,6.76,253.7,56.8,4.49,0.094,0.0108,929.4,929.4,202.15,,

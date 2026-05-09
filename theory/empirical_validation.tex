@@ -135,7 +135,116 @@ This benchmark makes two things visible. First, horizon validity can vary even
 when aggregate prediction error stays competitive. Second, the adjustment is
 asymmetric: contraction of the useful horizon is easier to trigger than
 re-expansion after a low-drift stretch. The pattern is operational evidence of
-path dependence in temporal memory adaptation.
+path dependence in temporal memory adaptation. Proposition~\ref{prop:asymmetric_horizon_recovery}
+formalizes the same asymmetry in the idealized EMA-to-horizon map.
+
+\begin{proposition}[Asymmetric Horizon Recovery]\label{prop:asymmetric_horizon_recovery}
+Let the drift estimator satisfy the EMA recursion
+\[
+  \hat\zeta_t \,=\, \alpha\,\Delta_t + q\,\hat\zeta_{t-1},
+  \qquad q \coloneqq 1-\alpha \in (0,1),
+\]
+with $\Delta_t = \delta_{\mathrm{slow}}$ in the slow regime and $\Delta_t = M$
+in the burst regime. Assume the horizon map is unclipped on
+$[\delta_{\mathrm{slow}}, M]$ so that
+\[
+  n^*(\delta) \,=\, \left(\frac{C_K}{\delta}\right)^{2/3}
+\]
+throughout the transition. Write
+$n_b \coloneqq n^*(M)$ and $n_s \coloneqq n^*(\delta_{\mathrm{slow}})$.
+For any $0 < \varepsilon < n_s - n_b$, define the inverse thresholds
+\[
+  \delta_b(\varepsilon) \coloneqq C_K\,(n_b + \varepsilon)^{-3/2},
+  \qquad
+  \delta_s(\varepsilon) \coloneqq C_K\,(n_s - \varepsilon)^{-3/2}.
+\]
+Then the exact recovery time from the slow regime to the burst regime is
+\[
+  T_{\mathrm{contract}}(\varepsilon)
+  \,=\,
+  \left\lceil
+  \frac{\log\!\bigl((M-\delta_{\mathrm{slow}})/(M-\delta_b(\varepsilon))\bigr)}{\log(1/q)}
+  \right\rceil,
+\]
+while, after a burst of duration $T_{\mathrm{burst}}$ steps, the exact recovery
+time back to the slow regime is
+\[
+  T_{\mathrm{expand}}(\varepsilon)
+  \,=\,
+  \left\lceil
+  \frac{\log\!\bigl((\hat\zeta_{\mathrm{end}}-\delta_{\mathrm{slow}})/
+  (\delta_s(\varepsilon)-\delta_{\mathrm{slow}})\bigr)}{\log(1/q)}
+  \right\rceil,
+\]
+where
+\[
+  \hat\zeta_{\mathrm{end}} \,=\, M - (M-\delta_{\mathrm{slow}})q^{T_{\mathrm{burst}}}
+\]
+is the burst-end drift estimate. If
+\[
+  T_{\mathrm{burst}} \,\geq\, T_0(\varepsilon)
+  \;\coloneqq\;
+  \left\lceil \frac{\log(1-\rho_\varepsilon)}{\log q} \right\rceil,
+  \qquad
+  \rho_\varepsilon \coloneqq
+  \frac{\delta_s(\varepsilon)-\delta_{\mathrm{slow}}}{M-\delta_b(\varepsilon)},
+\]
+then $T_{\mathrm{expand}}(\varepsilon) > T_{\mathrm{contract}}(\varepsilon)$.
+Moreover, for small $\varepsilon$,
+\[
+  M-\delta_b(\varepsilon)
+  = \tfrac{3}{2} C_K n_b^{-5/2}\,\varepsilon + O(\varepsilon^2),
+  \qquad
+  \delta_s(\varepsilon)-\delta_{\mathrm{slow}}
+  = \tfrac{3}{2} C_K n_s^{-5/2}\,\varepsilon + O(\varepsilon^2),
+\]
+ so the slow-side threshold distance is smaller by a factor
+ $\bigl(\delta_{\mathrm{slow}}/M\bigr)^{5/3}(1+o(1))$.
+\end{proposition}
+
+\begin{proof}
+The EMA recursion has the closed form
+\[
+  \hat\zeta_{t_0+k} = \Delta^* + \bigl(\hat\zeta_{t_0}-\Delta^*\bigr)q^k
+\]
+whenever the regime is constant with fixed point $\Delta^*$. Hence after the
+transition from $\delta_{\mathrm{slow}}$ to $M$,
+\[
+  \hat\zeta_{t_0+k} = M - (M-\delta_{\mathrm{slow}})q^k,
+\]
+and after the return to the slow regime,
+\[
+  \hat\zeta_{t_0+T_{\mathrm{burst}}+k}
+  = \delta_{\mathrm{slow}} + (\hat\zeta_{\mathrm{end}}-\delta_{\mathrm{slow}})q^k.
+\]
+
+Because $n^*(\delta)$ is monotone decreasing on the unclipped interval and
+its inverse is $g(n)=C_K n^{-3/2}$, the condition
+$|n^*(\hat\zeta_{t_0+k})-n_b|\leq \varepsilon$ is equivalent to
+\(\hat\zeta_{t_0+k} \geq \delta_b(\varepsilon)\), which gives the displayed
+formula for $T_{\mathrm{contract}}(\varepsilon)$. Likewise,
+$|n^*(\hat\zeta_{t_0+T_{\mathrm{burst}}+k})-n_s|\leq \varepsilon$
+is equivalent to
+\(\hat\zeta_{t_0+T_{\mathrm{burst}}+k} \leq \delta_s(\varepsilon)\),
+which yields $T_{\mathrm{expand}}(\varepsilon)$.
+
+The inequality $T_{\mathrm{expand}}(\varepsilon) > T_{\mathrm{contract}}(\varepsilon)$
+holds whenever the burst lasts long enough that
+\[
+  1-q^{T_{\mathrm{burst}}} \geq \rho_\varepsilon,
+\]
+since this makes the numerator of $T_{\mathrm{expand}}$ larger than that of
+$T_{\mathrm{contract}}$ by the exact threshold relation above. The small-$\varepsilon$
+expansions follow by Taylor expansion of $n \mapsto C_K n^{-3/2}$ around
+$n_b$ and $n_s$.
+\end{proof}
+
+\begin{remark}[Effect of clipping]
+If clipping at $n_{\min}$ is active near the burst side, then contraction can only
+be faster. The observed asymmetry is therefore conservative: clipping weakens the
+theoretical barrier in the burst regime, but it cannot eliminate the longer slow-
+side recovery.
+\end{remark}
 
 \begin{table}[!htbp]
 \centering
@@ -154,6 +263,25 @@ CubeRoot & 58.4 & 307.7 \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\subsection{Drift-EMA Sensitivity}\label{sec:validation_ema_sensitivity}
+
+The recovery asymmetry persists when the drift estimator itself is varied. The
+next sweep changes the EMA coefficient $\alpha$ in the drift estimator while
+keeping the alternating-timescales benchmark fixed. Larger $\alpha$ makes the
+drift estimate more reactive, reducing contraction regret while expansion regret
+stays persistently larger; the expansion-to-contraction ratio remains above one
+throughout the sweep and is higher at the larger $\alpha$ values.
+
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=0.95\linewidth]{figures/cuberoot_adwin/fig_drift_ema_ablation}
+\caption{EMA sensitivity of horizon recovery on alternating timescales. The
+ drift-EMA coefficient changes how quickly the regulator reacts to bursts, but the
+ asymmetry remains: expansion regret stays above contraction regret across the
+ sweep, and the ratio is larger at higher $\alpha$ in this benchmark.}
+\label{fig:drift_ema_ablation}
+\end{figure}
 
 \subsection{Horizon Cost Curve}\label{sec:validation_gap_cost}
 

@@ -367,6 +367,71 @@ def build_horizon_transition_rows(
     return rows
 
 
+def build_drift_ema_ablation_rows(
+    results: list[CubeRootADWINBenchmarkResult],
+    alphas: list[float],
+) -> SummaryRows:
+    rows: list[dict[str, float | int | str]] = []
+    if len(results) != len(alphas):
+        raise ValueError("results and alphas must have the same length")
+
+    for alpha, result in zip(alphas, results, strict=True):
+        transition_rows = [
+            row
+            for row in build_horizon_transition_rows(result)
+            if row["method"] == "cube"
+        ]
+        contraction = [
+            float(row["window_regret_mean"])
+            for row in transition_rows
+            if row["transition_type"] == "contraction"
+            and row["window_regret_mean"] != ""
+        ]
+        expansion = [
+            float(row["window_regret_mean"])
+            for row in transition_rows
+            if row["transition_type"] == "expansion" and row["window_regret_mean"] != ""
+        ]
+        summary = result.summaries["cube"]
+        contraction_mean = float(np.mean(contraction)) if contraction else float("nan")
+        expansion_mean = float(np.mean(expansion)) if expansion else float("nan")
+        ratio = (
+            expansion_mean / contraction_mean if contraction_mean > 0 else float("nan")
+        )
+        rows.append(
+            {
+                "drift_ema_alpha": round(float(alpha), 4),
+                "contraction_regret_mean": round(contraction_mean, 2),
+                "contraction_regret_std": round(float(np.std(contraction)), 2)
+                if contraction
+                else "",
+                "expansion_regret_mean": round(expansion_mean, 2),
+                "expansion_regret_std": round(float(np.std(expansion)), 2)
+                if expansion
+                else "",
+                "expansion_to_contraction_ratio": round(ratio, 2),
+                "tail_mae_mean": round(summary.tail_mae_mean, 4),
+                "tail_mae_std": round(summary.tail_mae_std, 4),
+                "cap_count_mean": ""
+                if summary.cap_count_mean is None
+                else round(summary.cap_count_mean, 2),
+                "cap_only_count_mean": ""
+                if summary.cap_only_count_mean is None
+                else round(summary.cap_only_count_mean, 2),
+                "first_cap_time_mean": ""
+                if summary.first_cap_time_mean is None
+                else round(summary.first_cap_time_mean, 2),
+                "first_drift_time_mean": ""
+                if summary.first_drift_time_mean is None
+                else round(summary.first_drift_time_mean, 2),
+                "cap_before_drift_delay_mean": ""
+                if summary.cap_before_drift_delay_mean is None
+                else round(summary.cap_before_drift_delay_mean, 2),
+            }
+        )
+    return rows
+
+
 def build_horizon_gap_curve_rows(
     result: CubeRootADWINBenchmarkResult, bins: int = 24
 ) -> SummaryRows:

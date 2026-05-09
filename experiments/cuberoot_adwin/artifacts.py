@@ -9,6 +9,7 @@ from ..core.common import rolling_mean
 from .model import CubeRootADWINBenchmarkResult
 from .reports import (
     build_delay_rows,
+    build_drift_ema_ablation_rows,
     build_frontier_rows,
     build_horizon_instability_rows,
     build_horizon_gap_curve_rows,
@@ -386,6 +387,64 @@ def save_horizon_gap_figure(
     )
     axes[0].set_ylabel("Excess error vs local oracle")
     axes[1].legend(loc="upper left", frameon=False)
+    fig.tight_layout()
+    fig.savefig(output_path, bbox_inches="tight")
+    plt.close(fig)
+
+
+def save_drift_ema_ablation_figure(
+    results: list[CubeRootADWINBenchmarkResult],
+    alphas: list[float],
+    output_path: Path,
+) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    rows = build_drift_ema_ablation_rows(results, alphas)
+    alpha = np.asarray([float(row["drift_ema_alpha"]) for row in rows])
+    contraction = np.asarray([float(row["contraction_regret_mean"]) for row in rows])
+    contraction_std = np.asarray([float(row["contraction_regret_std"]) for row in rows])
+    expansion = np.asarray([float(row["expansion_regret_mean"]) for row in rows])
+    expansion_std = np.asarray([float(row["expansion_regret_std"]) for row in rows])
+    ratio = np.asarray([float(row["expansion_to_contraction_ratio"]) for row in rows])
+
+    fig, ax1 = plt.subplots(figsize=(10.0, 5.0))
+    ax1.errorbar(
+        alpha,
+        contraction,
+        yerr=contraction_std,
+        marker="o",
+        linewidth=1.8,
+        color="tab:green",
+        label="contraction",
+    )
+    ax1.errorbar(
+        alpha,
+        expansion,
+        yerr=expansion_std,
+        marker="s",
+        linewidth=1.8,
+        color="tab:orange",
+        label="expansion",
+    )
+    ax1.set_xscale("log")
+    ax1.set_xlabel(r"Drift EMA $\alpha$")
+    ax1.set_ylabel("Mean horizon regret")
+    ax1.grid(alpha=0.2, linewidth=0.5)
+
+    ax2 = ax1.twinx()
+    ax2.plot(
+        alpha,
+        ratio,
+        color="tab:blue",
+        marker="^",
+        linewidth=1.5,
+        label="expansion / contraction",
+    )
+    ax2.set_ylabel("Recovery ratio")
+    ax2.axhline(1.0, color="black", linestyle="--", linewidth=1.0, alpha=0.6)
+
+    lines1, labels1 = ax1.get_legend_handles_labels()
+    lines2, labels2 = ax2.get_legend_handles_labels()
+    ax1.legend(lines1 + lines2, labels1 + labels2, frameon=False, loc="upper left")
     fig.tight_layout()
     fig.savefig(output_path, bbox_inches="tight")
     plt.close(fig)

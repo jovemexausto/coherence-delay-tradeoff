@@ -22,6 +22,7 @@ from ..gaussian import (
     run_ucurve_experiment,
 )
 from ..cuberoot_adwin.artifacts import save_benchmark_figure
+from ..cuberoot_adwin.artifacts import save_drift_ema_ablation_figure
 from ..cuberoot_adwin.artifacts import save_delay_figure
 from ..cuberoot_adwin.artifacts import save_frontier_figure
 from ..cuberoot_adwin.artifacts import save_horizon_gap_figure
@@ -30,6 +31,7 @@ from ..cuberoot_adwin.model import CubeRootADWINBenchmarkConfig, run_benchmark
 from ..cuberoot_adwin.reports import (
     build_event_rows,
     build_delay_rows,
+    build_drift_ema_ablation_rows,
     build_frontier_rows,
     build_horizon_gap_curve_rows,
     build_horizon_instability_rows,
@@ -212,6 +214,24 @@ def main() -> None:
             seeds=tuple(range(args.seed, args.seed + 20)),
         )
     )
+    drift_ema_alphas = (0.01, 0.02, 0.05, 0.1, 0.2)
+    drift_ema_results = [
+        run_benchmark(
+            CubeRootADWINBenchmarkConfig(
+                piecewise_drifts=alternating_config.piecewise_drifts,
+                piecewise_lengths=alternating_config.piecewise_lengths,
+                fixed_window=alternating_config.fixed_window,
+                fixed_long_window=alternating_config.fixed_long_window,
+                ewma_alpha=alternating_config.ewma_alpha,
+                adwin_delta=alternating_config.adwin_delta,
+                Ck=alternating_config.Ck,
+                drift_window=alternating_config.drift_window,
+                drift_ema_alpha=alpha,
+                seeds=tuple(range(args.seed, args.seed + 20)),
+            )
+        )
+        for alpha in drift_ema_alphas
+    ]
     delay_results = [
         run_benchmark(
             CubeRootADWINBenchmarkConfig(
@@ -251,6 +271,11 @@ def main() -> None:
         cuberoot_result,
         harness.figure_path("cuberoot_adwin", "fig_horizon_gap_cost.pdf"),
     )
+    save_drift_ema_ablation_figure(
+        drift_ema_results,
+        list(drift_ema_alphas),
+        harness.figure_path("cuberoot_adwin", "fig_drift_ema_ablation.pdf"),
+    )
     harness.save_summary_csv(
         build_summary_rows(cuberoot_result),
         "cuberoot_adwin",
@@ -280,6 +305,11 @@ def main() -> None:
         build_horizon_gap_curve_rows(cuberoot_result),
         "cuberoot_adwin",
         "cuberoot_adwin_horizon_gap_cost.csv",
+    )
+    harness.save_summary_csv(
+        build_drift_ema_ablation_rows(drift_ema_results, list(drift_ema_alphas)),
+        "cuberoot_adwin",
+        "cuberoot_adwin_drift_ema_ablation.csv",
     )
     harness.save_summary_csv(
         build_event_rows(cuberoot_result),
