@@ -21,21 +21,20 @@ on the drift regime.
 Empirically, the signature regime is `cap-only`: the memory horizon becomes
 operationally stale before there is enough statistical evidence for a changepoint
 alarm. That separation between evidence of change and temporal validity of
-memory is the main conceptual payoff of the paper. The alternating-timescales
-benchmark adds a secondary lesson: contraction is easier to induce than
-re-expansion, so EMA-driven horizon regulators have a recoverability gap.
+memory is the main conceptual payoff here. The alternating-timescales benchmark
+adds a secondary lesson: contraction is easier to induce than re-expansion, so
+EMA-driven horizon regulators have a recoverability gap.
 
-The real-stream evidence stays lighter: a representative ELEC2 case study in the
-main text, with the full ELEC2/Bikes arena detailed in the appendix. It keeps
-the temporal-validity gap from being synthetic-only, but it is not the main
-evidential load.
+ELEC2 is the representative real-stream case in the main text, with a short Bikes
+summary in the appendix. Together they show that the temporal-validity gap is not
+synthetic-only.
 
 Finite-memory systems are best judged by how long their retained evidence remains
 current enough to matter. The design consequence is simple: regulate useful
 memory and track the age at which evidence stops being current.
 
-Final claim: useful memory under drift has geometry, but its predictive value is
-policy-dependent.
+Useful memory under drift has geometry, but its predictive value is policy-
+dependent.
 
 Code and reproducibility artifacts are available in the project repository
 \citep{parreira2026useful_memory_horizon}.

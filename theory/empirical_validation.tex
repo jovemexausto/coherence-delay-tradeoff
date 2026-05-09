@@ -163,9 +163,8 @@ re-expansion after a low-drift stretch. The pattern is operational evidence of
 path dependence in temporal memory adaptation. Proposition~\ref{prop:asymmetric_horizon_recovery}
 formalizes the same asymmetry in the idealized EMA-to-horizon map.
 
-This is the paper's secondary indexable contribution: a horizon-recovery
-asymmetry for EMA-driven regulators, distinct from the cube-root scaling law
-itself.
+This asymmetry is a secondary contribution for EMA-driven regulators, distinct
+from the cube-root scaling law itself.
 
 \begin{proposition}[Asymmetric Horizon Recovery]\label{prop:asymmetric_horizon_recovery}
 Let the drift estimator satisfy the EMA recursion
@@ -308,6 +307,10 @@ point of the regulator and helps interpret the sensitivity of the drift proxy.
 To keep the closed-form claims auditable, the repository also includes a short
 numerical check for Proposition~2.8, Proposition~3.1, and Theorem~2.1 against
 the simulation code used in the paper.
+The same appendix quantifies the local calibration cost of misestimating
+$C_K$: near the optimum, the excess tracking error is quadratic in relative
+calibration error, so moderate bias is tolerable while large bias moves the
+operating horizon materially.
 
 \begin{figure}[!htbp]
 \centering
@@ -369,7 +372,7 @@ Appendix~\ref{app:downstream_temporal_invalidity}. Its role is purely
 mechanistic: it checks whether the cap-only regime carries a measurable
 predictive cost when the backend is a windowed classifier rather than a drift
 detector. The effect is directionally consistent with the main claim but modest
-in magnitude, so we treat it as supporting evidence rather than central evidence.
+  in magnitude, so it is a supporting check rather than a dominant result.
 
 \subsection{What the Figures Show}\label{sec:validation_summary}
 
@@ -379,5 +382,5 @@ horizon tracking is distinct from changepoint detection: memory can become stale
 before statistical evidence is strong enough to declare a change. Third,
 horizon control has operational value, but its predictive payoff depends on the
 backend and on the drift regime. The ELEC2 case study reinforces the same
-temporal-validity gap on public data, but it is best read as a supporting check
-on the main synthetic result.
+temporal-validity gap on public data, but the effect is modest relative to the
+main synthetic result.

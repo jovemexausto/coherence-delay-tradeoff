@@ -48,6 +48,94 @@ The appendix complements the main-text proposition by giving the concrete
 estimator used in the benchmarks and the empirical sweep used to check that the
 asymmetry persists as the drift filter is retuned.
 
+\subsection{Calibration Cost of $C_K$ Misestimation}
+
+Let the regulator use an estimated constant $\widehat C_K = r C_K$ while the
+true tracking law is governed by $C_K$. Since the selected horizon is
+$n^*(\widehat C_K) = (\widehat C_K/\zeta)^{2/3}$, the excess tracking error
+relative to the oracle choice is
+\begin{proposition}[Calibration Cost of $C_K$ Misestimation]
+\label{prop:calibration_cost}
+\[
+  \Delta E(r)
+  =
+  \mathcal{E}(n^*(\widehat C_K); C_K,\zeta)
+  -
+  \mathcal{E}(n^*(C_K); C_K,\zeta)
+  =
+  C_K^{2/3}\zeta^{1/3}
+  \left(r^{-1/3} + \tfrac12 r^{2/3} - \tfrac32\right).
+\]
+Moreover, for $r=1+\delta$ with $|\delta| \ll 1$,
+\[
+  \Delta E(r)
+  =
+  \tfrac19 E_{\min}\,\delta^2 + O(\delta^3),
+\]
+so small calibration errors are locally quadratic and symmetric to second order.
+\end{proposition}
+
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Local calibration-cost sensitivity for the horizon constant. The excess
+error is normalized by $E_{\min}$, so the table is scale-free. The proposition
+gives the local quadratic law around $r=1$; the table shows the exact curve.
+}
+\label{tab:calibration_cost}
+\begin{tabular}{lrp{0.42\linewidth}}
+\toprule
+$r = \widehat C_K/C_K$ & Exact $\Delta E/E_{\min}$ & Comment \\
+\midrule
+0.90 & 0.0018 & modest underestimation already moves the horizon \\
+0.95 & 0.0004 & local error is very small near the optimum \\
+1.00 & 0.0000 & oracle calibration \\
+1.05 & 0.0004 & local error is very small near the optimum \\
+1.10 & 0.0015 & moderate overestimation remains mild \\
+1.25 & 0.0085 & larger bias becomes visible \\
+1.50 & 0.0288 & large bias moves the operating point \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The practical implication is simple: moderate calibration error in $C_K$ is
+benign to first order, but large systematic bias still moves the operating point
+materially. The calibration-prefix machinery in Appendix~\ref{app:backend_umr_protocol}
+and the block-size sensitivity table below quantify how this shows up in
+practice.
+A short numerical check of the proposition is available in
+\texttt{scripts/calibration\_cost.py}.
+
+\subsection{Calibration Sensitivity Summary}
+
+Two short sensitivity checks are enough to capture the practical behavior of the
+regulator. First, the Sinkhorn regularization level changes the constant but not
+the exponent: across the tested values, the observed $\zeta^{1/3}$ slope stays
+at approximately $0.333$, while the implied $C_K$ moves from about $\sigma$ at
+large $\varepsilon$ to roughly $3.3\sigma$ at small $\varepsilon$. Second, the
+block length must not be too small: $d=10$ produces a very large positive bias in
+the drift proxy, $d=50$ is already usable, and $d=100$ is effectively stable.
+
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Practical sensitivity summary for the drift proxy. The epsilon sweep
+changes the calibration constant $C_K$ but leaves the cube-root exponent intact;
+the block-size sweep shows that too-small blocks induce severe positive bias in
+$\widehat\zeta_t$.}
+\label{tab:sensitivity_summary}
+\begin{tabular}{lrrl}
+\toprule
+Knob & Observed effect & Rule of thumb & Comment \\
+\midrule
+$\varepsilon$ & slope $\approx 0.333$ & exponent unchanged & only $C_K$ moves \\
+$d=10$ & $+618\%$ bias in $\widehat\zeta_t$ & too small & unusable \\
+$d=50$ & $+7.8\%$ bias in $\widehat\zeta_t$ & acceptable & practical \\
+$d=100$ & negligible bias & stable & preferred when feasible \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 \subsection{Robustness of the EMA Drift Proxy}
 
 Let the block-difference proxy satisfy $\Delta_t = \zeta_t + \xi_t$, where

@@ -35,6 +35,11 @@ MELO-style multi-horizon hedge, but it is still not a full survey of adaptive
 tracking methods. The analysis remains centered on the cube-root law and on the
 temporal-validity interpretation of memory.
 
+The drift proxy itself has a practical resolution limit: very small block sizes
+can grossly overestimate $\widehat\zeta_t$, so the calibration prefix needs blocks
+large enough to smooth local noise. In the current sweep, $d=50$ is acceptable,
+while $d=100$ is effectively stable.
+
 On the current ELEC2 and Bikes arenas, adding UMR to the multi-horizon hedge
 changes results only modestly and in a benchmark-dependent way; it acts as a
 horizon prior, not a universal replacement for uncertainty weighting.

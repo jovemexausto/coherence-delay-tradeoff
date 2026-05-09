@@ -16,6 +16,12 @@ $\mathsf{W}_2$-Lipschitz on measures, the estimator class is causal averaging
 kernels, and Proposition~\ref{prop:window_minimax} makes the $\zeta^{1/3}$ rate a
 minimax lower bound for arbitrary window-restricted estimators.
 
+The same cube-root tuning shows up in sliding-window analyses of drifting data
+\citep{BifetGavalda2007}:
+the window length is the control variable, but the quantity being protected is
+temporal coherence rather than regret alone. The present paper keeps that idea
+while changing the geometry from scalar losses to distributional tracking.
+
 Jiang, Li, and Zhang study online stochastic optimization under a Wasserstein
 nonstationarity measure and obtain distribution-aware regret guarantees
 \citep{JiangLiZhang2020}. Keehan, Anderson, and Wiesemann analyze a related

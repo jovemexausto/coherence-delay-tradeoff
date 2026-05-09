@@ -1,7 +1,7 @@
 \section{Backend $+$ UMR Protocol}\label{app:backend_umr_protocol}
 
-This appendix gives the concrete protocol used by the paper whenever a backend
-is paired with the useful-memory regulator (UMR). The code paths are:
+This appendix gives the concrete protocol used whenever a backend is paired with
+the useful-memory regulator (UMR). The code paths are:
 \texttt{drift/umr.py} for the drift proxy and horizon rule,
 \texttt{experiments/core/horizon\_baselines.py} for horizon-capped estimators,
 \texttt{experiments/core/detectors.py} for the ADWIN+$\,$UMR reset logic, and
@@ -56,7 +56,7 @@ warning is still ADWIN's own decision after the reset path.
 
 \subsection{Hyperparameters}
 
-The paper uses three parameter families.
+Three parameter families are used.
 
 \paragraph{Synthetic core suite.}
 \begin{table}[!htbp]
@@ -102,8 +102,12 @@ square root of prefix length. The drift-proxy appendix additionally reports the
 prefix-validated $(d,\alpha)$ sensitivity study, but that is a robustness study
 rather than a replacement for the fixed-regulator core.
 
-\subsection{Reproducibility Pseudocode}
+\subsection{Algorithm}
 
+\begin{figure}[!htbp]
+\centering
+\fbox{\begin{minipage}{0.96\linewidth}
+\textbf{Algorithm 1. Backend $+$ UMR update rule.}
 \begin{enumerate}[leftmargin=1.5em]
   \item \textbf{Input:} stream $x_{1:T}$, backend $B$, prefix length $m$, block
   size $d$, EMA coefficient $\alpha$, bounds $[n_{\min},n_{\max}]$, constant
@@ -123,6 +127,10 @@ rather than a replacement for the fixed-regulator core.
   \item \textbf{Output:} backend estimate, warnings, $n_t^*$, drift proxy, and
   cap events.
 \end{enumerate}
+\end{minipage}}
+\caption{Backend $+$ UMR update rule.}
+\label{alg:backend_umr}
+\end{figure}
 
 The exact implementation details are in the source files listed at the top of
 this appendix.
