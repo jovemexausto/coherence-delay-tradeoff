@@ -7,6 +7,21 @@ is moving \citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,YuanLamperski2020,
 MazzettoUpfal2023}. The present paper keeps that question in distributional form
 and makes the memory horizon itself the main object of analysis.
 
+\begin{remark}[Distinction from dynamic-regret analyses]
+The $\zeta^{1/3}$ exponent also appears in non-stationary stochastic
+optimization~\citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019} and online
+tracking with path variation~\citep{YuanLamperski2020}. Those results concern
+gradient-based methods on sequences of convex losses in Euclidean parameter
+space, where drift is measured by a variation budget on loss functions. The
+present law operates in a distinct setting: (i) drift is $\mathsf{W}_2$-Lipschitz
+on the space of probability measures, not on a Euclidean loss gradient;
+(ii) the estimator class is causal averaging kernels, not parametric gradient
+methods; (iii) Proposition~\ref{prop:window_minimax} establishes the
+$\zeta^{1/3}$ rate as a minimax lower bound for arbitrary window-restricted
+estimators, not only for averaging---an obstruction from finite memory itself,
+rather than from variation-budget constraints.
+\end{remark}
+
 \paragraph{Transport geometry.}
 Wasserstein distance and Sinkhorn-type estimators are natural because they respect
 the geometry of the signal space and behave well under transport of mass and

@@ -49,6 +49,10 @@ translates into predictive cost. Sinkhorn-based tracking scores serve as the
 measurement layer, and the cube-root cap shows how the same law can act as an
 online regulator as well as a retrospective explanation.
 
+The window size is a fundamental parameter whose mischoice can create spurious
+or missed detections~\cite{hinder2023window}; the coherence-delay law provides a
+principled answer when the drift rate is estimable.
+
 The scope of the paper is deliberately narrow. We study finite-memory tracking
 under drift, a lower bound for restricted estimators, and the associated
 temporal-coherence interpretation, together with experiments chosen to test that

@@ -37,6 +37,21 @@ Differentiate $\mathcal{E}(n)$ with respect to $n$ and solve
 window. Substituting back yields the minimum value.
 \end{proof}
 
+\begin{remark}[Explicit form of $C_K$]
+By the sharp convergence rates of Niles-Weed and Bach~\cite{NilesWeedBach2019},
+for $K$-subgaussian distributions with intrinsic dimension $d_\mathrm{eff}$
+and Sinkhorn regularization $\varepsilon$,
+\[
+  C_K \;=\; O\!\left(\frac{\sigma_K^2}{\varepsilon}
+  \cdot \left(1 + \frac{d_\mathrm{eff}}{\varepsilon}\right)^{1/2}\right).
+\]
+For $d_\mathrm{eff} \leq 3$ this reduces to $C_K = O(\sigma_K^2/\varepsilon)$,
+recovering a parametric $n^{-1/2}$ statistical rate. For $d_\mathrm{eff} > 4$,
+$C_K$ grows with dimension, but the $\zeta^{1/3}$ exponent in
+$\mathcal{E}_{\min} \propto C_K^{2/3}\zeta^{1/3}$ is dimension-free: the floor
+rises with ambient complexity, but the scaling with drift rate is invariant.
+\end{remark}
+
 \begin{corollary}[EWMA Analogue]\label{cor:ewma_cube_root}
 For exponential weights $w_j = \alpha(1-\alpha)^j$, the effective lag is
 $\tau_\alpha = (1-\alpha)/\alpha$ and the effective sample size scales as
