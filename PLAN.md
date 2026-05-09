@@ -1,6 +1,6 @@
 # PLAN
 
-This is the active execution plan for the standalone tracking manuscript.
+This is the active execution plan for the standalone memory-horizon manuscript.
 Older plans tied to the hybrid masking paper are superseded.
 
 ## Working Rule
@@ -11,7 +11,7 @@ Older plans tied to the hybrid masking paper are superseded.
 - Remove stale material instead of trying to reinterpret it if it no longer fits
   the paper.
 
-## Active Program: Standalone Tracking Paper
+## Active Program: Temporal Geometry of Useful Memory
 
 ### Phase 1: Scope Lock
 
@@ -48,7 +48,8 @@ Tasks:
 
 - retain only the theory needed for the law and the lower bound;
 - fix any sign or notation issues that affect the retained results;
-- remove triadic, ISS, and masking theory from the core path of the paper.
+- remove triadic, ISS, and masking theory from the core path of the paper;
+- keep the formal path aligned with the operational memory-horizon story.
 
 ### Phase 4: Empirical Redesign
 
@@ -59,6 +60,7 @@ Tasks:
 - center the empirical story on the `U`-curve and finite-memory trade-off;
 - add or surface ablations over drift strength and window length;
 - keep EWMA and other fair finite-memory comparators;
+- make the oracle-by-phase recovery and `cap-only` regime the operational payoff;
 - remove masking-centric and logged-intervention evidence from the main paper.
 
 ### Phase 5: Positioning and Close
@@ -69,8 +71,8 @@ Tasks:
 
 - rewrite `discussion/related_work.tex` around dynamic regret,
   nonstationarity, OT, and AoI;
-- rewrite `discussion/conclusion.tex` so it lands on the law and the
-  freshness interpretation;
+- rewrite `discussion/conclusion.tex` so it lands on the law, the operational
+  horizon regulation, and the freshness interpretation;
 - remove residual language that points back to the cut paper.
 
 ### Phase 6: Validation
@@ -89,5 +91,5 @@ The final manuscript should make one central case:
 
 - finite-memory tracking under drift has an unavoidable trade-off;
 - this yields a cube-root optimal memory law and a finite-memory floor;
-- the result can be interpreted through information freshness;
+- the result can be operationalized as horizon regulation under drift;
 - the experiments are selected to validate that story directly.

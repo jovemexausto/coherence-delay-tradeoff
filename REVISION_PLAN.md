@@ -2,8 +2,8 @@
 
 ## Objective
 
-Turn the current manuscript into a standalone `Paper 1` on finite-memory
-tracking under Wasserstein drift.
+Turn the current manuscript into a standalone paper on the temporal geometry of
+useful memory under drift.
 
 This revision is not a light trim of the previous draft. The paper must have:
 
@@ -28,11 +28,12 @@ The paper should read as follows:
 - finite-memory tracking under Wasserstein drift;
 - the cube-root window law;
 - the finite-memory floor and lower bound;
-- the Sinkhorn-based tracking score as a measurement tool;
+- the operational horizon-regulation consequence of the law;
 - Gaussian and related tracking experiments that directly support the law;
 - EWMA or similar finite-memory comparators;
 - a narrow related-work bridge to dynamic regret, nonstationary estimation, and
-  AoI/freshness.
+  AoI/freshness;
+- `CubeRootADWIN` as the first operational consequence of the law.
 
 ## What Goes
 
@@ -42,6 +43,8 @@ The paper should read as follows:
 - intervention-aware diagnosis as a primary contribution;
 - KuaiRand and particle masking as central evidence;
 - any claim that passive-detector comparisons establish universal superiority.
+- any framing that makes drift detection the central object instead of memory
+  validity.
 
 ## Narrative Spine
 
@@ -53,6 +56,7 @@ The manuscript should follow this argumentative order:
 4. Show the lower bound for the restricted estimator class.
 5. Interpret the result as an information-freshness law.
 6. Validate the law with experiments and ablations designed for this story.
+7. Show that the same law can be turned into a usable horizon regulator.
 
 ## File-by-File Edit Plan
 
@@ -67,6 +71,7 @@ Edits:
 - state the cube-root law;
 - state the finite-memory floor / lower bound;
 - mention AoI/freshness only as interpretation if it helps;
+- close with the operational horizon-regulation consequence;
 - remove masking, RLHF, and logged-intervention language.
 
 ### 2. `frontmatter/introduction.tex`
@@ -77,7 +82,7 @@ Edits:
 
 - motivate the tracking problem rather than coherence diagnostics;
 - explain the variance-vs-staleness trade-off early;
-- frame the paper around adaptive memory horizons;
+- frame the paper around adaptive memory horizons and useful-memory geometry;
 - add a narrow contribution list aligned with the retained claims;
 - remove any suggestion that this paper's value depends on the cut branch.
 
@@ -99,7 +104,8 @@ Edits:
 - fix any surviving proposition sign / notation mismatch that affects the
   retained theory;
 - remove triadic, ISS, masking, and closed-loop architectural theory from the
-  core argument.
+  core argument;
+- keep the formal path aligned with the operational memory-horizon story.
 
 ### 4. `theory/empirical_validation.tex`
 
@@ -114,6 +120,8 @@ Edits:
 - keep Sinkhorn runtime/calibration only insofar as it supports the measurement
   story;
 - remove masking-centric and logged-intervention results from the main paper.
+- add the `CubeRootADWIN` continuous-drift benchmark and its piecewise-oracle
+  horizon recovery as the operational consequence of the law.
 
 ### 5. `discussion/related_work.tex`
 
@@ -125,7 +133,9 @@ Edits:
 - add the small dynamic-regret / variation-budget cluster;
 - include `Keehan, Anderson & Wiesemann (2025)` as near-setting prior art;
 - keep `Genevay et al. (2019)` and `Niles-Weed & Bach (2019)` for the OT side;
-- use AoI as an interpretive bridge, not as the main mathematical ancestor.
+- use AoI as an interpretive bridge, not as the main mathematical ancestor;
+- keep the framing adjacent to adaptive memory and nonstationary tracking, not
+  to drift detection as the primary object.
 
 ### 6. `discussion/conclusion.tex`
 
@@ -136,6 +146,7 @@ Edits:
 - restate the cube-root law;
 - restate the finite-memory floor;
 - restate the freshness interpretation;
+- restate the operational horizon-regulation consequence;
 - mention downstream implications only briefly and without reopening the cut
   branch.
 
@@ -150,7 +161,9 @@ The paper needs experiments that justify its own claims. The minimum package is:
    by the harness;
 5. at least one figure or table making the finite-memory floor operationally
    visible;
-6. only passive benchmark evidence that genuinely supports the tracking story.
+6. a `cap-only` regime figure or table showing staleness before changepoint
+   evidence;
+7. only passive benchmark evidence that genuinely supports the tracking story.
 
 If an experiment does not support one of these claims, it should not remain in
 the body of `Paper 1`.
@@ -175,5 +188,5 @@ the body of `Paper 1`.
 ## Bottom Line
 
 The job is no longer to rescue the old manuscript as a hybrid paper. The job is
-to turn the surviving tracking contribution into a focused standalone paper with
-its own narrative and evidence.
+to turn the surviving tracking contribution into a focused standalone paper on
+useful-memory geometry under drift, with its own narrative and evidence.
