@@ -1,7 +1,7 @@
 # Baseline
 
 ## Scientific Core
-- The paper's governing object is the coherence-delay trade-off.
+- The paper's governing object is the coherence-lag trade-off.
 - Finite-memory tracking under drift has a cube-root horizon law.
 - Temporal coherence means operational alignment with the current distribution.
 - Freshness is only a rate-free proxy for memory age, not the main object.
@@ -27,7 +27,7 @@
 
 ## Current Interpretation
 - The paper characterizes the temporal geometry of useful memory under drift.
-- The cube-root law is the operational scale induced by the coherence-delay trade-off.
+- The cube-root law is the operational scale induced by the coherence-lag trade-off.
 - The main result is a separation between statistical detectability and temporal validity.
 - Operational hysteresis appears as asymmetric contraction/re-expansion of the useful horizon.
 

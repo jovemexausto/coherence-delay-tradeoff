@@ -10,7 +10,7 @@ That question creates a structural trade-off. Using more past data reduces
 sampling noise, but it also increases the age of the information being used to
 track the present. Under drift, memory is simultaneously helpful and harmful:
 short windows are fresh but noisy, while long windows are stable but stale. The
-central claim of this paper is that this tension defines a coherence-delay
+central claim of this paper is that this tension defines a coherence-lag
 trade-off and induces a quantitative law for finite-memory tracking under
 Wasserstein nonstationarity.
 
@@ -49,7 +49,7 @@ measurement layer, and the cube-root cap shows how the same law can act as an
 online regulator as well as a retrospective explanation.
 
 The window size is a fundamental parameter whose mischoice can create spurious
-or missed detections~\cite{hinder2023window}; the coherence-delay law provides a
+or missed detections~\cite{hinder2023window}; the coherence-lag law provides a
 principled answer when the drift rate is estimable.
 
 The scope of the paper is deliberately narrow. We study finite-memory tracking

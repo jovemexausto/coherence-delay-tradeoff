@@ -1,10 +1,10 @@
 \begin{abstract}
-Finite-memory tracking under drift is governed by a coherence-delay trade-off:
-retaining more past information reduces statistical noise, but it also increases
-the temporal misalignment between retained evidence and the current
-distribution. As the target law moves, each additional sample becomes both
-useful and increasingly stale, so the problem is not simply how much to
-remember, but how long remembered evidence should remain operationally current.
+Useful memory under drift has a finite horizon: retaining more past information
+reduces statistical noise, but it also increases the temporal misalignment
+between retained evidence and the current distribution. As the target law
+moves, each additional sample becomes both useful and increasingly stale, so the
+problem is not simply how much to remember, but how long remembered evidence
+should remain operationally current.
 
 We study this trade-off under Wasserstein nonstationarity. For the finite-memory
 averaging class analyzed here, the tracking error splits into a statistical term

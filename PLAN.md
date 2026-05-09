@@ -3,7 +3,7 @@
 This is a historical execution plan for the standalone memory-horizon manuscript.
 Older plans tied to the hybrid masking paper are superseded.
 
-The manuscript identity is now locked as `The Coherence-Delay Trade-off: Temporal Geometry of Useful Memory Under Drift`.
+The manuscript identity is now locked as `Useful Memory Has a Horizon: A Cube-Root Law for Tracking Under Drift`.
 
 ## Working Rule
 
@@ -12,7 +12,7 @@ The manuscript identity is now locked as `The Coherence-Delay Trade-off: Tempora
 - Update manuscript text, figures, and claims together.
 - Remove stale material instead of trying to reinterpret it if it no longer fits the paper.
 
-## Active Program: Coherence-Delay Trade-off
+## Active Program: Useful Memory Has a Horizon
 
 ### Phase 1: Scope Lock
 
@@ -44,6 +44,6 @@ The final manuscript should make one central case:
 
 - finite-memory tracking under drift has an unavoidable trade-off;
 - this yields a cube-root optimal memory law and a finite-memory floor;
-- the governing object is the coherence-delay trade-off;
+- the governing object is the coherence-lag trade-off;
 - the result can be operationalized as horizon regulation under drift;
 - the experiments are selected to validate that story directly.

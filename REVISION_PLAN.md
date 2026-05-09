@@ -3,11 +3,11 @@
 Historical note:
 
 - This document records the revision path that produced the current standalone drift paper.
-- The manuscript identity is now locked as `The Coherence-Delay Trade-off: Temporal Geometry of Useful Memory Under Drift`.
+- The manuscript identity is now locked as `Useful Memory Has a Horizon: A Cube-Root Law for Tracking Under Drift`.
 
 ## Objective
 
-Turn the current manuscript into a standalone paper on the coherence-delay trade-off and the temporal geometry of useful memory under drift.
+Turn the current manuscript into a standalone paper on useful memory under drift and the coherence-lag trade-off that governs it.
 
 ## Final Paper Stance
 
@@ -15,7 +15,7 @@ Turn the current manuscript into a standalone paper on the coherence-delay trade
 - larger windows reduce statistical noise but increase informational staleness;
 - this induces a cube-root optimal memory law;
 - a minimax lower bound shows an unavoidable finite-memory floor;
-- temporal coherence / Age-of-Information provides an interpretive lens rather than the main theorem.
+- temporal coherence is the main operational object rather than a generic freshness story.
 
 ## What Stays
 
@@ -25,7 +25,7 @@ Turn the current manuscript into a standalone paper on the coherence-delay trade
 - the operational horizon-regulation consequence of the law;
 - Gaussian and related tracking experiments that directly support the law;
 - EWMA or similar finite-memory comparators;
-- a narrow related-work bridge to dynamic regret, nonstationary estimation, and AoI/freshness;
+- a narrow related-work bridge to dynamic regret and nonstationary estimation;
 - `CubeRootADWIN` as the first operational consequence of the law.
 
 ## What Goes
@@ -44,10 +44,10 @@ Turn the current manuscript into a standalone paper on the coherence-delay trade
 2. Explain the finite-memory trade-off between estimation error and staleness.
 3. State the cube-root law and the resulting error floor.
 4. Show the lower bound for the restricted estimator class.
-5. Interpret the result as a temporal-coherence law with an AoI bridge.
+5. Interpret the result as a temporal-coherence law.
 6. Validate the law with experiments and ablations designed for this story.
 7. Show that the same law can be turned into a usable horizon regulator.
 
 ## Bottom Line
 
-The job is to turn the surviving tracking contribution into a focused standalone paper on the coherence-delay trade-off and useful-memory geometry under drift, with its own narrative and evidence.
+The job is to turn the surviving tracking contribution into a focused standalone paper on useful memory under drift, with its own narrative and evidence.
