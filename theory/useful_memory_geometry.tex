@@ -56,10 +56,10 @@ $F(w) = 1/(1+A(w))$. For a uniform window, $A(w)=(n-1)/2$.
 \end{definition}
 
 The quantity $A(w)$ gives a compact description of the temporal geometry of a
-finite-memory estimator. Short windows have small age but large variance;
-long windows have small variance but large age. The cube-root horizon marks the
-point where the marginal gain from lowering variance no longer compensates for
-the additional age of the retained evidence.
+finite-memory estimator. Short windows have small age and large variance; long
+windows have small variance and large age. The cube-root horizon marks the point
+where the gain from lowering variance no longer compensates for the added age of
+the retained evidence.
 
 \begin{proposition}[Finite-Memory Floor]\label{prop:window_minimax}
 Let the target trajectory satisfy a $W_2$-Lipschitz drift bound with rate
