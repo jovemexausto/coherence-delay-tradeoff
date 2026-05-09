@@ -45,6 +45,22 @@ staleness terms therefore yields the same cube-root exponent in the effective
 memory scale.
 \end{corollary}
 
+\begin{definition}[Effective Memory Age]\label{def:memory_age}
+Let an estimator place weights $w_0,\dots,w_{n-1}$ on the most recent
+observations, with $\sum_j w_j = 1$. Its \emph{effective memory age} is
+\[
+  A(w) \;=\; \sum_{j=0}^{n-1} j\,w_j,
+\]
+and its corresponding freshness score is the monotone transform
+$F(w) = 1/(1+A(w))$. For a uniform window, $A(w)=(n-1)/2$.
+\end{definition}
+
+The quantity $A(w)$ gives a compact description of the temporal geometry of a
+finite-memory estimator. Short windows have small age but large variance;
+long windows have small variance but large age. The cube-root horizon marks the
+point where the marginal gain from lowering variance no longer compensates for
+the additional age of the retained evidence.
+
 \begin{proposition}[Finite-Memory Floor]\label{prop:window_minimax}
 Let the target trajectory satisfy a $W_2$-Lipschitz drift bound with rate
 $\zeta$, and restrict attention to estimators that only use the last $m$
