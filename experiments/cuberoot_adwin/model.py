@@ -5,11 +5,11 @@ from dataclasses import dataclass
 import numpy as np
 from river import drift as river_drift
 
-from drift.cube_root_adwin import CubeRootADWIN, calibrate_Ck
+from drift.cube_root_adwin import UMR, calibrate_Ck
 
 
 @dataclass(slots=True)
-class CubeRootADWINBenchmarkConfig:
+class UMRBenchmarkConfig:
     steps: int = 3000
     seeds: tuple[int, ...] = tuple(range(20))
     drift: float = 0.001
@@ -86,8 +86,8 @@ class MethodSummary:
 
 
 @dataclass(slots=True)
-class CubeRootADWINBenchmarkResult:
-    config: CubeRootADWINBenchmarkConfig
+class UMRBenchmarkResult:
+    config: UMRBenchmarkConfig
     time: np.ndarray
     representative: SeedTrace
     traces: list[SeedTrace]
@@ -188,7 +188,7 @@ def _cube_root_estimate(
     n_min: int,
     n_max: int,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, list[int], list[int]]:
-    detector = CubeRootADWIN(
+    detector = UMR(
         delta=delta,
         Ck=Ck,
         drift_window=drift_window,
@@ -324,9 +324,9 @@ def _build_summary(
 
 
 def run_benchmark(
-    config: CubeRootADWINBenchmarkConfig | None = None,
-) -> CubeRootADWINBenchmarkResult:
-    config = config or CubeRootADWINBenchmarkConfig()
+    config: UMRBenchmarkConfig | None = None,
+) -> UMRBenchmarkResult:
+    config = config or UMRBenchmarkConfig()
     time = np.arange(config.steps)
     traces: list[SeedTrace] = []
 
@@ -470,7 +470,7 @@ def run_benchmark(
         "cube": _build_summary(traces, "cube", config.tail_fraction),
     }
 
-    return CubeRootADWINBenchmarkResult(
+    return UMRBenchmarkResult(
         config=config,
         time=time,
         representative=traces[0],

@@ -3,11 +3,11 @@ from __future__ import annotations
 import numpy as np
 
 from ..core.types import SummaryRows
-from .model import CubeRootADWINBenchmarkResult, _fixed_window_estimate
+from .model import UMRBenchmarkResult, _fixed_window_estimate
 
 
 def _phase_edges(
-    result: CubeRootADWINBenchmarkResult,
+    result: UMRBenchmarkResult,
 ) -> tuple[np.ndarray, tuple[float, ...]]:
     if result.config.piecewise_drifts:
         drifts = result.config.piecewise_drifts
@@ -22,7 +22,7 @@ def _phase_edges(
     return np.asarray([0, result.config.steps], dtype=int), (result.config.drift,)
 
 
-def build_summary_rows(result: CubeRootADWINBenchmarkResult) -> SummaryRows:
+def build_summary_rows(result: UMRBenchmarkResult) -> SummaryRows:
     rows: list[dict[str, float | str | int]] = []
     for method, summary in result.summaries.items():
         rows.append(
@@ -56,7 +56,7 @@ def build_summary_rows(result: CubeRootADWINBenchmarkResult) -> SummaryRows:
     return rows
 
 
-def build_event_rows(result: CubeRootADWINBenchmarkResult) -> SummaryRows:
+def build_event_rows(result: UMRBenchmarkResult) -> SummaryRows:
     representative = result.representative
     return [
         {
@@ -102,7 +102,7 @@ def build_event_rows(result: CubeRootADWINBenchmarkResult) -> SummaryRows:
     ]
 
 
-def build_phase_rows(result: CubeRootADWINBenchmarkResult) -> SummaryRows:
+def build_phase_rows(result: UMRBenchmarkResult) -> SummaryRows:
     edges, drifts = _phase_edges(result)
 
     rows: list[dict[str, float | int | str]] = []
@@ -130,7 +130,7 @@ def build_phase_rows(result: CubeRootADWINBenchmarkResult) -> SummaryRows:
     return rows
 
 
-def build_oracle_phase_rows(result: CubeRootADWINBenchmarkResult) -> SummaryRows:
+def build_oracle_phase_rows(result: UMRBenchmarkResult) -> SummaryRows:
     edges, drifts = _phase_edges(result)
 
     rows: list[dict[str, float | int | str]] = []
@@ -192,7 +192,7 @@ def build_oracle_phase_rows(result: CubeRootADWINBenchmarkResult) -> SummaryRows
 
 
 def build_frontier_rows(
-    result: CubeRootADWINBenchmarkResult,
+    result: UMRBenchmarkResult,
     windows: tuple[int, ...] | None = None,
 ) -> SummaryRows:
     windows = windows or tuple(range(10, 501, 10))
@@ -240,7 +240,7 @@ def build_frontier_rows(
     return rows
 
 
-def build_delay_rows(result: CubeRootADWINBenchmarkResult) -> SummaryRows:
+def build_delay_rows(result: UMRBenchmarkResult) -> SummaryRows:
     cube = result.summaries["cube"]
     adwin = result.summaries["adwin"]
     lead_time = (
@@ -265,7 +265,7 @@ def build_delay_rows(result: CubeRootADWINBenchmarkResult) -> SummaryRows:
     ]
 
 
-def build_horizon_instability_rows(result: CubeRootADWINBenchmarkResult) -> SummaryRows:
+def build_horizon_instability_rows(result: UMRBenchmarkResult) -> SummaryRows:
     rep = result.representative
     Ck = 1.0 if result.config.Ck is None else float(result.config.Ck)
     drift_path = np.maximum(rep.drift_path, 1e-6)
@@ -306,7 +306,7 @@ def build_horizon_instability_rows(result: CubeRootADWINBenchmarkResult) -> Summ
 
 
 def build_horizon_transition_rows(
-    result: CubeRootADWINBenchmarkResult, window_steps: int = 50
+    result: UMRBenchmarkResult, window_steps: int = 50
 ) -> SummaryRows:
     if not result.config.piecewise_drifts:
         return []
@@ -368,7 +368,7 @@ def build_horizon_transition_rows(
 
 
 def build_drift_ema_ablation_rows(
-    results: list[CubeRootADWINBenchmarkResult],
+    results: list[UMRBenchmarkResult],
     alphas: list[float],
 ) -> SummaryRows:
     rows: list[dict[str, float | int | str]] = []
@@ -433,7 +433,7 @@ def build_drift_ema_ablation_rows(
 
 
 def build_horizon_gap_curve_rows(
-    result: CubeRootADWINBenchmarkResult, bins: int = 24
+    result: UMRBenchmarkResult, bins: int = 24
 ) -> SummaryRows:
     methods = ("fixed", "fixed_long", "ewma", "adwin", "cube")
     width_attrs = {

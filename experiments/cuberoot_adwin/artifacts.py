@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from ..core.common import rolling_mean
-from .model import CubeRootADWINBenchmarkResult
+from .model import UMRBenchmarkResult
 from .reports import (
     build_delay_rows,
     build_drift_ema_ablation_rows,
@@ -16,9 +16,7 @@ from .reports import (
 )
 
 
-def save_benchmark_figure(
-    result: CubeRootADWINBenchmarkResult, output_path: Path
-) -> None:
+def save_benchmark_figure(result: UMRBenchmarkResult, output_path: Path) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     rep = result.representative
     time = result.time
@@ -36,9 +34,7 @@ def save_benchmark_figure(
     )
     axes[0].plot(time, rolling_mean(rep.ewma_error, 50), label="EWMA", linewidth=1.3)
     axes[0].plot(time, rolling_mean(rep.adwin_error, 50), label="ADWIN", linewidth=1.3)
-    axes[0].plot(
-        time, rolling_mean(rep.cube_error, 50), label="CubeRootADWIN", linewidth=1.3
-    )
+    axes[0].plot(time, rolling_mean(rep.cube_error, 50), label="UMR", linewidth=1.3)
     axes[0].set_ylabel("Rolling MAE")
     axes[0].set_title("Continuous drift tracking")
     axes[0].legend(loc="upper left", ncol=3)
@@ -47,11 +43,11 @@ def save_benchmark_figure(
     axes[1].plot(time, rep.fixed_long_width, label="fixed-500", linewidth=1.2)
     axes[1].plot(time, rep.ewma_width, label="EWMA effective width", linewidth=1.2)
     axes[1].plot(time, rep.adwin_width, label="ADWIN width", linewidth=1.2)
-    axes[1].plot(time, rep.cube_width, label="CubeRootADWIN width", linewidth=1.2)
+    axes[1].plot(time, rep.cube_width, label="UMR width", linewidth=1.2)
     axes[1].plot(
         time,
         rep.cube_n_star,
-        label=r"CubeRootADWIN $n^*$",
+        label=r"UMR $n^*$",
         linewidth=1.1,
         linestyle="--",
     )
@@ -68,8 +64,8 @@ def save_benchmark_figure(
     axes[2].set_xlabel("Time step")
     axes[2].set_yticks([])
     axes[2].text(0.01, 0.75, "blue=ADWIN drift", transform=axes[2].transAxes)
-    axes[2].text(0.01, 0.55, "orange=CubeRoot drift", transform=axes[2].transAxes)
-    axes[2].text(0.01, 0.35, "green=cube cap", transform=axes[2].transAxes)
+    axes[2].text(0.01, 0.55, "orange=UMR drift", transform=axes[2].transAxes)
+    axes[2].text(0.01, 0.35, "green=UMR cap", transform=axes[2].transAxes)
 
     for axis in axes:
         axis.grid(alpha=0.2, linewidth=0.5)
@@ -79,9 +75,7 @@ def save_benchmark_figure(
     plt.close(fig)
 
 
-def save_frontier_figure(
-    result: CubeRootADWINBenchmarkResult, output_path: Path
-) -> None:
+def save_frontier_figure(result: UMRBenchmarkResult, output_path: Path) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     rows = build_frontier_rows(result)
     sweep_rows = [row for row in rows if row["method"] == "fixed_sweep"]
@@ -132,7 +126,7 @@ def save_frontier_figure(
         "fixed_long": "fixed-500",
         "ewma": "EWMA",
         "adwin": "ADWIN",
-        "cube": "CubeRootADWIN",
+        "cube": "UMR",
     }
     for row in point_rows:
         method = str(row["method"])
@@ -159,9 +153,7 @@ def save_frontier_figure(
     plt.close(fig)
 
 
-def save_delay_figure(
-    results: list[CubeRootADWINBenchmarkResult], output_path: Path
-) -> None:
+def save_delay_figure(results: list[UMRBenchmarkResult], output_path: Path) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     rows: list[dict[str, float | int | str]] = []
     for result in results:
@@ -188,7 +180,7 @@ def save_delay_figure(
         color="tab:green",
         linewidth=2.0,
         marker="o",
-        label="CubeRootADWIN cap",
+        label="UMR cap",
     )
     axes[0].plot(
         drifts,
@@ -231,7 +223,7 @@ def save_delay_figure(
 
 
 def save_horizon_instability_figure(
-    result: CubeRootADWINBenchmarkResult, output_path: Path
+    result: UMRBenchmarkResult, output_path: Path
 ) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     rep = result.representative
@@ -261,9 +253,7 @@ def save_horizon_instability_figure(
     axes[1].plot(time, fixed_100, color="tab:gray", linewidth=1.5, label="fixed-100")
     axes[1].plot(time, fixed_200, color="tab:brown", linewidth=1.5, label="fixed-200")
     axes[1].plot(time, adwin_width, color="tab:orange", linewidth=1.4, label="ADWIN")
-    axes[1].plot(
-        time, cube_n_star, color="tab:green", linewidth=1.8, label="CubeRoot n*"
-    )
+    axes[1].plot(time, cube_n_star, color="tab:green", linewidth=1.8, label="UMR n*")
     axes[1].plot(
         time,
         cube_width,
@@ -271,7 +261,7 @@ def save_horizon_instability_figure(
         linestyle="--",
         linewidth=1.0,
         alpha=0.8,
-        label="CubeRoot width",
+        label="UMR width",
     )
     axes[1].set_ylabel("Horizon")
     axes[1].legend(loc="upper right", frameon=False, ncols=2)
@@ -284,7 +274,7 @@ def save_horizon_instability_figure(
         time, fixed_200_regret, color="tab:brown", linewidth=1.5, label="fixed-200"
     )
     axes[2].plot(time, adwin_regret, color="tab:orange", linewidth=1.4, label="ADWIN")
-    axes[2].plot(time, cube_regret, color="tab:green", linewidth=2.0, label="CubeRoot")
+    axes[2].plot(time, cube_regret, color="tab:green", linewidth=2.0, label="UMR")
     axes[2].set_ylabel("|n_t - n_t^*|")
     axes[2].grid(alpha=0.2, linewidth=0.5)
     axes[2].legend(loc="upper right", frameon=False, ncols=3)
@@ -310,18 +300,16 @@ def save_horizon_instability_figure(
         axes[2].axvline(t, color="tab:orange", alpha=0.08, linewidth=0.8)
 
     axes[2].set_xlabel("Time step")
-    axes[2].text(0.01, 0.83, "green=cube cap", transform=axes[2].transAxes)
+    axes[2].text(0.01, 0.83, "green=UMR cap", transform=axes[2].transAxes)
     axes[2].text(0.01, 0.71, "blue=ADWIN drift", transform=axes[2].transAxes)
-    axes[2].text(0.01, 0.59, "orange=CubeRoot drift", transform=axes[2].transAxes)
+    axes[2].text(0.01, 0.59, "orange=UMR drift", transform=axes[2].transAxes)
 
     fig.tight_layout()
     fig.savefig(output_path, bbox_inches="tight")
     plt.close(fig)
 
 
-def save_horizon_gap_figure(
-    result: CubeRootADWINBenchmarkResult, output_path: Path
-) -> None:
+def save_horizon_gap_figure(result: UMRBenchmarkResult, output_path: Path) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
     rows = build_horizon_gap_curve_rows(result)
     abs_rows = [row for row in rows if row["gap_kind"] == "absolute"]
@@ -339,7 +327,7 @@ def save_horizon_gap_figure(
         "fixed_long": "fixed-500",
         "ewma": "EWMA",
         "adwin": "ADWIN",
-        "cube": "CubeRootADWIN",
+        "cube": "UMR",
     }
 
     def _plot_panel(axis, panel_rows, title, xlabel, log_x=False):
@@ -393,7 +381,7 @@ def save_horizon_gap_figure(
 
 
 def save_drift_ema_ablation_figure(
-    results: list[CubeRootADWINBenchmarkResult],
+    results: list[UMRBenchmarkResult],
     alphas: list[float],
     output_path: Path,
 ) -> None:

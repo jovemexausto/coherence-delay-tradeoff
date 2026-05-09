@@ -9,6 +9,9 @@ continuous-drift, temporal-validity, and alternating-timescales benchmarks probe
 tracking. The horizon cost curve assesses predictive payoff. A compact piecewise
 benchmark is retained only as a phase-wise calibration check.
 
+In the paper-facing taxonomy, UMR is the useful-memory regulator and ADWIN is
+the backend detector instantiated in the benchmarks.
+
 \subsection{Law Validation}\label{sec:validation_law}
 
 We begin with the Gaussian sweep used to validate the finite-memory law. The
@@ -43,8 +46,7 @@ trade stops paying off.
 the empirical frontier: short horizons are noisy, long horizons are stale, and
 the knee marks the useful-memory optimum. The frontier is asymmetric because the
 gain from more memory saturates while the cost of age keeps accumulating. ADWIN
-sits far to the stale side, whereas CubeRootADWIN lies close to the frontier
-knee.}\label{fig:lag_variance_frontier}
+sits far to the stale side, whereas UMR lies close to the frontier knee.}\label{fig:lag_variance_frontier}
 \end{figure}
 
 \subsection{Over-Memory Under Continuous Drift}\label{sec:validation_continuous}
@@ -69,7 +71,7 @@ Fixed-100 & 0.0849 & 100.0 & -- & -- \\
 Fixed-500 & 0.2388 & 500.0 & -- & -- \\
 EWMA & 0.1291 & 39.0 & -- & -- \\
 ADWIN & 0.1757 & 335.8 & 3.9 & 0.0 \\
-CubeRootADWIN & 0.0978 & 88.9 & 0.0 & 1374.7 \\
+UMR & 0.0978 & 88.9 & 0.0 & 1374.7 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -78,7 +80,7 @@ CubeRootADWIN & 0.0978 & 88.9 & 0.0 & 1374.7 \\
 \centering
 \safeincludegraphics[width=0.95\linewidth]{figures/cuberoot_adwin/fig_cuberoot_adwin}
 \caption{Continuous-drift benchmark. Fixed-500 is the stale-memory baseline;
-ADWIN retains far more memory than the oracle-scale horizon; CubeRootADWIN
+ADWIN retains far more memory than the oracle-scale horizon; UMR
 pulls the effective horizon toward the useful-memory scale and exposes a
 `cap-only' regime, where memory becomes operationally stale before statistical
 changepoint evidence appears.}\label{fig:cuberoot_adwin}
@@ -91,8 +93,8 @@ validity distinct from the evidence threshold for abrupt change.
 \subsection{Temporal Validity Gap}\label{sec:validation_delay}
 
 The gap becomes more explicit when the drift rate varies. The next figure plots
-the first cap activation of the cube-root regulator and the first changepoint
-decision of ADWIN as the drift rate changes. In the smooth-drift regime, the cap
+the first cap activation of UMR and the first changepoint decision of ADWIN as
+the drift rate changes. In the smooth-drift regime, the cap
 activates much earlier than the detector; as the drift becomes faster, the gap
 shrinks but does not disappear.
 
@@ -100,8 +102,8 @@ shrinks but does not disappear.
 \centering
 \safeincludegraphics[width=0.95\linewidth]{figures/cuberoot_adwin/fig_cap_vs_detection_delay}
 \caption{Temporal validity gap across drift rates. The top panel compares the
-first cube-root cap activation with the first ADWIN detection. The bottom panel
-shows the resulting lead time. Under slow drift, memory becomes operationally
+first UMR cap activation with the first ADWIN detection. The bottom panel shows
+the resulting lead time. Under slow drift, memory becomes operationally
 stale long before changepoint evidence is available; under faster drift, the gap
 narrows but remains positive.}\label{fig:cap_vs_detection_delay}
 \end{figure}
@@ -122,7 +124,7 @@ how far each method remains from the local oracle horizon over time.
 \safeincludegraphics[width=0.95\linewidth]{figures/cuberoot_adwin/fig_horizon_instability}
 \caption{Alternating-timescales instability. The top panel shows the drift
 schedule, the middle panel shows the local oracle horizon alongside fixed
-windows and the cube-root regulator, and the bottom panel shows horizon regret
+windows and UMR, and the bottom panel shows horizon regret
 \,$|n_t - n_t^*|\,$ over time. The purpose of the benchmark is to expose when
 the useful horizon changes locally: slow stretches favor longer memory, bursts
 contract the oracle scale, and fixed horizons can remain misaligned across
@@ -259,7 +261,7 @@ Method & Contraction & Expansion \\
 fixed-100 & 63.3 & 254.2 \\
 fixed-200 & 163.3 & 154.2 \\
 ADWIN & 888.8 & 435.8 \\
-CubeRoot & 58.4 & 307.7 \\
+UMR & 58.4 & 307.7 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -297,8 +299,8 @@ grid, and the curve is binned over all seeds and time points.
 \safeincludegraphics[width=0.95\linewidth]{figures/cuberoot_adwin/fig_horizon_gap_cost}
 \caption{Excess error as a function of horizon misalignment. The relation is
 backend dependent rather than universal: fixed-100 stays inside a low-cost band,
-whereas fixed-500 and ADWIN pay substantially more once the gap widens. The cube-
-root regulator sits between these extremes.}
+whereas fixed-500 and ADWIN pay substantially more once the gap widens. UMR sits
+between these extremes.}
 \label{fig:horizon_gap_cost}
 \end{figure}
 

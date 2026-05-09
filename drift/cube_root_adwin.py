@@ -46,7 +46,7 @@ def calibrate_Ck(stream_prefix: list[float], n_calib: int | None = None) -> floa
     return max(std * (len(data) ** 0.5), 1e-6)
 
 
-class CubeRootADWIN:
+class UMR:
     """ADWIN plus a cube-root cap on adaptive memory."""
 
     def __init__(

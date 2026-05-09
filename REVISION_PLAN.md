@@ -26,7 +26,7 @@ Turn the current manuscript into a standalone paper on useful memory under drift
 - Gaussian and related tracking experiments that directly support the law;
 - EWMA or similar finite-memory comparators;
 - a narrow related-work bridge to dynamic regret and nonstationary estimation;
-- `CubeRootADWIN` as the first operational consequence of the law.
+- UMR as the first operational consequence of the law.
 
 ## What Goes
 

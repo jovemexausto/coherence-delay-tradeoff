@@ -27,7 +27,7 @@ from ..cuberoot_adwin.artifacts import save_delay_figure
 from ..cuberoot_adwin.artifacts import save_frontier_figure
 from ..cuberoot_adwin.artifacts import save_horizon_gap_figure
 from ..cuberoot_adwin.artifacts import save_horizon_instability_figure
-from ..cuberoot_adwin.model import CubeRootADWINBenchmarkConfig, run_benchmark
+from ..cuberoot_adwin.model import UMRBenchmarkConfig, run_benchmark
 from ..cuberoot_adwin.reports import (
     build_event_rows,
     build_delay_rows,
@@ -178,7 +178,7 @@ def main() -> None:
     )
 
     cuberoot_result = run_benchmark(
-        CubeRootADWINBenchmarkConfig(
+        UMRBenchmarkConfig(
             seeds=tuple(range(args.seed, args.seed + 20)),
             drift=0.001,
             fixed_window=100,
@@ -190,7 +190,7 @@ def main() -> None:
         )
     )
     piecewise_result = run_benchmark(
-        CubeRootADWINBenchmarkConfig(
+        UMRBenchmarkConfig(
             seeds=tuple(range(args.seed, args.seed + 20)),
             piecewise_drifts=(0.0005, 0.003, 0.001),
             fixed_window=100,
@@ -202,7 +202,7 @@ def main() -> None:
         )
     )
     alternating_result = run_benchmark(
-        CubeRootADWINBenchmarkConfig(
+        UMRBenchmarkConfig(
             piecewise_drifts=(0.0002, 0.0045, 0.00015, 0.007, 0.00025),
             piecewise_lengths=(900, 140, 700, 70, 1190),
             fixed_window=100,
@@ -217,7 +217,7 @@ def main() -> None:
     drift_ema_alphas = (0.01, 0.02, 0.05, 0.1, 0.2)
     drift_ema_results = [
         run_benchmark(
-            CubeRootADWINBenchmarkConfig(
+            UMRBenchmarkConfig(
                 piecewise_drifts=alternating_config.piecewise_drifts,
                 piecewise_lengths=alternating_config.piecewise_lengths,
                 fixed_window=alternating_config.fixed_window,
@@ -234,7 +234,7 @@ def main() -> None:
     ]
     delay_results = [
         run_benchmark(
-            CubeRootADWINBenchmarkConfig(
+            UMRBenchmarkConfig(
                 drift=drift,
                 fixed_window=100,
                 fixed_long_window=500,
