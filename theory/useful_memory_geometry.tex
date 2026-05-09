@@ -1,0 +1,76 @@
+\section{Useful Memory Geometry}\label{sec:memory_geometry}
+
+This section isolates the formal heart of the paper: under continuous drift,
+memory is not only a statistical resource but also a temporal liability. The
+core question is therefore not whether one can react to change, but how long a
+sample should remain operationally useful before it becomes stale.
+
+\begin{definition}[Lag-Inclusive Estimation Error]\label{def:lag_error}
+For a finite-memory estimator with effective window size $n$ and drift rate
+$\zeta$, we write the expected tracking error as
+\[
+  \mathcal{E}(n) \;=\; C_K\,n^{-1/2} \;+
+  \tfrac{1}{2}\,\zeta\,n,
+\]
+where the first term is the finite-sample statistical cost and the second term
+is the staleness cost induced by retaining old information.
+\end{definition}
+
+The two terms in \cref{def:lag_error} pull in opposite directions. Increasing
+$n$ reduces variance but raises the age of the retained evidence. The resulting
+trade-off is the basic geometry that governs the paper.
+
+\begin{proposition}[Optimal Window Under Drift]\label{prop:coherence_delay}
+Under \cref{def:lag_error}, the error $\mathcal{E}(n)$ is minimised at
+\[
+  n^* \;=\; \left(\frac{C_K}{\zeta}\right)^{2/3},
+\]
+with minimum value
+\[
+  \mathcal{E}_{\min} \;=\; \tfrac{3}{2}\,C_K^{2/3}\,\zeta^{1/3}.
+\]
+\end{proposition}
+
+\begin{proof}
+Differentiate $\mathcal{E}(n)$ with respect to $n$ and solve
+\(d\mathcal{E}/dn = 0\). The unique positive critical point gives the stated
+window. Substituting back yields the minimum value.
+\end{proof}
+
+\begin{corollary}[EWMA Analogue]\label{cor:ewma_cube_root}
+For exponential weights $w_j = \alpha(1-\alpha)^j$, the effective lag is
+$\tau_\alpha = (1-\alpha)/\alpha$ and the effective sample size scales as
+$n_{\mathrm{eff}} \asymp 1/\alpha$. Balancing the same statistical and
+staleness terms therefore yields the same cube-root exponent in the effective
+memory scale.
+\end{corollary}
+
+\begin{proposition}[Finite-Memory Floor]\label{prop:window_minimax}
+Let the target trajectory satisfy a $W_2$-Lipschitz drift bound with rate
+$\zeta$, and restrict attention to estimators that only use the last $m$
+samples. Then, in the critical-window regime, the minimax tracking error over
+that class cannot beat the same variance-plus-staleness scaling:
+\[
+  \inf_{\hat\Pot_m}\sup_{\Pot^*}\,\mathbb{E}\,d\bigl(\hat\Pot_m,\Pot^*\bigr)
+  \;\gtrsim\; C_K\,m^{-1/2} + \tfrac{1}{2}\,\zeta\,m.
+\]
+Consequently, the cube-root horizon is not merely the optimum of one estimator;
+it is the structural floor of finite memory on this drift class.
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+The lower bound combines a finite-sample concentration term with a lag term
+induced by the Lipschitz drift of the oracle trajectory. The concentration part
+is inherited from debiased Sinkhorn estimation, while the lag term follows from
+the fact that any estimator restricted to the last $m$ samples must average over
+observations whose oracle law has moved by order $\zeta m$. The two terms are
+additive at the level of the bound, so the same cube-root balance governs the
+critical regime.
+\end{proof}
+
+\begin{remark}[Measurement layer]
+The paper uses debiased Sinkhorn divergence as a practical measurement layer
+when the underlying geometry must be estimated from samples. That computational
+choice supports the tracking law, but the law itself is about the horizon of
+useful memory, not about any particular OT solver.
+\end{remark}

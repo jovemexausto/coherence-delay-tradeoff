@@ -1,96 +1,27 @@
 \section{Limitations and Open Directions}\label{sec:open}
 
-\paragraph{Finite-memory scope.}
-The cube-root law of \cref{prop:coherence_delay} is exact for the
-finite-memory averaging class analyzed here, and \cref{prop:window_minimax}
-extends the lower-bound side to arbitrary measurable estimators that only see
-the last $m$ samples of a $\zeta$-Lipschitz drift path. The cube-root exponent
-therefore survives beyond linear averaging in the critical-window regime,
-but this still falls short of a universal minimax result over arbitrary
-recursive or extrapolative adaptive estimators.
+\paragraph{Scope of the law.}
+The cube-root law is exact for the finite-memory averaging class analyzed in
+this paper, and the lower bound is stated for window-restricted estimators on a
+$W_2$-Lipschitz drift class. The result therefore captures a structural finite-
+memory phenomenon, but not a universal minimax theorem over all possible online
+estimators.
 
-\paragraph{Geometry and observability.}
-The present formulation uses $W_2$ and its debiased Sinkhorn approximation to
-measure model drift. Extending the same trade-off cleanly to other geometries,
-such as $f$-divergences or kernel MMD, remains open. Likewise,
-$CI^E$ (written formally as $\ScoreE(\IS,t)$ when needed) requires an observable
-proxy for intervention effort, and the preferred proxy is domain-dependent.
-This is especially relevant in performative or feedback-loop settings, where
-intervention and exposure are partially confounded
-\citep{PerdomoEtAl2020,HardtMendlerDunner2023,TaoriHashimoto2023,KrauthWangJordan2022}.
+\paragraph{Dependence on local drift estimation.}
+The operational regulator depends on a local estimate of drift. The current
+benchmark suggests that the remaining gap to the oracle is mostly a drift-
+estimation issue, not a failure of the cube-root scaling itself. Better local
+geometry estimators may therefore sharpen the horizon recovery without changing
+the law.
 
-\paragraph{Benchmark dependence.}
-The passive benchmarks use Page-Hinkley events as the operational reference for
-lead time, and different failure definitions would change the resulting alarm
-statistics. On active and logged benchmarks, the usefulness of
-CI$^E$ still depends on calibration choices such as the effort penalty
-$\lambda$, the warning threshold, and the local drift estimator
-$\hat\zeta_t$.
+\paragraph{Geometry beyond the current metric.}
+The present formulation uses Wasserstein geometry and a debiased Sinkhorn
+measurement layer when samples must be compared computationally. Other geometries
+may admit analogous trade-offs, but the constants and the calibration of useful
+memory may change.
 
-\paragraph{Effort proxies and $\sigma_A$ surrogates.}
-The practical hierarchy of effort proxies is strongest in simulation,
-weaker in direct observation, and weakest in logged recommendation data.
-Likewise, $\sigma_A$ is exact only in settings with replicated or fully
-specified action channels. In the Gaussian tracker it is constructive, in the
-particle tracker it is a controlled surrogate based on actuation gap, and in
-KuaiRand it is a normalized exposure-entropy proxy rather than a direct
-estimate of $e^{-H(\Act\mid\Pot)}$. The logged benchmark should therefore be
-read as operational evidence for effort-aware diagnostics, not as full causal
-identification of intervention dynamics. A stronger causal claim would require
-either replica-policy or shadow-policy logs, or an external human-grounded
-outcome surface against which masking could be falsified rather than inferred
-from the benchmark's own internal signals. More richly logged recommender traces
-that preserve full slate or action-channel realizations would also strengthen
-the estimand itself: in that regime $\sigma_A$ could move from a proxy-level
-surrogate toward the identified tier of the hierarchy in \cref{def:tci_estimable}.
-
-\paragraph{Scaling beyond present validation.}
-The Gaussian and particle trackers validate the theory in controlled Gaussian and non-Gaussian
-settings, and the real-data benchmarks show that the diagnostics remain useful
-outside the synthetic environment. High-dimensional state spaces, richer action
-channels, and direct measurements of intervention effort are the next natural
-tests of the framework. A particularly sharp next benchmark is RLHF-style
-post-training. That setting instantiates all three roles unusually cleanly: the
-current policy plays the role of $\Pot$, sampled completions or actions play the
-role of $\Act$, and the policy update rule plays the role of $\Conv$.
-Policy-reference KL is already logged as an intervention burden in standard
-RLHF pipelines \citep{StiennonEtAl2020,BaiEtAl2022}, making it a much cleaner
-effort proxy than the exposure surrogates available in logged recommendation
-data. At the same time, reward-model or proxy-reward improvement can be compared
-against held-out or human-grounded quality, creating an external masking surface
-that the present KuaiRand benchmark does not have. RLHF is therefore a natural
-next test bed for the masking gap $M_t = CI - CI^E$ (formally,
-$\Score(\IS,t) - \ScoreE(\IS,t)$): the system may maintain high proxy
-coherence while paying increasing KL cost and drifting away from the external
-target. Practical simulation frameworks such as AlpacaFarm
-\citep{DuboisEtAl2024} make that direction especially plausible without
-requiring full-scale LLM training in the loop.
-
-\paragraph{Opaque adaptation maps.}
-For black-box $\Conv_t$, the framework provides only the template requirement
-that an ISS-Lyapunov functional $V_\Phi$ exist. A CEGIS-style recovery route is
-not implemented or validated in this repository, so diagnosing $\sigma_\Phi$
-for opaque adaptation subsystems remains an open engineering problem.
-
-\paragraph{Computational profile.}
-The Sinkhorn runtime study is a prototype-level NumPy benchmark on Gaussian
-clouds. It is useful for separating statistical accuracy from wall-clock cost,
-but it does not claim a production implementation ceiling. The current sweep
-reaches $d=256$ and $\varepsilon=0.02$, and the main practical message is that
-fixed regularization is not portable across geometry: larger $\varepsilon$ is
-consistently cheaper and more accurate on this grid, while the residual bias and
-iteration count still depend on dimension. The current calibration is therefore
-operational rather than asymptotically exact: it is meant to compare tracked
-drifted clouds at a chosen operating point, not to claim a null-optimal threshold
-rule. Recent Sinkhorn limit theorems make that split explicit, with distinct
-alternative-regime and null fluctuation orders \citep{GoldfeldEtAl2022}.
-
-\paragraph{Missing adaptive baselines.}
-The passive comparisons emphasize ADWIN, Page-Hinkley, KSWIN, and the NoDrift
-sanity baseline, and now also include CUSUM, forgetting-factor recursive least
-squares, scalar Kalman predictors, and a kernel MMD two-sample test
-(Gaussian RBF, median-heuristic bandwidth) on the real-world streams. That does
-not exhaust the baseline space: multivariate MMD detectors, representation-space
-shift tests, and additional online adaptive learners such as explicit $H_\infty$
-filters remain future work, and the present calibration should still be read as
-benchmark-specific rather than universal.
+\paragraph{What the experiments do not claim.}
+The current experiments are not a leaderboard over drift detectors. They show a
+specific operational distinction: a tracker can still have statistically
+insufficient changepoint evidence while already being stale in the sense of
+useful memory.

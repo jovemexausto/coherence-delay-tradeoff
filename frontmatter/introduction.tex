@@ -3,8 +3,8 @@
 Adaptive systems rarely track a fixed target. In streaming estimation,
 monitoring, and online decision-making, the data-generating distribution itself
 drifts over time. A learner with finite memory must therefore solve a basic but
-easily neglected problem: how much of the past should still be used once the
-world that produced it has started to move away?
+easy-to-miss problem: how much of the past should still count once the world
+that produced it has started to move away?
 
 That question creates a structural trade-off. Using more past data reduces
 sampling noise, but it also increases the age of the information being used to
@@ -30,9 +30,8 @@ is not only finite sample size, but the age of the information that finite
 memory forces the estimator to retain. The result can therefore be read as a
 freshness law: the learner pays for variance reduction by carrying older
 evidence, and optimal tracking occurs at a memory horizon that balances noise
-against informational aging. This Age-of-Information interpretation is not the
-main theorem, but it helps explain why the law belongs naturally to a broader
-discussion of timeliness in adaptive inference.
+against informational aging. The Age-of-Information reading is not the main
+theorem, but it clarifies why timeliness is the right lens for the paper.
 
 The empirical section is organized around this theorem-first story. Gaussian
 tracking experiments exhibit the predicted `U`-curve, ablations over drift
@@ -40,7 +39,8 @@ strength show how the best window shifts with nonstationarity, EWMA provides a
 natural finite-memory comparison, and dynamic-window illustrations make the
 operational memory law visible when the local drift rate changes over time.
 Sinkhorn-based tracking scores serve as the practical measurement layer for this
-error surface.
+error surface, and the cube-root cap shows how the same law can be used as an
+online horizon regulator rather than only as a retrospective explanation.
 
 The scope of the paper is deliberately narrow. We study finite-memory tracking
 under drift, not a general theory of all recursive estimators, and not a

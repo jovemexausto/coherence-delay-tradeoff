@@ -1,1017 +1,118 @@
-\section{Empirical Validation}\label{sec:tgt}
+\section{Empirical Validation}\label{sec:validation}
 
-A Gaussian tracker provides an analytically tractable closed-loop tracking model
-that instantiates the three roles $(\Pot,\Act,\Conv)$ and admits closed-form
-computation of all Lyapunov functionals.
+The experiments are designed to validate the paper's central claim: under
+continuous drift, memory must be regulated by temporal usefulness rather than by
+statistical evidence of abrupt change alone. The empirical story has three
+parts. First, the Gaussian sweep recovers the cube-root law itself. Second,
+continuous-drift benchmarks show that classical adaptive windows can keep too
+much stale memory. Third, the piecewise-drift benchmark shows that a cube-root
+cap can recover the local oracle horizon across regimes.
 
-The active and logged results come first, because they are where effort-aware
-diagnostics matter most. The supporting studies then recover the cube-root
-scaling, ablate the three-role diagnostic, and place the method against passive
-drift alarms. Code and reproduction instructions are provided in
-\cref{app:code_repository}.
+\subsection{Law Validation}\label{sec:validation_law}
 
-\subsection{Logged and Active Masking}\label{sec:tgt_logged_active}
-
-Two results carry the empirical argument. On KuaiRand, healthy-only
-calibration raises bubble detection from $0.458$ with CI to $0.692$ with CI$^E$,
-with paired bootstrap intervals excluding zero for the user-level gain; all
-generic detectors in that comparison consume the same effort-adjusted scalar
-signal, so the comparison is about detector behavior rather than detector-specific
-inputs. On the active particle benchmark, CI$^E$ detects masking onset in all
-12 runs with median delay $5.0$, whereas ADWIN detects 7 of 12 runs with median
-delay $279.0$.
-
-These are the regimes in which the diagnostic claim matters: low observed error
-can be maintained by intervention, and passive alarms do not directly price that
-intervention burden. The detailed logged and active protocols appear in
-\cref{sec:tgt_exp_e,sec:particle_tracking_masking}. What follows tests the
-finite-memory law, the score construction, and the passive-regime split.
-
-\subsection{Formalization}\label{sec:tgt_formal}
-
-The Gaussian tracker extends \cref{ex:concrete}.
-Let the environment produce observations from a drifting Gaussian:
-\[
-  s_t \sim \mathcal{N}\!\left(\mu^*(t),\, \sigma_{\mathrm{obs}}^2\right),
-  \qquad
-  \mu^*(t) = \mu_0 + \zeta t + \sigma_w B_t,
-\]
-where $B_t$ is standard Brownian motion.
-The tracker components are:
-\begin{itemize}[noitemsep]
-  \item $\Pot(S,t) = \mathcal{N}(\hat\mu_t, \hat\sigma_t^2)$: Gaussian belief state.
-  \item $\Act_t(\Pot) = \hat\mu_t$: deterministic mean extraction
-    ($H(\Act_t \mid \Pot) = 0$, $\delta = 0$).
-  \item $\Conv_t$: Kalman measurement update (see \cref{ex:concrete}).
-\end{itemize}
-All three Lyapunov functionals are available in closed form
-(\cref{ex:concrete}), which makes the tracker a convenient test bed for the
-trade-off and diagnostic claims.
-
-\begin{lemma}[The Gaussian Tracker Satisfies the ISS Hypotheses]\label{lem:tgt_iss}
-The Gaussian tracker with $\sigma_w > 0$ and $\sigma_{\mathrm{obs}} > 0$ satisfies
-all four ISS hypotheses (H-ISS-P/A/$\Phi$/Env) of \cref{thm:borromean}:
-\begin{enumerate}[label=\textnormal{(\roman*)}, noitemsep]
-  \item \textbf{H-ISS-P}: $V_P(t) = \tfrac{1}{2}W_2(\Pot,\Pot^*)^2
-    = \tfrac{1}{2}(\hat\mu_t - \mu^*(t))^2$ is a valid ISS-Lyapunov
-    functional; the Kalman update contracts $V_P$ at rate
-    $1 - K_t$ per step, where $K_t \in (0,1)$ is the Kalman gain.
-  \item \textbf{H-ISS-A}: $V_A = H(\Act_t | \Pot) = 0$ since $\Act_t
-    = \hat\mu_t$ is deterministic; H-ISS-A is satisfied trivially.
-  \item \textbf{H-ISS-$\Phi$}: the Kalman recursion for $\hat\sigma_t^2$
-    converges to the steady-state variance
-    $\hat\sigma_\infty^2 = \tfrac{1}{2}(\sigma_w^2 +
-    \sqrt{\sigma_w^4 + 4\sigma_w^2\sigma_{\mathrm{obs}}^2})$,
-    a stable fixed point; $V_\Phi = |\hat\sigma_t^2 - \hat\sigma_\infty^2|$
-    decays geometrically with rate $1 - K_\infty$.
-  \item \textbf{H-ISS-Env}: the environmental drift rate $\zeta$ is
-    bounded by assumption; H-ISS-Env holds whenever
-    $\zeta < (1 - K_\infty)\,\sigma_{\mathrm{obs}}$.
-\end{enumerate}
-\end{lemma}
-
-\begin{proof}
-Items (i)--(iii) follow directly from the Kalman filter's convergence
-properties \citep{sontag1989,MironchenkoP2020}.
-Item (iv) is the H-ISS-Env condition of \cref{thm:borromean} applied
-to the scalar Gaussian case; the contraction rate equals the
-steady-state Kalman gain $K_\infty = \hat\sigma_\infty^2 /
-(\hat\sigma_\infty^2 + \sigma_{\mathrm{obs}}^2)$.
-\end{proof}
-
-All experiments use \texttt{uv sync} from the repository for exact environment
-reproduction. The controlled Gaussian studies use the parameter values stated in
-  their protocol paragraphs, while the ELEC2 benchmark keeps the same fixed
-warning level and Page-Hinkley calibration throughout.
-
-\subsection{Experiment A: Component Ablation}\label{sec:tgt_exp_a}
-
-\paragraph{Protocol.}
-We run $T = 500$ steps with $\zeta = 0.02$, $\sigma_w = 0.1$,
-$\sigma_{\mathrm{obs}} = 1.0$, seed $= 42$, under four conditions:
-\begin{enumerate}[label=\textbf{C\arabic*.}, noitemsep]
-  \item \textbf{Full model}: standard Gaussian tracker.
-  \item \textbf{FM-1} (static $\Pot$): $\hat\mu_t \equiv 0$ for all $t$;
-    Kalman update disabled.
-  \item \textbf{FM-2} (non-det.\ $\Act$): $\Act_t = \hat\mu_t + \epsilon_t$,
-    $\epsilon_t \sim \mathcal{N}(0, 0.25)$.
-  \item \textbf{FM-3} (absent $\Conv$): Kalman update disabled; no feedback.
-\end{enumerate}
-\textbf{Environment:} pure drift with no action feedback ($\alpha = 0$),
-so the world drifts independently of the system's actuation.
-The effect of action-environment coupling is addressed in the Coercive
-Masking Corollary (\cref{cor:coercive}).
-
-\paragraph{Results.}
-\Cref{tab:ablation} summarizes the tail-mean Lyapunov functionals and
-component coherence scores.
-
-\begin{table}[ht]
-\centering
-\caption{Ablation results ($T=500$, $\zeta=0.02$, influence$=0$, 42 seeds).
-  Cells report mean $\pm$ standard deviation over the final 100 steps.}\label{tab:ablation}
-\resizebox{\linewidth}{!}{%
-\begin{tabular}{@{}lrrrrrr@{}}
-\toprule
-Condition & $\bar V_P$ & $\bar V_A$ & $\bar V_\Phi$ &
-  $\bar\sigma_P$ & $\bar\sigma_A$ & $\bar\sigma_\Phi$ \\
-\midrule
-Full model & 0.051 $\pm$ 0.020 & 0.000 $\pm$ 0.000 & 0.010 $\pm$ 0.000 & 0.955 $\pm$ 0.017 & 1.000 $\pm$ 0.000 & 0.990 $\pm$ 0.000 \\
-FM-1 (static $\Pot$)  & 41.156 $\pm$ 16.005 & 0.000 $\pm$ 0.000 & 0.000 $\pm$ 0.000 & 0.034 $\pm$ 0.046 & 1.000 $\pm$ 0.000 & 1.000 $\pm$ 0.000 \\
-FM-2 (noisy $\Act$)   & 0.051 $\pm$ 0.020 & 0.974 $\pm$ 0.139 & 0.010 $\pm$ 0.000 & 0.955 $\pm$ 0.017 & 0.579 $\pm$ 0.031 & 0.990 $\pm$ 0.000 \\
-FM-3 (absent $\Conv$) & 1.972 $\pm$ 3.680 & 0.000 $\pm$ 0.000 & 5.400 $\pm$ 0.000 & 0.573 $\pm$ 0.259 & 1.000 $\pm$ 0.000 & 0.157 $\pm$ 0.000 \\
-\bottomrule
-\end{tabular}
-}
-\end{table}
+We begin with the Gaussian sweep used to validate the finite-memory law. The
+setup produces the characteristic U-curve: for small windows, error is dominated
+by variance; for large windows, error is dominated by staleness. The empirical
+minimum follows the predicted cube-root scaling, and EWMA behaves as the natural
+finite-memory analogue rather than as a competing theory.
 
 \begin{figure}[!htbp]
 \centering
-\safeincludegraphics[width=0.92\linewidth]{figures/fig_ablation}
-\caption{Component ablation: $V_{\mathrm{total}}$ (log scale, 20-step rolling
-  mean, top) and the Coherence Index (CI, bottom) under the four conditions.
-  The full model is the only condition where CI remains bounded away from~$0$.
-  FM-1 and FM-3 both diverge in $V_{\mathrm{total}}$ but are distinguished by
-  different bottleneck components: $\sigma_P \to 0$ for FM-1 (stale $\Pot$)
-  and $\sigma_\Phi \to 0$ for FM-3 (absent $\Conv$).}\label{fig:ablation}
+\safeincludegraphics[width=0.92\linewidth]{figures/fig_ucurve}
+\caption{Cube-root validation on the Gaussian sweep. Left: tracking error as a
+function of window size, showing the predicted U-shape for multiple drift rates.
+Right: the minimum achievable error follows an approximate $\zeta^{1/3}$ law.
+This figure validates the structural trade-off between variance and staleness
+that underlies the rest of the paper.}\label{fig:ucurve}
 \end{figure}
 
-The results confirm the stability template of \cref{thm:borromean}:
-$V_{\mathrm{total}}$ is lowest under the full model.
-FM-1 and FM-3 both fail, but via different components: the score correctly
-identifies $\Pot$ as the bottleneck in FM-1 ($\bar\sigma_P = 0.040$) and
-$\Conv$ as the bottleneck in FM-3 ($\bar\sigma_\Phi = 0.157$), while FM-2 is
-selectively degraded through $\Act$ ($\bar\sigma_A = 0.530$). The passive
-full-model run remains sharply concentrated near the equilibrium
-($\bar V_{\mathrm{total}} = 0.027$), whereas FM-1 rises to
-$\bar V_{\mathrm{total}} = 24.259$, providing the diagnostic precision claimed in
-\cref{def:tci}.
+\subsection{Over-Memory Under Continuous Drift}\label{sec:validation_continuous}
 
-$V_{\mathrm{total}}$ is not sample-path monotone, consistent with
-\cref{thm:borromean} which guarantees non-increasing \emph{expectation} under
-the ISS hypotheses, not sample-path monotonicity of the stochastic process.
+The next benchmark isolates the operational failure mode. We compare four
+methods on a smooth drifting stream: a short fixed window, a long fixed window,
+EWMA, ADWIN, and the cube-root capped variant. The point of the comparison is
+not detector leaderboard performance; it is to reveal when memory becomes stale
+before classical changepoint evidence accumulates.
 
-\subsection{Experiment B: Sinkhorn Sample Complexity and the Coherence-Delay U-Curve}\label{sec:tgt_exp_b}
-
-\paragraph{Protocol.}
-We use the Gaussian tracker at stationary regime ($T = 5000$, 50 seeds, $\sigma_{\mathrm{obs}} = 1$)
-and compute $\hat\sigma_P(t)$ using sliding-window estimators with
-$n \in \{5, 10, 25, 50, 100\}$.
-Mean absolute error (MAE) $|\sigma_P - \hat\sigma_P|$ is measured in the
-tail (last 40\% of $T$).
-
-\paragraph{The lag-drift tradeoff and the Coherence-Delay Principle.}
-The estimation error has two competing terms
-(\cref{def:lag_error}):
-\begin{equation}
-  \mathcal{E}(n)
-  \;\leq\;
-  \underbrace{C_K \, n^{-1/2}}_{\text{variance term}}
-  \;+\;
-  \underbrace{\zeta \cdot \tfrac{n}{2}}_{\text{lag-bias term}}.
-\end{equation}
-At large $n$ or fast drift, the lag-bias term dominates and the total
-error increases with $n$, hiding the $O(n^{-1/2})$ variance rate.
-
-To validate \cref{prop:coherence_delay} empirically, we additionally run
-a U-curve sweep: for each of four drift rates
-$\zeta \in \{0.001, 0.005, 0.01, 0.05\}$, we measure the raw tracking
-error $|\mu^*(t) - \bar{s}_{t-n:t}|$ across
-$n \in \{5, 10, 20, 50, 75, 100, 150, 200, 300, 500\}$
-in a passive environment (influence $= 0$) over $T = 6{,}000$ steps and
-20 seeds. For each drift level we extract the empirical minimum over the window
-grid and then fit the log--log slope of $\mathcal{E}_{\min}$ against $\zeta$ by
-ordinary least squares.
-
-\paragraph{Results.}
-
-\begin{figure}[!htbp]
+\begin{table}[!htbp]
 \centering
-\safeincludegraphics[width=\linewidth]{figures/fig_ucurve}
-\caption{Coherence-delay U-curve validation (\cref{prop:coherence_delay}).
-  \emph{Left:} empirical tracking error vs.\ window size $n$ for four
-  drift rates (log scale; dotted lines are scaled theoretical curves;
-  stars mark empirical $n^*$).
-  Each curve shows the predicted U-shape: variance-dominated decay for
-  small $n$, lag-dominated growth for large $n$.
-  \emph{Right:} $\mathcal{E}_{\min}$ vs.\ $\zeta$ on log-log scale.
-  Fitted slope $= 0.316$ (95\% CI $[0.287, 0.345]$); theoretical
-  prediction $= 1/3$.}\label{fig:ucurve}
-\end{figure}
-
-\Cref{fig:ucurve} confirms the two predictions of \cref{prop:coherence_delay}.
-The U-curves show the characteristic variance--lag tradeoff for each $\zeta$,
-with empirical $n^*$ shrinking as drift increases (from $n^* \approx 100$
-at $\zeta = 0.001$ to $n^* \approx 10$ at $\zeta = 0.05$).
-On the same four-point grid, a log--log fit of $n^*$ against $\zeta$ gives slope
-$-0.611$, already close to the predicted $-2/3$ memory law despite the coarse
-window discretization.
-The log-log slope of $\mathcal{E}_{\min}$ vs.\ $\zeta$ is
-$\mathbf{0.316}$ (95\% CI $[0.287, 0.345]$), close to the theoretical
-$1/3$ scaling for this finite-window estimator class.
-\Cref{tab:ucurve} reports the extracted minima.
-
-\begin{table}[ht]
-\centering
-\caption{Empirical validation of the Coherence-Delay bound
-  ($T=6{,}000$, 20 seeds, passive environment).}\label{tab:ucurve}
-\begin{tabular}{@{}rrrr@{}}
+\caption{Continuous-drift benchmark under a smooth drift rate. The key gap is
+between statistical evidence and operational freshness: ADWIN keeps a much wider
+window than the cube-root regulator, while the long fixed window collapses under
+lag.}
+\label{tab:continuous_benchmark}
+\begin{tabular}{lrrrr}
 \toprule
-$\zeta$ & $n^*_{\mathrm{obs}}$ & $\mathcal{E}_{\min}$ &
-  $\mathcal{E}_{\min}/\zeta^{1/3}$ \\
+Method & Tail MAE & Mean horizon & Drift events & Cap events \\
 \midrule
-0.001 & 100 & 0.0924 & 0.9236 \\
-0.005 &  50 & 0.1566 & 0.9159 \\
-0.010 &  20 & 0.1973 & 0.9158 \\
-0.050 &  10 & 0.3177 & 0.8623 \\
+Fixed-100 & 0.0849 & 100.0 & -- & -- \\
+Fixed-500 & 0.2388 & 500.0 & -- & -- \\
+EWMA & 0.1291 & 39.0 & -- & -- \\
+ADWIN & 0.1757 & 335.8 & 3.9 & 0.0 \\
+CubeRootADWIN & 0.0978 & 88.9 & 0.0 & 1374.7 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The ratio $\mathcal{E}_{\min}/\zeta^{1/3}$ remains close to constant
-($\approx 0.91$ across the four drift levels), confirming the expected
-$\zeta^{1/3}$ scaling despite finite-window effects.
-
-\paragraph{EWMA baseline and finite-memory universality.}
-To test whether the observed cube-root law is specific to the uniform
-sliding-window estimator, we ran the same Gaussian drift sweep with an
-exponentially weighted moving average (EWMA)
-$\hat\mu_t = \alpha s_t + (1-\alpha)\hat\mu_{t-1}$ over
-$\alpha \in \{0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.3, 0.5\}$.
-
-\begin{table}[ht]
+\begin{figure}[!htbp]
 \centering
-\caption{EWMA baseline on the Gaussian tracker: optimal forgetting factor by
-  drift rate.}
-\label{tab:ewma}
-\begin{tabular}{@{}rr@{}}
+\safeincludegraphics[width=0.95\linewidth]{figures/cuberoot_adwin/fig_cuberoot_adwin}
+\caption{Continuous-drift benchmark. Fixed-500 is the stale-memory baseline;
+ADWIN retains far more memory than the oracle-scale horizon; CubeRootADWIN
+pulls the effective horizon toward the useful-memory scale and exposes a
+`cap-only' regime, where memory becomes operationally stale before statistical
+changepoint evidence appears.}\label{fig:cuberoot_adwin}
+\end{figure}
+
+The important phenomenon here is not that a new detector fires more often. It is
+that the cap can activate while the Hoeffding test remains silent, separating the
+validity of memory from the evidence threshold for abrupt change.
+
+\subsection{Piecewise Horizon Recovery}\label{sec:validation_piecewise}
+
+The decisive benchmark is piecewise drift. Here the local drift rate changes in
+three phases, and we compare the adaptive horizon against the offline oracle
+fixed window for each phase. The calibration is held fixed across phases; only
+the stream changes.
+
+\begin{table}[!htbp]
+\centering
+\caption{Oracle horizon recovery on piecewise drift. The same calibrated cap
+tracks the oracle scale across regimes: it is close in the fast-drift phase and
+remains within the right order of magnitude in the smoother phases.}
+\label{tab:piecewise_oracle}
+\begin{tabular}{lrrrr}
 \toprule
-$\zeta$ & $\alpha^*$ \\
+Drift & Oracle window & Cube $n^*$ & Oracle MAE & Cube MAE \\
 \midrule
-0.001 & 0.02 \\
-0.005 & 0.05 \\
-0.010 & 0.10 \\
-0.050 & 0.20 \\
+$0.0005$ & 200 & 191.2 & 0.0741 & 0.0874 \\
+$0.003$ & 50 & 58.1 & 0.1258 & 0.1381 \\
+$0.001$ & 100 & 89.7 & 0.0876 & 0.1033 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-The minimum-error EWMA slope is \textbf{0.3173} on a log-log fit of
-$\mathcal{E}_{\min}$ vs.\ $\zeta$, essentially identical to the
-sliding-window slope \textbf{0.316} in \cref{fig:ucurve}. The optimal
-forgetting factor follows log-log slope \textbf{0.6011}, close to the
-$2/3$ prediction from \cref{cor:ewma_cube_root}. Empirically, the optimal
-forgetting factors increase with drift exactly as finite effective memory
-theory predicts, supporting the claim that the cube-root law is a property of
-the finite-memory class rather than an artifact of uniform windows. The EWMA
-slope is extracted by the same log--log fitting protocol as the sliding-window
-case, now using the minimum error over the tested $\alpha$ grid at each drift
-level.
-
-This is also the right place to separate the present theorem from stronger
-parametric filters. Forgetting-factor RLS and Kalman predictors address a
-closely related responsiveness-versus-variance trade-off, but they belong to a
-different estimator class: they exploit explicit state-space or parametric
-structure rather than only finite-memory averaging. They are appropriate
-empirical baselines in the passive benchmarks, but not counterexamples to
-the cube-root law proved here. In masking regimes that rely on suppressing
-innovations, a model-based filter can look artificially healthy when the
-controller keeps its innovation signal small, whereas $CI^E$ charges the effort
-needed to maintain that apparent fit.
-
-In a correctly specified scalar parametric tracker with forgetting factor
-$\lambda$, the same engineering intuition can be written heuristically as a
-variance--lag balance,
-\[
-  \mathcal{E}_{\mathrm{RLS}}^2(\lambda)
-  \;\asymp\;
-  \frac{\sigma^2(1-\lambda)}{1+\lambda}
-  + \frac{\zeta^2}{(1-\lambda)^2},
-\]
-so the optimal responsiveness satisfies
-$1-\lambda^* \asymp (\zeta/\sigma)^{2/3}$ and the corresponding root-risk scale
-is again of order $\sigma^{2/3}\zeta^{1/3}$; see \citet{Ljung1999} for the
-classical forgetting-factor perspective. We do not prove that formula here, and
-we do not claim that all such parametric filters satisfy the present theorem.
-The point is narrower: even when a parametric filter shares the same exponent
-under correct specification, that does not collapse the distinction in estimator
-class or remove the masking failure mode that motivates $CI^E$.
-
-For the score estimation rate, we use slow drift ($\zeta = 0.001$, $\sigma_w = 0.035$)
-to stay near the variance-dominated regime while retaining a visible lag term at
-$n = 100$.
-The observed log-log slope is $-0.436$ (95\% CI $[-0.865, -0.008]$;
-target $-0.5$); the deviation reflects the onset of lag-bias at the largest
-window and residual autocorrelation induced by the slow-drift regime
-(\cref{tab:sinkhorn,fig:sinkhorn}).
-
 \begin{figure}[!htbp]
 \centering
-\safeincludegraphics[width=0.70\linewidth]{figures/fig_sinkhorn}
-\caption{Sinkhorn sample complexity in the variance-dominated regime
-  ($\zeta = 0.001$, $n \leq 100$, 50 seeds, $T = 5000$).
-  Empirical log-log slope $= -0.436$ (95\% CI $[-0.865, -0.008]$);
-  theoretical target $-0.5$.
-  This is the variance-only regime of the U-curve in \cref{fig:ucurve}.}\label{fig:sinkhorn}
+\safeincludegraphics[width=0.95\linewidth]{figures/cuberoot_adwin/fig_cuberoot_adwin_piecewise}
+\caption{Piecewise-drift recovery. The same cube-root calibration follows the
+phase-dependent oracle window closely enough to preserve the right operational
+scale in each regime. The result is not a claim of universal superiority; it is
+evidence that the law can be turned into a usable horizon regulator.}
+\label{fig:cuberoot_adwin_piecewise}
 \end{figure}
 
-\begin{table}[ht]
-\centering
-\caption{Sinkhorn estimation error vs window size
-  ($\zeta = 0.001$, 50 seeds, $T = 5000$; mean $\pm$ standard deviation).}\label{tab:sinkhorn}
-\begin{tabular}{@{}rrr@{}}
-\toprule
-$n$ & MAE $|\sigma_P - \hat\sigma_P|$ & std \\
-\midrule
-  5 & 0.0801 & 0.0036 \\
- 10 & 0.0457 & 0.0032 \\
- 25 & 0.0233 & 0.0026 \\
- 50 & 0.0188 & 0.0029 \\
-100 & 0.0245 & 0.0061 \\
-\midrule
-\multicolumn{2}{@{}l}{Log-log slope: $-0.436$ (target: $-0.5$)} \\
-\bottomrule
-\end{tabular}
-\end{table}
+The strongest lesson is the separation between two notions that are often
+collapsed in streaming work. Statistical detection asks whether there is enough
+evidence to declare a change. Temporal validity asks whether the memory being
+used is still fresh enough to count as current. The cap-only regime makes that
+gap visible.
 
-\paragraph{Computational budget.}
-While evaluating exact Wasserstein distances scales poorly, the debiased Sinkhorn
-divergences used for $\hat\sigma_P$ and $\hat\sigma_A$ are highly parallelizable.
-\Cref{fig:sinkhorn_runtime} and \cref{tab:sinkhorn_runtime} profile the
-computational cost across sequence lengths $n \in \{25, 50, 100\}$, ambient
-dimensions $d \in \{2, 8, 32, 64, 128, 256\}$, and regularization parameters
-$\varepsilon \in \{0.02, 0.05, 0.2, 1.0\}$. The metrics isolate the pairwise
-distance matrix computation and Sinkhorn iteration loop. On this grid the solver
-remains stable as dimension increases, but fixed $\varepsilon$ is not portable:
-larger regularization is consistently cheaper and also gives lower absolute bias
-on the Gaussian clouds we tested. For instance, at $d=8$ and $n=100$, mean solve
-time falls from 7.341\,ms at $\varepsilon=0.05$ to 0.661\,ms at $\varepsilon=1.0$,
-while mean absolute bias falls from 0.6102 to 0.1383; at $d=256$ and $n=100$,
-the corresponding pair is 0.799\,ms / 1.7778 at $\varepsilon=0.05$ versus
-0.571\,ms / 0.1446 at $\varepsilon=1.0$. The practical message is that
-intrinsic-dimension-aware calibration matters even when the same $S_\varepsilon$
-machinery is used throughout. These are operational drift-comparison sweeps,
-not null-calibration experiments; the empirical Sinkhorn limit theory indicates
-that null fluctuations obey a different order and should be handled separately
-when setting thresholds \citep{GoldfeldEtAl2022}.
+\subsection{What the Figures Show}\label{sec:validation_summary}
 
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=0.95\linewidth]{figures/fig_gaussian_sinkhorn_runtime}
-\caption{Sinkhorn runtime and bias trade-off on Gaussian clouds.
-  \emph{Left:} mean runtime versus window size for each combination of
-  dimension and regularization.
-  \emph{Right:} mean absolute bias versus regularization at the largest window
-  size ($n=100$); the sweep extends to $d=256$ and $\varepsilon=0.02$.}\label{fig:sinkhorn_runtime}
-\end{figure}
-
-\begin{table}[ht]
-\centering
-\scriptsize
-\caption{Representative Sinkhorn runtime points (Gaussian clouds). The grid now
-  extends to $d=256$ and $\varepsilon=0.02$.}\label{tab:sinkhorn_runtime}
-\begin{tabular}{@{}lrrrr@{}}
-\toprule
-Setting & Mean runtime (ms) & Mean abs. bias & Mean iters & Pairwise/s \\
-\midrule
-$d=8$, $n=25$, $\varepsilon=0.02$ & 1.436 & 0.9522 & 250.0 & 435{,}296 \\
-$d=8$, $n=100$, $\varepsilon=0.05$ & 7.341 & 0.6102 & 250.0 & 1{,}362{,}217 \\
-$d=8$, $n=100$, $\varepsilon=1.0$ & 0.661 & 0.1383 & 14.5 & 15{,}121{,}765 \\
-$d=128$, $n=100$, $\varepsilon=0.05$ & 1.179 & 1.6354 & 81.5 & 8{,}481{,}666 \\
-$d=256$, $n=100$, $\varepsilon=0.05$ & 0.799 & 1.7778 & 35.5 & 12{,}511{,}617 \\
-$d=256$, $n=100$, $\varepsilon=1.0$ & 0.571 & 0.1446 & 6.2 & 17{,}519{,}521 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\subsection{Experiment F: Feedback Masking in the Particle Tracker}\label{sec:particle_tracking_masking}
-
-This experiment instantiates \cref{cor:coercive,def:tci_effort} in the
-non-Gaussian, non-linear particle tracker. The environment evolves according to the scalar
-particle-filter simulator implemented in \texttt{experiments/particle/model.py}, but now
-with an explicit action-coupling parameter $\alpha \in [0,1]$ so that the
-actuation can pull the latent state toward the stale controller output. In
-the synthetic setting we operationalise the effort proxy as the \emph{realized
-coercive effort}
-\[
-  E_t^{\mathrm{sim}} = \alpha\,|a_t - s_t^{\mathrm{free}}|,
-\]
-where $s_t^{\mathrm{free}}$ is the latent state that would have arisen at
-time $t$ before applying control. This distinguishes mere action-world
-mismatch from actual world-forcing.
-
-\paragraph{Protocol.}
-We freeze $\Pot$ (FM-1) and compare two regimes: passive ($\alpha = 0$)
-and coercive ($\alpha > 0$). The main single-run diagnostic uses
-$\alpha = 0.3$ and effort penalty $\lambda = 3.0$. We then sweep
-$\alpha \in \{0.1,0.2,0.3,0.5,0.7,0.9\}$ and
-$\lambda \in \{0.5,1.0,2.0,3.0,4.0\}$ over 8 seeds, exporting all raw and
-aggregated metrics from the experiment harness. To keep the main text readable,
-\cref{tab:particle_tracking_masking} reports a five-regime masking matrix at
-the default $\lambda = 3.0$: passive, weak, mild, moderate, and strong
-coercive coupling.
-
-\paragraph{Results.}
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=\linewidth]{figures/fig_particle_tracking_masking}
-\caption{Synthetic feedback masking in the particle tracker.
-  Left column: passive FM-1, where effort remains at zero and CI and $CI^E$
-  coincide. Right column: coercive FM-1, where the action gap remains
-  nonzero, realized coercive effort appears once influence is positive, and
-  $CI^E$ drops once effort is penalized.}
-\label{fig:particle_tracking_masking}
-\end{figure}
-
-\begin{table}[ht]
-\centering
-\small
-\caption{Five-regime masking matrix for frozen-$\Pot$ FM-1 in the particle
-  tracker at $\lambda = 3.0$ (8 seeds). Cells report tail means.}
-\label{tab:particle_tracking_masking}
-\begin{tabular}{@{}lrrrrr@{}}
-\toprule
-Regime & $\alpha$ & effort & CI & CI$^E$ & $M_t$ \\
-\midrule
-Passive & 0.0 & 0.000 & 0.795 & 0.795 & 0.000 \\
-Weak coercion & 0.1 & 0.054 & 0.872 & 0.757 & 0.115 \\
-Mild coercion & 0.2 & 0.090 & 0.920 & 0.726 & 0.194 \\
-Moderate coercion & 0.3 & 0.118 & 0.949 & 0.697 & 0.252 \\
-Strong coercion & 0.9 & 0.266 & 0.999 & 0.518 & 0.481 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The matrix makes the masking mechanism explicit. As coupling increases, the
-stale FM-1 controller looks progressively healthier under the plain score:
-CI rises from $0.795$ in the passive regime to $0.999$ under strong
-coercion. The effort-aware diagnostic moves in the opposite direction:
-CI$^E$ falls from $0.795$ to $0.518$, and the masking gap grows from $0$ to
-$0.481$. This is the closed-loop signature we care about: apparent coherence is
-improving while effort-aware coherence is deteriorating.
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=\linewidth]{figures/fig_particle_tracking_masking_grid}
-\caption{Multi-seed parameter sweep for feedback masking in the particle tracker
-  (8 seeds). Left: mean CI. Middle: mean $CI^E$. Right: masking gap
-  $M_t = CI - CI^E$. The standard index monotonically rises with
-  influence, while the masking gap widens with both influence and effort
-  penalty $\lambda$.}
-\label{fig:particle_tracking_masking_grid}
-\end{figure}
-
-The sweep confirms that the correction is not an artifact of one parameter
-choice. At fixed $\lambda = 3.0$, the masking gap increases from $0.115$
-at $\alpha = 0.1$ to $0.481$ at $\alpha = 0.9$, with a clear intermediate
-effect already at $\alpha = 0.2$ (gap $= 0.194$). At fixed
-$\alpha = 0.3$, increasing $\lambda$ from $0.5$ to $4.0$ expands the gap
-from $0.051$ to $0.313$. Thus, stronger coercive capacity and stronger
-effort penalisation separate apparent from genuine coherence in the expected
-direction. The particle tracker closes the empirical loop on
-\cref{cor:coercive}: the standard score can be masked by control, whereas
-CI$^E$ remains sensitive to the intervention cost that creates the
-mask. Combined with the calibration grid in
-\cref{fig:particle_tracking_tcie_calibration}, this supports the practical
-rule: set $E_0$ to the healthy effort scale and choose $\lambda$ in the range
-$2$--$3$, with $\lambda = 3$ as a strong default.
-
-To test whether this advantage survives comparison with a generic change
-detector, we build an active benchmark with two known regime transitions:
-healthy tracking for $t<200$, feedback masking for $200 \le t < 400$, and
-coercive collapse for $t \ge 400$. The masking phase freezes $\Pot$ while
-maintaining moderate coupling ($\alpha = 0.3$); the collapse phase sharply
-increases exogenous drift. We compare thresholded CI, thresholded
-CI$^E$, ADWIN, PageHinkley, KSWIN, and NoDrift on the raw
-observation stream, giving the generic detectors a fully observable signal
-rather than a model-derived residual.
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=\linewidth]{figures/fig_particle_tracking_active_benchmark}
-\caption{Active benchmark in the particle tracker with two known phase changes.
-  Orange line: masking onset at $t=200$. Red line: collapse onset at
-  $t=400$. ADWIN receives the raw observation stream. CI and $CI^E$ are
-  thresholded at $0.8$.}
-\label{fig:particle_tracking_active_benchmark}
-\end{figure}
-
-\begin{table}[ht]
-\centering
-\caption{Active benchmark summary in the particle tracker (12 seeds).
-  Detection is measured against the known onset of feedback masking and the
-  known onset of coercive collapse.}
-\label{tab:particle_tracking_active_benchmark}
-\begin{tabular}{@{}llrrr@{}}
-\toprule
-Phase & Detector & Detections & Rate & Median delay \\
-\midrule
-Masking onset & CI & 12/12 & 1.00 & 25.5 \\
-Masking onset & CI$^E$ & 12/12 & 1.00 & 5.0 \\
-Masking onset & ADWIN & 7/12 & 0.58 & 279.0 \\
-Masking onset & PageHinkley & 12/12 & 1.00 & 68.5 \\
-Masking onset & KSWIN & 1/12 & 0.08 & 118.0 \\
-Masking onset & NoDrift & 0/12 & 0.00 & NA \\
-Collapse onset & CI & 12/12 & 1.00 & 2.0 \\
-Collapse onset & CI$^E$ & 12/12 & 1.00 & 0.0 \\
-Collapse onset & ADWIN & 5/12 & 0.42 & 111.0 \\
-Collapse onset & PageHinkley & 12/12 & 1.00 & 37.5 \\
-Collapse onset & KSWIN & 0/12 & 0.00 & NA \\
-Collapse onset & NoDrift & 0/12 & 0.00 & NA \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The benchmark isolates the point that passive ELEC2 cannot address. ADWIN is
-stronger on passive streams because it is a generic changepoint detector.
-PageHinkley is reliable but slower, KSWIN is too conservative on this signal,
-and NoDrift is the sanity baseline. In the active setting, however, the
-relevant anomaly is not merely distributional change but coercive maintenance
-of an apparently healthy world-model fit. Here CI$^E$ detects masking onset
-in all 12 runs with median delay $5.0$, whereas ADWIN detects only 7 of 12
-masking onsets and does so with median delay $279.0$. For the collapse
-transition the same ordering persists: ADWIN detects only 5 of 12 runs, while
-CI and CI$^E$ detect all of them, with CI$^E$ firing earliest.
-This is the regime in which the effort-corrected index provides information that
-a generic passive detector does not encode.
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=0.95\linewidth]{figures/fig_particle_tracking_tcie_calibration}
-\caption{Calibration grid for $CI^E$ over effort penalty $\lambda$
-  and threshold. The rate panel is omitted because it saturates across most of
-  the grid; the figure instead reports masking delay, collapse delay, and
-  healthy false positives, which are the informative calibration axes.
-  The default setting ($\lambda = 3.0$, threshold $0.80$) remains a low-delay
-  compromise.}
-\label{fig:particle_tracking_tcie_calibration}
-\end{figure}
-
-\subsection{Experiment C: ELEC2 Early-Warning Lead Time}\label{sec:tgt_exp_c}
-
-\paragraph{Dataset.}
-The ELEC2 dataset \citep{Harries1999} records 45,312 hourly observations of
-electricity demand in New South Wales, Australia, exhibiting documented
-concept drift due to market deregulation.
-We apply a 1D Gaussian tracker to the normalized demand stream.
-
-\paragraph{Protocol.}
-Failures are detected by the Page-Hinkley test
-\citep[threshold $= 84$, $\delta = 0.01$]{Harries1999},
-yielding 113 regime-shift events on the normalized NSW demand stream.
-$\ScoreHat$ is computed from a 1D Gaussian tracker on the normalized target
-stream, with all detector hyperparameters fixed before evaluation. The passive
-benchmark therefore uses no effort proxy and no adaptive threshold retuning on
-future events.
-$\mathrm{CUSUM}$, forgetting-factor RLS, and scalar Kalman baselines are run on
-the same normalized stream, while ADWIN consumes the residual stream used in
-the original benchmark.
-The Fr\'echet baseline compares each current window to the healthy prefix in the
-same scalar representation space.
-$\ScoreHat$ warnings are recorded on each falling-edge crossing of
-$\hat\sigma_P < 0.295$.
-Because ELEC2 exposes no direct actuation or effort channel, this benchmark
-uses the estimable score rather than CI$^E$; the effort-corrected
-score is reserved for the active/coercive setting of \cref{sec:particle_tracking_masking}.
-Lead time is defined as the gap between a warning and the nearest subsequent
-Page-Hinkley event, using an adaptive maximum gap set to half the median
-inter-event interval (nearest-future matching; see \cref{app:code_repository} for implementation).
-
-\paragraph{Results.}
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=\linewidth]{figures/fig_elec2}
-\caption{ELEC2 early-warning diagnostic.
-  \emph{Top:} the Coherence Index estimate $\widehat{CI}$ via $\hat\sigma_P(t)$ (sliding window $n=100$) with
-  warning threshold $0.295$ (dashed red).
-  Vertical lines mark CI warnings (red), ADWIN warnings (purple), and
-  Page-Hinkley failures (grey). \emph{Bottom:} residual signal fed to
-  ADWIN (50-step rolling mean).}\label{fig:elec2}
-\end{figure}
-
-Across the 45,312-step stream, the fixed-$n=100$ score issues 58 warnings
-(falling-edge crossings of $\hat\sigma_P < 0.295$), of which
-\textbf{18 are matched to a subsequent Page-Hinkley event} within the
-adaptive matching gap (half the median inter-event interval; 166 steps here).
-The median lead time is \textbf{94 steps}; mean is 96.9; minimum 45;
-maximum 157.
-For comparison, ADWIN with $\delta = 0.03$ on the same residual stream issues
-114 warnings, of which 54 are matched to a subsequent Page-Hinkley event,
-at 47.4\% precision and median lead 84.5.
-At lower thresholds the detector becomes more conservative; at higher
-thresholds it produces more warnings but the same one-to-one matching rule
-reduces effective precision.
-On this passive benchmark ADWIN remains
-the strongest generic change detector under this calibration, while the score
-continues to serve as a tuneable structural diagnostic whose score semantics
-carry over to the active setting where CI$^E$ becomes the correct
-observable.
-
-\subsection{Experiment D: Dynamic \texorpdfstring{$n^*_t$}{n-star-t} Optimization on ELEC2}\label{sec:tgt_exp_d}
-
-\Cref{prop:coherence_delay} provides the self-tuning rule
-$n^*_t = (C_K/\hat\zeta_t)^{2/3}$.
-This experiment tests whether deploying that rule dynamically on ELEC2
-improves on the fixed-$n=100$ score baseline while remaining interpretable next
-to a strong passive detector.
-
-\paragraph{Protocol.}
-We estimate the local drift rate at each step using an
-exponentially weighted moving average (EMA, decay $\alpha = 0.05$)
-of the absolute change in mean between consecutive windows of $d = 50$ steps:
-$\hat\zeta_t = \text{EMA}_\alpha(|{\bar{s}}_{t-d:t} - {\bar{s}}_{t-2d:t-d}|/d)$.
-The constant $C_K$ is calibrated once on the first 2,000 steps
-(near-stationary): $C_K \approx 1.25\,\overline{|s_t - \bar{s}|} \cdot \sqrt{100}$.
-The resulting $n^*_t = (C_K/\hat\zeta_t)^{2/3}$ is clipped to $[30, 300]$,
-with $\hat\zeta_t$ estimated from consecutive 24-step means and EMA decay
-$\alpha = 0.03$.
-The full score sweep in the figure includes fixed $n = 50$, $100$, and $300$ as
-references. The main quantitative comparison reported in the table uses the
-validated fixed-$n=100$ baseline, the dynamic $n^*_t$ rule, and ADWIN on the
-same residual stream as an external passive baseline.
-Warnings and lead times are computed identically to \cref{sec:tgt_exp_c},
-using the same warning threshold $0.295$ and one-to-one future matching.
-
-\paragraph{Results.}
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=\linewidth]{figures/fig_dynamic_nstar}
-\caption{Dynamic $n^*_t$ optimization on ELEC2
-  ($C_K \approx 1.25\,\overline{|s_t-\bar s|}\sqrt{100}$, EMA $\alpha = 0.03$,
-  drift window $d = 24$).
-  \emph{Top:} $\hat\sigma_P$ (100-step mean) for all three strategies;
-  grey lines are PH regime shifts.
-  \emph{Middle:} dynamic window size $n^*_t$, contracting sharply near
-  regime shifts and expanding during stable periods.
-  \emph{Bottom:} lead-time distributions, including ADWIN, CUSUM,
-  forgetting-factor RLS, scalar Kalman, and Fr\'echet baselines.}\label{fig:dynamic_nstar}
-\end{figure}
-
-\begin{table}[ht]
-\centering
-\caption{ELEC2 early-warning comparison: fixed windows, dynamic $n^*_t$,
-  generic passive baselines, and ADWIN.
-  113 PH failures; warning level $= 0.295$; max gap adaptive
-  (half the median inter-event interval; 166 steps here).}\label{tab:dynamic}
-\begin{tabular}{@{}lrrrr@{}}
-\toprule
-Strategy & Warnings & Leads & Precision & Median lead \\
-\midrule
-Fixed $n = 50$ & 24 & 11 & 46\% & 91 \\
-Fixed $n = 100$ & 58 & 18 & 31\% & 94 \\
-Fixed $n = 300$ & 83 & 34 & 41\% & 44 \\
-Dynamic $n^*_t$ & 95 & 29 & 31\% & 101 \\
-CUSUM & 793 & 96 & 12\% & 141.5 \\
-FF-RLS & 151 & 45 & 30\% & 55 \\
-Kalman & 96 & 24 & 25\% & 91 \\
-Fr\'echet & 0 & 0 & 0\% & NA \\
-MMD & 131 & 48 & 37\% & 74 \\
-ADWIN ($\delta = 0.03$) & 114 & 54 & 47\% & 84.5 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-The results are qualitatively consistent with \cref{prop:coherence_delay}, but
-the passive-stream nature of ELEC2 keeps the advantage modest. Relative to the
-validated fixed-$n=100$ baseline, the dynamic rule increases matched leads from
-18 to 29 and slightly improves median lead time from 94 to 101, but both remain
-well behind ADWIN on raw passive detection.
-
-The added passive baselines do not change that ordering. CUSUM is highly
-sensitive but imprecise; FF-RLS and Kalman sit between the fixed-window score
-and ADWIN, while the Fr\'echet baseline is too conservative on ELEC2 to fire at
-this calibration. The kernel MMD baseline (Gaussian RBF, median-heuristic
-bandwidth, window vs.\ prefix comparison) achieves 48 matched leads at
-37\% precision, placing it between ADWIN and the score-based diagnostics.
-None overtakes ADWIN on matched leads or precision. That ordering is expected:
-ADWIN is designed for passive changepoint detection, whereas the score
-targets structural validity under feedback and extends naturally to the
-effort-corrected CI$^E$ used in the active masking experiment. The Bikes
-benchmark shows the same passive-stream pattern on a longer real-world
-demand sequence.
-
-The trade-off is structural: the dynamic rule improves on the static score
-baseline without changing the basic passive-stream ordering. That is the honest
-reading carried forward into the later active benchmarks.
-
-The dynamic rule is also moderately robust to calibration error, as predicted by
-the $2/3$ sensitivity of $n_t^*$. On ELEC2, scaling $\hat\zeta_t$ by
-$0.75\times$, $1.5\times$, and $2.0\times$ moves the mean dynamic window from
-$47.7$ to $57.8$, $36.7$, and $31.9$, while matched leads change from $29$ to
-$22$, $21$, and $19$. Perturbing $C_K$ by the same factors gives mean windows
-$39.5$, $62.5$, and $75.7$ with $25$, $18$, and $19$ matched leads. The Bikes
-benchmark is more tolerant: $\hat\zeta_t$ perturbations yield $92$, $76$, and
-$74$ matched leads, while scaling $C_K$ upward to $1.5\times$ and $2.0\times$
-actually increases matched leads to $98$ and $110$. These shifts are material
-but not catastrophic, which is the practical point of the sublinear sensitivity
-law.
-
-The Sinkhorn runtime study makes the regime dependence of $C_K$ more concrete.
-At the largest window size, increasing $\varepsilon$ from $0.02$ to $1.0$
-reduces mean runtime from $4.206$ ms to $0.658$ ms and reduces mean absolute
-bias from $1.1115$ to $0.1308$; changing dimension from $d=2$ to $d=256$ shifts
-the same quantities from $5.410$ ms and $0.1077$ to $2.346$ ms and $1.3918$.
-The right reading is not a closed form for $C_K(d,\varepsilon)$, but a
-calibrated constant whose value varies with geometry and regularization while
-the $\zeta^{1/3}$ and $\zeta^{-2/3}$ exponents remain intact.
-
-\subsection{Experiment E: Real-Data Masking on KuaiRand}\label{sec:tgt_exp_e}
-
-\paragraph{Dataset and protocol.}
-We treat KuaiRand-Pure as the real-data masking benchmark. The
-random-exposure slice is treated as healthy, the first half of the later
-standard-recommendation slice as bubble formation, and the second half as
-collapse. The benchmark is evaluated on 367 users with at least 20 interactions
-in each relevant phase. User signals are computed on 20-step windows over
-\texttt{watch\_ratio} with video-tag exposure summaries; the effort term is the
-KL divergence between the current exposure-tag distribution and the user's
-healthy random-exposure baseline. The KuaiRand implementation uses a surrogate
-$\sigma_A$ based on normalized exposure entropy rather than on replicated action
-logs, so the benchmark should be read as an operational logged-data proxy for
-actuation reproducibility rather than as exact $e^{-H(\Act\mid\Pot)}$. To keep
-the comparison honest, the score and CI$^E$ thresholds are calibrated only on
-healthy random-exposure windows, using the 20th percentile of the healthy score
-distribution, and the reported $E_0$ is the median healthy effort scale. We
-also report an EWMA-smoothed CI$^E$ baseline to distinguish genuine masking from
-simple temporal smoothing. The main metric is a user-level detection rate: a
-user counts as detected for bubble or collapse if the corresponding warning
-fires within a fixed four-window neighborhood before the annotated phase
-boundary, and the reported uncertainty intervals are paired bootstrap intervals
-over users. The companion protocol appendix also records shuffled-label,
-random-boundary, and weak off-policy sanity controls. These serve as safeguards
-against trivial exposure-shift explanations, not as causal identification.
-
-\paragraph{Results.}
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=0.95\linewidth]{figures/fig_kuairand_active}
-\caption{KuaiRand proxy-level logged benchmark.
-  The random-exposure phase is treated as healthy, the first half of the later
-  standard-recommendation slice as bubble formation, and the second half as
-  collapse.
-  Thresholds for CI, $CI^E$, and EWMA-smoothed $CI^E$ are
-  calibrated only on healthy windows.}
-\label{fig:kuairand_active}
-\end{figure}
-
-\begin{table}[ht]
-\centering
-\caption{KuaiRand proxy-level logged benchmark summary on 367 users.
-  Under healthy-only calibration, $CI^E$ improves over CI with paired
-  bootstrap deltas $+0.234$ for bubble onset and $+0.153$ for collapse, both
-  with 95\% intervals excluding zero.}
-\label{tab:kuairand_active}
-\begin{tabular}{@{}llrrr@{}}
-\toprule
-Phase & Detector & Detections & Rate & Median delay \\
-\midrule
-Bubble onset & CI & 168/367 & 0.458 & 27.0 \\
-Bubble onset & CI$^E$ & 254/367 & 0.692 & 31.8 \\
-Bubble onset & CI$^E$-EWMA & 194/367 & 0.529 & 35.5 \\
-Bubble onset & ADWIN & 0/367 & 0.000 & NA \\
-Bubble onset & PageHinkley & 0/367 & 0.000 & NA \\
-Bubble onset & KSWIN & 225/367 & 0.613 & 23.0 \\
-Bubble onset & NoDrift & 0/367 & 0.00 & NA \\
-Collapse onset & CI & 201/367 & 0.548 & 37.0 \\
-Collapse onset & CI$^E$ & 257/367 & 0.700 & 45.0 \\
-Collapse onset & CI$^E$-EWMA & 208/367 & 0.567 & 41.8 \\
-Collapse onset & ADWIN & 0/367 & 0.000 & NA \\
-Collapse onset & PageHinkley & 0/367 & 0.000 & NA \\
-Collapse onset & KSWIN & 357/367 & 0.973 & 26.5 \\
-Collapse onset & NoDrift & 0/367 & 0.00 & NA \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-Under this healthy-only calibration, the effort-corrected score is the
-strongest score-based diagnostic in the logged benchmark. Relative to CI,
-$CI^E$ raises bubble detection from 45.8\% to 69.2\% and collapse detection
-from 54.8\% to 70.0\%, while the user-level paired-bootstrap improvements stay
-strictly positive: $+0.234$ for bubble onset with 95\% interval
-$[0.183, 0.292]$, and $+0.153$ for collapse onset with 95\% interval
-$[0.098, 0.207]$. The EWMA-smoothed baseline sits in between, as a conservative
-baseline should: it damps short fluctuations but does not match the raw
-effort-aware diagnostic. The passive detectors behave
-unevenly once all of them see the same effort-adjusted signal: KSWIN is the
-most sensitive generic baseline here, while ADWIN and PageHinkley stay inert
-under this calibration. For fairness, the comparison is run at a fixed operating
-point: the score-based thresholds are fit on healthy windows only, the reported
-intervals are paired bootstraps over users, and all generic detectors consume
-the same effort-adjusted scalar signal rather than detector-specific inputs.
-This is therefore not an exhaustive ROC analysis. The point is not that generic
-detectors fail uniformly, but that the effort term exposes a form of
-control-induced coherence that passive alarms do not encode directly.
-
-The KuaiRand $\lambda$ sweep gives the same calibration message as the particle
-tracker. Bubble detection for CI$^E$ rises from $0.463$ at $\lambda=0.5$ to
-$0.575$ at $\lambda=2.0$, $0.692$ at $\lambda=3.0$, and $0.747$ at
-$\lambda=4.0$, while healthy false positives rise from $0.777$ to $1.215$,
-$1.387$, and $1.632$ per user. Together with the particle masking-gap sweep,
-this makes $\lambda \in [2,3]$ the stable operating region and justifies the
-default $\lambda = 3$ as a compromise rather than a hand-tuned optimum.
-The reference scale $E_0$ behaves as the same calibration logic predicts. A
-smaller reference scale makes the effort penalty fire more aggressively, raising
-bubble detection to $0.845$ at $E_0 \times 0.5$ but also increasing healthy
-false positives to $1.837$ per user; a larger scale $E_0 \times 2.0$ relaxes
-the penalty, dropping bubble detection to $0.529$ while reducing healthy false
-positives to $1.019$.
-The follow-up proxy comparison points in the same direction. Replacing the KL
-effort proxy by total-variation or exposure-Gini alternatives preserves the
-qualitative ordering CI$^E$ $>$ CI on the logged benchmark, but both
-alternatives underperform KL at the same healthy-only calibration. We therefore
-keep KL as the default operational proxy whenever exact action-channel logs are
-not available.
-
-Taken together, the dynamic-window perturbations, particle $\lambda$ sweep,
-KuaiRand $\lambda$ sweep, and KuaiRand proxy swap form the main sensitivity
-analysis: the operating point matters, but the central qualitative picture
-survives the tested perturbations. \Cref{fig:sensitivity_summary} collects the
-main calibration axes in one place: the Sinkhorn $\varepsilon$ runtime/bias
-trade-off, the KuaiRand $\lambda$ and $E_0$ sweeps, the logged effort-proxy
-swap, threshold sensitivity under healthy-only calibration, and the particle
-masking-gap sweep.
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=\linewidth]{figures/fig_sensitivity_summary}
-\caption{Consolidated sensitivity analysis from existing artifacts.
-  \emph{A:} Sinkhorn regularization $\varepsilon$ trades runtime against bias,
-  so it should be reported as an operational calibration knob rather than fixed
-  universally. \emph{B--C:} On KuaiRand, stronger effort penalties and smaller
-  reference scales raise bubble sensitivity but also increase healthy false
-  positives, making calibration part of the method rather than a nuisance detail.
-  \emph{D:} KL is the strongest logged effort proxy among the tested options.
-  \emph{E:} The ordering CI$^E$ $>$ CI$^E$-EWMA $>$ CI survives threshold-quantile
-  perturbations under healthy-only calibration. \emph{F:} In the particle
-  benchmark, the masking gap grows monotonically with $\lambda$ and with the
-  action-coupling strength $\alpha$, confirming that the effort correction is
-  responding to coercive control rather than passive drift alone.}
-\label{fig:sensitivity_summary}
-\end{figure}
-
-\begin{table}[ht]
-\centering
-\caption{Calibration summaries for the dynamic window rule, effort penalty,
-  reference effort scale, and logged-data effort proxies.}
-\label{tab:phase3_calibration}
-\begin{tabular}{@{}llrr@{}}
-\toprule
-Setting & Perturbation / $\lambda$ & Primary metric & Auxiliary metric \\
-\midrule
-Particle ($\alpha=0.3$) & $\lambda = 0.5$ & CI$^E = 0.898$ & $M_t = 0.051$ \\
-Particle ($\alpha=0.3$) & $\lambda = 2.0$ & CI$^E = 0.768$ & $M_t = 0.181$ \\
-Particle ($\alpha=0.3$) & $\lambda = 3.0$ & CI$^E = 0.697$ & $M_t = 0.252$ \\
-Particle ($\alpha=0.3$) & $\lambda = 4.0$ & CI$^E = 0.636$ & $M_t = 0.313$ \\
-KuaiRand & $\lambda = 0.5$ & bubble rate 0.463 & healthy FP/u 0.777 \\
-KuaiRand & $\lambda = 2.0$ & bubble rate 0.575 & healthy FP/u 1.215 \\
-KuaiRand & $\lambda = 3.0$ & bubble rate 0.692 & healthy FP/u 1.387 \\
-KuaiRand & $\lambda = 4.0$ & bubble rate 0.747 & healthy FP/u 1.632 \\
-KuaiRand & $E_0 \times 0.5$ & bubble rate 0.845 & healthy FP/u 1.837 \\
-KuaiRand & $E_0 \times 1.0$ & bubble rate 0.692 & healthy FP/u 1.387 \\
-KuaiRand & $E_0 \times 2.0$ & bubble rate 0.529 & healthy FP/u 1.019 \\
-KuaiRand & proxy = KL & bubble rate 0.692 & healthy FP/u 1.387 \\
-KuaiRand & proxy = TV & bubble rate 0.569 & healthy FP/u 1.014 \\
-KuaiRand & proxy = Gini & bubble rate 0.556 & healthy FP/u 1.008 \\
-ELEC2 dyn. $n_t^*$ & baseline & 29 matched leads & mean window 47.7 \\
-ELEC2 dyn. $n_t^*$ & $\hat\zeta_t \times 0.75$ & 22 matched leads & mean window 57.8 \\
-ELEC2 dyn. $n_t^*$ & $\hat\zeta_t \times 1.5$ & 21 matched leads & mean window 36.7 \\
-ELEC2 dyn. $n_t^*$ & $C_K \times 0.75$ & 25 matched leads & mean window 39.5 \\
-ELEC2 dyn. $n_t^*$ & $C_K \times 1.5$ & 18 matched leads & mean window 62.5 \\
-Bikes dyn. $n_t^*$ & baseline & 85 matched leads & mean window 113.3 \\
-Bikes dyn. $n_t^*$ & $\hat\zeta_t \times 0.75$ & 92 matched leads & mean window 136.1 \\
-Bikes dyn. $n_t^*$ & $\hat\zeta_t \times 1.5$ & 76 matched leads & mean window 86.9 \\
-Bikes dyn. $n_t^*$ & $C_K \times 1.5$ & 98 matched leads & mean window 146.3 \\
-Bikes dyn. $n_t^*$ & $C_K \times 2.0$ & 110 matched leads & mean window 173.4 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\subsection{Experiment G: Bikes Early-Warning Lead Time}\label{sec:tgt_exp_g}
-
-\paragraph{Dataset.}
-The River Bikes stream records a long real-world bike-demand sequence with
-seasonal and weather-driven changes. We normalize the target stream to unit
-variance and use it as a second passive benchmark beyond ELEC2.
-
-\paragraph{Protocol.}
-As in ELEC2, Page-Hinkley events on the normalized stream define the warning
-reference. The same fixed-window score strategies ($n = 50, 100, 300$), the
-dynamic $n^*_t$ rule, and ADWIN on the residual stream are evaluated under the
-same one-to-one future matching rule. The dynamic rule uses the same deployment
-recipe as ELEC2: $C_K$ is calibrated on the initial prefix, $n_t^*$ is clipped
-to a bounded range, and the warning threshold is held fixed rather than tuned
-against future failures.
-CUSUM, forgetting-factor RLS, and scalar Kalman baselines are evaluated on the
-normalized stream with the same thresholding discipline.
-The Fr\'echet baseline compares each current window to the healthy prefix in
-the same representation space.
-
-\paragraph{Results.}
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=\linewidth]{figures/fig_bikes}
-\caption{Bikes early-warning diagnostic.
-  \emph{Top:} $\hat\sigma_P(t)$ (sliding window $n=100$) with warning
-  threshold $0.295$ (dashed red). Vertical lines mark CI warnings (red),
-  ADWIN warnings (purple), and Page-Hinkley failures (grey).
-  \emph{Bottom:} residual signal fed to ADWIN (50-step rolling mean).}
-\label{fig:bikes}
-\end{figure}
-
-\begin{table}[ht]
-\centering
-\caption{Bikes early-warning comparison: fixed windows, dynamic $n^*_t$,
-  generic passive baselines, and ADWIN. The same one-to-one future matching
-  rule is used as in ELEC2.}
-\label{tab:bikes}
-\begin{tabular}{@{}lrrrrr@{}}
-\toprule
-Strategy & Warnings & Leads & Precision & Median lead & Min lead \\
-\midrule
-Fixed $n = 50$  & 572 & 75 & 13\% & 123 & 0 \\
-Fixed $n = 100$ & 989 & 101 & 10\% & 87 & 0 \\
-Fixed $n = 300$ & 3{,}363 & 137 & 4\% & 58 & 0 \\
-Dynamic $n^*_t$ & 717 & 85 & 12\% & 127 & 0 \\
-CUSUM & 5{,}928 & 384 & 6\% & 214 & 11 \\
-FF-RLS & 15{,}687 & 327 & 2\% & 220 & 0 \\
-Kalman & 13{,}985 & 319 & 2\% & 220 & 0 \\
-Fr\'echet & 21 & 4 & 19\% & 154.5 & 65 \\
-MMD & 152 & 75 & 49\% & 22 & 0 \\
-ADWIN ($\delta = 0.03$) & 477 & 250 & 52\% & 92 & 0 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-On Bikes, ADWIN again leads on matched leads as a generic passive
-detector. However, the kernel MMD baseline is the strongest newcomer:
-at 49\% precision with 75 matched leads and a median lead time of 22 steps,
-it provides earlier warnings than any other detector including ADWIN
-(median 92). The dynamic window rule improves modestly over fixed $n = 100$
-in precision but not in lead count. The CUSUM, FF-RLS, Kalman, and
-Fr\'echet baselines remain weaker than ADWIN under this calibration, which
-confirms that the passive-stream caveat is not ELEC2-specific.
-
-\subsection{Diagnostic Regime Map}\label{sec:tgt_regime_summary}
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=\linewidth]{figures/fig_regime_first_summary}
-\caption{Regime-first diagnostic summary.
-  Passive streams favor generic drift alarms, active feedback exposes the need
-  for $CI^E$, and logged recommendation data reward proxy-aware effort
-  correction. The figure places each diagnostic in the regime where it is most
-  informative; a median delay of $0.0$ means same-timestep detection.}
-\label{fig:regime_first_summary}
-\end{figure}
-
-This summary shows which diagnostic is most informative in each regime.
-Passive streams such as ELEC2 and Bikes still favor generic changepoint
-detectors; active systems under coercive masking require $CI^E$; and logged
-recommendation data use the same effort-aware logic with a proxy effort signal.
-
-\subsection{Passive and Active Diagnostics Are Complementary}\label{sec:tgt_complementary}
-
-The experiments support a clean division of labor. On passive streams such as
-ELEC2 and Bikes, the relevant anomaly is changepoint detection on exogenous
-data. In that regime, generic detectors such as ADWIN are the right default
-tools, and the score should be read as a structural diagnostic with tunable
-semantics rather than as a universal replacement for passive alarms.
-
-On active or logged benchmarks, the target anomaly changes. In the particle
-tracker and KuaiRand, the problem is not only that the data distribution moves,
-but that intervention can keep apparent model-world fit high while a stale model
-is being protected by effort. In that regime, CI$^E$ and the masking gap are
-the relevant observables. KSWIN remains a competitive generic detector on
-KuaiRand, but it pays with false positives comparable to or higher than the
-effort-aware diagnostic, while ADWIN and PageHinkley contribute little under the
-same calibration. The practical conclusion is therefore complementary rather
-than adversarial: use passive drift detectors for passive streams, and use
-effort-aware coherence when the system can actively shape the observations it is
-judged against.
-
-\subsection{Discussion: Limitations of the Empirical Validation}\label{sec:tgt_discussion}
-
-Four limitations bound the scope of these results.
-First, the Gaussian-linear setting satisfies H-ISS-P/A/$\Phi$/Env by
-construction (\cref{ex:concrete}); non-Gaussian, non-linear systems require
-case-by-case hypothesis verification.
-Second, the Sinkhorn rate is validated only for the finite-memory,
-sliding-window estimator class analyzed here, and only in the
-variance-dominated regime ($\zeta \leq 0.001$, $n \leq 100$);
-high-dimensional or fast-drift systems require the debiased $S_\varepsilon$
-with lag correction.
-Third, the ELEC2 failure definition (Page-Hinkley events) is one operational
-choice; different failure definitions yield different lead-time statistics.
-Fourth, the dynamic $n^*_t$ strategy's precision depends critically on
-$\hat\zeta_t$ estimation quality; a more accurate real-time drift estimator
-would sharpen the precision-recall frontier.
-
-The Gaussian tracker provides the reproducible, analytically tractable validation
-of the trade-off and diagnostic claims.
-High-dimensional, non-Gaussian, and non-linear extensions constitute
-open directions for future validation (\cref{sec:open}).
+Taken together, the figures support three claims. First, the cube-root law is a
+real finite-memory law rather than a fitting artifact. Second, adaptive windows
+that optimize detection can still accumulate too much stale memory under smooth
+drift. Third, the cube-root cap gives an explicit operational rule for keeping
+the horizon of useful memory near the oracle scale. That is the paper's main
+empirical contribution.

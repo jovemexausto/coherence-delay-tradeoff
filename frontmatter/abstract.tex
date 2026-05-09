@@ -17,16 +17,17 @@ critical-window regime, we further show a minimax lower bound for
 window-restricted estimators, establishing a genuine finite-memory floor rather
 than a peculiarity of one estimator.
 
-The empirical results support the same story. Gaussian drift experiments produce
-the predicted `U`-curve, sliding-window and EWMA estimators recover the
-cube-root scaling closely, and dynamic-window illustrations show how the best
-memory horizon changes with drift strength over time. Sinkhorn-based tracking
-scores provide a practical way to measure the resulting error surface.
+The experiments mirror the theory. Gaussian drift experiments produce the
+predicted `U`-curve, sliding-window and EWMA estimators recover the cube-root
+scaling closely, and dynamic-window illustrations show how the best memory
+horizon shifts with drift strength over time. Sinkhorn-based tracking scores
+provide a practical way to measure the resulting error surface, while the
+cube-root cap turns the law into an operational horizon regulator.
 
 The resulting picture is theorem-first and operational: under drift, optimal
 tracking requires memory that is neither too short nor too old. Read through an
-Age-of-Information lens, the law describes a quantitative limit on how much
-freshness a finite-memory learner can preserve while tracking a changing world.
+Age-of-Information lens, the law quantifies how much freshness a finite-memory
+learner can preserve while tracking a changing world.
 
 \end{abstract}
 
