@@ -35,14 +35,18 @@ left side is variance-dominated, the right side is stale-memory dominated, and
 the knee marks the region where useful memory is best preserved.
 Read through the lens of effective memory age, the same curve says when older
 evidence stops buying accuracy.
+The frontier is asymmetric because the variance term decays sublinearly while the
+staleness term grows linearly, so the knee appears sharper on the stale side than
+on the variance side.
 
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.95\linewidth]{figures/cuberoot_adwin/fig_lag_variance_frontier}
 \caption{Lag--variance frontier for useful memory. The fixed-window sweep traces
 the empirical frontier: short horizons are noisy, long horizons are stale, and
-the knee marks the useful-memory optimum. ADWIN sits far to the stale side,
-whereas CubeRootADWIN lies close to the frontier knee.}\label{fig:lag_variance_frontier}
+the knee marks the useful-memory optimum. The frontier is asymmetric because
+variance decays sublinearly while staleness grows linearly. ADWIN sits far to the
+stale side, whereas CubeRootADWIN lies close to the frontier knee.}\label{fig:lag_variance_frontier}
 \end{figure}
 
 \subsection{Over-Memory Under Continuous Drift}\label{sec:validation_continuous}
