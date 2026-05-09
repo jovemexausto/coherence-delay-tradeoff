@@ -108,6 +108,12 @@ def save_frontier_figure(
         label="oracle fixed window",
     )
 
+    xmin = float(np.min(sweep_x))
+    xmax = float(np.max(sweep_x))
+    ax.axvspan(xmin, best_x * 0.9, color="tab:blue", alpha=0.05, linewidth=0)
+    ax.axvspan(best_x * 0.9, best_x * 1.1, color="gold", alpha=0.08, linewidth=0)
+    ax.axvspan(best_x * 1.1, xmax, color="tab:red", alpha=0.05, linewidth=0)
+
     palette = {
         "fixed": "tab:gray",
         "fixed_long": "tab:brown",
@@ -136,10 +142,6 @@ def save_frontier_figure(
         )
 
     ax.axvline(best_x, color="black", linestyle="--", linewidth=1.1, alpha=0.6)
-    ax.text(best_x * 1.03, best_y * 1.04, "oracle horizon", fontsize=10)
-    ax.text(0.02, 0.88, "variance-dominated", transform=ax.transAxes, fontsize=10)
-    ax.text(0.48, 0.16, "optimal freshness", transform=ax.transAxes, fontsize=10)
-    ax.text(0.76, 0.86, "stale-memory region", transform=ax.transAxes, fontsize=10)
 
     ax.set_xlabel("Effective memory horizon")
     ax.set_ylabel("Tail MAE")
@@ -147,5 +149,5 @@ def save_frontier_figure(
     ax.grid(alpha=0.2, linewidth=0.5)
     ax.legend(loc="upper right", frameon=False, ncols=2)
     fig.tight_layout()
-    fig.savefig(output_path)
+    fig.savefig(output_path, bbox_inches="tight")
     plt.close(fig)
