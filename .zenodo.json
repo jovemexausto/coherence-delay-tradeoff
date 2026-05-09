@@ -1,6 +1,6 @@
 {
-  "title": "The Coherence-Delay Trade-off: Finite-Memory Limits and Effort-Aware Diagnostics for Coercive Masking",
-  "description": "LaTeX source and experiment code for the v2 preprint 'The Coherence-Delay Trade-off: Finite-Memory Limits and Effort-Aware Diagnostics for Coercive Masking'. Earlier drafts circulated under the title 'The Coherence-Delay Trade-off in Tracking Under Drift: A Cube-Root Law for Finite-Memory Estimation'.",
+  "title": "The Coherence-Delay Trade-off in Tracking Under Drift: A Cube-Root Law for Finite-Memory Estimation",
+  "description": "LaTeX source and experiment code for the preprint 'The Coherence-Delay Trade-off in Tracking Under Drift: A Cube-Root Law for Finite-Memory Estimation'.",
   "upload_type": "publication",
   "publication_type": "preprint",
   "creators": [

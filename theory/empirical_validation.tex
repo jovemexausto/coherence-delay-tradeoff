@@ -709,6 +709,15 @@ actually increases matched leads to $98$ and $110$. These shifts are material
 but not catastrophic, which is the practical point of the sublinear sensitivity
 law.
 
+The Sinkhorn runtime study makes the regime dependence of $C_K$ more concrete.
+At the largest window size, increasing $\varepsilon$ from $0.02$ to $1.0$
+reduces mean runtime from $4.206$ ms to $0.658$ ms and reduces mean absolute
+bias from $1.1115$ to $0.1308$; changing dimension from $d=2$ to $d=256$ shifts
+the same quantities from $5.410$ ms and $0.1077$ to $2.346$ ms and $1.3918$.
+The right reading is not a closed form for $C_K(d,\varepsilon)$, but a
+calibrated constant whose value varies with geometry and regularization while
+the $\zeta^{1/3}$ and $\zeta^{-2/3}$ exponents remain intact.
+
 \subsection{Experiment E: Real-Data Masking on KuaiRand}\label{sec:tgt_exp_e}
 
 \paragraph{Dataset and protocol.}
