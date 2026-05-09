@@ -1,144 +1,93 @@
 # PLAN
 
-This roadmap is driven by `REVIEW_RESPONSE.md`. Every phase below must update
-the paper, code, figures, and report together whenever the evidence changes.
+This is the active execution plan for the standalone tracking manuscript.
+Older plans tied to the hybrid masking paper are superseded.
 
 ## Working Rule
 
-- Keep exactly one task in `in_progress` at any time.
-- When a phase is done, mark it `completed` and commit that phase.
-- Do not start the next phase until the current phase is committed.
-- Use `REVIEW_RESPONSE.md` as the standing source of truth for review answers,
-  evidence gaps, and claim boundaries.
-- Never defend a claim once the evidence points the other way.
+- Keep exactly one phase in `in_progress`.
+- Do not start a later phase before the current one is complete.
+- Update manuscript text, figures, and claims together.
+- Remove stale material instead of trying to reinterpret it if it no longer fits
+  the paper.
 
-## Evidence Rule
+## Active Program: Standalone Tracking Paper
 
-- Passive streams: keep ADWIN/KSWIN/Page-Hinkley as legitimate baselines and do not overclaim superiority.
-- Active or logged systems: optimize for intervention-aware diagnosis, where the renamed diagnostics (`CI`, `CI^E`, `Masking Gap`) should become the flagship layer if they survive the evidence.
-- New names, visuals, or architecture only stay if they improve clarity, reproducibility, or measured performance.
-- Product claims must be backed by benchmark tables, artifacts, and manuscript text in the same phase.
+### Phase 1: Scope Lock
 
-## Completed Program: Paper Revision
+Status: `done`
 
-- [x] Phase 1: Formal Theory and EWMA
-- [x] Phase 2: Coercive Masking as a Flagship Contribution
-- [x] Phase 3: Calibration and Sensitivity
-- [x] Phase 4: Scope and Honesty of the Stability Template
-- [x] Phase 5: Related Work and Editorial Framing
-- [x] Phase 6: Real-World Benchmarks and Limitations
-- [x] Phase 7: Passive-vs-Active Framing
-- [x] Phase 8: Editorial Reframing
-- [x] Phase 9: Final Validation and Cleanup
+Deliverables:
 
-## Program 2: Review Response and Strengthening
-
-## Phase 10: Review Response Report and Claim Audit
-
-- [x] Write `REVIEW_RESPONSE.md` as the shared reference for all later phases.
-- [x] Audit the live manuscript against the review and record any stale claims.
-- [x] Identify which review criticisms are already resolved, which are partially resolved, and which still require new evidence.
-- [x] Mark the sign inconsistency / Proposition 6.12 issue as resolved in the live source, then verify no stale text remains.
-- [completed] Commit Phase 10.
+- thesis sentence;
+- non-goals sentence;
+- narrative spine;
+- minimum empirical package.
 
 Why this phase exists:
-- The review must become an execution spec, not just a rebuttal note.
-- Every later phase should be traceable to a question, a gap, or an evidence-backed decision in `REVIEW_RESPONSE.md`.
 
-## Phase 11: Theoretical Strengthening and Lower Bounds
+- the paper must stop being a reduced version of the previous manuscript and
+  become a standalone theorem-first tracking paper.
 
-- [x] Tighten the cube-root discussion so it is precise about what is proven, what is conjectured, and what is operationally supported by experiments.
-- [x] Prove a formal lower bound for an explicit class of finite-memory estimators / kernels.
-- [x] Add the strongest possible relation to nonstationary optimization, dynamic regret, and adaptive filtering without overclaiming equivalence.
-- [x] Update the manuscript and the report together with the final theorem statement.
-- [completed] Commit Phase 11.
+### Phase 2: Frontmatter Rewrite
 
-Why this phase exists:
-- This is the biggest remaining theoretical vulnerability, and the review is explicit about it.
+Status: `done`
 
-## Phase 12: Effort Proxy, `\sigma_A`, and KuaiRand Honesty
+Tasks:
 
-- [x] Separate exact, synthetic, and logged-data interpretations of `\sigma_A` in the paper.
-- [x] Formalize the observability ladder for `\sigma_A` (`exact`, `identified`, `proxy`) and make it explicit in the paper.
-- [x] Add an explicit operational hierarchy for effort proxies and state when each one is valid.
-- [x] Tighten the KuaiRand wording so it clearly reflects logged-data limitations, confounding risk, and the meaning of the reported metric.
-- [x] Add any needed ablations on `\lambda`, `E0`, and proxy choice, and remove any unsupported causal language.
-- [completed] Commit Phase 12.
+- rewrite `frontmatter/abstract.tex` around the tracking law;
+- rewrite `frontmatter/introduction.tex` around finite-memory tracking,
+  staleness, and adaptive window choice;
+- remove masking-centered framing from the frontmatter.
 
-Why this phase exists:
-- The reviewer’s critique of effort estimation is real and must be answered with both language and evidence.
+### Phase 3: Theory Trim and Repair
 
-## Phase 13: Baseline Expansion and Fair Comparisons
+Status: `in_progress`
 
-- [x] Implement CUSUM, forgetting-factor RLS, and scalar Kalman baselines on the real-world streams.
-- [x] Add at least one representation-space OT / Fréchet / MMD-style baseline if it can be implemented faithfully.
-- [x] Re-evaluate ELEC2 and Bikes under the same matching rules used in the paper.
-- [x] Re-evaluate active/logged benchmarks with calibration-matched comparisons and record any losses honestly.
-- [x] Commit Phase 13.
+Tasks:
 
-Why this phase exists:
-- The paper becomes stronger if it can win in the right regimes and lose cleanly where it should.
+- retain only the theory needed for the law and the lower bound;
+- fix any sign or notation issues that affect the retained results;
+- remove triadic, ISS, and masking theory from the core path of the paper.
 
-## Phase 14: Computational Budget and Sinkhorn Cost
+### Phase 4: Empirical Redesign
 
-- [x] Measure runtime / latency / throughput for the estimator and transport machinery under the streaming settings used in the paper.
-- [x] Separate theoretical sample-complexity claims from practical wall-clock behavior.
-- [x] Measure the impact of `\varepsilon`, window size, and dimension on cost and bias.
-- [x] Update the manuscript and report with the concrete computational picture.
-- [x] Commit Phase 14.
+Status: `pending`
 
-Why this phase exists:
-- If the geometry is part of the contribution, the computational cost must be part of the evidence.
+Tasks:
 
-## Phase 15: Naming and Visual System
+- center the empirical story on the `U`-curve and finite-memory trade-off;
+- add or surface ablations over drift strength and window length;
+- keep EWMA and other fair finite-memory comparators;
+- remove masking-centric and logged-intervention evidence from the main paper.
 
-- [x] Decide the diagnostics naming stack: `CI` (Coherence Index), `CI^E` (Effort-Adjusted Coherence Index), and `Masking Gap`.
-- [x] Decide the project naming stack around `CI`, `CI^E`, and `Masking Gap`.
-- [x] Design flagship visualizations that communicate regimes, not just calibration tables.
-- [x] Update the paper figures and repo-facing docs if the new naming and visuals survive the evidence.
-- [x] Commit Phase 15.
+### Phase 5: Positioning and Close
 
-Why this phase exists:
-- The current notation is mathematically compact but product-poor.
+Status: `pending`
 
-## Phase 16: Software Core and Benchmark Harness
+Tasks:
 
-- [x] Factor the repository into a clearer production-style core: scoring, detectors, calibration, adapters, evaluation, and visualization.
-- [x] Add stable APIs and typed outputs for the main diagnostics and alerts.
-- [x] Keep the experiment harness aligned with the core rather than duplicating logic.
-- [x] Preserve reproducibility artifacts as first-class outputs.
-- [x] Commit Phase 16.
+- rewrite `discussion/related_work.tex` around dynamic regret,
+  nonstationarity, OT, and AoI;
+- rewrite `discussion/conclusion.tex` so it lands on the law and the
+  freshness interpretation;
+- remove residual language that points back to the cut paper.
 
-Why this phase exists:
-- The project should become a software system, not only a paper with scripts.
+### Phase 6: Validation
 
-## Phase 17: Paper Refresh and Release Candidate
+Status: `pending`
 
-- [x] Refresh the manuscript so it reflects the best surviving names, strongest proofs, new baselines, and new computational evidence.
-- [x] Remove or narrow any claim that later phases weaken.
-- [x] Rebuild the PDF and verify the release state against `REVIEW_RESPONSE.md`.
-- [x] Commit Phase 17.
+Tasks:
 
-Why this phase exists:
-- The paper must remain the truthful public face of the current system.
+- rebuild the manuscript;
+- rerun only the experiments still cited in the text;
+- verify that captions, tables, and prose match the retained evidence.
 
-## Notes
+## Current Standard
 
-- The target is not universal dominance on passive drift detection.
-- The target is a system that is clearly stronger in intervention-aware monitoring and materially better overall through evidence-backed strengthening.
-- The preferred sequence is: review response report -> theory strengthening -> effort proxy honesty -> baselines -> runtime -> naming/visuals -> software core -> paper refresh.
+The final manuscript should make one central case:
 
-## Phase 18: Second Review Response and Strengthening
-
-- [x] Add strategic classification citation (Hardt et al. 2016).
-- [x] Add kernel MMD two-sample test citation (Gretton et al. 2012).
-- [x] Add intrinsic-dimension OT calibration citation (Niles-Weed & Bach 2019).
-- [x] Tighten related-work connections to performative prediction and kernel shift detection.
-- [x] Implement kernel MMD two-sample test baseline detector.
-- [x] Run MMD baseline on ELEC2 and Bikes; update manuscript tables and prose.
-- [x] Recompile manuscript and verify clean PDF.
-- [ ] Commit Phase 18.
-
-Why this phase exists:
-- The second review is favorable and recommends acceptance with clarifications.
-- Most concerns are already addressed by Phases 10--17; this phase closes the remaining citation and baseline gaps.
+- finite-memory tracking under drift has an unavoidable trade-off;
+- this yields a cube-root optimal memory law and a finite-memory floor;
+- the result can be interpreted through information freshness;
+- the experiments are selected to validate that story directly.

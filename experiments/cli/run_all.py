@@ -21,6 +21,14 @@ from ..gaussian import (
     run_sinkhorn_runtime_experiment,
     run_ucurve_experiment,
 )
+from ..cuberoot_adwin.artifacts import save_benchmark_figure
+from ..cuberoot_adwin.model import CubeRootADWINBenchmarkConfig, run_benchmark
+from ..cuberoot_adwin.reports import (
+    build_event_rows,
+    build_oracle_phase_rows,
+    build_phase_rows,
+    build_summary_rows,
+)
 from ..gaussian.artifacts import (
     save_ablation_figure,
     save_sigma_p_complexity_figure,
@@ -156,6 +164,43 @@ def main() -> None:
         build_sinkhorn_runtime_rows(runtime_result),
         "gaussian",
         "gaussian_sinkhorn_runtime.csv",
+    )
+
+    cuberoot_result = run_benchmark(
+        CubeRootADWINBenchmarkConfig(
+            seeds=tuple(range(args.seed, args.seed + 20)),
+            drift=0.001,
+            fixed_window=100,
+            fixed_long_window=500,
+            ewma_alpha=0.05,
+            adwin_delta=0.002,
+            Ck=1.0,
+            drift_window=100,
+        )
+    )
+    save_benchmark_figure(
+        cuberoot_result,
+        harness.figure_path("cuberoot_adwin", "fig_cuberoot_adwin.pdf"),
+    )
+    harness.save_summary_csv(
+        build_summary_rows(cuberoot_result),
+        "cuberoot_adwin",
+        "cuberoot_adwin_summary.csv",
+    )
+    harness.save_summary_csv(
+        build_event_rows(cuberoot_result),
+        "cuberoot_adwin",
+        "cuberoot_adwin_events.csv",
+    )
+    harness.save_summary_csv(
+        build_phase_rows(cuberoot_result),
+        "cuberoot_adwin",
+        "cuberoot_adwin_phases.csv",
+    )
+    harness.save_summary_csv(
+        build_oracle_phase_rows(cuberoot_result),
+        "cuberoot_adwin",
+        "cuberoot_adwin_oracle_phases.csv",
     )
 
     bikes_result = run_bikes_experiments(BikesConfig())

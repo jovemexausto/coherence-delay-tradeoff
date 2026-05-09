@@ -4,6 +4,7 @@
   "venvPath": "experiments",
   "venv": ".venv",
   "extraPaths": [
+    ".",
     "experiments",
   ],
   "reportImplicitStringConcatenation": "none",
@@ -17,7 +18,7 @@
   "reportUnusedImport": "error",
   "executionEnvironments": [
     {
-      "root": "experiments"
+      "root": "."
     }
   ]
 }

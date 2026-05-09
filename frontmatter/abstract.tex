@@ -1,45 +1,39 @@
 \begin{abstract}
-Tracking in a changing environment is governed by a simple tension: more memory
-reduces noise, but it also makes the estimate older. In passive streams this is
-already a statistical problem; in closed-loop systems it becomes an epistemic
-one, because the same actions used to stabilize behavior can also make a stale
-model look correct. The result is a two-part problem: a finite-memory tracking
-limit, and a masking diagnostic for systems whose actions shape what they later
-observe.
+Finite-memory tracking under drift is governed by a simple tension: longer
+memory reduces statistical noise, but it also makes the estimate older. When
+the target distribution moves over time, every additional sample is both useful
+and stale. This creates an unavoidable trade-off between estimation variance and
+informational age.
 
-The first contribution formalizes a coherence-delay trade-off for finite-memory
-tracking under drift. For the finite-memory averaging class studied here,
-variance falls with memory while lag grows with drift and effective age,
-yielding a \textbf{cube-root law}: the \textbf{minimum achievable tracking
-error} scales as $\boldsymbol{\zeta^{1/3}}$ with drift rate $\zeta$, and the
-\textbf{optimal effective memory} scales as $\boldsymbol{\zeta^{-2/3}}$.
-Empirically, sliding windows and EWMA recover slopes of 0.316 and 0.317,
-closely matching the theoretical prediction.
+We formalize this trade-off for tracking under Wasserstein nonstationarity. For
+the finite-memory averaging class studied here, the tracking error decomposes
+into a statistical term that decreases with memory and a staleness term that
+grows with drift. Optimizing that balance yields a \textbf{cube-root law}: the
+\textbf{optimal memory horizon} scales as
+$\boldsymbol{n^* \asymp (C_K/\zeta)^{2/3}}$, while the corresponding
+\textbf{minimum tracking error} scales as
+$\boldsymbol{\mathcal{E}_{\min} \asymp C_K^{2/3}\zeta^{1/3}}$. In the
+critical-window regime, we further show a minimax lower bound for
+window-restricted estimators, establishing a genuine finite-memory floor rather
+than a peculiarity of one estimator.
 
-The second contribution concerns the regime in which low observed error is
-maintained not by adaptation but by steering the environment toward a stale
-model. We call this \emph{coercive masking} and introduce the
-\textbf{Coherence Index (CI)} and the \textbf{Effort-Adjusted Coherence Index
-($CI^E$)} to separate genuine adaptation from action-induced alignment. On
-passive benchmarks, generic changepoint detectors remain the stronger default
-alarms. On active synthetic and logged recommendation benchmarks, however,
-$CI^E$ exposes masking that passive detectors do not encode under matched
-calibration, identifying masking onset with median delay 5.0 steps in the
-particle benchmark and improving KuaiRand bubble detection from 0.458 to 0.692
-on a proxy-level logged benchmark, with paired user-level bootstrap intervals
-excluding zero.
+The empirical results support the same story. Gaussian drift experiments produce
+the predicted `U`-curve, sliding-window and EWMA estimators recover the
+cube-root scaling closely, and dynamic-window illustrations show how the best
+memory horizon changes with drift strength over time. Sinkhorn-based tracking
+scores provide a practical way to measure the resulting error surface.
 
-The picture is straightforward. Under drift, finite memory imposes a real error
-floor. Under feedback, raw fit can be misleading unless the cost of
-intervention is made explicit. The theory explains the floor; the diagnostic
-reveals when apparent coherence is being purchased rather than earned.
+The resulting picture is theorem-first and operational: under drift, optimal
+tracking requires memory that is neither too short nor too old. Read through an
+Age-of-Information lens, the law describes a quantitative limit on how much
+freshness a finite-memory learner can preserve while tracking a changing world.
 
 \end{abstract}
 
 \bigskip
 \noindent\textbf{Keywords:}
 tracking under drift; finite-memory estimation; Wasserstein distance;
-Sinkhorn divergence; concept drift; online compression;
-Coherence Index; Effort-Adjusted Coherence Index; coercive masking.
+Sinkhorn divergence; concept drift; information freshness;
+Age of Information; adaptive memory.
 
 \noindent\textbf{MSC~2020:} 93D05, 93D30, 68P99.
