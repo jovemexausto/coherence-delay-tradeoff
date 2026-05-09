@@ -123,7 +123,7 @@ def run_ewma_baseline(
     )
 
 
-def compute_umr_regulator(
+def compute_useful_memory_regulation(
     values: np.ndarray,
     *,
     block_size: int,

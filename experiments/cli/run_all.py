@@ -15,6 +15,12 @@ from ..bikes.reports import build_bikes_arena_rows, build_bikes_rows
 from ..airlines.artifacts import save_airlines_figure
 from ..airlines.model import AirlinesConfig, run_airlines_benchmark
 from ..airlines.reports import build_airlines_rows
+from ..temporal_invalidity.artifacts import save_temporal_invalidity_figure
+from ..temporal_invalidity.model import (
+    TemporalInvalidityConfig,
+    run_temporal_invalidity_benchmark,
+)
+from ..temporal_invalidity.reports import build_temporal_invalidity_rows
 from ..core.harness import ExperimentHarness
 from ..core.regime_map import save_regime_first_summary_figure
 from ..elec2.artifacts import (
@@ -382,6 +388,28 @@ def main() -> None:
         build_airlines_rows(airlines_result),
         "airlines",
         "airlines_summary.csv",
+    )
+
+    temporal_invalidity_result = run_temporal_invalidity_benchmark(
+        TemporalInvalidityConfig(
+            seeds=(
+                args.seed,
+                args.seed + 1,
+                args.seed + 2,
+                args.seed + 3,
+                args.seed + 4,
+                args.seed + 5,
+            )
+        )
+    )
+    save_temporal_invalidity_figure(
+        temporal_invalidity_result,
+        harness.figure_path("temporal_invalidity", "fig_temporal_invalidity.pdf"),
+    )
+    harness.save_summary_csv(
+        build_temporal_invalidity_rows(temporal_invalidity_result),
+        "temporal_invalidity",
+        "temporal_invalidity_summary.csv",
     )
 
     elec2_result = run_elec2_experiments(Elec2Config())

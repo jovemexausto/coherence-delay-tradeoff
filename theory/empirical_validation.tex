@@ -352,32 +352,35 @@ operational range when the drift regime changes discretely.
 \subsection{Representative Real-Stream Case Study}\label{sec:validation_real_world}
 
 The synthetic experiments isolate the geometry of horizon control and carry the
-main claim of the paper. The real-data section uses ELEC2 as a representative
-public stream to show the same temporal-validity pattern when the drift process
-is not experimentally controlled.
-The full ELEC2/Bikes arena is moved to Appendix~\cref{app:real_stream_arena}.
+main claim of the paper. The real-data section plays a different role. Here we
+keep a single representative public stream, ELEC2, to check that the same
+temporal-validity story still appears once the drift process is no longer under
+experimental control. It is read as a case study, not as a ranking exercise.
+The full ELEC2/Bikes arena is provided in \cref{app:real_stream_arena}.
 
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.95\linewidth]{figures/elec2/fig_umr_arena}
-\caption{ELEC2 case study. The paired precision and median-lead comparison shows
-that horizon regulation changes the temporal-validity profile on a public
-stream.}
+\caption{ELEC2 representative case study. The paired precision and median-lead
+comparison shows the same temporal-validity gap seen in the synthetic setting,
+but here the effect is read as a public-stream illustration rather than a
+leaderboard result.}
 \label{fig:elec2_real}
 \end{figure}
 
-\subsection{Airlines Prequential Benchmark}\label{sec:validation_airlines}
+The real-data picture is consistent with the synthetic one, but the effect is
+mixed enough that it should not carry the main narrative. The point is simply
+that coarse horizon adaptation still matters on public data, while the payoff
+remains backend dependent.
 
-On the OpenML Airlines stream, we ran a prequential binary classification
-benchmark with hashed online logistic regression and candidate horizons
-\{10,25,50,100,200,400\}. The selected single horizon was 400, while the cap
-series on the evaluation slice averaged 75.4. On the test slice, the uncapped
-single-horizon model reached 0.5551 accuracy and 0.6882 log loss; the capped
-single-horizon version reached 0.5479 accuracy and 0.6901 log loss. The
-uncapped ensemble reached 0.5532 accuracy and 0.6868 log loss; the capped
-ensemble reached 0.5526 accuracy and 0.6888 log loss. The downstream effect of
-the cap is therefore measurable but small, and it is weaker for the ensemble
-than for the single-horizon model.
+\subsection{Controlled Downstream Check}\label{sec:validation_downstream}
+
+The downstream classification benchmark is reported in
+Appendix~\ref{app:downstream_temporal_invalidity}. Its role is purely
+mechanistic: it checks whether the cap-only regime carries a measurable
+predictive cost when the backend is a windowed classifier rather than a drift
+detector. The effect is directionally consistent with the main claim but modest
+in magnitude, so we treat it as supporting evidence rather than central evidence.
 
 \subsection{What the Figures Show}\label{sec:validation_summary}
 

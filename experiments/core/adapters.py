@@ -10,7 +10,7 @@ from .detectors import run_river_drift_detector, run_umr_drift_detector
 from .horizon_baselines import (
     HorizonBaselineResult,
     UMRRegulatorResult,
-    compute_umr_regulator,
+    compute_useful_memory_regulation,
     run_ewma_baseline,
     run_fixed_window_baseline,
     run_melo_style_baseline,
@@ -61,7 +61,7 @@ def run_horizon_adapter(
     *,
     config: ArenaAdapterConfig,
 ) -> tuple[dict[str, HorizonBaselineResult], UMRRegulatorResult]:
-    regulator = compute_umr_regulator(
+    regulator = compute_useful_memory_regulation(
         values,
         block_size=config.block_size,
         ema_alpha=config.ema_alpha,

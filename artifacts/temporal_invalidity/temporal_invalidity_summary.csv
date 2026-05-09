@@ -1,0 +1,5 @@
+method,global_accuracy,global_log_loss,cap_only_accuracy,cap_only_log_loss,delta_cap_only_vs_fixed_400_pp,cap_only_steps,cap_only_segments,mean_umr_width_cap_only
+Fixed-400,0.9304,0.1691,0.904,0.231,0.0,363.0,5.2,293.27
+Fixed-100,0.9598,0.0927,0.9576,0.1046,5.36,363.0,5.2,293.27
+ADWIN,0.934,0.1589,0.904,0.231,0.0,363.0,5.2,293.27
+UMR,0.9415,0.142,0.9205,0.1852,1.66,363.0,5.2,293.27

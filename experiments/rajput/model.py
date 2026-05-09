@@ -6,7 +6,7 @@ from collections.abc import Callable
 import numpy as np
 
 from ..bikes.model import load_bikes_values
-from ..core.horizon_baselines import compute_umr_regulator
+from ..core.horizon_baselines import compute_useful_memory_regulation
 from ..core.rff_ensemble import (
     prequential_rff_predictions,
     scale_for_miscalibration,
@@ -161,7 +161,7 @@ def _calibrate_models(
 def _compute_cap_series(
     values: np.ndarray, config: RajputConfig, sample_count: int
 ) -> np.ndarray:
-    regulator = compute_umr_regulator(
+    regulator = compute_useful_memory_regulation(
         values,
         block_size=config.umr_block_size,
         ema_alpha=config.umr_ema_alpha,
