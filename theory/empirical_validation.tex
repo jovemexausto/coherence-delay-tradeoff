@@ -110,6 +110,16 @@ narrows but remains positive.}\label{fig:cap_vs_detection_delay}
 
 \subsection{Fixed-Horizon Instability and Recovery Asymmetry}\label{sec:validation_instability}
 
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=0.95\linewidth]{figures/cuberoot_adwin/fig_horizon_instability}
+\caption{Alternating-timescales instability. The top panel shows the drift
+schedule, the middle panel compares the local oracle horizon with fixed windows
+and ADWIN+$\,$UMR, and the bottom panel shows horizon regret over time. The
+figure exposes local horizon instability under regime changes.}
+\label{fig:horizon_instability}
+\end{figure}
+
 The next benchmark makes fixed-horizon instability visible. The
 stream alternates between slow drift, fast bursts, recovery plateaus, and
 micro-bursts with irregular durations, so the local oracle horizon need not be
@@ -118,20 +128,6 @@ average while remaining locally misaligned for long stretches. This benchmark
 separates three questions that are often conflated: whether the oracle horizon
 is time-varying, whether an online regulator can track that changing scale, and
 how far each method remains from the local oracle horizon over time.
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=0.95\linewidth]{figures/cuberoot_adwin/fig_horizon_instability}
-\caption{Alternating-timescales instability. The top panel shows the drift
-schedule, the middle panel shows the local oracle horizon alongside fixed
-windows and ADWIN+$\,$UMR, and the bottom panel shows horizon regret
-\,$|n_t - n_t^*|\,$ over time. The purpose of the benchmark is to expose when
-the useful horizon changes locally: slow stretches favor longer memory, bursts
-contract the oracle scale, and fixed horizons can remain misaligned across
-regime changes. The figure makes the temporal-validity problem visible
-directly.}
-\label{fig:horizon_instability}
-\end{figure}
 
 This benchmark makes two things visible. First, horizon validity can vary even
 when aggregate prediction error stays competitive. Second, the adjustment is

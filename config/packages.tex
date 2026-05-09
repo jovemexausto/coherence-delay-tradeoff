@@ -11,7 +11,31 @@
 \usepackage{tikz}
 \usepackage{natbib}
 \usepackage{enumitem}
+\usepackage{placeins}
+\usepackage{etoolbox}
 \usepackage{xcolor}
+
+% Float spacing tuned for dense manuscript pages.
+\setlength{\textfloatsep}{28pt plus 5pt minus 4pt}
+\setlength{\floatsep}{14pt plus 3pt minus 2pt}
+\setlength{\intextsep}{24pt plus 4pt minus 4pt}
+\setlength{\abovecaptionskip}{10pt plus 2pt minus 2pt}
+\setlength{\belowcaptionskip}{0pt}
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.85}
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+\makeatletter
+\setlength{\@fptop}{0pt}
+\setlength{\@fpsep}{8pt plus 2pt minus 2pt}
+\setlength{\@fpbot}{0pt plus 1fil}
+\makeatother
+
+% Give tables a little top padding so they do not feel glued to the text above.
+\AtBeginEnvironment{table}{\vspace*{4pt}}
 
 \usepackage[colorlinks=true, linkcolor=blue!60!black, citecolor=green!50!black,
             urlcolor=cyan!70!black,
