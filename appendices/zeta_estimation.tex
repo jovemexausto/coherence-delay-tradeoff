@@ -128,8 +128,9 @@ data and the regulator's own forecasts.
 \small
 \caption{Prefix-validated auto-calibration on the synthetic benchmark. The
 calibration prefix chooses $(d,\alpha)$ by observable one-step-ahead prequential
-MSE, then the selected parameters are run on the full stream. The rule beats the
-fixed default in both scenarios.}
+MSE, then the selected parameters are run on the full stream. This is a
+sensitivity study: the selected pair shifts the operating point, and on this
+calibration set it improves tail MAE relative to the fixed default.}
 \label{tab:zeta_autocalibration}
 \begin{tabular}{lrrrr}
 \toprule
@@ -145,8 +146,8 @@ Alternating drift & 0.11 & 62.5 & 0.1020 & 0.0890 \\
 \centering
 \safeincludegraphics[width=0.92\linewidth]{figures/cuberoot_adwin/fig_zeta_self_calibration}
 \caption{Prefix-validated self-calibration of the drift proxy. The selected
-$(d,\alpha)$ improves the tail MAE relative to the fixed default in both the
-constant-drift and alternating-timescales scenarios.}
+$(d,\alpha)$ shifts the operating point of the regulator; on this calibration
+study it improves tail MAE relative to the fixed default.}
 \label{fig:zeta_self_calibration}
 \end{figure}
 
@@ -161,4 +162,5 @@ block scales and EMA coefficients, score each candidate by prequential one-step
 MSE on a short prefix, then deploy the best candidate for the remainder of the
 stream. For non-Lipschitz local behavior, the grid should include at least one
 short and one longer block scale so that bursty changes do not force a single
-timescale to carry the entire burden.
+timescale to carry the entire burden. This is an operational refinement, not a
+replacement for the fixed-regulator results in the main text.

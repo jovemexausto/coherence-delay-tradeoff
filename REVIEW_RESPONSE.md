@@ -46,14 +46,19 @@ proxy is a short-window block difference, smoothed with an EMA, and the appendix
 includes the empirical `\alpha` sweep already used in the code. The key result is
 that the contraction/expansion asymmetry persists across the tested range and the
 expansion-to-contraction ratio stays above one.
+The appendix also records a prefix-validated calibration study for `(d,\alpha)`;
+it is treated as an operational refinement and sensitivity analysis, not as a
+replacement for the fixed-regulator core results.
 
 ### 4. What is the evaluation metric, and how is `\varepsilon` chosen?
 
 The theory is stated in `W_2`. The Sinkhorn divergence appears only as the
 computational realization of the metric layer in the synthetic experiments. The
 main text now says this explicitly, and the runtime experiment varies `\varepsilon`
-over `{0.02, 0.05, 0.2, 1.0}` to show sensitivity. The paper does not claim that
-the main cube-root exponent depends on a special `\varepsilon` choice.
+over `{0.02, 0.05, 0.2, 1.0}` to show sensitivity. The new finite-sample appendix
+also quantifies how `\varepsilon` and sample size inflate the effective horizon
+calibration constant; the paper does not claim that the main cube-root exponent
+depends on a special `\varepsilon` choice.
 
 ### 5. Can you add stronger adaptive baselines?
 
