@@ -3,16 +3,14 @@
 \paragraph{Scope of the law.}
 The cube-root law is exact for the finite-memory averaging class analyzed in
 this paper, and the lower bound is stated for window-restricted estimators on a
-$W_2$-Lipschitz drift class. The result therefore captures a structural finite-
-memory phenomenon, but not a universal minimax theorem over all possible online
-estimators.
+$W_2$-Lipschitz drift class. It captures a structural finite-memory phenomenon,
+though not a universal minimax theorem over all possible online estimators.
 
 \paragraph{Dependence on local drift estimation.}
 The operational regulator depends on a local estimate of drift. The current
-benchmark suggests that the remaining gap to the oracle is mostly a drift-
-estimation issue, not a failure of the cube-root scaling itself. Better local
-geometry estimators may therefore sharpen the horizon recovery without changing
-the law.
+benchmark suggests that the remaining gap to the oracle comes mostly from drift
+estimation. Better local geometry estimators may therefore sharpen the horizon
+recovery without changing the law.
 
 \paragraph{Geometry beyond the current metric.}
 The present formulation uses Wasserstein geometry and a debiased Sinkhorn
@@ -20,7 +18,7 @@ measurement layer when samples must be compared computationally. Other geometrie
 may admit analogous trade-offs, but the constants and the calibration of useful
 memory may change.
 
-\paragraph{What the experiments do not claim.}
+\paragraph{What the experiments show.}
 The current experiments are not a leaderboard over drift detectors. They show a
 specific operational distinction: a tracker can still have statistically
 insufficient changepoint evidence while already being stale in the sense of

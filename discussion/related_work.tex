@@ -1,39 +1,35 @@
 \section{Related Work}\label{sec:related}
 
 \paragraph{Tracking under nonstationarity.}
-The closest literature is dynamic regret, online least-squares, and adaptive
-filtering. In those settings, the basic question is already the one asked here:
-how much past evidence should remain relevant once the target is moving
-\citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,YuanLamperski2020,
-MazzettoUpfal2023}. The present paper keeps that question, but casts it in
-distributional form and makes the memory horizon itself the main object of
-analysis.
+Dynamic regret, online least-squares, and adaptive filtering all ask a closely
+related question: how much past evidence should remain relevant once the target
+is moving \citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,YuanLamperski2020,
+MazzettoUpfal2023}. The present paper keeps that question in distributional form
+and makes the memory horizon itself the main object of analysis.
 
 \paragraph{Transport geometry.}
-Wasserstein distance and Sinkhorn-type estimators are natural because they
-respect the geometry of the signal space and behave well under transport of mass
-and support. Recent finite-sample results clarify how the constants depend on
-geometry and regularization, while still leaving the exponent structure intact
+Wasserstein distance and Sinkhorn-type estimators are natural because they respect
+the geometry of the signal space and behave well under transport of mass and
+support. Recent finite-sample results clarify how the constants depend on
+geometry and regularization, while leaving the exponent structure intact
 \citep{GenevayEtAl2019,NilesWeedBach2019,GoldfeldEtAl2022,AkyildizEtAl2024}.
-The geometry is used here to quantify how much old evidence can be retained
-before it becomes stale.
+Here, the geometry quantifies how much old evidence can be retained before it
+becomes stale.
 
 \paragraph{Adaptive forgetting and horizon control.}
 Classical smoothers such as EWMA, forgetting-factor RLS, and Kalman filtering all
-instantiate the same tension between variance reduction and responsiveness.
-What they usually do not expose explicitly is the temporal validity of the
-retained memory. The cube-root law makes that validity visible by turning the
-trade-off into an operational horizon selector.
+instantiate the same tension between variance reduction and responsiveness. What
+they often leave implicit is the temporal validity of the retained memory. The
+cube-root law makes that validity visible by turning the trade-off into an
+operational horizon selector.
 
 \paragraph{Freshness and timeliness.}
 The Age-of-Information literature gives a useful interpretive bridge: recent
-information is not just more expensive to maintain, it is also more timely.
-That viewpoint fits the argument here well, but only as interpretation. The main
-contribution is the concrete horizon law and its empirical regulator, not an AoI
-model in the communication-theory sense.
+information is more timely, and timeliness carries a cost. That viewpoint fits
+the argument here well, while AoI remains an interpretation rather than a
+modeling target.
 
 \paragraph{What is different here.}
-The result is adjacent to drift detection, but it is not organized around
-changepoint alarms. The relevant distinction is between statistical evidence of
-change and the operational validity of the memory that a tracker is still using.
-That is the gap the cube-root regulator is designed to expose.
+The result sits next to drift detection, but its organizing distinction is a
+different one: statistical evidence of change versus the horizon at which the
+retained memory remains current.

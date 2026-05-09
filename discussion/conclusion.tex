@@ -1,27 +1,26 @@
 \section{Conclusion}\label{sec:conclusion}
 
 How long can memory remain useful when the target distribution keeps moving?
-The answer is that useful memory has a finite temporal horizon, and that horizon
-obeys a cube-root law under the drift class studied here.
+Under the drift class studied here, useful memory has a finite temporal horizon,
+and that horizon obeys a cube-root law.
 
 The theoretical contribution is a clean decomposition of tracking error into a
 variance term and a staleness term, together with a lower bound showing that the
-resulting finite-memory floor is structural. The operational contribution is that
-this law can be turned into a memory regulator: a cube-root cap keeps the
-effective horizon near the oracle scale across drift regimes, while classical
-adaptive windows can still accumulate stale memory.
+resulting finite-memory floor is structural. The operational contribution is a
+memory regulator: a cube-root cap keeps the effective horizon near the oracle
+scale across drift regimes, while classical adaptive windows can still accumulate
+stale memory.
 
 Empirically, the signature regime is `cap-only`: the memory horizon becomes
 operationally stale before there is enough statistical evidence for a changepoint
 alarm. That separation between evidence of change and temporal validity of
 memory is the main conceptual payoff of the paper.
 
-The broader implication is that finite-memory systems should be judged not only
-by whether they notice change, but by how long their retained evidence remains
-current enough to count as useful. In that sense, the paper contributes a small
-law with a broad design consequence: regulate useful memory, do not merely wait
-for change to announce itself.
+Finite-memory systems are therefore best judged by how long their retained
+evidence remains current enough to count as useful. The paper contributes a law
+with a clear design consequence: regulate useful memory and track the age at
+which evidence stops being current.
 
-The effective-memory-age viewpoint makes the design rule even sharper: the real
-question is not how much history a system keeps, but how old that history is
-allowed to become before it stops being operationally current.
+The effective-memory-age viewpoint sharpens the rule further: the key question is
+how old a retained history may become before it stops being operationally
+current.

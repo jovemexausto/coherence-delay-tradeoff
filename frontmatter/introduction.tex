@@ -26,12 +26,12 @@ that the finite-memory floor is structural rather than a quirk of one specific
 rule.
 
 This viewpoint also gives the paper its interpretive layer. The limiting factor
-is not only finite sample size, but the age of the information that finite
-memory forces the estimator to retain. The result can therefore be read as a
+is the age of the information that finite memory forces the estimator to retain,
+alongside the usual finite-sample cost. The result can therefore be read as a
 freshness law: the learner pays for variance reduction by carrying older
 evidence, and optimal tracking occurs at a memory horizon that balances noise
-against informational aging. In Age-of-Information terms, the point is simple:
-timeliness is part of the estimation problem, not just a downstream concern.
+against informational aging. In Age-of-Information terms, timeliness belongs to
+the estimation problem itself.
 
 The empirical section follows the same logic in three steps. Gaussian tracking
 experiments exhibit the predicted `U`-curve, ablations over drift strength show
@@ -39,13 +39,11 @@ how the best window shifts with nonstationarity, and dynamic-window
 illustrations make the operational memory law visible when the local drift rate
 changes over time. Sinkhorn-based tracking scores serve as the practical
 measurement layer for this error surface, and the cube-root cap shows how the
-same law can be used as an online horizon regulator rather than only as a
-retrospective explanation.
+same law can be used as an online horizon regulator as well as a retrospective
+explanation.
 
 The scope of the paper is deliberately narrow. We study finite-memory tracking
-under drift, not a general theory of all recursive estimators, and not a
-flagship account of intervention-aware diagnosis, RLHF, or coercive masking.
-The contribution is the law, the lower bound, and the associated freshness
-interpretation, together with experiments chosen to validate that story. Framed
-this way, the paper asks a single question: what tracking accuracy is possible
-when the learner's memory is finite and the target distribution keeps moving?
+under drift, a lower bound for restricted estimators, and the associated
+freshness interpretation, together with experiments chosen to validate that
+story. The paper asks a single question: what tracking accuracy is possible when
+the learner's memory is finite and the target distribution keeps moving?

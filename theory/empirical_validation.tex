@@ -47,11 +47,10 @@ whereas CubeRootADWIN lies close to the frontier knee.}\label{fig:lag_variance_f
 
 \subsection{Over-Memory Under Continuous Drift}\label{sec:validation_continuous}
 
-The next benchmark isolates the operational failure mode. We compare five
+The next benchmark focuses on the operational failure mode. We compare five
 methods on a smooth drifting stream: a short fixed window, a long fixed window,
-EWMA, ADWIN, and the cube-root capped variant. The point of the comparison is
-not detector leaderboard performance; it is to reveal when memory becomes stale
-before classical changepoint evidence accumulates.
+EWMA, ADWIN, and the cube-root capped variant. The comparison asks when memory
+becomes stale before classical changepoint evidence accumulates.
 
 \begin{table}[!htbp]
 \centering
@@ -83,9 +82,9 @@ pulls the effective horizon toward the useful-memory scale and exposes a
 changepoint evidence appears.}\label{fig:cuberoot_adwin}
 \end{figure}
 
-The important phenomenon here is not that a new detector fires more often. It is
-that the cap can activate while the Hoeffding test remains silent, separating the
-validity of memory from the evidence threshold for abrupt change.
+The important phenomenon here is the separation between cap activation and the
+Hoeffding test. The cap can activate while the test remains silent, which keeps
+memory validity distinct from the evidence threshold for abrupt change.
 
 \subsection{Temporal Validity Gap}\label{sec:validation_delay}
 
@@ -107,10 +106,9 @@ narrows but remains positive.}\label{fig:cap_vs_detection_delay}
 
 \subsection{Piecewise Horizon Recovery}\label{sec:validation_piecewise}
 
-The decisive benchmark is piecewise drift. Here the local drift rate changes in
-three phases, and we compare the adaptive horizon against the offline oracle
-fixed window for each phase. The calibration is held fixed across phases; only
-the stream changes.
+The piecewise-drift benchmark changes the local drift rate in three phases, and
+the adaptive horizon is compared with the offline oracle fixed window for each
+phase. The calibration is held fixed across phases; only the stream changes.
 
 \begin{table}[!htbp]
 \centering
@@ -139,11 +137,10 @@ evidence that the law can be turned into a usable horizon regulator.}
 \label{fig:cuberoot_adwin_piecewise}
 \end{figure}
 
-The strongest lesson is the separation between two notions that are often
-collapsed in streaming work. Statistical detection asks whether there is enough
-evidence to declare a change. Temporal validity asks whether the memory being
-used is still fresh enough to count as current. The cap-only regime makes that
-gap visible.
+The central distinction is between statistical detection and temporal validity.
+Statistical detection asks whether there is enough evidence to declare a change.
+Temporal validity asks whether the memory being used is still fresh enough to
+count as current. The cap-only regime makes that gap visible.
 
 \subsection{What the Figures Show}\label{sec:validation_summary}
 
