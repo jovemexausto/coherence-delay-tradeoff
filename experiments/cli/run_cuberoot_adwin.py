@@ -6,9 +6,11 @@ import argparse
 from pathlib import Path
 
 from ..cuberoot_adwin.artifacts import save_benchmark_figure
+from ..cuberoot_adwin.artifacts import save_frontier_figure
 from ..cuberoot_adwin.model import CubeRootADWINBenchmarkConfig, run_benchmark
 from ..cuberoot_adwin.reports import (
     build_event_rows,
+    build_frontier_rows,
     build_oracle_phase_rows,
     build_phase_rows,
     build_summary_rows,
@@ -60,12 +62,16 @@ def main() -> None:
     piecewise_result = run_benchmark(piecewise_config)
 
     save_benchmark_figure(result, args.figures_dir / "fig_cuberoot_adwin.pdf")
+    save_frontier_figure(result, args.figures_dir / "fig_lag_variance_frontier.pdf")
     save_benchmark_figure(
         piecewise_result,
         args.figures_dir / "fig_cuberoot_adwin_piecewise.pdf",
     )
     export_summary_csv(
         build_summary_rows(result), args.artifacts_dir / "cuberoot_adwin_summary.csv"
+    )
+    export_summary_csv(
+        build_frontier_rows(result), args.artifacts_dir / "cuberoot_adwin_frontier.csv"
     )
     export_summary_csv(
         build_event_rows(result), args.artifacts_dir / "cuberoot_adwin_events.csv"
@@ -95,8 +101,10 @@ def main() -> None:
     )
 
     print(f"Saved {args.figures_dir / 'fig_cuberoot_adwin.pdf'}")
+    print(f"Saved {args.figures_dir / 'fig_lag_variance_frontier.pdf'}")
     print(f"Saved {args.figures_dir / 'fig_cuberoot_adwin_piecewise.pdf'}")
     print(f"Saved {args.artifacts_dir / 'cuberoot_adwin_summary.csv'}")
+    print(f"Saved {args.artifacts_dir / 'cuberoot_adwin_frontier.csv'}")
     print(f"Saved {args.artifacts_dir / 'cuberoot_adwin_events.csv'}")
     print(f"Saved {args.artifacts_dir / 'cuberoot_adwin_phases.csv'}")
     print(f"Saved {args.artifacts_dir / 'cuberoot_adwin_oracle_phases.csv'}")

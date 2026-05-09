@@ -3,9 +3,11 @@ from __future__ import annotations
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 from ..core.common import rolling_mean
 from .model import CubeRootADWINBenchmarkResult
+from .reports import build_frontier_rows
 
 
 def save_benchmark_figure(
@@ -66,6 +68,84 @@ def save_benchmark_figure(
     for axis in axes:
         axis.grid(alpha=0.2, linewidth=0.5)
 
+    fig.tight_layout()
+    fig.savefig(output_path)
+    plt.close(fig)
+
+
+def save_frontier_figure(
+    result: CubeRootADWINBenchmarkResult, output_path: Path
+) -> None:
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    rows = build_frontier_rows(result)
+    sweep_rows = [row for row in rows if row["method"] == "fixed_sweep"]
+    point_rows = [row for row in rows if row["method"] != "fixed_sweep"]
+
+    sweep_x = np.asarray([float(row["tail_width_mean"]) for row in sweep_rows])
+    sweep_y = np.asarray([float(row["tail_mae_mean"]) for row in sweep_rows])
+    order = np.argsort(sweep_x)
+    sweep_x = sweep_x[order]
+    sweep_y = sweep_y[order]
+
+    best_index = int(np.argmin(sweep_y))
+    best_x = float(sweep_x[best_index])
+    best_y = float(sweep_y[best_index])
+
+    fig, ax = plt.subplots(figsize=(9.5, 6.0))
+    ax.plot(
+        sweep_x,
+        sweep_y,
+        color="black",
+        linewidth=2.0,
+        label="fixed-window sweep",
+    )
+    ax.scatter(
+        [best_x],
+        [best_y],
+        s=70,
+        color="black",
+        zorder=4,
+        label="oracle fixed window",
+    )
+
+    palette = {
+        "fixed": "tab:gray",
+        "fixed_long": "tab:brown",
+        "ewma": "tab:blue",
+        "adwin": "tab:orange",
+        "cube": "tab:green",
+    }
+    labels = {
+        "fixed": "fixed-100",
+        "fixed_long": "fixed-500",
+        "ewma": "EWMA",
+        "adwin": "ADWIN",
+        "cube": "CubeRootADWIN",
+    }
+    for row in point_rows:
+        method = str(row["method"])
+        x = float(row["tail_width_mean"])
+        y = float(row["tail_mae_mean"])
+        ax.scatter(
+            [x],
+            [y],
+            s=85 if method == "cube" else 65,
+            color=palette[method],
+            zorder=5,
+            label=labels[method],
+        )
+
+    ax.axvline(best_x, color="black", linestyle="--", linewidth=1.1, alpha=0.6)
+    ax.text(best_x * 1.03, best_y * 1.04, "oracle horizon", fontsize=10)
+    ax.text(0.02, 0.88, "variance-dominated", transform=ax.transAxes, fontsize=10)
+    ax.text(0.48, 0.16, "optimal freshness", transform=ax.transAxes, fontsize=10)
+    ax.text(0.76, 0.86, "stale-memory region", transform=ax.transAxes, fontsize=10)
+
+    ax.set_xlabel("Effective memory horizon")
+    ax.set_ylabel("Tail MAE")
+    ax.set_title("Lag-variance frontier for useful memory")
+    ax.grid(alpha=0.2, linewidth=0.5)
+    ax.legend(loc="upper right", frameon=False, ncols=2)
     fig.tight_layout()
     fig.savefig(output_path)
     plt.close(fig)

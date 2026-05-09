@@ -22,9 +22,11 @@ from ..gaussian import (
     run_ucurve_experiment,
 )
 from ..cuberoot_adwin.artifacts import save_benchmark_figure
+from ..cuberoot_adwin.artifacts import save_frontier_figure
 from ..cuberoot_adwin.model import CubeRootADWINBenchmarkConfig, run_benchmark
 from ..cuberoot_adwin.reports import (
     build_event_rows,
+    build_frontier_rows,
     build_oracle_phase_rows,
     build_phase_rows,
     build_summary_rows,
@@ -182,10 +184,19 @@ def main() -> None:
         cuberoot_result,
         harness.figure_path("cuberoot_adwin", "fig_cuberoot_adwin.pdf"),
     )
+    save_frontier_figure(
+        cuberoot_result,
+        harness.figure_path("cuberoot_adwin", "fig_lag_variance_frontier.pdf"),
+    )
     harness.save_summary_csv(
         build_summary_rows(cuberoot_result),
         "cuberoot_adwin",
         "cuberoot_adwin_summary.csv",
+    )
+    harness.save_summary_csv(
+        build_frontier_rows(cuberoot_result),
+        "cuberoot_adwin",
+        "cuberoot_adwin_frontier.csv",
     )
     harness.save_summary_csv(
         build_event_rows(cuberoot_result),

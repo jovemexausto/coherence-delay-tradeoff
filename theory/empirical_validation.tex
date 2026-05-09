@@ -26,6 +26,23 @@ This figure validates the structural trade-off between variance and staleness
 that underlies the rest of the paper.}\label{fig:ucurve}
 \end{figure}
 
+\subsection{Lag--Variance Frontier}\label{sec:validation_frontier}
+
+The U-curve becomes more informative when it is viewed as a frontier in horizon
+space. The next figure plots tail error against effective memory horizon for a
+fixed-window sweep and overlays the operating points of the main methods. The
+left side is variance-dominated, the right side is stale-memory dominated, and
+the knee marks the region where useful memory is best preserved.
+
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=0.95\linewidth]{figures/cuberoot_adwin/fig_lag_variance_frontier}
+\caption{Lag--variance frontier for useful memory. The fixed-window sweep traces
+the empirical frontier: short horizons are noisy, long horizons are stale, and
+the knee marks the useful-memory optimum. ADWIN sits far to the stale side,
+whereas CubeRootADWIN lies close to the frontier knee.}\label{fig:lag_variance_frontier}
+\end{figure}
+
 \subsection{Over-Memory Under Continuous Drift}\label{sec:validation_continuous}
 
 The next benchmark isolates the operational failure mode. We compare four

@@ -183,3 +183,52 @@ def build_oracle_phase_rows(result: CubeRootADWINBenchmarkResult) -> SummaryRows
             }
         )
     return rows
+
+
+def build_frontier_rows(
+    result: CubeRootADWINBenchmarkResult,
+    windows: tuple[int, ...] | None = None,
+) -> SummaryRows:
+    windows = windows or tuple(range(10, 501, 10))
+    rows: list[dict[str, float | int | str]] = []
+
+    for window in windows:
+        per_seed_mae: list[float] = []
+        per_seed_width: list[float] = []
+        for trace in result.traces:
+            estimate, width = _fixed_window_estimate(trace.observations, window)
+            tail_start = int(estimate.size * (1.0 - result.config.tail_fraction))
+            per_seed_mae.append(
+                float(
+                    np.mean(
+                        np.abs(trace.latent_mean[tail_start:] - estimate[tail_start:])
+                    )
+                )
+            )
+            per_seed_width.append(float(np.mean(width[tail_start:])))
+
+        rows.append(
+            {
+                "method": "fixed_sweep",
+                "window": int(window),
+                "tail_mae_mean": round(float(np.mean(per_seed_mae)), 4),
+                "tail_mae_std": round(float(np.std(per_seed_mae)), 4),
+                "tail_width_mean": round(float(np.mean(per_seed_width)), 2),
+                "tail_width_std": round(float(np.std(per_seed_width)), 2),
+            }
+        )
+
+    for method in ("fixed", "fixed_long", "ewma", "adwin", "cube"):
+        summary = result.summaries[method]
+        rows.append(
+            {
+                "method": method,
+                "window": "",
+                "tail_mae_mean": round(summary.tail_mae_mean, 4),
+                "tail_mae_std": round(summary.tail_mae_std, 4),
+                "tail_width_mean": round(summary.tail_width_mean, 2),
+                "tail_width_std": round(summary.tail_width_std, 2),
+            }
+        )
+
+    return rows
