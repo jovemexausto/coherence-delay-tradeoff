@@ -108,7 +108,7 @@ stale long before changepoint evidence is available; under faster drift, the gap
 narrows but remains positive.}\label{fig:cap_vs_detection_delay}
 \end{figure}
 
-\subsection{Fixed-Horizon Instability}\label{sec:validation_instability}
+\subsection{Fixed-Horizon Instability and Recovery Asymmetry}\label{sec:validation_instability}
 
 The next benchmark makes fixed-horizon instability visible. The
 stream alternates between slow drift, fast bursts, recovery plateaus, and
@@ -139,6 +139,10 @@ asymmetric: contraction of the useful horizon is easier to trigger than
 re-expansion after a low-drift stretch. The pattern is operational evidence of
 path dependence in temporal memory adaptation. Proposition~\ref{prop:asymmetric_horizon_recovery}
 formalizes the same asymmetry in the idealized EMA-to-horizon map.
+
+This is the paper's secondary indexable contribution: a horizon-recovery
+asymmetry for EMA-driven regulators, distinct from the cube-root scaling law
+itself.
 
 \begin{proposition}[Asymmetric Horizon Recovery]\label{prop:asymmetric_horizon_recovery}
 Let the drift estimator satisfy the EMA recursion

@@ -10,7 +10,8 @@ That question creates a structural trade-off. Using more past data reduces
 sampling noise, but it also increases the age of the information being used to
 track the present. Under drift, memory is simultaneously helpful and harmful:
 short windows are fresh but noisy, while long windows are stable but stale. The
-central claim of this paper is that this tension defines a coherence-lag
+constraint is temporal rather than parametric: one cannot overparameterize time.
+The central claim of this paper is that this tension defines a coherence-lag
 trade-off and induces a quantitative law for finite-memory tracking under
 Wasserstein nonstationarity.
 
@@ -47,6 +48,10 @@ horizon instability, and the gap-cost benchmark quantifies how misalignment
 translates into predictive cost. Sinkhorn-based tracking scores serve as the
 measurement layer, and the cube-root cap shows how the same law can act as an
 online regulator as well as a retrospective explanation.
+
+Within that last benchmark, we also isolate a secondary formal effect: an
+asymmetric horizon-recovery law for EMA-smoothed drift-to-horizon maps, where
+contraction after bursts is faster than re-expansion after low-drift stretches.
 
 The window size is a fundamental parameter whose mischoice can create spurious
 or missed detections~\cite{hinder2023window}; the coherence-lag law provides a

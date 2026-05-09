@@ -38,6 +38,13 @@ they often leave implicit is the temporal validity of the retained memory. The
 cube-root law makes that validity visible by turning the coherence-lag
 trade-off into an operational horizon selector.
 
+The asymmetry result below is adjacent to this literature but not covered by it:
+EMA-based control papers typically analyze smoothing as a parameter-regularizing
+device, while changepoint methods such as ADWIN give detection guarantees rather
+than recovery-time guarantees. Our contribution is the gap between those two
+questions: once drift evidence is mapped into a horizon rule, re-expansion can be
+provably slower than contraction.
+
 Keehan, Anderson, and Wiesemann~\citep{KeehanAndersonWiesemann2025} study a
 closely related drift-aware weighting problem in Wasserstein distributionally
 robust optimization. Their result balances effective sample size against drift in
