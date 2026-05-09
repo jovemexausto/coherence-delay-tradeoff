@@ -9,7 +9,10 @@ though not a universal minimax theorem over all possible online estimators.
 \paragraph{Dependence on local drift estimation.}
 The operational regulator depends on a local estimate of drift. The current
 benchmark suggests that the remaining gap to the oracle comes mostly from drift
-estimation. Better local geometry estimators may therefore sharpen the horizon
+estimation. At the same time, this is not just a weakness: the paper now shows
+that a short observable calibration prefix can materially improve the regulator,
+so drift estimation is part of the method rather than a hidden nuisance
+parameter. Better local geometry estimators may therefore sharpen horizon
 recovery without changing the law.
 
 \paragraph{Geometry beyond the current metric.}

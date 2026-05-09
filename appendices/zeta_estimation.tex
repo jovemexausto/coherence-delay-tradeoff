@@ -47,3 +47,118 @@ $\alpha$ & Contraction & Expansion & Ratio & Tail MAE \\
 The appendix complements the main-text proposition by giving the concrete
 estimator used in the benchmarks and the empirical sweep used to check that the
 asymmetry persists as the drift filter is retuned.
+
+\subsection{Robustness of the EMA Drift Proxy}
+
+Let the block-difference proxy satisfy $\Delta_t = \zeta_t + \xi_t$, where
+$\xi_t$ is a zero-mean noise term with $\mathrm{Var}(\xi_t) \leq \sigma_\Delta^2$
+and the EMA recursion is
+\[
+  \widehat\zeta_t = \alpha\Delta_t + (1-\alpha)\widehat\zeta_{t-1}.
+\]
+If $\zeta_t \equiv \zeta$ is constant, then
+\[
+  \mathbb E[\widehat\zeta_t] = \zeta + (1-\alpha)^t(\widehat\zeta_0-\zeta),
+  \qquad
+  \mathrm{Var}(\widehat\zeta_t) \leq \frac{\alpha}{2-\alpha}\,\sigma_\Delta^2.
+\]
+So smaller $\alpha$ reduces variance but increases lag, while larger $\alpha$
+reacts faster but amplifies noise.
+
+Since the regulator uses
+\[
+  n_t^* = \left(\frac{C_K}{\widehat\zeta_t}\right)^{2/3},
+\]
+the relative horizon error is first-order sensitive to relative drift-estimation
+error:
+\[
+  \frac{\delta n_t^*}{n^*} \approx -\frac{2}{3}\frac{\delta \widehat\zeta_t}{\zeta}.
+\]
+Thus persistent overestimation of $\zeta$ induces under-memory, and persistent
+underestimation induces over-memory. If the proxy has multiplicative bias
+$\mathbb E[\Delta_t]=(1+b)\zeta$ with $b>0$, then asymptotically
+\[
+  \frac{\widehat n^*}{n^*} = (1+b)^{-2/3},
+\]
+so a $10\%$ overestimate of drift shrinks the target horizon by about $6.5\%$.
+
+\begin{table}[!htbp]
+\centering
+\small
+\caption{EMA robustness check for a constant drift proxy with additive noise. The
+empirical mean matches the target drift, the empirical variance matches the
+closed-form $\alpha/(2-\alpha)$ law, and the implied horizon distortion stays
+close to one when the proxy is unbiased.}
+\label{tab:zeta_robustness}
+\begin{tabular}{lrrrr}
+\toprule
+$\alpha$ & $\mathbb E[\widehat\zeta_t]$ & $\mathrm{Var}(\widehat\zeta_t)$ & Theory & $\mathbb E[\widehat n^*]/n^*$ \\
+\midrule
+0.01 & 1.0000 & 0.00031 & 0.00031 & 1.0002 \\
+0.02 & 0.9999 & 0.00063 & 0.00063 & 1.0004 \\
+0.05 & 1.0000 & 0.00160 & 0.00160 & 1.0009 \\
+0.10 & 1.0000 & 0.00329 & 0.00329 & 1.0018 \\
+0.20 & 1.0002 & 0.00694 & 0.00694 & 1.0038 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+For persistent overestimation, the same calculation gives systematic under-memory.
+For example, with a $10\%$ positive bias the asymptotic horizon ratio is
+$1.1^{-2/3} \approx 0.94$, and with a $25\%$ bias it is about $0.86$.
+
+\subsection{Prefix-Validated Auto-Calibration}
+
+The operational fix is to choose $(d,\alpha)$ on a short calibration prefix by
+minimizing an \emph{observable} prequential score over a small grid. For each
+candidate pair $(d,\alpha)$, run the regulated estimator on the prefix,
+generate the one-step-ahead forecast $\hat x_{t|t-1}^{(d,\alpha)}$, and score it by
+\[
+  S(d,\alpha)
+  \,=\,
+  \frac{1}{T_0-1}\sum_{t=1}^{T_0-1}
+  \bigl(x_{t+1} - \hat x_{t|t-1}^{(d,\alpha)}\bigr)^2.
+\]
+The selected pair minimizes this prequential MSE on the prefix and is then used
+for the full run. This is implementable online because it only uses observed
+data and the regulator's own forecasts.
+
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Prefix-validated auto-calibration on the synthetic benchmark. The
+calibration prefix chooses $(d,\alpha)$ by observable one-step-ahead prequential
+MSE, then the selected parameters are run on the full stream. The rule beats the
+fixed default in both scenarios.}
+\label{tab:zeta_autocalibration}
+\begin{tabular}{lrrrr}
+\toprule
+Scenario & Mean $\alpha$ & Mean $d$ & Tail MAE (default) & Tail MAE (calibrated) \\
+\midrule
+Constant drift & 0.19 & 50.0 & 0.2087 & 0.1224 \\
+Alternating drift & 0.11 & 62.5 & 0.1020 & 0.0890 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=0.92\linewidth]{figures/cuberoot_adwin/fig_zeta_self_calibration}
+\caption{Prefix-validated self-calibration of the drift proxy. The selected
+$(d,\alpha)$ improves the tail MAE relative to the fixed default in both the
+constant-drift and alternating-timescales scenarios.}
+\label{fig:zeta_self_calibration}
+\end{figure}
+
+The failure mode is also visible: if the proxy is overreactive, the selected
+window contracts too aggressively and under-memory appears in the tail; if it is
+too inertial, the horizon lags the drift and over-memory follows. The calibration
+rule reduces that sensitivity by choosing the grid point that best predicts the
+next-step observations on the prefix.
+
+The implemented self-calibrating rule is therefore simple: keep a small grid of
+block scales and EMA coefficients, score each candidate by prequential one-step
+MSE on a short prefix, then deploy the best candidate for the remainder of the
+stream. For non-Lipschitz local behavior, the grid should include at least one
+short and one longer block scale so that bursty changes do not force a single
+timescale to carry the entire burden.

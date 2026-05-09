@@ -1,6 +1,19 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from collections import deque
+
+import numpy as np
+
+
+@dataclass(slots=True)
+class DriftCalibrationResult:
+    window: int
+    ema_alpha: float
+    score: float
+    prediction_mse: float
+    smoothness_penalty: float
+    residual_std: float
 
 
 class OnlineDriftEstimator:
@@ -29,6 +42,98 @@ class OnlineDriftEstimator:
     @property
     def delta(self) -> float:
         return max(self._delta_ema, self.floor)
+
+
+def block_drift_series(values: np.ndarray, window: int) -> np.ndarray:
+    window = max(1, int(window))
+    prefix = np.zeros(values.size + 1, dtype=float)
+    prefix[1:] = np.cumsum(values, dtype=float)
+    drift = np.full(values.size, np.nan, dtype=float)
+    for index in range(2 * window, values.size):
+        right = index
+        prev_left = right - 2 * window
+        prev_right = right - window
+        recent_mean = float((prefix[right] - prefix[prev_right]) / window)
+        previous_mean = float((prefix[prev_right] - prefix[prev_left]) / window)
+        drift[index] = abs(recent_mean - previous_mean) / window
+    return drift
+
+
+def score_ema_drift_proxy(
+    values: np.ndarray,
+    *,
+    window: int,
+    ema_alpha: float,
+    smoothness_weight: float = 0.1,
+    prefix_length: int | None = None,
+) -> DriftCalibrationResult:
+    prefix_length = values.size if prefix_length is None else int(prefix_length)
+    prefix_length = max(0, min(prefix_length, values.size))
+    series = block_drift_series(values[:prefix_length], window=window)
+    valid = np.isfinite(series)
+    if not np.any(valid):
+        return DriftCalibrationResult(
+            window=int(window),
+            ema_alpha=float(ema_alpha),
+            score=float("inf"),
+            prediction_mse=float("inf"),
+            smoothness_penalty=float("inf"),
+            residual_std=float("inf"),
+        )
+
+    valid_series = series[valid]
+    ema = float(valid_series[0])
+    prev_ema = ema
+    squared_residuals: list[float] = []
+    squared_jumps: list[float] = []
+    residuals: list[float] = []
+
+    alpha = float(min(max(ema_alpha, 1e-6), 1.0))
+    for delta in valid_series[1:]:
+        residual = float(delta) - ema
+        residuals.append(residual)
+        squared_residuals.append(residual**2)
+        squared_jumps.append((ema - prev_ema) ** 2)
+        prev_ema = ema
+        ema = alpha * float(delta) + (1.0 - alpha) * ema
+
+    prediction_mse = float(np.mean(squared_residuals)) if squared_residuals else 0.0
+    smoothness_penalty = float(np.mean(squared_jumps)) if squared_jumps else 0.0
+    score = prediction_mse + smoothness_weight * smoothness_penalty
+    residual_std = float(np.std(np.asarray(residuals, dtype=float)))
+    return DriftCalibrationResult(
+        window=int(window),
+        ema_alpha=alpha,
+        score=score,
+        prediction_mse=prediction_mse,
+        smoothness_penalty=smoothness_penalty,
+        residual_std=residual_std,
+    )
+
+
+def select_drift_proxy_calibration(
+    values: np.ndarray,
+    *,
+    windows: tuple[int, ...],
+    alphas: tuple[float, ...],
+    prefix_length: int,
+    smoothness_weight: float = 0.1,
+) -> DriftCalibrationResult:
+    best: DriftCalibrationResult | None = None
+    for window in windows:
+        for alpha in alphas:
+            candidate = score_ema_drift_proxy(
+                values,
+                window=window,
+                ema_alpha=alpha,
+                smoothness_weight=smoothness_weight,
+                prefix_length=prefix_length,
+            )
+            if best is None or candidate.score < best.score:
+                best = candidate
+    if best is None:
+        raise ValueError("windows and alphas must not be empty")
+    return best
 
 
 def calibrate_umr_constant(

@@ -109,7 +109,11 @@ In the synthetic benchmarks, $\hat\zeta_t$ is estimated from short-window
 block differences using an EMA update, $C_K$ is calibrated from a stationary
 prefix, and $\varepsilon$ is held fixed within each experiment family, with
 runtime sensitivity to $\varepsilon$ reported separately. The benchmark-specific
-drift proxy and sensitivity sweep are detailed in Appendix~\ref{app:zeta}.
+drift proxy, robustness check, and sensitivity sweep are detailed in
+Appendix~\ref{app:zeta}.
+The same appendix also validates an observable prequential calibration rule for
+choosing $\alpha$ and the block scale, so the online regulator is not tied to a
+fixed manual setting.
 \end{remark}
 
 \begin{corollary}[EWMA Analogue]\label{cor:ewma_cube_root}
@@ -165,10 +169,19 @@ $S_t(w)\approx \zeta(n-1)/2$, which is the same age term that appears in
 \cref{thm:lag_error} up to constants.
 
 \begin{proposition}[Finite-Memory Floor]\label{prop:window_minimax}
-Let the target trajectory satisfy a $W_2$-Lipschitz drift bound with rate
-$\zeta$, and restrict attention to estimators that only use the last $m$
-samples. Then, in the critical-window regime, the minimax tracking error over
-that class cannot beat the same variance-plus-staleness scaling:
+Let $\mathcal P_{\zeta,m}$ be the class of length-$m$ distribution paths for
+which the following hold:
+\begin{enumerate}
+  \item the path is $W_2$-Lipschitz with rate at most $\zeta$;
+  \item the proof is tested on the Gaussian location subclass
+  $X_t \sim \mathcal N(\mu_t,\sigma^2 I_d)$ with
+  $\|\mu_t-\mu_s\|_2 \le \zeta |t-s|$;
+  \item the estimator at time $m$ only uses the last $m$ samples.
+\end{enumerate}
+Measure risk by the endpoint $W_2$ error (equivalently, Euclidean endpoint
+error in the Gaussian location subclass). Then, in the critical-window regime,
+the minimax tracking error over that class cannot beat the same
+variance-plus-staleness scaling:
 \[
   \inf_{\hat\Pot_m}\sup_{\Pot^*}\,\mathbb{E}\,d\bigl(\hat\Pot_m,\Pot^*\bigr)
   \;\gtrsim\; \max\!\left\{C_K\,m^{-1/2},\; c\,\sigma^{2/3}\zeta^{1/3}\right\}.
@@ -275,6 +288,15 @@ and the ramp bound gives
 \]
 So one admissible explicit constant in the critical-window regime is
 $c = 3/64$.
+
+\begin{remark}[Scope of the lower bound]\label{rem:lower_bound_scope}
+The lower bound is parametric only in the testing construction: it uses a
+Gaussian location subclass whose mean path is itself $W_2$-Lipschitz. That is
+enough to make the result minimax for any larger class containing that subclass,
+including the paper's general $W_2$-Lipschitz path class. So the proposition is
+not claiming that every path is Gaussian; it is claiming that the worst case
+already appears inside the Gaussian mean-shift subproblem.
+\end{remark}
 
 \begin{remark}[Measurement layer]
 Debiased Sinkhorn divergence serves as a practical measurement layer when the
