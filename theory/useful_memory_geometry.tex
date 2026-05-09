@@ -102,13 +102,104 @@ Consequently, the cube-root horizon is not merely the optimum of one estimator;
 it is the structural floor of finite memory on this drift class.
 \end{proposition}
 
-\paragraph{Proof sketch.}
-The lower bound combines a finite-sample concentration term with a lag term
-induced by the Lipschitz drift of the oracle trajectory. The concentration part
-is inherited from debiased Sinkhorn estimation, while the lag term follows from
-the fact that any estimator restricted to the last $m$ samples must average over
-observations whose oracle law has moved by order $\zeta m$. The terms add at the
-level of the bound, so the same cube-root balance governs the critical regime.
+\paragraph{Proof.}
+Write $R_m^* \coloneqq \inf_{\delta_m} R_m(\delta_m)$. We exhibit two
+independent obstructions. The first is the ordinary finite-sample estimation
+floor, obtained by restricting to the constant-path subclass $\mu_s \equiv
+\theta$, which is contained in the admissible drift class. For the two
+hypotheses $\theta_\pm = \pm \sigma /(2\sqrt{m})$, the induced product-Gaussian
+laws have Kullback--Leibler divergence
+\[
+  \mathrm{KL}(P_+,P_-)
+  = \frac{1}{2\sigma^2} \sum_{j=1}^{m} (\theta_+ - \theta_-)^2
+  = \frac{1}{2\sigma^2} m\left(\frac{\sigma}{\sqrt{m}}\right)^2
+  = \frac{1}{2}.
+\]
+For any estimator $\delta_m$, the plug-in test $\psi = \mathbf{1}\{\delta_m \geq 0\}$
+must err whenever the estimate falls on the wrong side of the origin; on that
+event the endpoint error is at least $\sigma /(2\sqrt{m})$. By Le Cam's
+two-point lemma and Pinsker's inequality, the average testing error is at least
+\[
+  \frac{1-\mathrm{TV}(P_+,P_-)}{2}
+  \geq
+  \frac{1-\sqrt{\mathrm{KL}(P_+,P_-)/2}}{2}
+  \geq \frac{1}{4}.
+\]
+Hence
+\[
+  R_m^* \;\geq\; \frac{\sigma}{8\sqrt{m}},
+\]
+so one valid explicit choice is $c_0 = 1/8$.
+
+The second obstruction is local drift. Fix any $1\leq h\leq m$ and define
+\[
+  \beta_h \coloneqq \min\!\left\{\zeta,\; \frac{\sigma}{4h^{3/2}}\right\},
+  \qquad
+  \mu^{\pm,h}_{t-j} \coloneqq \pm \,\beta_h\,(h-j)_+, 
+  \qquad 0\leq j\leq m-1,
+\]
+where $(u)_+ \coloneqq \max\{u,0\}$. Each path belongs to the admissible
+class because its slope magnitude is at most $\beta_h \leq \zeta$. The
+endpoint gap is
+\[
+  |\mu_t^{+,h} - \mu_t^{-,h}| = 2\beta_h h.
+\]
+The corresponding Gaussian product laws satisfy
+\[
+  \mathrm{KL}(P_{+,h},P_{-,h})
+  = \frac{1}{2\sigma^2} \sum_{j=0}^{m-1}
+    \bigl(2\beta_h (h-j)_+\bigr)^2
+  \leq \frac{2\beta_h^2}{\sigma^2} \sum_{r=1}^{h} r^2
+  \leq \frac{2\beta_h^2}{\sigma^2} h^3
+  \leq \frac{1}{8}.
+\]
+Applying the same reduction from estimation to testing, now with endpoint error
+threshold $\beta_h h$, and using Le Cam together with Pinsker gives average
+testing error at least
+\[
+  \frac{1-\mathrm{TV}(P_{+,h},P_{-,h})}{2}
+  \geq
+  \frac{1-\sqrt{\mathrm{KL}(P_{+,h},P_{-,h})/2}}{2}
+  \geq \frac{3}{8}.
+\]
+Therefore
+\[
+  R_m^* \;\geq\; \frac{3}{8}\,\beta_h h
+  \;\geq\;
+  \frac{3}{32}\,\min\!\left\{\zeta h,\; \sigma h^{-1/2}\right\}
+\]
+which is again a fully explicit numerical lower bound. Since $h$ was arbitrary,
+\[
+  R_m^* \;\geq\;
+  \frac{3}{32}\,\sup_{1\leq h\leq m}
+  \min\!\left\{\zeta h,\; \sigma h^{-1/2}\right\}.
+\]
+
+Taking the maximum of the constant-path and ramp bounds proves the displayed
+lower bound. For the cube-root regime, assume
+$1 \leq h_\star \coloneqq (\sigma/\zeta)^{2/3} \leq m$. Choose an integer
+$\bar h \in [h_\star/2, h_\star]$. Then
+\[
+  \zeta \bar h \geq \frac{1}{2}\,\zeta h_\star
+  = \frac{1}{2}\,\sigma^{2/3}\zeta^{1/3},
+\]
+and
+\[
+  \sigma \bar h^{-1/2}
+  \geq \sigma h_\star^{-1/2}
+  = \sigma^{2/3}\zeta^{1/3}.
+\]
+Therefore
+\[
+  \min\!\left\{\sigma \bar h^{-1/2},\; \zeta \bar h\right\}
+  \geq \frac{1}{2}\,\sigma^{2/3}\zeta^{1/3},
+\]
+and the ramp bound gives
+\[
+  R_m^* \geq \frac{3}{64}\,\sigma^{2/3}\zeta^{1/3}.
+\]
+So one admissible explicit constant in the critical-window regime is
+$c = 3/64$.
 
 \begin{remark}[Measurement layer]
 Debiased Sinkhorn divergence serves as a practical measurement layer when the
