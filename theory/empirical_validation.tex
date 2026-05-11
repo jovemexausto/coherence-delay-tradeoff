@@ -330,7 +330,7 @@ operating horizon materially.
 
 The next question is when horizon misalignment becomes operationally expensive.
 For each backend, we compare its instantaneous horizon $n_t$ with the local
-cube-root target $n_t^*$ and plot the excess error $E_t - E_t^\star$ against both
+horizon target $n_t^*$ and plot the excess error $E_t - E_t^\star$ against both
 the absolute gap $|n_t - n_t^*|$ and the relative gap $|\log(n_t / n_t^*)|$.
 Here $E_t^\star$ is the best error achieved at time $t$ by the fixed-window oracle
 grid, and the curve is binned over all seeds and time points.
@@ -380,8 +380,8 @@ detector. The effect is directionally consistent with the main claim but modest
 
 \subsection{What the Figures Show}\label{sec:validation_summary}
 
-Taken together, the figures support three claims. First, the cube-root law is a
-real geometric law for useful memory rather than a fitting artifact. Second,
+Taken together, the figures support three claims. First, the finite-memory
+optimum is real and not a fitting artifact. Second,
 horizon tracking is distinct from changepoint detection: memory can become stale
 before statistical evidence is strong enough to declare a change. Third,
 horizon control has operational value, but its predictive payoff depends on the

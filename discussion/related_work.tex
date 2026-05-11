@@ -39,10 +39,11 @@ it becomes stale.
 
 \paragraph{Adaptive forgetting and detection.}
 EWMA, forgetting-factor RLS, and Kalman filtering all balance variance reduction
-against responsiveness. The cube-root law makes temporal validity explicit. The
-asymmetry result is adjacent to changepoint detection and EMA-based control, but
-the contribution here is the gap between those questions: once drift evidence is
-mapped into a horizon rule, re-expansion can be slower than contraction.
+against responsiveness \citep{Jazwinski1970}. The cube-root law makes temporal
+validity explicit. The asymmetry result is adjacent to changepoint detection and
+EMA-based control, but the contribution here is the gap between those questions:
+once drift evidence is mapped into a horizon rule, re-expansion can be slower
+than contraction.
 
 This also connects to the concept-drift literature more broadly
 \citep{Gama2004,GamaSurvey2014}. In particular, the ``Window Dilemma'' argument

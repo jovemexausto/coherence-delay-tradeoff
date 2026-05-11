@@ -40,10 +40,26 @@ Status: `done`
 
 ## Current Standard
 
-The final manuscript should make one central case:
+The current manuscript should make one central case:
 
 - finite-memory tracking under drift has an unavoidable trade-off;
-- this yields a cube-root optimal memory law and a finite-memory floor;
+- this yields a worst-case cube-root horizon law and a finite-memory floor;
 - the governing object is the coherence-lag trade-off;
-- the result can be operationalized as horizon regulation under drift;
-- the experiments are selected to validate that story directly.
+- the result can be operationalized as a backend-agnostic temporal-validity cap;
+- the experiments are selected to validate that narrow story directly.
+
+## Current Working Split
+
+- `PAPER_SPLIT_PLAN.md` records the scientific split between the current paper
+  and the broader path-geometry direction.
+- `RESEARCH_PROGRAM.md` records the deeper research identity, risks, and
+  long-range software trajectory.
+- `NEXT_VERSION_TASKS.md` records the prioritized execution checklist for the
+  next manuscript version.
+
+## Immediate Constraint
+
+- Do not let Paper 2 language leak into Paper 1.
+- Keep future-work wording minimal and paper-native.
+- Keep UMR defined as a temporal-validity cap, not as a detector-specific hack
+  and not yet as a native regime-adaptive tracker.
