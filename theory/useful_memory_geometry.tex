@@ -44,9 +44,13 @@ $\hat Q_n := n^{-1}\sum_{i=1}^n \delta_{X_i}$. Then:
   \]
   \item If $d_\mathrm{eff}=4$, the same bound holds with an additional
   $(\log n)^{1/2}$ factor.
-  \item If $d_\mathrm{eff}>4$, the raw Wasserstein rate is slower than
-  $n^{-1/2}$, so the constant-only form above should not be used.
-\end{itemize}
+	\item If $d_\mathrm{eff}>4$, the raw Wasserstein rate is slower than
+	$n^{-1/2}$, so the constant-only form above should not be used.
+	\end{itemize}
+
+	In that regime, the statistical fluctuations do not follow the
+	$n^{-1/2}$ carrier exponent, so the resulting horizon scaling becomes
+	carrier-dependent (see \cref{rem:carrier_exponent}).
 If the geometry is computed with debiased Sinkhorn divergence $S_\varepsilon$
 on a bounded domain of diameter $D$, then for fixed $\varepsilon>0$ the
 empirical fluctuations remain $O(n^{-1/2})$ with a constant
@@ -57,6 +61,36 @@ A short numerical sanity check for this regime is reported in
 Appendix~\ref{app:finite_sample_geometry}; it is not used as a theorem, but it
 matches the intended low-dimensional interpretation of the finite-sample term.
 \end{lemma}
+
+\begin{remark}[Carrier-dependent horizon scaling]\label{rem:carrier_exponent}
+The cube-root law follows when the finite-sample term behaves as
+\(\mathbb E\,W_2(\widehat P_t^{(n)},\bar P_t^{(n)})\lesssim C_K n^{-1/2}\).
+More generally, if the finite-sample term admits the scaling
+
+\[
+  \mathbb E\,W_2(\widehat P_t^{(n)},\bar P_t^{(n)})\lesssim C_K n^{-a}
+  \quad\text{for some }a>0,
+\]
+
+then balancing it against the drift-induced staleness cost
+\(\tfrac12\zeta n\) yields
+
+\[
+  n^*(a)
+  \;=\;\left(\frac{2a\,C_K}{\zeta}\right)^{\!\frac{1}{a+1}},
+  \qquad
+  \mathcal E_{\min}(a)
+  \;=\;\frac{a+1}{(2a)^{a/(a+1)}}\,C_K^{1/(a+1)}\,\zeta^{a/(a+1)}.
+\]
+
+In the setting of \cref{lem:finite_sample_term}, the effective exponent is
+\(a=1/2\) for \(d_\mathrm{eff}<4\), with an additional \((\log n)^{1/2}\)
+factor for \(d_\mathrm{eff}=4\); for \(d_\mathrm{eff}>4\) the raw Wasserstein
+rate is slower than \(n^{-1/2}\), so the exponent is strictly smaller than
+\(1/2\) (carrier-dependent). The cube-root law is therefore the
+\emph{$a=1/2$ carrier instance} of a broader carrier-dependent horizon
+scaling.
+\end{remark}
 
 The two terms in \cref{thm:lag_error} pull in opposite directions. Increasing
 $n$ reduces variance but raises the age of the retained evidence. That tension is
