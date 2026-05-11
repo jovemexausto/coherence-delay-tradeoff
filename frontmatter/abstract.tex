@@ -9,19 +9,20 @@ We study this trade-off under Wasserstein nonstationarity. Cube-root scalings
 already appear in nonstationary optimization and bandit literature, but here
 the object is the finite-memory horizon itself. For the finite-memory
 averaging class analyzed here, the tracking error splits into a statistical
-term that decreases with memory and a staleness term that grows with drift.
+term that decreases with memory and a worst-case staleness term that grows
+with drift.
 When the statistical fluctuations scale as $n^{-1/2}$, as in the low
 effective-dimension regime for raw $W_2$ and in fixed-$\varepsilon$
-Sinkhorn-based measurement carriers, the resulting \textbf{cube-root law}
-holds: the \textbf{optimal memory horizon} scales as
+Sinkhorn-based measurement carriers, the resulting worst-case \textbf{cube-root
+law} holds: the \textbf{optimal memory horizon} scales as
 $\boldsymbol{n^* \asymp (C_K/\zeta)^{2/3}}$, while the corresponding
 \textbf{minimum tracking error} scales as
 $\boldsymbol{\mathcal{E}_{\min} \asymp C_K^{2/3}\zeta^{1/3}}$. In the
 critical-window regime, we also prove a minimax lower bound, showing that
 this finite-memory floor is structural rather than estimator-specific.
 
-Empirically, Gaussian drift experiments recover the predicted $U$-curve and
-cube-root scaling. Continuous-drift benchmarks expose a gap between temporal
+Empirically, Gaussian drift experiments recover the predicted $U$-curve and a
+finite useful-memory optimum. Continuous-drift benchmarks expose a gap between temporal
 validity and changepoint evidence; alternating-timescales benchmarks show that
 contraction is easier than re-expansion; and gap-cost experiments show that
 horizon misalignment induces nonlinear predictive cost.

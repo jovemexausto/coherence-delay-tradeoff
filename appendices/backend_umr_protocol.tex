@@ -1,7 +1,10 @@
 \section{Backend $+$ UMR Protocol}\label{app:backend_umr_protocol}
 
 This appendix gives the concrete protocol used whenever a backend is paired with
-the useful-memory regulator (UMR). The code paths are:
+the useful-memory regulator (UMR). In the experiments, UMR is a shared
+backend-agnostic horizon cap: it estimates a local drift scale, smooths that
+estimate with an EMA, and converts it into a runtime horizon bound. The code
+paths are:
 \texttt{drift/umr.py} for the drift proxy and horizon rule,
 \texttt{experiments/core/horizon\_baselines.py} for horizon-capped estimators,
 \texttt{experiments/core/detectors.py} for the ADWIN+$\,$UMR reset logic, and
@@ -36,11 +39,11 @@ mixing), the runtime horizon is simply clipped by the regulator:
 The backend then computes its estimate using $h_t^{\mathrm{eff}}$ exactly as it
 would have used $h_t^{\mathrm{backend}}$.
 
-\subsection{ADWIN $+$ UMR Event Logic}
+\subsection{Detector Wrapper Instance}
 
-For the detector wrapper, the backend is ADWIN on a scalar signal. The regulated
-version maintains a rolling buffer of the last $n_{\max}$ observations and
-applies the following logic:
+One detector-side instantiation uses ADWIN on a scalar signal. The wrapper
+maintains a rolling buffer of the last $n_{\max}$ observations and applies the
+same cap logic to the detector width:
 
 \begin{enumerate}[leftmargin=1.5em]
   \item Update the drift proxy and compute $n_t^*$.
@@ -52,7 +55,8 @@ applies the following logic:
 \end{enumerate}
 
 The cap event is therefore a horizon event, not a detector event. The detector
-warning is still ADWIN's own decision after the reset path.
+warning is still ADWIN's own decision after the reset path. This wrapper is one
+instance of the shared UMR rule, not the defining form of the regulator.
 
 \subsection{Hyperparameters}
 
@@ -107,7 +111,7 @@ rather than a replacement for the fixed-regulator core.
 \begin{figure}[!htbp]
 \centering
 \fbox{\begin{minipage}{0.96\linewidth}
-\textbf{Algorithm 1. Backend $+$ UMR update rule.}
+\textbf{Algorithm 1. UMR update rule.}
 \begin{enumerate}[leftmargin=1.5em]
   \item \textbf{Input:} stream $x_{1:T}$, backend $B$, prefix length $m$, block
   size $d$, EMA coefficient $\alpha$, bounds $[n_{\min},n_{\max}]$, constant
@@ -120,15 +124,15 @@ rather than a replacement for the fixed-regulator core.
     $n_t^* = \mathrm{clip}((C_K/\max(\hat\zeta_t,10^{-9}))^{2/3},n_{\min},n_{\max})$.
     \item If $B$ is horizon-based, set the effective horizon to
     $\min(h_t^{B},n_t^*)$ and evaluate the backend with that horizon.
-    \item If $B$ is ADWIN, update the detector; if its width exceeds $n_t^*$,
-    reset it and re-feed the last $n_t^*$ buffered observations; then record any
-    ADWIN warning.
+    \item If $B$ is a detector wrapper, update the detector; if its internal
+    width exceeds $n_t^*$, reset it and re-feed the last $n_t^*$ buffered
+    observations; then record any detector warning.
   \end{enumerate}
   \item \textbf{Output:} backend estimate, warnings, $n_t^*$, drift proxy, and
   cap events.
 \end{enumerate}
 \end{minipage}}
-\caption{Backend $+$ UMR update rule.}
+\caption{UMR update rule.}
 \label{alg:backend_umr}
 \end{figure}
 

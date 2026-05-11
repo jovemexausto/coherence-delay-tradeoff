@@ -8,19 +8,19 @@
 
 Tracking under drift is a race against obsolescence: you want enough memory to be precise, but not so much that retained evidence becomes temporally misaligned with the present.
 
-The current paper is organized around temporal coherence, temporal validity, and horizon misalignment under drift. For the finite-memory averaging class studied in the manuscript, that trade-off yields a cube-root law for the useful memory horizon and a finite-memory tracking floor.
+The current paper is organized around temporal coherence, temporal validity, and horizon misalignment under drift. For the finite-memory averaging class studied in the manuscript, that trade-off yields a robust worst-case cube-root law for the useful memory horizon and a finite-memory tracking floor.
 
 ## Core idea
 
 - useful memory under drift has temporal geometry
 - the horizon is finite
 - horizon misalignment has measurable operational cost
-- the cube-root law sets the useful-memory scale for finite-memory tracking
+- the cube-root law sets a worst-case useful-memory scale for finite-memory tracking
 
 ## Manuscript status
 
-- Main paper: theorem-first drift tracking paper
-- Appendix: phase-wise recovery details for the cube-root regulator
+- Main paper: theorem-first drift tracking paper with a worst-case horizon law
+- Appendix: phase-wise recovery details for the UMR horizon cap
 - Archival materials: earlier masking / logged-feedback work, retained for history only
 
 ## Reproducibility

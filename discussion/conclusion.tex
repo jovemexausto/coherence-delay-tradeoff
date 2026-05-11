@@ -2,16 +2,15 @@
 
 How long can memory remain useful when the target distribution keeps moving?
 Under the drift class studied here, useful memory has a finite temporal horizon,
-and that horizon obeys a cube-root law. The governing object is a coherence-lag
-trade-off: preserving temporally coherent evidence requires limiting the lag
-induced by old memory.
+and in the worst-case linear-staleness regime that horizon obeys a cube-root
+law. The governing object is a coherence-lag trade-off: preserving temporally
+coherent evidence requires limiting the lag induced by old memory.
 
 The theoretical contribution is a decomposition of tracking error into a
 variance term and a staleness term, together with a lower bound showing that the
 resulting finite-memory floor is structural. The operational contribution is a
-memory regulator: a cube-root cap keeps the effective horizon near the oracle
-scale across drift regimes, while classical adaptive windows can still accumulate
-stale memory.
+horizon regulator: UMR turns the worst-case law into a temporal-validity cap,
+which keeps the effective horizon from drifting far into stale-memory territory.
 
 The strongest empirical lesson is that horizon geometry, horizon tracking, and
 predictive payoff are distinct objects. Horizon misalignment carries a nonlinear

@@ -9,23 +9,26 @@ continuous-drift, temporal-validity, and alternating-timescales benchmarks probe
 tracking. The horizon cost curve assesses predictive payoff. A compact piecewise
 benchmark is retained only as a phase-wise calibration check.
 
-In the experiments, UMR is the useful-memory regulator and ADWIN is the backend
-detector instantiated in the benchmarks.
+In the experiments, UMR is a backend-agnostic horizon cap driven by a smoothed
+local drift proxy. It is applied to fixed-window, EWMA, and multi-horizon
+backends, and it is also wrapped around ADWIN as one detector-side instance of
+the same temporal-validity rule.
 
 \subsection{Law Validation}\label{sec:validation_law}
 
-We begin with the Gaussian sweep used to validate the finite-memory law. The
-setup produces the characteristic U-curve: for small windows, error is dominated
-by variance; for large windows, error is dominated by staleness. The empirical
-minimum follows the predicted cube-root scaling, and EWMA behaves as the natural
-finite-memory analogue rather than as a competing theory.
+We begin with the Gaussian sweep used to validate the finite-memory trade-off.
+The setup produces the characteristic U-curve: for small windows, error is
+dominated by variance; for large windows, error is dominated by staleness. The
+empirical minimum remains finite and moves in the expected direction as drift
+strengthens, and EWMA behaves as the natural finite-memory analogue rather than
+as a competing theory.
 
 To make the comparison statistically explicit, we also ran a paired bootstrap
 over the 20 synthetic seeds (50{,}000 resamples). Table~\ref{tab:bootstrap_tail_mae}
 reports the tail-MAE mean and 95\% interval for each method, together with the
-paired difference relative to ADWIN+$\,$UMR. The cube-cap remains better than
-ADWIN, EWMA, and the long fixed window on this benchmark, while the short fixed
-window remains the strongest baseline.
+paired difference relative to the UMR-capped detector instance. The horizon cap
+remains better than ADWIN, EWMA, and the long fixed window on this benchmark,
+while the short fixed window remains the strongest baseline.
 
 \begin{table}[!htbp]
 \centering
@@ -36,7 +39,7 @@ seeds; the second block reports paired differences versus ADWIN+$\,$UMR.}
 \label{tab:bootstrap_tail_mae}
 \begin{tabular}{lrr}
 \toprule
-Method & Tail MAE [95\% CI] & $\Delta$ vs cube [95\% CI] \\
+Method & Tail MAE [95\% CI] & $\Delta$ vs capped ADWIN [95\% CI] \\
 \midrule
 Fixed-100 & 0.0849 [0.0815, 0.0884] & $-0.0130$ [$-0.0144$, $-0.0115$] \\
 Fixed-500 & 0.2388 [0.2274, 0.2501] & $+0.1409$ [$+0.1319$, $+0.1504$] \\
@@ -50,11 +53,12 @@ ADWIN + UMR & 0.0978 [0.0942, 0.1016] & -- \\
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.92\linewidth]{figures/fig_ucurve}
-\caption{Cube-root validation on the Gaussian sweep. Left: tracking error as a
-function of window size, showing the predicted U-shape for multiple drift rates.
-Right: the minimum achievable error follows an approximate $\zeta^{1/3}$ law.
-This figure validates the structural trade-off between variance and staleness
-that underlies the rest of the paper.}\label{fig:ucurve}
+\caption{Finite-memory law validation on the Gaussian sweep. Left: tracking
+error as a function of window size, showing the predicted U-shape for multiple
+drift rates. Right: the minimum achievable error decreases as drift weakens,
+consistent with the variance--staleness trade-off. The figure validates the
+existence of a finite useful-memory optimum, which underlies the rest of the
+paper.}\label{fig:ucurve}
 \end{figure}
 
 \subsection{Lag--Variance Frontier}\label{sec:validation_frontier}
@@ -80,15 +84,15 @@ sits far to the stale side, whereas ADWIN+$\,$UMR lies close to the frontier kne
 
 The next benchmark focuses on the operational failure mode. We compare five
 methods on a smooth drifting stream: a short fixed window, a long fixed window,
-EWMA, ADWIN, and the cube-root capped variant. The question is when memory
-becomes stale before changepoint evidence accumulates.
+EWMA, ADWIN, and an ADWIN wrapper equipped with the UMR horizon cap. The
+question is when memory becomes stale before changepoint evidence accumulates.
 
 \begin{table}[!htbp]
 \centering
 \caption{Continuous-drift benchmark under a smooth drift rate. The key gap is
 between statistical evidence and temporal validity: ADWIN keeps a much wider
-window than the cube-root regulator, while the long fixed window collapses under
-lag.}
+window than the UMR-capped horizon scale, while the long fixed window collapses
+under lag.}
 \label{tab:continuous_benchmark}
 \begin{tabular}{lrrrr}
 \toprule
@@ -120,10 +124,10 @@ validity distinct from the evidence threshold for abrupt change.
 \subsection{Temporal Validity Gap}\label{sec:validation_delay}
 
 The gap becomes more explicit when the drift rate varies. The next figure plots
-the first cap activation of ADWIN+$\,$UMR and the first changepoint decision of ADWIN as
-the drift rate changes. In the smooth-drift regime, the cap
-activates much earlier than the detector; as the drift becomes faster, the gap
-shrinks but does not disappear.
+the first UMR cap activation for the detector wrapper and the first changepoint
+decision of ADWIN as the drift rate changes. In the smooth-drift regime, the
+cap activates much earlier than the detector; as the drift becomes faster, the
+gap shrinks but does not disappear.
 
 \begin{figure}[!htbp]
 \centering

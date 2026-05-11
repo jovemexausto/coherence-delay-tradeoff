@@ -19,8 +19,9 @@ new pieces here.
 
 For the finite-memory averaging class analyzed here, the tracking error splits
 into a statistical term that decreases with memory length and a staleness term
-that increases with drift and effective data age. Optimizing that balance yields
-a cube-root law:
+that increases with drift and effective data age. In the worst-case linear
+staleness regime induced by the $W_2$-Lipschitz path bound, optimizing that
+balance yields a cube-root law:
 $\mathcal{E}_{\min} \asymp C_K^{2/3}\zeta^{1/3}$ with
 $n^* \asymp (C_K/\zeta)^{2/3}$. The law is exact for the averaging class
 considered here. Beyond that class, the paper proves a minimax lower bound for
@@ -29,7 +30,9 @@ the finite-memory floor is structural rather than a quirk of one specific rule.
 
 The cube-root scaling corresponds to the carrier regime where the finite-sample
 term decays as $n^{-1/2}$; more generally, carrier-dependent exponents lead to
-carrier-dependent horizon scaling \cref{rem:carrier_exponent}.
+carrier-dependent horizon scaling \cref{rem:carrier_exponent}. The analysis
+below is stated for the linear-staleness regime induced by the local
+$W_2$-Lipschitz path bound.
 
 The same decomposition also has a simple interpretation: the limiting factor is
 the age of the information that finite memory forces the estimator to retain,
@@ -45,7 +48,7 @@ when it becomes stale, and how much that staleness costs.
 
 Every backend need not collapse to the same horizon. Short fixed windows can
 remain strong compromises even when the local oracle horizon moves over time.
-What the cube-root regulator contributes is a notion of validity: it tells us
+What the UMR horizon cap contributes is a notion of validity: it tells us
 when remembered evidence is still current enough to matter, and when it has
 become stale before a detector has enough evidence to complain.
 

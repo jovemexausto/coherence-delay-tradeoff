@@ -17,7 +17,12 @@ class DriftCalibrationResult:
 
 
 class OnlineDriftEstimator:
-    """Estimate local drift magnitude with an EMA of adjacent block shifts."""
+    """Estimate a smoothed local drift scale from adjacent block shifts.
+
+    The estimator is intentionally backend-agnostic: it only produces a local
+    drift magnitude, which can then be converted into a horizon cap for any
+    memory-bearing backend.
+    """
 
     def __init__(self, window: int = 50, ema_alpha: float = 0.05, floor: float = 1e-6):
         self.window = int(window)
@@ -152,7 +157,13 @@ def calibrate_umr_constant(
 
 
 class UsefulMemoryRegulator:
-    """Backend-agnostic horizon controller driven by local drift."""
+    """Backend-agnostic temporal-validity cap driven by local drift.
+
+    UMR does not implement a detector or predictor itself. It maintains a
+    smoothed drift proxy and converts it into a runtime horizon bound that can
+    be applied to fixed windows, exponential smoothers, ensembles, or detector
+    wrappers with an internal width.
+    """
 
     def __init__(
         self,
@@ -181,10 +192,12 @@ class UsefulMemoryRegulator:
         return self._drift_est.delta
 
     def observe(self, x: float) -> int:
+        """Update the drift proxy with a new observation and return the cap."""
         self._drift_est.update(float(x))
         raw = (self.Ck / self._drift_est.delta) ** (2.0 / 3.0)
         self._n_star = int(min(max(raw, self.n_min), self.n_max))
         return self._n_star
 
     def limit(self, proposed_horizon: int | float) -> int:
+        """Apply the current horizon cap to a backend-proposed memory scale."""
         return int(min(max(1, int(round(proposed_horizon))), self._n_star))

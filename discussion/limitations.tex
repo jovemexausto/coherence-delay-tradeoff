@@ -8,6 +8,10 @@ location subclass and endpoint $W_2$ error, so its structural claim is worst-cas
 and subclass-based rather than a universal theorem over all possible online
 estimators.
 
+More refined drift classes may admit tighter staleness growth and different
+horizon exponents. The analysis here isolates the linear-staleness law induced
+by the $W_2$-Lipschitz path bound.
+
 \paragraph{Dependence on local drift estimation.}
 The operational regulator depends on a local estimate of drift. The current
 benchmark suggests that the remaining gap to the oracle comes mostly from drift
@@ -32,8 +36,8 @@ evidence while already being stale in the sense of useful memory.
 \paragraph{Scope of the comparison suite.}
 The benchmark suite now includes a Window-Dilemma-style switcher and a
 MELO-style multi-horizon hedge, but it is still not a full survey of adaptive
-tracking methods. The analysis remains centered on the cube-root law and on the
-temporal-validity interpretation of memory.
+tracking methods. The analysis remains centered on the worst-case cube-root law
+and on the temporal-validity interpretation of memory.
 
 The drift proxy itself has a practical resolution limit: very small block sizes
 can grossly overestimate $\widehat\zeta_t$, so the calibration prefix needs blocks
@@ -43,3 +47,9 @@ while $d=100$ is effectively stable.
 On the current ELEC2 and Bikes arenas, adding UMR to the multi-horizon hedge
 changes results only modestly and in a benchmark-dependent way; it acts as a
 horizon prior, not a universal replacement for uncertainty weighting.
+
+\paragraph{Path-class refinement.}
+The linear staleness term comes from the local $W_2$-Lipschitz path bound and is
+therefore a worst-case statement for that class. Characterizing narrower drift
+classes in which temporal misalignment accumulates more slowly, together with
+matching lower bounds, remains open.

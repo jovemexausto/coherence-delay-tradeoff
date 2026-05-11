@@ -19,8 +19,8 @@ minimax lower bound for arbitrary window-restricted estimators.
 The same cube-root tuning shows up in sliding-window analyses of drifting data
 \citep{BifetGavalda2007}:
 the window length is the control variable, but the quantity being protected is
-temporal coherence rather than regret alone. The present paper keeps that idea
-while changing the geometry from scalar losses to distributional tracking.
+temporal coherence rather than regret alone. The same perspective appears here,
+but with the geometry changed from scalar losses to distributional tracking.
 
 Jiang, Li, and Zhang study online stochastic optimization under a Wasserstein
 nonstationarity measure and obtain distribution-aware regret guarantees
@@ -54,8 +54,8 @@ the object that must be estimated.
 \paragraph{Public-stream baselines.}
 Window-Dilemma-style and MELO-style baselines widen the empirical comparison.
 The comparison is broader, but the claim stays the same: the cube-root
-regulator is a structural limit of finite-memory tracking under drift, not a new
-exponent invented here.
+regulator is a worst-case horizon law for the class studied here, not a claim
+about every possible drift-path class.
 
 Multi-horizon ensembles attack the same practical issue from another angle by
 maintaining several historical windows and combining their predictions through
@@ -68,4 +68,5 @@ The Age-of-Information literature asks how old the last received update is and
 how update policies should balance communication cost against information
 staleness~\citep{KaulYatesGruteser2012,YatesEtAl2021AoI}. The distributional
 analogue is the same question under $\mathsf{W}_2$ drift: useful memory has a
-finite horizon, and that horizon obeys the cube-root law.
+finite worst-case horizon, and the cube-root law quantifies that worst-case
+scale for the class studied here.
