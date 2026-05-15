@@ -17,7 +17,7 @@ One-sentence thesis:
 Under drift, memory is both a statistical resource and a temporal liability, so useful memory has a finite horizon determined by how temporal roughness accumulates staleness.
 
 One-sentence reviewer summary:
-The paper shows that finite-memory tracking is governed by a variance-staleness trade-off, that the cube-root law is the worst-case Lipschitz member of a broader family of horizon laws, and that memory can become temporally invalid before change becomes statistically detectable.
+The paper shows that finite-memory tracking is governed by a roughness-indexed variance-staleness trade-off, that the cube-root law is the worst-case Lipschitz member of a broader family of horizon laws, and that memory can become temporally invalid before change becomes statistically detectable.
 
 Core conceptual message:
 `Temporal roughness determines how staleness accumulates, and therefore determines the horizon of useful memory.`
@@ -30,23 +30,24 @@ Core contrast sentence:
 
 ## Unified Abstract
 
-We study the temporal validity of finite memory under drift.
-Its starting point is a structural trade-off between finite-sample variance and
-drift-induced staleness. In the worst-case Lipschitz envelope, that trade-off
-induces the cube-root horizon law and a structural finite-memory floor. In
-deterministic Holder-type path classes, the same object becomes a family of
-roughness-indexed horizon laws and minimax rates. The main observable
-consequence is detector-silent staleness: retained memory can become invalid
-before change becomes statistically detectable. The empirical section exists to
-make those structural signatures visible, not to validate a named adaptive
-policy.
+We study the temporal validity of finite memory under drift. The core object is
+not a single exponent but a roughness-indexed family of horizon laws: memory
+reduces variance, but it also ages, so useful memory has a finite horizon whose
+scale depends on how temporal roughness accumulates staleness. In the worst-case
+Lipschitz envelope, this family specializes to the cube-root anchor and a
+structural finite-memory floor. In deterministic Holder-type path classes, the
+same balance yields a broader set of horizon laws and minimax rates. The main
+observable consequence is detector-silent staleness: retained memory can become
+invalid before change becomes statistically detectable. The empirical section
+exists to make these structural signatures visible, not to validate a named
+adaptive policy.
 
 ## What This Work Is
 
 This work is about:
 - the temporal validity of retained evidence under drift;
 - finite-memory tracking as a variance-staleness problem;
-- worst-case and regime-dependent horizon laws;
+- roughness-indexed horizon laws with a worst-case Lipschitz anchor;
 - structural lower bounds for finite-memory tracking;
 - detector-silent staleness as the key observable failure mode;
 - the geometry of useful memory across path classes.
@@ -73,8 +74,9 @@ The retained past is therefore never purely beneficial.
 
 That tension induces a structural trade-off between finite-sample error and staleness.
 Under a local drift envelope, this trade-off yields a finite useful-memory horizon.
-For the Lipschitz worst case, the horizon obeys the cube-root law.
-For deterministic Holder-type path classes, the horizon becomes regime-dependent.
+For deterministic Holder-type path classes, the horizon becomes roughness-dependent.
+For the Lipschitz worst case, the horizon obeys the cube-root law as the anchor
+case inside the same family.
 
 ### End
 
@@ -95,7 +97,7 @@ The relevant question is:
 `How long can retained evidence remain representative of the present?`
 
 That question turns memory into a dynamic statistical object.
-The paper is about the limits of that object.
+The paper is about the limits of that object across path classes.
 
 ## The Mathematical Core
 
@@ -106,6 +108,26 @@ The mathematical skeleton of the paper is:
 \le
 C_K n^{-1/2} + \mathrm{Staleness}(n; \zeta, H).
 ```
+
+### Roughness-indexed horizon family
+
+For deterministic Holder-type path classes, temporal misalignment accumulates like:
+
+```tex
+\mathrm{Staleness}(n;\zeta,H) \asymp \zeta n^H.
+```
+
+Balancing this against the finite-sample term yields:
+
+```tex
+n^*(H,\zeta) \asymp (C_K/\zeta)^{2/(1+2H)},
+\qquad
+R^*(H,\zeta) \asymp \sigma^{2H/(1+2H)}\zeta^{1/(1+2H)}.
+```
+
+The horizon is therefore not universal.
+It depends on temporal roughness because roughness changes the way staleness
+accumulates with lag.
 
 ### Worst-case Lipschitz anchor
 
@@ -127,25 +149,6 @@ This is the anchor case.
 It is the worst-case linear-staleness envelope.
 It is not the whole theory.
 
-### Holder generalization
-
-For deterministic Holder-type path classes, temporal misalignment accumulates like:
-
-```tex
-\mathrm{Staleness}(n;\zeta,H) \asymp \zeta n^H.
-```
-
-Then the balancing law becomes:
-
-```tex
-n^*(H,\zeta) \asymp (C_K/\zeta)^{2/(1+2H)},
-\qquad
-R^*(H,\zeta) \asymp \sigma^{2H/(1+2H)}\zeta^{1/(1+2H)}.
-```
-
-The horizon is therefore not universal.
-It depends on temporal roughness because roughness changes the way staleness accumulates with lag.
-
 ### Structural floor
 
 The lower-bound half of the paper must show that the finite-memory floor is structural.
@@ -163,8 +166,8 @@ The novelty is the combination of five things:
 
 1. The object of analysis is the temporal validity of finite memory itself.
 2. The error is decomposed into a statistical term and a staleness term in a distribution-tracking setting.
-3. The worst-case Lipschitz law is identified as a structural horizon law, not just a heuristic tuning rule.
-4. That law is placed inside a broader family indexed by temporal roughness.
+3. The worst-case Lipschitz law is identified as a structural anchor within a broader roughness-indexed family.
+4. The family is the main theory object, not an appendix to the Lipschitz case.
 5. The work identifies and visualizes detector-silent staleness: memory can expire before change becomes detectable.
 
 Dynamic regret work, window-tuning work, adaptive forgetting, and concept-drift detection each touch neighboring questions, but the unified paper should argue that they do not make temporal validity the primary object.
@@ -238,8 +241,8 @@ Under drift, those incentives conflict.
 
 ### Act 2: There is a structural horizon
 
-State the worst-case upper law.
-Show the finite optimum.
+State the roughness-indexed horizon family.
+Show the worst-case Lipschitz anchor as the first member.
 Show the lower bound.
 At this point, the reader should believe that memory has a finite horizon even before the generalization arrives.
 
@@ -286,6 +289,7 @@ This is a statement of intellectual structure, not implementation.
 The opening must do exactly this:
 - state that memory helps and ages;
 - define the useful-memory horizon problem;
+- present the roughness-indexed horizon family;
 - state the worst-case Lipschitz result;
 - reveal that the cube-root law is the anchor, not the total theory;
 - state the Holder family cleanly and early enough that the paper does not look artificially split;
@@ -323,12 +327,12 @@ The paper is strongest when it sounds like it discovered a constraint, not when 
 
 The unified paper should revolve around a clean theorem package:
 
-1. Upper law under the Lipschitz envelope.
-2. Optimal horizon and minimum error for the Lipschitz case.
-3. Lower bound showing a structural finite-memory floor.
-4. General Holder-class upper law.
-5. Holder-class optimized horizon and minimax rate.
-6. Holder-class lower bound with matching exponent.
+1. General Holder-class upper law.
+2. Holder-class optimized horizon and minimax rate.
+3. Holder-class lower bound with matching exponent.
+4. Worst-case Lipschitz envelope as the `H=1` anchor.
+5. Lipschitz optimal horizon and minimum error.
+6. Structural finite-memory floor.
 7. Explicit special-case recovery of `H=1` and any other editorially useful case.
 
 The special-case structure matters.
@@ -354,7 +358,8 @@ The paper should be explicit about what is and is not closed.
 
 Closed enough for the main claim:
 - the variance-staleness object;
-- the worst-case Lipschitz law;
+- the roughness-indexed family of horizon laws;
+- the worst-case Lipschitz anchor;
 - the Holder family of exponents;
 - the lower-bound story at the level of exponent and structural floor;
 - the detectability-validity gap as an observable phenomenon.
@@ -447,8 +452,8 @@ The paper should be readable from figures alone.
    Purpose: the structural floor is visible.
 
 4. `Regime Family Figure`
-   Purpose: visualize how staleness accumulation and horizon scaling change across `H`.
-   This is new and should become one of the paper's signatures.
+    Purpose: visualize how staleness accumulation and horizon scaling change across `H`.
+    This is new and should become one of the paper's signatures.
 
 5. `Detector-Silent Staleness`
    Purpose: visualize the invalidity gap between `t_valid` and `t_detect`.
@@ -518,6 +523,8 @@ Use consistently:
 - temporal validity
 - staleness
 - temporal roughness
+- roughness-indexed horizon law
+- Lipschitz anchor
 - worst-case Lipschitz envelope
 - Holder path class
 - detector-silent staleness
@@ -547,11 +554,11 @@ Otherwise the paper starts sounding larger than what it strictly proves.
 
 The final paper should be able to state its contributions like this:
 
-- We formalize finite-memory tracking under drift as a variance-staleness trade-off in distributional geometry.
-- We prove a worst-case Lipschitz horizon law and a corresponding structural finite-memory floor.
-- We show that this worst-case law is one member of a broader Holder-indexed family of horizon laws and minimax rates.
+- We formalize finite-memory tracking under drift as a roughness-indexed variance-staleness trade-off in distributional geometry.
+- We show that the worst-case Lipschitz horizon law is the `H=1` anchor of a broader Holder-indexed family of horizon laws and minimax rates.
+- We prove a structural finite-memory floor that rules out treating the horizon as an estimator artifact.
 - We identify detector-silent staleness as a structural phenomenon: temporal validity can fail before changepoint evidence appears.
-- We show empirically that the theory leaves visible finite-sample signatures through a structural U-curve, regime-dependent scaling, an invalidity gap, and horizon-misalignment cost.
+- We show empirically that the theory leaves visible finite-sample signatures through a structural U-curve, roughness-dependent scaling, an invalidity gap, and horizon-misalignment cost.
 
 No contribution bullet should have a mechanism as its grammatical subject.
 
@@ -568,8 +575,7 @@ The paper should maintain five scope constraints:
 
 The unified paper is successful only if all of the following are true:
 - the paper reads as one discovery rather than two stitched papers;
-- the Lipschitz case appears as the worst-case anchor, not as the whole theory;
-- the Holder family appears as the natural completion of the object, not as an appendix to save for later;
+- the roughness-indexed family is the primary object, with the Lipschitz case as the anchor;
 - the lower bound is visually and mathematically central;
 - no named mechanism is needed to justify the work;
 - the empirical section reads as phenomenon validation, not product validation;

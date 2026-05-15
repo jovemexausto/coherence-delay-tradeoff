@@ -1,10 +1,10 @@
 \section{Empirical Evidence}\label{sec:validation}
 
-The experiments test a single claim: under continuous drift, memory must be
-regulated by temporal validity rather than by changepoint evidence alone. The
-evidence separates layers that are often collapsed: the finite useful-memory
-horizon itself, the gap between temporal validity and detector evidence, the
-cap-only regime that gap creates, and the predictive cost of horizon
+The experiments show that under continuous drift, memory has a finite useful-
+memory horizon and can become temporally invalid before changepoint evidence
+appears. The evidence separates layers that are often collapsed: the useful-
+memory horizon itself, the gap between temporal validity and detector evidence,
+the resulting stale-memory regime, and the predictive cost of horizon
 misalignment.
 
 In the experiments, UMR is a backend-agnostic conservative horizon cap driven by
@@ -13,8 +13,7 @@ runtime horizon policy for estimators whose effective memory can be adjusted,
 such as capped sliding-window, EWMA, and multi-horizon backends. Second, it is
 wrapped around ADWIN as one detector-side instance of the same temporal-validity
 rule. Fixed-window methods remain uncapped baselines. The resulting
-comparisons are used to make detector-silent staleness visible, not to rank
-detectors.
+comparisons expose detector-silent staleness.
 
 \subsection{Structural U-Curve}\label{sec:validation_law}
 
@@ -22,8 +21,8 @@ We begin with the Gaussian sweep used to validate the finite-memory trade-off.
 The setup produces the characteristic U-curve: for small windows, error is
 dominated by variance; for large windows, error is dominated by staleness. The
 empirical minimum remains finite and moves in the expected direction as drift
-strengthens, and EWMA behaves as the natural finite-memory analogue rather than
-as a competing theory.
+strengthens, and EWMA follows the same finite-memory pattern on its effective
+memory scale.
 
 \begin{figure}[!htbp]
 \centering
@@ -32,7 +31,7 @@ as a competing theory.
 error as a function of window size, showing the predicted U-shape for multiple
 drift rates. Right: the minimum achievable error decreases as drift weakens,
 consistent with the variance-staleness trade-off. The figure shows that the
-useful-memory optimum is finite and structural rather than a tuning artifact.}
+useful-memory optimum is finite and stable across drift rates.}
 \label{fig:ucurve}
 \end{figure}
 
@@ -53,10 +52,9 @@ gain from more memory saturates while the cost of age keeps accumulating.}
 
 \subsection{Temporal Validity Is Not Changepoint Evidence}\label{sec:validation_delay}
 
-The central empirical contrast is the gap between two questions. The detector
-asks whether there is enough statistical evidence of a change. The horizon asks
-whether the retained evidence is still temporally valid for the present. Those
-questions need not be synchronized.
+The detector asks whether there is enough statistical evidence of a change. The
+horizon asks whether the retained evidence is still temporally valid for the
+present. Those questions need not be synchronized.
 
 \begin{figure}[!htbp]
 \centering
@@ -73,9 +71,8 @@ narrows but remains positive.}
 
 The gap becomes concrete on the continuous-drift benchmark. We compare a short
 fixed window, a long fixed window, EWMA, ADWIN, and an ADWIN wrapper equipped
-with the UMR horizon cap. ADWIN appears here as the cleanest contrast case: it
-can retain far more memory than the useful-memory scale, while a conservative
-cap contracts that stale window earlier.
+with the UMR horizon cap. ADWIN can retain far more memory than the useful-
+memory scale, while a conservative cap contracts that stale window earlier.
 
 \input{artifacts/tables/cuberoot_adwin/continuous_benchmark}
 
@@ -239,8 +236,8 @@ oracle grid, and the curve is binned over all seeds and time points.
 \centering
 \safeincludegraphics[width=0.95\linewidth]{artifacts/figures/cuberoot_adwin/fig_horizon_gap_cost}
 \caption{Excess error as a function of horizon misalignment. The relation is
-backend dependent rather than universal: fixed-100 stays inside a low-cost band,
-whereas fixed-500 and ADWIN pay substantially more once the gap widens.
+backend dependent: fixed-100 stays inside a low-cost band, whereas fixed-500
+and ADWIN pay substantially more once the gap widens.
 ADWIN+$\,$UMR sits between these extremes.}
 \label{fig:horizon_gap_cost}
 \end{figure}
@@ -274,7 +271,7 @@ Appendix~\ref{app:downstream_temporal_invalidity}.
 \subsection{What the Evidence Shows}\label{sec:validation_summary}
 
 Taken together, the evidence supports five claims. First, the finite-memory
-optimum is real and not a fitting artifact. Second, temporal validity and
+optimum is real. Second, temporal validity and
 changepoint evidence are distinct objects. Third, the cap-only regime is
 operationally visible. Fourth, horizon recovery is asymmetric under alternating
 timescales. Fifth, horizon control has operational value, but its predictive

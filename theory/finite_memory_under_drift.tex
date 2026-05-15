@@ -1,22 +1,61 @@
-\section{Finite Memory Under Drift}\label{sec:finite_memory_under_drift}
+\section{Temporal Validity Under Drift}\label{sec:finite_memory_under_drift}
 
-Under continuous drift, memory is both a statistical resource and a temporal
-liability. The core question is therefore not whether one can react to change,
-but how long a sample should remain operationally useful before it becomes
-stale.
+Under drift, memory is both a statistical resource and a temporal liability.
+This section isolates the structural question behind useful memory: how long can
+retained evidence remain temporally valid before staleness overwhelms the
+benefit of variance reduction?
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.92\linewidth]{artifacts/figures/conceptual/fig_two_clocks_of_drift.pdf}
 \caption{Two clocks of drift in normalized theorem units. The finite-sample
 term falls with horizon, the staleness term rises with age, and total error is
-minimized at the useful-memory horizon $n^*$. The cost crossing occurs later,
-so the optimum is about marginal balance rather than equality of levels. The
-shaded region marks detector-silent staleness.}
+minimized at the useful-memory horizon $n^*$. The shaded region marks
+detector-silent staleness: temporal invalidity can arrive before changepoint
+evidence.}
 \label{fig:two_clocks_of_drift}
 \end{figure}
 
-\subsection{Worst-Case Upper Law}
+The family of horizon laws comes first: temporal roughness controls how
+staleness accumulates, and the Lipschitz case is the $H=1$ anchor inside that
+family.
+
+\subsection{Roughness-Indexed Horizon Family}
+
+\begin{proposition}[Roughness-indexed horizon law]\label{prop:holder_horizon}
+Let a deterministic Holder-type path class have roughness index $H\in(0,1]$
+and staleness growth
+\[
+  \mathrm{Staleness}_H(n;\zeta) \asymp \zeta n^H.
+\]
+If the finite-sample term remains of order $C_K n^{-1/2}$, then the error bound
+\[
+  \mathcal E_H(n) \le C_K n^{-1/2} + c_H\,\zeta n^H
+\]
+is minimized at
+\[
+  n_H^* \asymp (C_K/\zeta)^{2/(1+2H)},
+  \qquad
+  \mathcal E_{H,\min} \asymp C_K^{2H/(1+2H)}\,\zeta^{1/(1+2H)}.
+\]
+In particular, $H=1$ recovers the cube-root anchor.
+\end{proposition}
+
+\begin{proof}
+Balance the decreasing statistical term against the increasing staleness term.
+The optimizer is determined by the point where the two terms have the same
+order.
+\end{proof}
+
+\begin{remark}[Family interpretation]
+This proposition is the roughness-indexed completion of the Lipschitz case.
+As $H$ decreases, staleness accumulates differently with lag and the
+useful-memory horizon shifts accordingly. The point is not that cube-root is
+special in itself; the point is that it is the $H=1$ member of a broader
+geometry.
+\end{remark}
+
+\subsection{Worst-Case Lipschitz Anchor}
 
 \begin{theorem}[Lag-Inclusive Tracking Error Bound]\label{thm:lag_error}
 Let $X_{t-j} \sim P^*_{t-j}$ and let
@@ -75,7 +114,7 @@ Appendix~\ref{app:finite_sample_geometry}; it is not used as a theorem, but it
 matches the intended low-dimensional interpretation of the finite-sample term.
 \end{lemma}
 
-\subsection{Optimal Horizon}
+\subsection{Optimal Horizon in the Lipschitz Case}
 
 \begin{remark}[Scope of the horizon law]\label{rem:carrier_exponent}
 The cube-root law follows when the finite-sample term behaves as
@@ -102,9 +141,9 @@ then balancing it against the drift-induced staleness cost
 In the setting of \cref{lem:finite_sample_term}, the effective exponent is
 \(a=1/2\) for \(d_\mathrm{eff}<4\), with an additional \((\log n)^{1/2}\)
 factor for \(d_\mathrm{eff}=4\); for \(d_\mathrm{eff}>4\) the raw Wasserstein
-rate is slower than \(n^{-1/2}\). That case is outside the displayed cube-root
-regime. This is not a claim of a universal memory law; it isolates the
-worst-case linear-staleness envelope studied in this paper.
+rate is slower than \(n^{-1/2}\). That case lies outside the displayed cube-root
+regime. The present result isolates the worst-case linear-staleness envelope
+induced by the local Lipschitz path bound.
 \end{remark}
 
 The two terms in \cref{thm:lag_error} pull in opposite directions. Increasing
@@ -121,6 +160,11 @@ with minimum value
   \mathcal{E}_{\min} \;=\; \tfrac{3}{2}\,C_K^{2/3}\,\zeta^{1/3}.
 \]
 \end{proposition}
+
+\begin{remark}[Anchor case]
+The cube-root law is the worst-case Lipschitz member of a broader horizon
+family.
+\end{remark}
 
 \begin{proof}
 Apply the triangle inequality for $W_2$:
@@ -158,8 +202,8 @@ prequential calibration rule.
 For fixed $\varepsilon$ on bounded domains, the debiased Sinkhorn divergence
 converges at rate $n^{-1/2}$ with $\varepsilon$-dependent constants
 \citep{GenevayEtAl2019}, while the approximation gap to $W_2^2$ is $O(\varepsilon)$
-and vanishes as $\varepsilon\to 0$. We therefore treat Sinkhorn as a calibration
-proxy rather than part of the law itself.
+and vanishes as $\varepsilon\to 0$. We therefore use Sinkhorn as a calibration
+proxy in the measurement layer.
 \end{remark}
 
 \begin{corollary}[EWMA Analogue]\label{cor:ewma_cube_root}
@@ -167,8 +211,8 @@ For exponential weights $w_j = \alpha(1-\alpha)^j$, the effective lag is
 $\tau_\alpha = (1-\alpha)/\alpha$ and the effective sample size scales as
 $n_{\mathrm{eff}} \asymp 1/\alpha$. Balancing the same statistical and
 staleness terms therefore yields the same cube-root exponent in the effective
-memory scale. This is an implementation analogue for exponentially weighted
-memory, not a separate general law.
+memory scale. This gives the exponentially weighted analogue of the Lipschitz
+anchor.
 \end{corollary}
 
 \subsection{A Structural Finite-Memory Floor}
@@ -202,7 +246,8 @@ variance-plus-staleness scaling:
   \;\gtrsim\; \max\!\left\{C_K\,m^{-1/2},\; c\,\sigma^{2/3}\zeta^{1/3}\right\}.
 \]
 Consequently, the cube-root horizon is not merely the optimum of one estimator;
-it is the structural floor of finite memory on this drift class.
+Consequently, the cube-root horizon is the structural floor of finite memory on
+this drift class.
 \end{proposition}
 
 \paragraph{Proof.}
@@ -318,6 +363,12 @@ $W_2$-Lipschitz class at the same drift rate $\zeta$, any lower bound proven on
 that subclass is automatically a lower bound for the larger class.
 \end{remark}
 
+\subsection{Holder Path Classes and Horizon Laws}
+
+The preceding proposition already states the family law. This subsection keeps
+the Holder terminology explicit for the reader and emphasizes that the Lipschitz
+case is the $H=1$ anchor inside the same family.
+
 \subsection{Temporal Validity and Memory Age}
 
 \begin{definition}[Effective Memory Age]\label{def:memory_age}
@@ -357,15 +408,16 @@ operational validity with the current distribution.
 
 The quantity $A(w)$ gives a compact description of the temporal age of a
 finite-memory estimator. Short windows preserve temporal validity at the cost
-of variance; long windows reduce variance at the cost of staleness. The
-cube-root horizon marks the point where that exchange stops improving. For a
+of variance; long windows reduce variance at the cost of staleness. In the
+Lipschitz anchor, the cube-root horizon marks the point where that exchange
+stops improving. For a
 uniform window under approximately constant local drift, the induced staleness
 scales as $S_t(w)\approx \zeta(n-1)/2$, which is the same age term that appears
 in \cref{thm:lag_error} up to constants.
 
 \begin{remark}[Measurement layer]
-Debiased Sinkhorn divergence serves as a practical measurement layer when the
-underlying geometry must be estimated from samples. That computational choice
-supports the tracking law, but the law itself is about the horizon of useful
-memory, not about any particular OT solver.
+Debiased Sinkhorn divergence serves as a practical measurement layer in the
+synthetic experiments when the underlying geometry must be estimated from
+samples. That computational choice supports the tracking law, and the law itself
+concerns the horizon of useful memory.
 \end{remark}

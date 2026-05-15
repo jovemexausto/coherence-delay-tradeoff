@@ -1,31 +1,25 @@
 \begin{abstract}
 Under drift, memory helps and ages at the same time: retaining more past
 information reduces variance, but it also increases the age of the evidence used
-to represent the present. For finite-memory tracking, the central question is
-therefore not only how much to remember, but how long remembered evidence
-remains temporally valid.
+to represent the present. The central question is therefore not only how much to
+remember, but how long remembered evidence remains temporally valid.
 
-We study this trade-off under a worst-case local $W_2$-Lipschitz drift
-envelope. For the finite-memory averaging class analyzed here, the tracking
-error decomposes into a decreasing finite-sample term and an increasing
-staleness term. In the induced linear-staleness regime, this yields a
-\textbf{cube-root horizon law}: the useful-memory horizon obeys
-$\boldsymbol{n^* \asymp (C_K/\zeta)^{2/3}}$, and the minimum tracking error
-obeys $\boldsymbol{\mathcal{E}_{\min} \asymp C_K^{2/3}\zeta^{1/3}}$. In the
-critical-window regime, we also prove a minimax lower bound on a Gaussian
-location subclass, showing that the resulting finite-memory floor is structural
-rather than estimator-specific.
+We study the temporal validity of finite memory under drift and show that
+useful memory has a finite horizon determined by temporal roughness. For path
+classes in which drift-induced staleness accumulates as $\zeta n^H$, the
+variance-staleness balance yields roughness-indexed horizon laws
+$n_H^* \asymp (C_K/\zeta)^{2/(1+2H)}$ and the corresponding minimax rates. The
+worst-case $W_2$-Lipschitz envelope is the $H=1$ anchor, recovering the
+cube-root horizon $n^* \asymp (C_K/\zeta)^{2/3}$. A Gaussian location lower
+bound shows that the same scaling defines a structural finite-memory floor.
 
-Empirically, Gaussian drift experiments recover the predicted $U$-curve and a
-finite useful-memory optimum. Continuous-drift benchmarks then expose the
-practical thesis of the paper: temporal validity is not changepoint evidence.
-They reveal a cap-only regime in which retained memory is already stale while a
-detector remains statistically silent. Alternating-timescales experiments show
-that contraction is easier than re-expansion, and horizon-misalignment
-experiments show that stale memory can carry a nonlinear predictive cost.
-
-The operational consequence is conservative horizon control: a horizon cap can
-remove stale memory before a detector has enough evidence to alarm.
+This also reveals a two-clock structure in drifting systems: retained evidence
+can lose temporal validity before a changepoint becomes statistically
+detectable. In finite samples, horizon sweeps exhibit a structural $U$-curve
+with a finite optimum, and that optimum shifts with temporal roughness across
+path classes. The same separation between validity expiry and statistical
+detection appears as a positive invalidity gap, while departures from the
+useful-memory scale incur measurable excess error.
 
 \end{abstract}
 
@@ -33,6 +27,6 @@ remove stale memory before a detector has enough evidence to alarm.
 \noindent\textbf{Keywords:}
 tracking under drift; useful memory; temporal validity;
 Wasserstein distance; Sinkhorn divergence; concept drift;
-adaptive memory.
+finite-memory horizon.
 
 \noindent\textbf{MSC~2020:} 93D05, 93D30, 68P99.

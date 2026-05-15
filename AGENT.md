@@ -18,8 +18,8 @@ The paper must communicate, with maximum clarity and minimum contamination from
 legacy framing, that:
 - memory is both a statistical resource and a temporal liability under drift;
 - useful memory has a finite horizon;
-- the Lipschitz cube-root law is the worst-case anchor, not the whole theory;
-- Holder-type path classes induce a broader family of horizon laws;
+- the roughness-indexed family of horizon laws is the main theory object;
+- the Lipschitz cube-root law is the worst-case anchor inside that family;
 - temporal validity is not changepoint evidence;
 - memory can become invalid before change becomes statistically detectable.
 
@@ -34,7 +34,7 @@ If they conflict with `PAPER0.md`, `PAPER0.md` wins.
 
 The paper is about:
 - temporal validity of retained evidence;
-- variance-staleness trade-offs;
+- roughness-indexed variance-staleness trade-offs;
 - worst-case and roughness-indexed horizon laws;
 - structural lower bounds;
 - detector-silent staleness as the main observable consequence.
@@ -55,6 +55,10 @@ stands on the paper's actual scientific object.
 
 Prefer derivational language over proposal language.
 
+Write every section as if the paper were being read cold by someone with no
+access to the repository history, prior drafts, or internal editorial debates.
+The prose must stand on its own from the first sentence.
+
 Prefer:
 - `the analysis shows`
 - `the law implies`
@@ -67,6 +71,8 @@ Avoid:
 - `we introduce a controller`
 - `our method improves`
 - `we cap memory`
+- any sentence that contrasts with hidden prior framing, earlier drafts, or an
+  implicit alternative that exists only in internal discussion
 - any wording that makes the paper sound like a tool or system.
 
 The tone should remain cold, structural, and mathematical.
@@ -75,6 +81,7 @@ The tone should remain cold, structural, and mathematical.
 
 Protect the following at all times:
 - the variance-staleness decomposition;
+- the roughness-indexed family as the primary object;
 - the Lipschitz worst-case anchor;
 - the Holder generalization as part of the same object;
 - the lower bound as central, not decorative;
@@ -166,6 +173,9 @@ In practice, this usually means the order is:
 5. figures and captions;
 6. appendices and residual cleanup.
 
+When the roughness-indexed family and the cube-root anchor compete for emphasis,
+the family wins. The cube-root law is an anchor case, not the paper's identity.
+
 ## Editing Rules
 
 When rewriting a section:
@@ -188,8 +198,7 @@ When dealing with appendices:
 The rewrite is successful only when:
 - the paper reads as one discovery rather than stitched papers;
 - no named mechanism is needed to justify the work;
-- the Lipschitz case appears as the worst-case anchor, not the whole theory;
-- the Holder family appears as the natural completion of the object;
+- the roughness-indexed family appears as the primary object, with the Lipschitz case as the anchor;
 - the lower bound is central both mathematically and editorially;
 - the empirical section reads as phenomenon validation rather than method validation;
 - a reviewer could summarize the paper as:

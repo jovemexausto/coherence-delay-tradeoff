@@ -5,8 +5,7 @@ The cube-root law is exact for the finite-memory averaging class studied here,
 and the lower bound is stated for window-restricted estimators on a
 $W_2$-Lipschitz drift class. The lower bound itself is proved through a Gaussian
 location subclass and endpoint $W_2$ error, so its structural claim is worst-case
-and subclass-based rather than a universal theorem over all possible online
-estimators.
+and subclass-based.
 
 More refined drift classes may admit tighter staleness growth and different
 horizon exponents. The analysis here isolates the linear-staleness law induced
@@ -17,7 +16,7 @@ The operational regulator depends on a local estimate of drift. The current
 benchmark suggests that the remaining gap to the oracle comes mostly from drift
 estimation. At the same time, a short observable calibration prefix can
 materially improve the regulator, so drift estimation is part of the method
-rather than a hidden nuisance parameter. Better local geometry estimators may
+and enters the operational picture directly. Better local geometry estimators may
 therefore sharpen horizon recovery without changing the law.
 
 \paragraph{Geometry beyond the current metric.}
@@ -27,14 +26,14 @@ analogous trade-offs, but the constants and the calibration of useful memory may
 change.
 
 \paragraph{What the experiments show.}
-The experiments are not a leaderboard over drift detectors. Their role is to
-show the operational distinction between temporal validity and changepoint
-evidence, together with the cap-only regime that distinction creates. The
-public-stream results are confirmatory rather than decisive.
+The experiments show the operational distinction between temporal validity and
+changepoint evidence, together with the cap-only regime that distinction
+creates. The public-stream results provide supporting evidence with weaker
+identification than the synthetic benchmarks.
 
 \paragraph{Scope of the comparison suite.}
 The benchmark suite now includes a Window-Dilemma-style switcher and a
-MELO-style multi-horizon hedge, but it is still not a full survey of adaptive
+MELO-style multi-horizon hedge, but it does not cover the full space of adaptive
 tracking methods. The analysis remains centered on the worst-case cube-root law
 and on the temporal-validity interpretation of memory.
 
@@ -45,7 +44,7 @@ while $d=100$ is effectively stable.
 
 On the current ELEC2 and Bikes arenas, adding UMR to the multi-horizon hedge
 changes results only modestly and in a benchmark-dependent way; it acts as a
-horizon prior, not a universal replacement for uncertainty weighting.
+horizon prior within those experiments.
 
 \paragraph{Path-class refinement.}
 The linear staleness term comes from the local $W_2$-Lipschitz path bound and is
