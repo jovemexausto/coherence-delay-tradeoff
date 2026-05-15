@@ -90,6 +90,10 @@ shows mean gaps of roughly $5 \times 10^2$ steps over the tested settings. This
 is the observable form of detector-silent staleness: evidence can become
 obsolete while standard detection remains silent.
 
+The phenomenon is not specific to ADWIN. The detector-family comparison in
+\cref{tab:invalidity_gap_detectors} shows that the gap remains strictly positive
+for Page--Hinkley as well, even though the alarm timing changes.
+
 \begin{table}[!htbp]
 \centering
 \small
@@ -97,14 +101,31 @@ obsolete while standard detection remains silent.
 ADWIN thresholds, the mean detection time remains strictly later than the mean
 validity-expiry time, so the measured invalidity gap stays positive throughout.}
 \label{tab:invalidity_gap_ablation}
-\begin{tabular}{rrrr}
+\begin{tabular}{lrrr}
 \toprule
 $\delta$ & $\overline t_{\mathrm{valid}}$ & $\overline t_{\mathrm{detect}}$ & $\overline\Delta_{\mathrm{inv}}$ \\
 \midrule
-0.0005 & 1131.0 & 1671.0 & 540.0 \\
-0.0010 & 1131.0 & 1657.7 & 526.7 \\
-0.0020 & 1131.0 & 1641.7 & 510.7 \\
-0.0040 & 1131.0 & 1631.0 & 500.0 \\
+0.0005 & 1108.0 & 1671.0 & 563.0 \\
+0.0010 & 1108.0 & 1657.7 & 549.7 \\
+0.0020 & 1108.0 & 1641.7 & 533.7 \\
+0.0040 & 1108.0 & 1631.0 & 523.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Detector-family comparison for the invalidity gap. Using the same drift
+ramp and operating horizon, the positive gap persists for both ADWIN and
+Page--Hinkley, even though their changepoint clocks differ.}
+\label{tab:invalidity_gap_detectors}
+\begin{tabular}{rrrr}
+\toprule
+Detector & $\overline t_{\mathrm{valid}}$ & $\overline t_{\mathrm{detect}}$ & $\overline\Delta_{\mathrm{inv}}$ \\
+\midrule
+ADWIN & 1108.0 & 1641.7 & 533.7 \\
+Page--Hinkley & 1108.0 & 1410.6 & 302.6 \\
 \bottomrule
 \end{tabular}
 \end{table}

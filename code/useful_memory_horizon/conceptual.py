@@ -76,7 +76,7 @@ def generate_two_clocks(output_path: Path, csv_path: Path) -> None:
     ]
     labels = [
         r"Variance $C_K n^{-1/2}$",
-        r"Staleness $\frac{1}{2}\zeta n$",
+        r"Staleness $3^{-1/2}\zeta n$",
         r"Total $\mathcal{E}(n)$",
     ]
     fig.legend(

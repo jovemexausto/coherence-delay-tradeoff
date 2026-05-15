@@ -1,7 +1,7 @@
 \begin{table}[!htbp]
 \centering
 \small
-\caption{Empirical scaling check for the finite-sample term. The bounded-support $W_2$ experiment is close to the expected $n^{-1/2}$ rate in low dimension, and the slope degrades as intrinsic dimension increases. The Sinkhorn proxy is reported at fixed $\varepsilon$, where the measured slope and constant both vary with regularization.}
+\caption{Empirical scaling check for the finite-sample term. The bounded-support i.i.d. $W_2$ experiment is close to the expected $n^{-1/2}$ rate in low dimension, the corresponding triangular-array check compares one sample from each drifted component against an i.i.d. sample from the window mixture, and the Sinkhorn proxy is reported at fixed $\varepsilon$. These rows are numerical support for the carrier-regime discussion rather than theorem statements.}
 \label{tab:finite_sample_geometry}
 \begin{tabular}{lrr}
 \toprule
@@ -11,6 +11,10 @@ $W_2$, $d=1$ & -0.48 & close to $-1/2$ \\
 $W_2$, $d=2$ & -0.41 & slower decay \\
 $W_2$, $d=4$ & -0.25 & slower decay \\
 $W_2$, $d=5$ & -0.24 & slower decay \\
+$W_2$, i.i.d. mixture, $d=1$, $H=0.5$ & -0.50 & fixed span $\zeta n^H=0.25$ \\
+$W_2$, triangular, $d=1$, $H=0.5$ & -0.45 & fixed span $\zeta n^H=0.25$ \\
+$W_2$, i.i.d. mixture, $d=1$, $H=1.0$ & -0.47 & fixed span $\zeta n^H=0.25$ \\
+$W_2$, triangular, $d=1$, $H=1.0$ & -0.41 & fixed span $\zeta n^H=0.25$ \\
 Sinkhorn $\varepsilon=0.50$ & -0.21 & proxy constant changes \\
 Sinkhorn $\varepsilon=0.10$ & -0.53 & proxy constant changes \\
 Sinkhorn $\varepsilon=0.05$ & -0.67 & proxy constant changes \\

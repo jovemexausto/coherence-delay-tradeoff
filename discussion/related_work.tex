@@ -19,6 +19,21 @@ is not changepoint evidence: memory can stop representing the present before the
 available data support a detector alarm. The invalidity gap makes that
 distinction measurable rather than rhetorical.
 
+\paragraph{Adaptive filtering and state-space tracking.}
+Classical adaptive filtering and state-space tracking also balance smoothing
+against responsiveness by tuning forgetting factors, gain schedules, or process
+noise models \citep{Kalman1960,Jazwinski1970}. Those analyses usually work under
+stochastic state-space assumptions and ask for Bayes-optimal tracking of a
+latent process. The present paper instead studies deterministic Wasserstein
+drift envelopes and characterizes a worst-case temporal-validity horizon.
+
+\paragraph{Locally stationary smoothing.}
+Locally stationary time-series analysis likewise studies how window or bandwidth
+choice must adapt to time variation \citep{Dahlhaus1997}. That literature is
+close in its bias--variance logic, but the moving object there is typically a
+local spectrum or regression function. Here the moving object is a path of
+distributions, and the age penalty is measured directly in transport geometry.
+
 \paragraph{Distribution tracking under transport geometry.}
 Wasserstein distance and Sinkhorn-type estimators are natural when drift lives
 on paths of distributions rather than on scalar losses

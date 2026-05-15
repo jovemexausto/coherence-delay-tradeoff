@@ -3,12 +3,15 @@ from __future__ import annotations
 import argparse
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Literal
 
 import matplotlib.pyplot as plt
 import numpy as np
 from river import drift as river_drift
 
 from .common import export_rows_csv, rolling_mean
+
+LIPSCHITZ_STALENESS_COEFFICIENT = 3.0 ** (-0.5)
 
 
 @dataclass(slots=True)
@@ -24,6 +27,11 @@ class InvalidityGapConfig:
     operating_window: int = 220
     detector_delta: float = 0.002
     detector_deltas: tuple[float, ...] = (0.0005, 0.001, 0.002, 0.004)
+    detector_name: Literal["adwin", "page_hinkley"] = "adwin"
+    page_hinkley_delta: float = 0.005
+    page_hinkley_threshold: float = 50.0
+    page_hinkley_alpha: float = 0.9999
+    page_hinkley_min_instances: int = 30
     n_min: int = 20
     n_max: int = 320
     Ck: float = 1.0
@@ -52,6 +60,7 @@ class InvalidityGapTrace:
 
 @dataclass(slots=True)
 class InvalidityGapSummary:
+    detector_name: str
     detector_delta: float
     mean_t_valid: float
     mean_t_detect: float
@@ -67,6 +76,20 @@ class InvalidityGapResult:
     representative: InvalidityGapTrace
     traces: list[InvalidityGapTrace]
     summaries: list[InvalidityGapSummary]
+
+
+def _build_detector(
+    config: InvalidityGapConfig, detector_delta: float
+) -> river_drift.ADWIN | river_drift.PageHinkley:
+    if config.detector_name == "adwin":
+        return river_drift.ADWIN(delta=detector_delta)
+    return river_drift.PageHinkley(
+        min_instances=config.page_hinkley_min_instances,
+        delta=config.page_hinkley_delta,
+        threshold=config.page_hinkley_threshold,
+        alpha=config.page_hinkley_alpha,
+        mode="both",
+    )
 
 
 def _simulate_stream(
@@ -102,7 +125,10 @@ def _moving_average(values: np.ndarray, window: int) -> np.ndarray:
 
 
 def _oracle_horizon(config: InvalidityGapConfig, drift_path: np.ndarray) -> np.ndarray:
-    horizon = (config.Ck / np.maximum(drift_path, 1e-12)) ** (2.0 / 3.0)
+    horizon = (
+        config.Ck
+        / (2.0 * LIPSCHITZ_STALENESS_COEFFICIENT * np.maximum(drift_path, 1e-12))
+    ) ** (2.0 / 3.0)
     return np.clip(horizon, config.n_min, config.n_max)
 
 
@@ -143,7 +169,7 @@ def _run_single_trace(
     operating_error = np.abs(latent_mean - operating_estimate)
     oracle_error = np.abs(latent_mean - oracle_estimate)
     residual_stream = np.abs(observations - operating_estimate)
-    detector = river_drift.ADWIN(delta=detector_delta)
+    detector = _build_detector(config, detector_delta)
     detector_events = np.zeros(config.steps, dtype=bool)
     for index, value in enumerate(observations):
         detector.update(float(value))
@@ -172,7 +198,7 @@ def _run_single_trace(
 
 
 def _summarize(
-    traces: list[InvalidityGapTrace], detector_delta: float
+    traces: list[InvalidityGapTrace], detector_name: str, detector_delta: float
 ) -> InvalidityGapSummary:
     t_valid = [trace.t_valid for trace in traces if trace.t_valid is not None]
     t_detect = [trace.t_detect for trace in traces if trace.t_detect is not None]
@@ -180,6 +206,7 @@ def _summarize(
         trace.invalidity_gap for trace in traces if trace.invalidity_gap is not None
     ]
     return InvalidityGapSummary(
+        detector_name=detector_name,
         detector_delta=detector_delta,
         mean_t_valid=float(np.mean(t_valid)) if t_valid else float("nan"),
         mean_t_detect=float(np.mean(t_detect)) if t_detect else float("nan"),
@@ -199,7 +226,9 @@ def run_invalidity_gap_experiment(
     for delta in cfg.detector_deltas:
         summaries.append(
             _summarize(
-                [_run_single_trace(seed, cfg, delta) for seed in cfg.seeds], delta
+                [_run_single_trace(seed, cfg, delta) for seed in cfg.seeds],
+                cfg.detector_name,
+                delta,
             )
         )
     representative = max(
@@ -209,6 +238,32 @@ def run_invalidity_gap_experiment(
     return InvalidityGapResult(
         config=cfg, representative=representative, traces=traces, summaries=summaries
     )
+
+
+def run_detector_comparison() -> list[InvalidityGapSummary]:
+    configs = (
+        InvalidityGapConfig(
+            detector_name="adwin", detector_delta=0.002, detector_deltas=(0.002,)
+        ),
+        InvalidityGapConfig(detector_name="page_hinkley", detector_deltas=(0.005,)),
+    )
+    rows: list[InvalidityGapSummary] = []
+    for config in configs:
+        result = run_invalidity_gap_experiment(config)
+        summary = result.summaries[0]
+        rows.append(
+            InvalidityGapSummary(
+                detector_name=config.detector_name,
+                detector_delta=summary.detector_delta,
+                mean_t_valid=summary.mean_t_valid,
+                mean_t_detect=summary.mean_t_detect,
+                mean_gap=summary.mean_gap,
+                std_gap=summary.std_gap,
+                positive_gap_rate=summary.positive_gap_rate,
+                detection_rate=summary.detection_rate,
+            )
+        )
+    return rows
 
 
 def _rolling_error(
@@ -346,6 +401,7 @@ def build_gap_rows(result: InvalidityGapResult) -> list[dict[str, float | str]]:
     for summary in result.summaries:
         rows.append(
             {
+                "detector": summary.detector_name,
                 "detector_delta": round(float(summary.detector_delta), 4),
                 "mean_t_valid": round(float(summary.mean_t_valid), 1),
                 "mean_t_detect": round(float(summary.mean_t_detect), 1),
@@ -353,6 +409,23 @@ def build_gap_rows(result: InvalidityGapResult) -> list[dict[str, float | str]]:
                 "std_gap": round(float(summary.std_gap), 1),
                 "positive_gap_rate": round(float(summary.positive_gap_rate), 3),
                 "detection_rate": round(float(summary.detection_rate), 3),
+            }
+        )
+    return rows
+
+
+def build_detector_comparison_rows(
+    summaries: list[InvalidityGapSummary],
+) -> list[dict[str, float | str]]:
+    rows: list[dict[str, float | str]] = []
+    for summary in summaries:
+        rows.append(
+            {
+                "detector": summary.detector_name,
+                "mean_t_valid": round(float(summary.mean_t_valid), 1),
+                "mean_t_detect": round(float(summary.mean_t_detect), 1),
+                "mean_gap": round(float(summary.mean_gap), 1),
+                "positive_gap_rate": round(float(summary.positive_gap_rate), 3),
             }
         )
     return rows
@@ -393,6 +466,10 @@ def main() -> None:
     save_invalidity_gap_figure(result, args.figures_dir / "fig_invalidity_gap.pdf")
     export_rows_csv(
         build_gap_rows(result), args.csv_dir / "invalidity_gap_ablation.csv"
+    )
+    export_rows_csv(
+        build_detector_comparison_rows(run_detector_comparison()),
+        args.csv_dir / "invalidity_gap_detector_comparison.csv",
     )
     export_rows_csv(
         build_trace_rows(result), args.csv_dir / "invalidity_gap_traces.csv"

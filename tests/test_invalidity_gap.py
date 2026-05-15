@@ -4,6 +4,7 @@ import unittest
 
 from useful_memory_horizon.invalidity_gap import (
     InvalidityGapConfig,
+    run_detector_comparison,
     run_invalidity_gap_experiment,
 )
 
@@ -28,6 +29,12 @@ class InvalidityGapTest(unittest.TestCase):
         summary = result.summaries[0]
         self.assertGreater(summary.mean_gap, 0.0)
         self.assertGreater(summary.positive_gap_rate, 0.5)
+
+    def test_invalidity_gap_persists_across_detector_families(self) -> None:
+        summaries = run_detector_comparison()
+        for summary in summaries:
+            self.assertGreater(summary.mean_gap, 0.0)
+            self.assertGreater(summary.positive_gap_rate, 0.5)
 
 
 if __name__ == "__main__":

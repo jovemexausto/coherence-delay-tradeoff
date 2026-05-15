@@ -52,11 +52,21 @@ horizon.
 The family of horizon laws comes first. The theorem-level object is a
 deterministic Holder-type envelope on paths of distributions: temporal
 roughness controls how staleness accumulates with lag, so different path
-classes induce different useful-memory scales.
+classes induce different useful-memory scales. For $H\in(0,1]$ and
+$\zeta>0$, write
+\[
+  \mathfrak P_H(\zeta)
+  \coloneqq
+  \left\{(P_s^*)_{s\in\mathbb Z}: W_2(P_{t-j}^*,P_t^*) \le \zeta j^H
+  \text{ for all } j\ge 0\right\}
+\]
+for the deterministic path class whose temporal misalignment is controlled by a
+one-sided Holder envelope at the present time $t$. The local Lipschitz regime is
+the special case $H=1$.
 
 \begin{proposition}[Roughness-indexed horizon law]\label{prop:holder_horizon}
-Let a deterministic Holder-type path class have roughness index $H\in(0,1]$ and
-staleness growth
+Let the target path belong to $\mathfrak P_H(\zeta)$ for some roughness index
+$H\in(0,1]$, so that the staleness growth obeys
 \[
   \mathrm{Staleness}_H(n;\zeta) \asymp \zeta n^H.
 \]
@@ -119,7 +129,7 @@ $W_2$-Lipschitz with rate $\zeta$, so that
   W_2\!\left(P^*_{t-j}, P^*_t\right) \leq \zeta j
   \qquad \text{for all } 0 \leq j < n,
 \]
-and assume the finite-sample term obeys
+and assume the finite-sample term obeys the carrier-regime bound
 \[
   \mathbb{E}\!\left[W_2\!\left(\widehat P_t^{(n)}, \bar P_t^{(n)}\right)\right]
   \leq C_K n^{-1/2},
@@ -127,7 +137,7 @@ and assume the finite-sample term obeys
 where $\bar P_t^{(n)} := n^{-1}\sum_{j=0}^{n-1} P^*_{t-j}$. Then the expected
 tracking error satisfies
 \[
-  \mathcal{E}(n) \;\leq\; C_K\,n^{-1/2} \;+\; \tfrac{1}{2}\,\zeta\,n,
+  \mathcal{E}(n) \;\leq\; C_K\,n^{-1/2} \;+\; 3^{-1/2}\,\zeta\,n,
 \]
 where the first term is the finite-sample statistical cost and the second term
 is the staleness cost induced by retaining old information.
@@ -144,17 +154,28 @@ Apply the triangle inequality:
 The first term is controlled by the assumed finite-sample bound. For the second
 term, let $\pi_j$ be an optimal coupling between $P^*_{t-j}$ and $P_t^*$. The
 averaged coupling $\bar\pi := n^{-1}\sum_{j=0}^{n-1} \pi_j$ couples
-$\bar P_t^{(n)}$ with $P_t^*$, so
+$\bar P_t^{(n)}$ with $P_t^*$, so the quadratic transport cost of that explicit
+coupling yields
+\[
+  W_2^2\!\left(\bar P_t^{(n)}, P_t^*\right)
+  \leq \int \|x-y\|^2\,d\bar\pi(x,y)
+  = \frac{1}{n}\sum_{j=0}^{n-1} W_2^2\!\left(P^*_{t-j}, P_t^*\right).
+\]
+Under the local Lipschitz envelope,
+\[
+  W_2^2\!\left(\bar P_t^{(n)}, P_t^*\right)
+  \leq \frac{\zeta^2}{n}\sum_{j=0}^{n-1} j^2
+  \leq \frac{\zeta^2 n^2}{3},
+\]
+so
 \[
   W_2\!\left(\bar P_t^{(n)}, P_t^*\right)
-  \leq \frac{1}{n}\sum_{j=0}^{n-1} W_2\!\left(P^*_{t-j}, P_t^*\right)
-  \leq \frac{1}{n}\sum_{j=0}^{n-1} \zeta j
-  \leq \tfrac{1}{2}\,\zeta n.
+  \leq 3^{-1/2}\,\zeta n.
 \]
 Combining the two bounds gives the claim.
 \end{proof}
 
-\begin{lemma}[Finite-sample Wasserstein term]\label{lem:finite_sample_term}
+\begin{lemma}[I.i.d. reference for the carrier regime]\label{lem:finite_sample_term}
 Let $Q$ be a probability measure on $\mathbb R^{d_\mathrm{eff}}$ with support
 contained in a ball of radius $R$ and finite second moment. Let
 $X_1,\dots,X_n$ be i.i.d. samples from $Q$, and let
@@ -184,6 +205,15 @@ Appendix~\ref{app:finite_sample_geometry}; it is not used as a theorem, but it
 matches the intended low-dimensional interpretation of the finite-sample term.
 \end{lemma}
 
+\begin{remark}[Carrier-regime status]\label{rem:triangular_array_status}
+\Cref{thm:lag_error} assumes the $n^{-1/2}$ finite-sample term for the
+windowed triangular array $X_{t-j}\sim P_{t-j}^*$. \Cref{lem:finite_sample_term}
+records the i.i.d. reference case that motivates this carrier exponent in the
+low-dimensional Wasserstein regime. Extending that rate from a fixed law $Q$ to
+the non-identically distributed window requires additional stability or coupling
+assumptions and is not claimed as a general theorem here.
+\end{remark}
+
 The two terms in \cref{thm:lag_error} pull in opposite directions. Increasing
 $n$ reduces variance but raises the age of the retained evidence. That tension
 produces the worst-case Lipschitz horizon law.
@@ -191,22 +221,22 @@ produces the worst-case Lipschitz horizon law.
 \begin{proposition}[Optimal horizon in the Lipschitz case]\label{prop:coherence_delay}
 Under \cref{thm:lag_error}, the error $\mathcal{E}(n)$ is minimized at
 \[
-  n^* \;=\; \left(\frac{C_K}{\zeta}\right)^{2/3},
+  n^* \;=\; \left(\frac{\sqrt{3}\,C_K}{2\zeta}\right)^{2/3},
 \]
 with minimum value
 \[
-  \mathcal{E}_{\min} \;=\; \tfrac{3}{2}\,C_K^{2/3}\,\zeta^{1/3}.
+  \mathcal{E}_{\min} \;=\; \frac{3^{5/6}}{2^{2/3}}\,C_K^{2/3}\,\zeta^{1/3}.
 \]
 \end{proposition}
 
 \begin{proof}
 Differentiate the upper envelope
-$C_K n^{-1/2} + \tfrac12\zeta n$ and solve
+$C_K n^{-1/2} + 3^{-1/2}\zeta n$ and solve
 \[
-  -\tfrac12 C_K n^{-3/2} + \tfrac12 \zeta = 0.
+  -\tfrac12 C_K n^{-3/2} + 3^{-1/2} \zeta = 0.
 \]
-This gives $n^*=(C_K/\zeta)^{2/3}$. Substituting back yields the displayed
-minimum.
+This gives $n^*=(\sqrt{3}C_K/(2\zeta))^{2/3}$. Substituting back yields the
+displayed minimum.
 \end{proof}
 
 \begin{remark}[Scope of the horizon law]\label{rem:carrier_exponent}
@@ -217,16 +247,19 @@ More generally, if the finite-sample term admits scaling
   \mathbb E\,W_2(\widehat P_t^{(n)},\bar P_t^{(n)})\lesssim C_K n^{-a}
   \quad \text{for some } a>0,
 \]
-then balancing it against the linear staleness cost $\tfrac12\zeta n$ yields
+then balancing it against the linear staleness cost $c_{\mathrm{lin}}\zeta n$
+for some explicit constant $c_{\mathrm{lin}}>0$ yields
 \[
   n^*(a)
-  \;=\;\left(\frac{2a\,C_K}{\zeta}\right)^{\!\frac{1}{a+1}},
+  \;=\;\left(\frac{a\,C_K}{c_{\mathrm{lin}}\zeta}\right)^{\!\frac{1}{a+1}},
   \qquad
   \mathcal E_{\min}(a)
-  \;=\;\frac{a+1}{(2a)^{a/(a+1)}}\,C_K^{1/(a+1)}\,\zeta^{a/(a+1)}.
+  \;=\;(a+1)\,a^{-a/(a+1)}\,c_{\mathrm{lin}}^{a/(a+1)}
+  \,C_K^{1/(a+1)}\,\zeta^{a/(a+1)}.
 \]
-The main text uses only the $a=1/2$ regime. The displayed cube-root law is
-therefore the worst-case linear-staleness member of the broader family.
+The main text uses only the $a=1/2$ regime with
+$c_{\mathrm{lin}}=3^{-1/2}$. The displayed cube-root law is therefore the
+worst-case linear-staleness member of the broader family.
 \end{remark}
 
 \begin{remark}[Measurement layer]

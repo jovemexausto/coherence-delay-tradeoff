@@ -3,6 +3,10 @@ setting,estimated_slope,comment
 "$W_2$, $d=2$",-0.41,slower decay
 "$W_2$, $d=4$",-0.25,slower decay
 "$W_2$, $d=5$",-0.24,slower decay
+"$W_2$, i.i.d. mixture, $d=1$, $H=0.5$",-0.50,fixed span $\zeta n^H=0.25$
+"$W_2$, triangular, $d=1$, $H=0.5$",-0.45,fixed span $\zeta n^H=0.25$
+"$W_2$, i.i.d. mixture, $d=1$, $H=1.0$",-0.47,fixed span $\zeta n^H=0.25$
+"$W_2$, triangular, $d=1$, $H=1.0$",-0.41,fixed span $\zeta n^H=0.25$
 Sinkhorn $\varepsilon=0.50$,-0.21,proxy constant changes
 Sinkhorn $\varepsilon=0.10$,-0.53,proxy constant changes
 Sinkhorn $\varepsilon=0.05$,-0.67,proxy constant changes

@@ -1,16 +1,27 @@
 \section{Finite-Sample Geometry Check}\label{app:finite_sample_geometry}
 
 For the finite-sample term in \cref{lem:finite_sample_term}, we estimate
-empirical $W_2$ between two i.i.d.
-samples from the same distribution using exact assignment in low and moderate
-dimension, then fit a log--log slope in $n$. We also check the Sinkhorn proxy in
-one dimension at a few fixed values of $\varepsilon$.
+empirical $W_2$ between two i.i.d. samples from the same distribution using
+exact assignment in low and moderate dimension, then fit a log--log slope in
+$n$. We also probe the non-identically distributed window directly in one
+dimension by comparing a triangular-array sample, with one draw from each
+drifted component in the window, against an i.i.d. sample from the same window
+mixture. In that check the within-window drift span $\zeta n^H$ is held fixed,
+so the experiment targets the carrier-regime interpretation used in the main
+text rather than the large-span regime in which heterogeneity itself can become
+dominant. Finally, we check the Sinkhorn proxy at a few fixed values of
+$\varepsilon$.
 
 \input{artifacts/tables/gaussian/finite_sample_geometry}
 
 The numerical check is only meant to support the modeling choice behind
-\cref{lem:finite_sample_term}. In low dimension, the raw Wasserstein term is
-compatible with an $n^{-1/2}$ fluctuation scale, whereas higher-dimensional raw
-Wasserstein decays more slowly. For fixed $\varepsilon$, the Sinkhorn proxy acts
-as a measurement layer whose calibration constant changes with regularization and
-ambient geometry even when the horizon argument keeps the same formal shape.
+\cref{lem:finite_sample_term} and \cref{rem:triangular_array_status}. In low
+dimension, the raw i.i.d. Wasserstein term is compatible with an
+$n^{-1/2}$ fluctuation scale, whereas higher-dimensional raw Wasserstein decays
+more slowly. In the one-dimensional fixed-span triangular-array check, the
+recovered slopes stay in the same rough vicinity as the corresponding i.i.d.
+mixture baseline, which is consistent with the carrier-regime reading used in
+the main text but does not amount to a theorem. For fixed $\varepsilon$, the
+Sinkhorn proxy acts as a measurement layer whose calibration constant changes
+with regularization and ambient geometry even when the horizon argument keeps
+the same formal shape.

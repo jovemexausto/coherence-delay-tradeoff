@@ -92,12 +92,124 @@ def estimate_sinkhorn_rows() -> list[dict[str, str | float]]:
     return rows
 
 
+def _path_means(n: int, dim: int, zeta: float, H: float) -> np.ndarray:
+    lags = np.arange(n, dtype=float)
+    means = np.zeros((n, dim), dtype=float)
+    means[:, 0] = -zeta * lags**H
+    return means
+
+
+def _triangular_window_sample(
+    n: int, dim: int, zeta: float, H: float, rng: np.random.Generator
+) -> np.ndarray:
+    means = _path_means(n, dim, zeta, H)
+    return means + rng.normal(size=(n, dim))
+
+
+def _mixture_sample(
+    n: int, dim: int, zeta: float, H: float, rng: np.random.Generator
+) -> np.ndarray:
+    means = _path_means(n, dim, zeta, H)
+    component_index = rng.integers(0, n, size=n)
+    return means[component_index] + rng.normal(size=(n, dim))
+
+
+def estimate_triangular_array_rows() -> tuple[
+    list[dict[str, str | float]], list[dict[str, str | float]]
+]:
+    dim = 1
+    H_values = (0.5, 1.0)
+    span = 0.25
+    sample_sizes = np.asarray([32, 64, 128, 256], dtype=int)
+    seeds = range(24)
+    summary_rows: list[dict[str, str | float]] = []
+    curve_rows: list[dict[str, str | float]] = []
+
+    for H in H_values:
+        triangular_means: list[float] = []
+        iid_means: list[float] = []
+        for n in sample_sizes:
+            zeta = span / (n**H)
+            triangular_values: list[float] = []
+            iid_values: list[float] = []
+            for seed in seeds:
+                triangular_rng = np.random.default_rng(
+                    20_000 + 100 * int(10 * H) + 10 * n + seed
+                )
+                mixture_rng = np.random.default_rng(
+                    30_000 + 100 * int(10 * H) + 10 * n + seed
+                )
+                comparison_rng = np.random.default_rng(
+                    40_000 + 100 * int(10 * H) + 10 * n + seed
+                )
+
+                triangular_sample = _triangular_window_sample(
+                    n, dim, zeta, H, triangular_rng
+                )
+                mixture_sample = _mixture_sample(n, dim, zeta, H, mixture_rng)
+                iid_sample_left = _mixture_sample(n, dim, zeta, H, comparison_rng)
+                iid_sample_right = _mixture_sample(n, dim, zeta, H, comparison_rng)
+
+                triangular_values.append(
+                    exact_empirical_w2(triangular_sample, mixture_sample)
+                )
+                iid_values.append(exact_empirical_w2(iid_sample_left, iid_sample_right))
+
+            triangular_mean = float(np.mean(triangular_values))
+            iid_mean = float(np.mean(iid_values))
+            triangular_means.append(triangular_mean)
+            iid_means.append(iid_mean)
+            curve_rows.append(
+                {
+                    "setting": "triangular",
+                    "dimension": dim,
+                    "H": H,
+                    "window_span": span,
+                    "zeta": round(float(zeta), 8),
+                    "sample_size": n,
+                    "mean_w2": round(triangular_mean, 6),
+                }
+            )
+            curve_rows.append(
+                {
+                    "setting": "iid-mixture",
+                    "dimension": dim,
+                    "H": H,
+                    "window_span": span,
+                    "zeta": round(float(zeta), 8),
+                    "sample_size": n,
+                    "mean_w2": round(iid_mean, 6),
+                }
+            )
+
+        triangular_slope = float(
+            np.polyfit(np.log(sample_sizes), np.log(triangular_means), 1)[0]
+        )
+        iid_slope = float(np.polyfit(np.log(sample_sizes), np.log(iid_means), 1)[0])
+        summary_rows.append(
+            {
+                "setting": rf"$W_2$, i.i.d. mixture, $d=1$, $H={H:.1f}$",
+                "estimated_slope": f"{iid_slope:.2f}",
+                "comment": rf"fixed span $\zeta n^H={span}$",
+            }
+        )
+        summary_rows.append(
+            {
+                "setting": rf"$W_2$, triangular, $d=1$, $H={H:.1f}$",
+                "estimated_slope": f"{triangular_slope:.2f}",
+                "comment": rf"fixed span $\zeta n^H={span}$",
+            }
+        )
+
+    return summary_rows, curve_rows
+
+
 def build_table(rows: list[dict[str, str | float]]) -> str:
     lines = [
         r"\begin{table}[!htbp]",
         r"\centering",
         r"\small",
-        r"\caption{Empirical scaling check for the finite-sample term. The bounded-support $W_2$ experiment is close to the expected $n^{-1/2}$ rate in low dimension, and the slope degrades as intrinsic dimension increases. The Sinkhorn proxy is reported at fixed $\varepsilon$, where the measured slope and constant both vary with regularization.}",
+        r"\caption{Empirical scaling check for the finite-sample term. The bounded-support i.i.d. $W_2$ experiment is close to the expected $n^{-1/2}$ rate in low dimension, the corresponding triangular-array check compares one sample from each drifted component against an i.i.d. sample from the window mixture, and the Sinkhorn proxy is reported at fixed $\varepsilon$. These rows are numerical support for the carrier-regime discussion rather than theorem statements.}",
         r"\label{tab:finite_sample_geometry}",
         r"\begin{tabular}{lrr}",
         r"\toprule",
@@ -125,6 +237,8 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
-    rows = estimate_raw_w2_slopes() + estimate_sinkhorn_rows()
+    triangular_rows, curve_rows = estimate_triangular_array_rows()
+    rows = estimate_raw_w2_slopes() + triangular_rows + estimate_sinkhorn_rows()
     write_csv(args.csv_dir / "finite_sample_geometry.csv", rows)
+    write_csv(args.csv_dir / "finite_sample_geometry_curves.csv", curve_rows)
     write_text(args.tables_dir / "finite_sample_geometry.tex", build_table(rows))
