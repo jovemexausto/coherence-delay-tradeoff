@@ -1,641 +1,296 @@
 # PAPER 2
 
-## Working Identity
+## Identity
 
-Primary working title:
+Working title:
 `Useful Memory Has Temporal Path Geometry`
 
-Alternative technical titles:
+Alternative titles:
 - `A Holder-Parameterized Horizon Law for Finite-Memory Tracking`
 - `Temporal Path Geometry of Useful Memory Under Drift`
-- `Regime-Dependent Horizon Laws for Endpoint Tracking Under Temporal Roughness`
+- `Regime-Dependent Horizon Laws for Finite-Memory Tracking`
 
-Recommended one-sentence thesis:
-The exponent governing the useful-memory horizon is not universal; it depends on temporal path geometry, and for deterministic Holder-H drift classes the optimal memory and minimax risk obey a regime-dependent law.
+One-sentence thesis:
+The exponent governing the useful-memory horizon is not universal; it depends on temporal path geometry, and deterministic Holder-type path classes induce regime-dependent optimal memory and minimax risk laws.
 
-90-second reviewer message:
-Paper 1 establishes the worst-case Lipschitz envelope and its cube-root horizon. Paper 2 explains that this is only one member of a larger family. For deterministic Holder-H path classes, the tracking error decomposes into a statistical term and a staleness term growing like `zeta n^H`, leading to `n^*(H,zeta) ~ zeta^{-2/(1+2H)}` and minimax risk `R^*(H,zeta) ~ zeta^{1/(1+2H)}` up to constants. The upper and lower exponents match. The remaining open problem is not the scaling law, but the sharp minimax constants and their optimal-recovery interpretation.
+One-sentence reviewer summary:
+Paper 1 gives the worst-case Lipschitz member of the story. Paper 2 shows that this is one member of a larger family: if staleness accumulates like `n^H`, then the optimal horizon and minimax risk scale with `H`, and the upper and lower exponents match.
 
-## Status Summary
-
-### What is already known
-
-The conceptual structure of Paper 2 is real, not speculative.
-
-Closed at the exponent level:
-- deterministic Holder-H drift class is the correct mathematical object;
-- upper bound has the form `C_K n^{-1/2} + c_H zeta n^H`;
-- lower bound via bump construction plus Le Cam matches the exponent;
-- minimax risk exponent is `1/(1+2H)`;
-- optimal memory exponent is `-2/(1+2H)`;
-- `H=1` recovers the cube-root law;
-- `H=1/2` recovers the square-root law.
-
-Not closed at the constant level:
-- theorem-proof upper constants are not sharp;
-- current lower bound constant is not sharp;
-- the real open problem is the minimax constant, not the exponent.
-
-### What Paper 2 is responsible for
-
-Paper 2 must do four things well:
-- formalize the Holder-H path class cleanly;
-- prove the regime-dependent exponents cleanly;
-- explain how Paper 1 appears as the `H=1` worst-case member;
-- state honestly what is not yet solved, especially sharp constants.
-
-It does not need to solve sharp constants to be a strong paper.
-
-## Non-Negotiable Positioning
-
-### Paper 2 is not
-
-- a direct theorem about fractional Brownian motion;
-- a paper about ADWIN or detector wrapping;
-- a vague narrative about `different regimes` without theorem-level closure;
-- a paper that requires sharp constants to exist.
-
-### Paper 2 is
-
-- a deterministic temporal-regularity theorem;
-- a regime family for useful-memory horizons;
-- the conceptual unification of cube-root and square-root as special cases;
-- a bridge from worst-case memory validity to temporal path geometry.
-
-## Main Theoretical Message
-
-For deterministic Holder-H drift classes, the variance-staleness trade-off becomes
+Core technical message:
 
 ```tex
-\mathbb E\,\mathcal E(n)
-\le C_K n^{-1/2} + c_H \zeta n^H,
+\mathcal E(n)\le C_K n^{-1/2}+c_H\zeta n^H
 ```
 
-and balancing the two terms yields
+so that
 
 ```tex
-n^*(H,\zeta) \asymp (C_K/\zeta)^{2/(1+2H)},
+n^*(H,\zeta)\asymp (C_K/\zeta)^{2/(1+2H)},
+\qquad
+R^*(H,\zeta)\asymp \sigma^{2H/(1+2H)}\zeta^{1/(1+2H)}.
 ```
 
-with minimax risk scaling
+Core conceptual message:
+`Temporal roughness determines how staleness accumulates, and therefore determines the horizon of useful memory.`
 
-```tex
-R^*(H,\zeta)
-\asymp
-\sigma^{2H/(1+2H)}\zeta^{1/(1+2H)}.
-```
+## Non-Negotiable Identity
 
-The core discovery is not only that exponents vary with `H`, but that useful memory has temporal path geometry.
+Paper 2 is about:
+- deterministic temporal-regularity classes;
+- regime-dependent useful-memory horizons;
+- the family of exponents indexed by temporal roughness;
+- the unification of Paper 1's cube-root case with rougher and smoother classes;
+- the idea that staleness accumulation depends on path geometry.
 
-## Mathematical Object
+Paper 2 is not about:
+- ADWIN;
+- detector wrapping;
+- a vague story about many regimes without theorem-level closure;
+- fractional Brownian motion as the literal theorem object;
+- sharp constants as a prerequisite for publication.
 
-### Recommended primary class
+## Central Reframe
 
-Paper 2 should be stated for a deterministic Holder-H path class.
+The wrong version of Paper 2 is:
+`Paper 1, but generalized a bit`
 
-Representative form:
+The right version of Paper 2 is:
+`the rate at which memory expires depends on temporal path geometry`
+
+Paper 2 exists to change the ontological status of the horizon.
+
+After Paper 1, the horizon looks finite.
+After Paper 2, the horizon looks geometric.
+
+## Reader Effect
+
+Target reader reaction:
+`Paper 1 gave the worst-case envelope. Paper 2 shows that this envelope is one member of a theorem-level family indexed by temporal roughness.`
+
+Target closing intuition:
+`Useful memory does not decay at one universal rate. Different path classes make staleness accumulate differently.`
+
+If the reader instead concludes:
+- `this is really about fBm folklore`;
+- `this is a loose regime narrative without closure`;
+- `this is just Paper 1 with a parameter inserted`;
+
+then Paper 2 has failed.
+
+## Official Language
+
+Use consistently:
+- temporal path geometry
+- deterministic Holder class
+- temporal roughness
+- regime-dependent horizon law
+- regime-dependent minimax risk
+- staleness accumulation
+- special-case recovery of cube-root
+
+Use carefully:
+- Hurst-type motivation
+- stochastic motivation
+
+Avoid in theorems and core claims:
+- direct claims about fractional Brownian motion unless actually proved;
+- language that blurs deterministic envelopes with stochastic-process laws;
+- vague `many regimes` rhetoric without a precise class.
+
+## Relationship to Paper 1
+
+Paper 1 says:
+`under the worst-case Lipschitz envelope, memory has a finite horizon and can become stale before detectable change`
+
+Paper 2 says:
+`the Lipschitz case is only one member of a larger family, because the rate of staleness accumulation depends on temporal path geometry`
+
+Paper 1 is about expiration under the worst-case envelope.
+Paper 2 is about the geometry of expiration across path classes.
+
+Paper 2 must not weaken Paper 1 by making it look provisional or naive.
+It must instead make Paper 1 look like the `H=1` cornerstone.
+
+## The Main Mathematical Object
+
+Paper 2 should be stated for deterministic Holder-type classes of the form
 
 ```tex
 \mathcal H(H,\zeta)
 =
-\left\{ (P_t^*)_t : d(P_t^*,P_s^*) \le \zeta |t-s|^H \text{ for all relevant } s,t \right\}
+\left\{(P_t^*)_t : d(P_t^*,P_s^*)\le \zeta |t-s|^H \text{ for relevant } s,t\right\}.
 ```
 
-where `d` is the endpoint geometry being tracked in the theorem statement.
-
-### Recommended interpretation
-
-This class is an envelope model for temporal roughness.
+This class should be interpreted as an envelope model for temporal roughness.
 
 That means:
 - the theorem is deterministic;
-- the theorem does not depend on stochastic-process construction;
-- Hurst language can be heuristic or motivational only.
+- the object is a path class, not a stochastic-process construction;
+- Hurst language is motivational at most;
+- the theorem should stand without fBm.
 
-### What not to claim
+## Theorem Package
 
-Do not claim:
-`fractional Brownian motion with Hurst exponent H lies in the class almost surely with fixed deterministic zeta`.
+Paper 2 should revolve around a clean package:
 
-Correct statement:
-paths from stochastic families with Hurst-type roughness can motivate the deterministic Holder envelope, but the theorem itself is not yet an fBm theorem.
+1. Upper bound for finite-memory tracking under Holder-type drift.
+2. Optimized horizon and minimized risk.
+3. Lower bound with matching exponent.
+4. Explicit recovery of special cases, especially `H=1` and `H=1/2`.
 
-## Main Theorem Package
+The editorial payoff is that cube-root and square-root stop looking unrelated.
+They become members of the same geometric family.
 
-Paper 2 should revolve around a clean theorem package.
+## Closed vs Open
 
-### Theorem A: Upper bound for uniform-window tracking
+Closed enough for the paper's main claim:
+- the deterministic Holder-class framing;
+- an upper law with staleness term `n^H`;
+- a lower bound with matching exponent;
+- the scaling exponents `2/(1+2H)` and `1/(1+2H)`;
+- the special cases that recover known-looking laws.
 
-Need:
-- deterministic Holder-H path assumption;
-- explicit finite-sample term;
-- explicit staleness term scaling as `zeta n^H`;
-- clean constants;
-- explicit role of `sigma` or `C_K`.
+Still open and should be stated honestly:
+- sharp constants;
+- exact extremal path structure;
+- exact extremal estimator characterization;
+- any stronger stochastic-process interpretation.
 
-Representative target form:
+The open problem is not the exponent family.
+The open problem is the sharp minimax geometry inside that family.
 
-```tex
-\mathcal E(n)
-\le
-C_K n^{-1/2} + c_H \zeta n^H.
-```
+## Narrative Arc
 
-### Corollary B: Optimized horizon
+### Act 1: Beyond the Worst Case
 
-Need the optimizer and minimized risk written symmetrically and cleanly.
+Paper 1 identifies the worst-case Lipschitz envelope.
+Paper 2 begins by saying that this cannot be the end of the story, because worst-case linear staleness is only one way that age can accumulate.
 
-Representative target form:
+### Act 2: Roughness Determines Expiration Rate
 
-```tex
-n^*(H,\zeta)
-\asymp
-\left(\frac{C_K}{\zeta}\right)^{2/(1+2H)},
-\qquad
-\mathcal E_{\min}(H,\zeta)
-\asymp
-C_K^{2H/(1+2H)}\zeta^{1/(1+2H)}.
-```
+If temporal misalignment grows like `n^H`, then the variance-staleness trade-off changes accordingly.
 
-If `sigma` is separated from `C_K`, do it explicitly and consistently.
+This is the central move.
 
-### Theorem C: Lower bound via hard pair / bump construction
+The paper should make the reader feel that the horizon exponent is not mysterious; it is the consequence of how temporal roughness accumulates with lag.
 
-Need:
-- a lower bound matched in exponent;
-- precise scope on the estimator class;
-- explicit statement of the critical-window regime or optimized-window problem;
-- honest non-sharp constant language.
+### Act 3: The Family of Horizon Laws
 
-Representative target form:
+The reader should then see:
+- one family of upper laws;
+- one family of optimized horizons;
+- one family of minimax rates.
 
-```tex
-R^*(H,\zeta)
-\ge
-C_{\mathrm{LB}}(H)
-\sigma^{2H/(1+2H)}\zeta^{1/(1+2H)}.
-```
+This is where Paper 2 earns the phrase `temporal path geometry`.
 
-### Corollaries D and E: Special cases
+### Act 4: Special Cases as Editorial Payoff
 
-These should be explicit and visible.
+`H=1` should recover Paper 1.
+`H=1/2` should recover the square-root case.
 
-- `H=1` gives cube-root.
-- `H=1/2` gives square-root.
+These are not afterthoughts.
+They are the reader's proof that the family is real.
 
-This is an important editorial payoff because it shows Paper 1 is a special case, not a contradiction.
+### Act 5: Honest Boundary
 
-## What Must Be Corrected from the Current Theorem Block
+The ending should make clear:
+- the exponent family is solved at theorem level;
+- the sharp constants are not;
+- stochastic interpretations remain motivational unless proved.
 
-### 1. Rename the theorem away from `Hurst-parameterized`
+## Conceptual Structure
 
-Current issue:
-the theorem is about deterministic Holder classes, not fBm itself.
-
-Recommended replacement:
-- `Holder-Parameterized Horizon Law`
-- or `Temporal-Roughness-Parameterized Horizon Law`
-
-### 2. Fix the fBm remark
-
-Current issue:
-too strong and mathematically inaccurate.
-
-Required replacement idea:
-`The deterministic Holder class can be viewed as an envelope model for stochastic path families with Hurst-type roughness, but the theorem itself is deterministic and does not rely on an fBm construction.`
-
-### 3. Make lower-bound scope precise
-
-Current issue:
-some formulations sound too broad over all estimators using the last `n` observations while the actual argument lives at the critical scale or optimized-window level.
-
-Recommended fix:
-choose one of the following and state it explicitly.
-
-Option A:
-the lower bound is for the optimized-window minimax problem.
-
-Option B:
-the lower bound is for windows in the critical scale regime.
-
-Recommendation:
-Option A is editorially cleaner if it can be stated cleanly.
-
-### 4. Factor `sigma` symmetrically in upper and lower statements
-
-Required final scaling form:
-
-```tex
-R^*(H,\zeta)
-\asymp
-\sigma^{2H/(1+2H)}\zeta^{1/(1+2H)}.
-```
-
-The paper should not have `sigma` hidden in one side and absent in the other.
-
-### 5. Rewrite the tightness remark
-
-Correct final message:
-- exponents are tight;
-- theorem-proof upper constants are non-sharp;
-- Le Cam lower bound seems to capture roughly half of the best observed linear constant;
-- closing the constant gap likely needs tools beyond two-point Le Cam.
-
-### 6. Remove the `H -> 0` corollary if it overclaims
-
-If the current wording suggests independence from `zeta`, remove it.
-
-It is not needed for the paper's main argument and creates unnecessary attack surface.
-
-## What Is Closed vs Open
-
-### Closed enough for Paper 2 main claim
-
-- deterministic Holder-H class framing;
-- upper theorem;
-- lower theorem with matching exponent;
-- regime law `1/(1+2H)` and `2/(1+2H)`;
-- `H=1` and `H=1/2` special cases;
-- interpretation of Paper 1 as worst-case member.
-
-### Still open
-
-- sharp minimax constants;
-- exact extremal path and extremal estimator characterization;
-- whether the optimal estimator is uniform, nearly uniform, or a nontrivial kernel;
-- full stochastic transfer to fBm-style models;
-- online estimation of `H` or regime class;
-- geometry-adaptive controller design.
-
-## Sharp Constants: Final Strategic Position
-
-### Bottom line
-
-Sharp constants are not a must-have for Paper 2.
-
-Paper 2 remains strong without them if it delivers:
-- exponent-tight theory;
-- a clean deterministic Holder framing;
-- convincing special cases and interpretation;
-- honest discussion of the constant gap.
-
-### How to describe the open problem in the paper
-
-Recommended wording:
-`We establish the sharp scaling exponents, but not the sharp minimax constants. Closing the remaining constant gap appears to require tools beyond two-point Le Cam, likely through an optimal-recovery or modulus-of-continuity analysis tailored to endpoint estimation under temporal regularity constraints.`
-
-### What the sharp-constant problem really is
-
-It is not just `improving a constant`.
-
-It is about identifying:
-- the true extremal path geometry;
-- the true optimal estimator or kernel;
-- the exact information-theoretic obstruction behind endpoint estimation;
-- the right dual or modulus formulation of the problem.
-
-### Is it a separate paper?
-
-Yes, very plausibly.
-
-Natural future-paper identities:
-- `Sharp Minimax Constants for Endpoint Estimation under Temporal Holder Drift`
-- `Optimal Recovery for Temporal Endpoint Estimation`
-- `Sharp Constants in Holder-Parameterized Memory Horizon Laws`
-
-### What solving sharp constants would change
-
-Scientific impact:
-- closes the theory;
-- identifies the actual extremal problem behind the scaling law;
-- clarifies whether current upper procedures are nearly optimal or structurally suboptimal.
-
-Practical impact:
-- improves fine calibration of horizon rules;
-- clarifies how much uniform windows lose versus the true optimum;
-- sharpens policy comparisons.
-
-But the main gain is theoretical, not practical.
-
-## Numerical State of the Constants Problem
-
-Current validated pattern from numerical investigation:
-- theorem upper constants are loose;
-- the exact uniform-window risk is much better than the theorem upper bound;
-- the best observed nonnegative linear kernel improves only a few percent over uniform;
-- the Le Cam lower bound appears stably around half of the best observed linear constant.
-
-Representative pattern already observed:
-- `C_LB / C_best-linear ~ 0.53` across tested `H` values.
-
-Interpretation:
-- exponents look genuinely closed;
-- constants are not closed;
-- the problem is now a sharp-constant lower-bound problem more than an upper-bound crisis.
-
-Important caution:
-- no strong claim should be made yet about signed weights or full optimality beyond the observed linear searches.
-
-## Literature Positioning
-
-The best strategic positioning for the sharp-constant discussion is not `Pinsker solved this already`.
-
-More credible framing:
-- Le Cam gets the exponent and a non-sharp constant;
-- Assouad is useful for rates but not obviously the constant solution here;
-- van Trees may help locally but is unlikely to fully close the endpoint constant;
-- the most promising path for sharp constants looks like optimal recovery, modulus of continuity, and Gaussian white-noise style formulations.
-
-Names worth retaining in Paper 2 notes or appendix:
-- Tsybakov
-- Donoho
-- Donoho and Liu
-- Korostelev
-- Bertin
-- Brown and Low
-- Polyanskiy and Wu
-
-## Paper 2 Editorial Identity
-
-### Core message
-
-Paper 2 should feel like the discovery that the exponent is regime-dependent because temporal roughness changes how stale evidence accumulates.
-
-The emotional center of the paper is:
-`Paper 1 found expiration. Paper 2 shows that the expiration rate depends on temporal path geometry.`
-
-### Main conceptual sentence
-
-`Useful memory has temporal path geometry: under smoother or rougher drift classes, staleness accumulates at different rates and induces different optimal memory scales.`
-
-### Scope discipline
-
-Do not let the paper drift into:
-- detector engineering;
-- empirical benchmark sprawl;
-- weak stochastic analogies presented as theorems;
-- premature sharp-constant claims.
-
-## Proposed Manuscript Structure
-
-Recommended structure:
+If born correctly, Paper 2 would read conceptually as:
 
 1. Introduction
-2. Problem Setup and Holder Path Classes
-3. Upper Bound: Noise-Staleness Trade-off under Holder Drift
-4. Lower Bound: Endpoint Hardness via Bump Construction and Le Cam
-5. Regime Law and Special Cases
-6. Constants, Tightness, and What Remains Open
-7. Numerical Validation of the Scaling Law
-8. Discussion and Future Directions
+2. Deterministic Holder Classes as Temporal-Roughness Envelopes
+3. Upper Horizon Law
+4. Lower Bound and Matched Exponents
+5. Special Cases and Geometric Interpretation
+6. Limits and Open Problems
+7. Conclusion
 
-If a shorter structure is needed:
+This is a statement of intellectual structure, not of implementation.
 
-1. Introduction
-2. Holder Horizon Law
-3. Lower Bound and Tight Exponents
-4. Constants and Numerics
-5. Discussion
+## Opening Standard
 
-## Section-by-Section Seed
+The opening must do exactly this:
+- state that the horizon exponent is not universal;
+- state the deterministic Holder-class object;
+- state the regime-dependent upper and lower laws;
+- explain that Paper 1 is recovered as `H=1`;
+- state honestly that sharp constants remain open.
 
-### 1. Introduction
+It must not:
+- oversell fBm;
+- sound like a speculative geometry manifesto;
+- rely on future work to justify the present theorem;
+- bury the theorem behind broad motivation.
 
-Must establish:
-- Paper 1 gave the worst-case cube-root member;
-- cube-root is not universal;
-- the true object is a family indexed by temporal regularity;
-- this paper studies deterministic Holder-H classes;
-- exponent-tight theory is proved;
-- sharp constants remain open.
+## Theoretical Standard
 
-The introduction should not spend its first paragraph on ADWIN, UMR, or online regulation.
+The theory must protect:
+- a clean deterministic class definition;
+- a clean upper theorem;
+- a clean lower theorem with matching exponent;
+- symmetric scaling statements;
+- explicit scope around what is and is not sharp.
 
-### 2. Problem Setup and Holder Path Classes
+The theory must avoid:
+- imprecise stochastic claims;
+- fake generality;
+- rhetorical overreach about universality.
 
-Need:
-- formal path-class definition;
-- endpoint risk definition;
-- estimator class definition;
-- notation for `H`, `zeta`, `sigma`, and memory length `n`;
-- explicit distinction between deterministic envelope and stochastic motivation.
+## Figure Standard
 
-### 3. Upper Bound
+Paper 2 should be figure-light but conceptually sharp.
 
-Need:
-- clean derivation of the `zeta n^H` staleness term;
-- clean optimization over `n`;
-- exact dependence on constants where possible;
-- optional remark on EWMA or weighted windows only if it helps rather than distracts.
+The figures that matter most are:
+1. a regime-family conceptual figure showing how staleness growth changes with `H`;
+2. a scaling figure for horizon and risk exponents across `H`;
+3. a lower-bound witness figure adapted to the Holder setting.
 
-### 4. Lower Bound
+Any figure should answer a conceptual question, not just decorate algebra.
 
-Need:
-- hard pair or bump construction;
-- KL calculation;
-- explicit scaling match;
-- precise regime/scope statement;
-- honest constant discussion.
+## Reviewer Attack Surface
 
-### 5. Regime Law and Special Cases
+### Attack
+`This is really about fractional Brownian motion, but you did not prove that.`
 
-This section should make the paper memorable.
+Response:
+No. The theorem is about deterministic Holder envelopes. Stochastic roughness families are only motivation unless explicitly proved.
 
-Need:
-- theorem summary box if useful;
-- `H=1` as cube-root;
-- `H=1/2` as square-root;
-- maybe a compact phase diagram of exponent versus `H`.
+### Attack
+`The constants are not sharp.`
 
-### 6. Constants, Tightness, and Open Problem
+Response:
+Correct. The exponent family is the closed theorem-level result; the sharp constants are the next problem.
 
-Need:
-- clear statement that exponents are tight;
-- constants are not sharp;
-- include numerical table or figure contrasting lower bound, theorem upper, exact uniform, best observed linear;
-- explain why this is an open optimal-recovery-type problem rather than a defect in the main theorem.
+### Attack
+`Is this just Paper 1 with a parameter H inserted?`
 
-### 7. Numerical Validation
+Response:
+No. The conceptual claim changes: the horizon is no longer a single worst-case law but a family indexed by temporal roughness.
 
-Purpose:
-- support the scaling law;
-- support the constants discussion;
-- illustrate special cases.
+### Attack
+`Why should anyone care about this family?`
 
-This should not turn into a large benchmark paper.
-
-### 8. Discussion
-
-Need:
-- deterministic-vs-stochastic scope;
-- relation to Paper 1;
-- why sharp constants are future work rather than blocker;
-- possible future work on online regime estimation and adaptive controllers.
-
-## Figures and Tables
-
-### Required figures
-
-1. `Path Geometry to Horizon Law` conceptual figure.
-   Content:
-   - compare linear staleness (`H=1`) with rougher/smoother envelopes;
-   - show how the optimal horizon changes with `H`.
-
-2. `Upper-Lower Exponent Match` figure.
-   Content:
-   - log-log curves showing matched slope across `H` values.
-
-3. `Hard Pair / Bump Witness` figure.
-   Content:
-   - two Holder paths with small KL and endpoint gap.
-
-4. `Special Cases` figure.
-   Content:
-   - highlight `H=1` cube-root and `H=1/2` square-root inside the same family.
-
-5. `Constant Gap` figure or table.
-   Content:
-   - `C_LB`, `C_UB(thm)`, `C_U(exact)`, `C_best-linear`.
-
-### Required table
-
-One compact table is enough if it carries the constants story.
-
-Suggested columns:
-- `H`
-- `C_LB`
-- `C_UB(thm)`
-- `C_U(exact)`
-- `C_best-linear`
-- ratio `C_LB / C_best-linear`
-
-## What Paper 2 Must Explicitly Say About Paper 1
-
-Paper 2 should treat Paper 1 as the `H=1` worst-case member.
-
-Recommended wording:
-`The cube-root horizon law studied in the worst-case Lipschitz setting is the H=1 member of a broader Holder-parameterized family.`
-
-That makes the papers complementary rather than revisionist.
-
-## What Paper 2 Must Not Do to Paper 1
-
-Do not frame Paper 1 as mistaken.
-
-Do not say:
-- cube-root was an accident;
-- the original law was too narrow to matter;
-- Paper 1 should have waited for Paper 2.
-
-Correct framing:
-Paper 1 established the correct worst-case foundation. Paper 2 expands the universe of path classes.
-
-## Research Tasks Still Needed
-
-### A. Formal theorem polishing
-
-Tasks:
-- choose exact path-class notation and metric;
-- rewrite theorem statements with explicit sigma dependence;
-- choose the precise lower-bound scope statement;
-- remove misleading fBm phrasing;
-- remove any overstrong `H -> 0` statements.
-
-Exit criterion:
-all theorem statements are manuscript-ready and venue-safe.
-
-### B. Proof cleanup
-
-Tasks:
-- clean upper proof so the `n^H` term is transparent;
-- clean lower proof so the bump width and KL scaling are transparent;
-- verify constants and regime assumptions carefully;
-- separate exponent-tight argument from constant-sharp discussion.
-
-Exit criterion:
-the proofs are auditable and easy to summarize.
-
-### C. Numerical package cleanup
-
-Relevant current scripts:
-- `scripts/paper2_closed_proof.py`
-- `scripts/paper2_holder_proof.py`
-- `scripts/lower_bound.py`
-- `scripts/numerical_validation.py`
-- `scripts/tight_constant_investigation.py`
-
-Tasks:
-- verify which scripts produce theorem-supporting plots;
-- standardize notation in outputs;
-- separate exponent-validation outputs from constant-gap outputs;
-- avoid heavy searches that do not materially change the paper.
-
-Exit criterion:
-there is a lean, credible numerical appendix and figure set.
-
-### D. Manuscript seeding
-
-Tasks:
-- draft theorem-first introduction;
-- draft notation/setup section;
-- draft constants/open-problem section;
-- design the main phase diagram or law summary figure.
-
-Exit criterion:
-Paper 2 can be written as a real manuscript rather than a research memo.
-
-## Nice-to-Have but Not Blockers
-
-- stronger numerical exploration of linear kernels;
-- more refined constant tables across more `H` values;
-- early attempts at online `H` estimation;
-- exploratory adaptive controller discussion.
-
-These are useful, but they should not delay the core theorem paper.
-
-## Things That Should Be Deferred to a Later Project
-
-- sharp minimax constants as a full closure problem;
-- full stochastic-process transfer to fBm or related models;
-- online regime-estimation algorithms;
-- geometry-adaptive closed-loop controller;
-- broad empirical systems paper showing adaptive gains across many backends.
-
-These can become a Paper 3 or later branch.
-
-## Suggested Writing Order
-
-1. write the theorem statements cleanly;
-2. write the lower-bound scope paragraph cleanly;
-3. write the special-cases section;
-4. write the constants-and-open-problem section;
-5. only then write the introduction and discussion.
-
-This is the safest order because the paper's credibility depends on theorem-level precision.
+Response:
+Because it explains when cube-root is the right law and when it is not. It upgrades a single worst-case statement into a geometry of horizon laws.
 
 ## Definition of Done
 
-Paper 2 is ready at a high level when all of the following are true:
+Paper 2 is ready only when all of the following are true:
+- the horizon exponent is clearly presented as non-universal;
+- the deterministic Holder-class object is clean and defensible;
+- the upper and lower exponents match;
+- Paper 1 is visibly recovered as `H=1`;
+- the paper is honest about constants and stochastic interpretation;
+- a reviewer can summarize the work as `useful memory has temporal path geometry`.
 
-- the theorem is clearly deterministic Holder-H, not mislabeled as stochastic Hurst;
-- upper and lower bounds match in exponent;
-- `sigma` and `zeta` dependence are stated symmetrically;
-- `H=1` and `H=1/2` are explicit and persuasive;
-- the constants gap is discussed honestly but non-defensively;
-- the paper clearly states that sharp constants remain open;
-- the reader leaves convinced that useful memory has a regime-dependent geometry.
+## Final Positioning
 
-## Final Strategic Verdict
+Paper 2 is:
+`the theorem-level geometry of useful-memory horizons across temporal roughness classes.`
 
-Paper 2 does not need sharp constants to be a high-level paper.
-
-What it needs is:
-- clean theorem statements;
-- clean scope discipline;
-- honest open-problem positioning;
-- a strong conceptual message.
-
-The right final identity is:
-`a theorem paper on regime-dependent memory horizons under temporal Holder geometry, with tight exponents and an open sharp-constants frontier.`
-
-That is already a serious paper.
+It should feel like a genuine expansion of the object, not a parameterized sequel.

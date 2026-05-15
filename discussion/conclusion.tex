@@ -12,31 +12,30 @@ resulting finite-memory floor is structural. The operational contribution is a
 horizon regulator: UMR turns the worst-case law into a temporal-validity cap,
 which keeps the effective horizon from drifting far into stale-memory territory.
 
-The strongest empirical lesson is that horizon scale, horizon tracking, and
-predictive payoff are distinct objects. Horizon misalignment carries a nonlinear
-operational cost, but the transfer from gap to error depends on the backend and
-on the drift regime.
-
-Empirically, the signature regime is `cap-only`: the memory horizon becomes
-operationally stale before there is enough statistical evidence for a changepoint
-alarm. That separation between evidence of change and temporal validity of
-memory is the main conceptual payoff here. The alternating-timescales benchmark
-adds a secondary lesson: contraction is easier to induce than re-expansion, so
+The strongest empirical lesson is that temporal validity and changepoint
+evidence are distinct objects. The signature regime is \emph{cap-only}: the
+memory horizon becomes operationally stale before there is enough statistical
+evidence for a changepoint alarm. Horizon misalignment carries a nonlinear
+operational cost, but the transfer from gap to predictive error depends on the
+backend and on the drift regime. The alternating-timescales benchmark adds a
+secondary lesson: contraction is easier to induce than re-expansion, so
 EMA-driven horizon regulators have a recoverability gap.
 
-ELEC2 is the representative real-stream case, with a short Bikes summary in the
-appendix. Together they show that the temporal-validity gap is not synthetic-only.
+The real-stream evidence is intentionally secondary. ELEC2, with a short Bikes
+summary in the appendix, shows that the temporal-validity gap is not
+synthetic-only, but the main claim of the paper remains worst-case and
+structural.
 
-Finite-memory systems are best judged by how long their retained evidence remains
-current enough to matter. The design consequence is simple: regulate useful
-memory and track the age at which evidence stops being current.
-
-Useful memory under drift has a finite temporal horizon, but its predictive
-value is policy-dependent.
+Finite-memory systems are best judged by how long their retained evidence
+remains current enough to matter. The design consequence is simple: treat memory
+as a resource with a finite horizon, separate temporal validity from changepoint
+evidence, and use conservative horizon regulation to avoid stale-memory carryover.
 
 The cube-root exponent is tied to the worst-case linear-staleness envelope
-studied here. Characterizing how this horizon changes under narrower stochastic
-path classes is the next step.
+studied here, and the lower bound is established through a Gaussian location
+subclass. The next step is correspondingly disciplined: characterize narrower
+path classes and better local drift estimators without diluting the current
+worst-case statement.
 
 Code and reproducibility artifacts are available in the project repository
 \citep{parreira2026useful_memory_horizon}.

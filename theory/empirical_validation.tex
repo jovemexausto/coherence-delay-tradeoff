@@ -1,10 +1,11 @@
 \section{Empirical Evidence}\label{sec:validation}
 
 The experiments test a single claim: under continuous drift, memory must be
-regulated by temporal validity rather than by statistical evidence of abrupt
-change alone. The evidence separates three layers that are often collapsed: the
-finite-memory horizon itself, the conflict between temporal validity and
-detector evidence, and the predictive cost of horizon misalignment.
+regulated by temporal validity rather than by changepoint evidence alone. The
+evidence separates layers that are often collapsed: the finite useful-memory
+horizon itself, the gap between temporal validity and detector evidence, the
+cap-only regime that gap creates, and the predictive cost of horizon
+misalignment.
 
 In the experiments, UMR is a backend-agnostic conservative horizon cap driven by
 a smoothed local drift proxy. It is evaluated in two roles. First, it acts as a
@@ -12,7 +13,8 @@ runtime horizon policy for estimators whose effective memory can be adjusted,
 such as capped sliding-window, EWMA, and multi-horizon backends. Second, it is
 wrapped around ADWIN as one detector-side instance of the same temporal-validity
 rule. Fixed-window methods remain uncapped baselines. The resulting
-comparisons make detector-silent staleness visible.
+comparisons are used to make detector-silent staleness visible, not to rank
+detectors.
 
 \subsection{Structural U-Curve}\label{sec:validation_law}
 
@@ -59,30 +61,32 @@ questions need not be synchronized.
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.95\linewidth]{artifacts/figures/cuberoot_adwin/fig_cap_vs_detection_delay}
-\caption{Temporal validity gap across drift rates. The top panel compares the
-first ADWIN+$\,$UMR cap activation with the first ADWIN detection. The bottom
-panel shows the resulting lead time. Under slow drift, memory becomes
-operationally stale long before changepoint evidence is available; under faster
-drift, the gap narrows but remains positive.}
+\caption{Cap leads detection under continuous drift. The top panel compares the
+first ADWIN+$\,$UMR cap event with the first ADWIN detection, and the bottom
+panel shows the resulting lead time. Under slow drift, memory becomes stale
+well before changepoint evidence is available; under faster drift, the gap
+narrows but remains positive.}
 \label{fig:cap_vs_detection_delay}
 \end{figure}
 
+\subsection{The Cap-Only Regime}\label{sec:validation_cap_only}
+
 The gap becomes concrete on the continuous-drift benchmark. We compare a short
 fixed window, a long fixed window, EWMA, ADWIN, and an ADWIN wrapper equipped
-with the UMR horizon cap. ADWIN can retain far more memory than the
-useful-memory scale, while a conservative cap contracts that stale window
-earlier.
+with the UMR horizon cap. ADWIN appears here as the cleanest contrast case: it
+can retain far more memory than the useful-memory scale, while a conservative
+cap contracts that stale window earlier.
 
 \input{artifacts/tables/cuberoot_adwin/continuous_benchmark}
 
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.95\linewidth]{artifacts/figures/cuberoot_adwin/fig_cuberoot_adwin}
-\caption{Continuous-drift benchmark. Fixed-500 is the stale-memory baseline;
-ADWIN retains far more memory than the oracle-scale horizon; ADWIN+$\,$UMR
-pulls the effective horizon toward the useful-memory scale and exposes a
-cap-only regime in which memory becomes operationally stale before statistical
-changepoint evidence appears.}
+\caption{Cap-only regime on the continuous-drift benchmark. Fixed-500 is the
+stale-memory baseline, plain ADWIN can retain far more memory than the
+useful-memory scale, and ADWIN+$\,$UMR contracts the effective horizon earlier.
+The gain comes from capping stale memory before detector evidence is strong
+enough to fire.}
 \label{fig:cuberoot_adwin}
 \end{figure}
 
@@ -97,10 +101,10 @@ while remaining locally misaligned for long stretches.
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.95\linewidth]{artifacts/figures/cuberoot_adwin/fig_horizon_instability}
-\caption{Alternating-timescales instability. The top panel shows the drift
+\caption{Alternating-timescales benchmark. The top panel shows the drift
 schedule, the middle panel compares the local oracle horizon with fixed windows
-and ADWIN+$\,$UMR, and the bottom panel shows horizon regret over time. The
-figure shows that contraction is easier to trigger than re-expansion after a
+and ADWIN+$\,$UMR, and the bottom panel shows horizon regret over time.
+Contraction is easier to trigger under bursts than re-expansion after a
 low-drift stretch.}
 \label{fig:horizon_instability}
 \end{figure}
@@ -246,7 +250,7 @@ together with backend-specific degradation once that band is exceeded.
 
 \subsection{Representative Real-Stream Case Study}\label{sec:validation_real_world}
 
-The synthetic experiments carry the clearest identification, but ELEC2 shows
+The synthetic experiments carry the clearest identification, but ELEC2 provides
 the same qualitative phenomenon on public data. Coarse horizon adaptation still
 changes the operating regime outside the synthetic setting, although the effect
 is smaller and more backend dependent. A Bikes summary is given in

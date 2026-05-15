@@ -9,8 +9,8 @@ that produced it has started to move away?
 That question creates a structural trade-off. More past data reduces sampling
 noise, but it also increases the age of the evidence used to describe the
 present. Under drift, memory is simultaneously helpful and harmful: short
-windows are fresh but noisy, while long windows are stable but stale. The
-resulting problem is a worst-case horizon problem, not a detector comparison.
+windows are fresh but noisy, while long windows are stable but stale. The paper
+therefore studies a worst-case horizon problem, not a detector comparison.
 
 For the finite-memory averaging class analyzed here, the tracking error splits
 into a statistical term that decreases with memory and a staleness term that
@@ -21,11 +21,20 @@ $\mathcal{E}_{\min} \asymp C_K^{2/3}\zeta^{1/3}$. The same class also admits a
 minimax lower bound in the critical-window regime, so the finite-memory floor is
 structural rather than a quirk of one estimator.
 
-The central conceptual distinction is simple: temporal validity is not
-changepoint evidence. A detector can remain statistically silent while retained
-memory is already stale for the present. That separation creates the
-operational gap that makes a conservative horizon cap useful even when no
-detector has fired.
+The practical conflict is between two clocks. One clock measures the age at
+which retained evidence stops being valid for the present. The other measures
+when the accumulated data provide enough statistical evidence for a changepoint
+alarm. Those clocks need not move together. The central conceptual distinction
+is therefore simple: temporal validity is not changepoint evidence. A detector
+can remain statistically silent while retained memory is already stale for the
+present.
+
+That gap motivates a conservative instrument rather than a stronger detector.
+UMR is used here as a horizon regulator: it caps retained memory by a local
+drift proxy so that the system does not wait for changepoint evidence before
+discarding stale history. Its role in the paper is narrow and operational. It is
+not presented as a universal detector and not as a claim that every backend must
+adapt in the same way.
 
 The contributions are fivefold:
 \begin{itemize}
@@ -53,4 +62,6 @@ The theoretical results are stated in $W_2$; the Sinkhorn divergence is the
 computational measurement layer used in the synthetic experiments. The window
 size result of \citet{hinder2023window} motivates the broader issue, but the
 contribution here is more specific: memory has a finite temporal validity horizon
-under worst-case drift.
+under worst-case drift. The next step is correspondingly limited: characterize
+narrower path classes that change the staleness law without diluting the current
+worst-case statement.

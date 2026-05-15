@@ -8,17 +8,15 @@ stale.
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.92\linewidth]{artifacts/figures/conceptual/fig_two_clocks_of_drift.pdf}
-\caption{Two clocks of drift. The vertical axis is tracking error and the
-horizontal axis is the memory horizon, shown in normalized theorem units.
-More memory reduces the finite-sample variance term but increases staleness,
-producing a U-shaped total error. The optimum $n^*$ occurs before the point
-where the two cost levels cross, because the optimum is determined by marginal
-balance rather than equality of the two cost values. The shaded region marks
-detector-silent staleness.}
+\caption{Two clocks of drift in normalized theorem units. The finite-sample
+term falls with horizon, the staleness term rises with age, and total error is
+minimized at the useful-memory horizon $n^*$. The cost crossing occurs later,
+so the optimum is about marginal balance rather than equality of levels. The
+shaded region marks detector-silent staleness.}
 \label{fig:two_clocks_of_drift}
 \end{figure}
 
-\subsection{Variance-Staleness Decomposition}
+\subsection{Worst-Case Upper Law}
 
 \begin{theorem}[Lag-Inclusive Tracking Error Bound]\label{thm:lag_error}
 Let $X_{t-j} \sim P^*_{t-j}$ and let
@@ -77,12 +75,12 @@ Appendix~\ref{app:finite_sample_geometry}; it is not used as a theorem, but it
 matches the intended low-dimensional interpretation of the finite-sample term.
 \end{lemma}
 
-\subsection{A Structural Worst-Case Horizon}
+\subsection{Optimal Horizon}
 
 \begin{remark}[Scope of the horizon law]\label{rem:carrier_exponent}
 The cube-root law follows when the finite-sample term behaves as
 \(\mathbb E\,W_2(\widehat P_t^{(n)},\bar P_t^{(n)})\lesssim C_K n^{-1/2}\).
-The discussion below uses only that regime.
+The main text uses only that regime.
 More generally, if the finite-sample term admits the scaling
 
 \[
@@ -105,7 +103,8 @@ In the setting of \cref{lem:finite_sample_term}, the effective exponent is
 \(a=1/2\) for \(d_\mathrm{eff}<4\), with an additional \((\log n)^{1/2}\)
 factor for \(d_\mathrm{eff}=4\); for \(d_\mathrm{eff}>4\) the raw Wasserstein
 rate is slower than \(n^{-1/2}\). That case is outside the displayed cube-root
-regime.
+regime. This is not a claim of a universal memory law; it isolates the
+worst-case linear-staleness envelope studied in this paper.
 \end{remark}
 
 The two terms in \cref{thm:lag_error} pull in opposite directions. Increasing
@@ -168,66 +167,19 @@ For exponential weights $w_j = \alpha(1-\alpha)^j$, the effective lag is
 $\tau_\alpha = (1-\alpha)/\alpha$ and the effective sample size scales as
 $n_{\mathrm{eff}} \asymp 1/\alpha$. Balancing the same statistical and
 staleness terms therefore yields the same cube-root exponent in the effective
-memory scale.
+memory scale. This is an implementation analogue for exponentially weighted
+memory, not a separate general law.
 \end{corollary}
-
-\subsection{Temporal Validity and Memory Age}
-
-\begin{definition}[Effective Memory Age]\label{def:memory_age}
-Let an estimator place weights $w_0,\dots,w_{n-1}$ on the most recent
-observations, with $\sum_j w_j = 1$. Its \emph{effective memory age} is
-\[
-  A(w) \;=\; \sum_{j=0}^{n-1} j\,w_j,
-\]
-and its corresponding freshness proxy is the monotone transform
-$F(w) = 1/(1+A(w))$. The role of $F(w)$ is purely geometric: it records how old
-the retained evidence is before any local drift scale is specified. For a
-uniform window, $A(w)=(n-1)/2$.
-\end{definition}
-
-\begin{definition}[Temporal Validity]\label{def:temporal_coherence}
-For an estimator with weights $w$ at time $t$, define its \emph{operational
-staleness}
-\[
-  S_t(w) \;=\; \sum_{j=0}^{n-1} w_j\,
-  W_2\!\left(\Pot^*(S,t-j),\Pot^*(S,t)\right).
-\]
-Its \emph{temporal validity} is the inverse alignment score
-\[
-  C_t(w) \;=\; \frac{1}{1 + S_t(w)}.
-\]
-If the target path is locally $W_2$-Lipschitz at rate $\zeta_t$, in the sense
-that $W_2\!\left(\Pot^*(S,t-j),\Pot^*(S,t)\right) \leq \zeta_t j$ for the
-relevant lags, then
-\[
-  S_t(w) \;\leq\; \zeta_t A(w),
-  \qquad
-  C_t(w) \;\geq\; \frac{1}{1+\zeta_t A(w)}.
-\]
-In that sense, $F(w)$ is the rate-free freshness proxy, while $C_t(w)$ measures
-operational validity with the current distribution.
-\end{definition}
-
-The quantity $A(w)$ gives a compact description of the temporal age of a
-finite-memory estimator. Short windows preserve temporal validity at the cost
-of variance; long windows reduce variance at the cost of staleness. The
-cube-root horizon marks the point where that exchange stops improving. For a
-uniform window under
-approximately constant local drift, the induced staleness scales as
-$S_t(w)\approx \zeta(n-1)/2$, which is the same age term that appears in
-\cref{thm:lag_error} up to constants.
 
 \subsection{A Structural Finite-Memory Floor}
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.88\linewidth]{artifacts/figures/conceptual/fig_lower_bound_witness.pdf}
-\caption{Lower-bound witness on the Gaussian location subclass. The vertical
-axis is the mean shift and the horizontal axis is sample age inside the retained
-memory. The two paths are far apart at the present but differ only over a short
-recent segment of width $h$, while they are identical over the remaining
-retained history. This is the structural obstruction behind the finite-memory
-floor.}
+\caption{Lower-bound witness on the Gaussian location subclass. The two paths
+share most of the retained history and differ only on a short recent segment of
+width $h$, yet they remain separated at the present. That unresolved recent
+segment is enough to create a structural finite-memory floor.}
 \label{fig:lower_bound_witness}
 \end{figure}
 
@@ -365,6 +317,51 @@ Equivalently, since the Gaussian location family is a subfamily of the ambient
 $W_2$-Lipschitz class at the same drift rate $\zeta$, any lower bound proven on
 that subclass is automatically a lower bound for the larger class.
 \end{remark}
+
+\subsection{Temporal Validity and Memory Age}
+
+\begin{definition}[Effective Memory Age]\label{def:memory_age}
+Let an estimator place weights $w_0,\dots,w_{n-1}$ on the most recent
+observations, with $\sum_j w_j = 1$. Its \emph{effective memory age} is
+\[
+  A(w) \;=\; \sum_{j=0}^{n-1} j\,w_j,
+\]
+and its corresponding freshness proxy is the monotone transform
+$F(w) = 1/(1+A(w))$. The role of $F(w)$ is purely geometric: it records how old
+the retained evidence is before any local drift scale is specified. For a
+uniform window, $A(w)=(n-1)/2$.
+\end{definition}
+
+\begin{definition}[Temporal Validity]\label{def:temporal_coherence}
+For an estimator with weights $w$ at time $t$, define its \emph{operational
+staleness}
+\[
+  S_t(w) \;=\; \sum_{j=0}^{n-1} w_j\,
+  W_2\!\left(\Pot^*(S,t-j),\Pot^*(S,t)\right).
+\]
+Its \emph{temporal validity} is the inverse alignment score
+\[
+  C_t(w) \;=\; \frac{1}{1 + S_t(w)}.
+\]
+If the target path is locally $W_2$-Lipschitz at rate $\zeta_t$, in the sense
+that $W_2\!\left(\Pot^*(S,t-j),\Pot^*(S,t)\right) \leq \zeta_t j$ for the
+relevant lags, then
+\[
+  S_t(w) \;\leq\; \zeta_t A(w),
+  \qquad
+  C_t(w) \;\geq\; \frac{1}{1+\zeta_t A(w)}.
+\]
+In that sense, $F(w)$ is the rate-free freshness proxy, while $C_t(w)$ measures
+operational validity with the current distribution.
+\end{definition}
+
+The quantity $A(w)$ gives a compact description of the temporal age of a
+finite-memory estimator. Short windows preserve temporal validity at the cost
+of variance; long windows reduce variance at the cost of staleness. The
+cube-root horizon marks the point where that exchange stops improving. For a
+uniform window under approximately constant local drift, the induced staleness
+scales as $S_t(w)\approx \zeta(n-1)/2$, which is the same age term that appears
+in \cref{thm:lag_error} up to constants.
 
 \begin{remark}[Measurement layer]
 Debiased Sinkhorn divergence serves as a practical measurement layer when the

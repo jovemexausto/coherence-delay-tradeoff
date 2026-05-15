@@ -17,9 +17,8 @@ The operational regulator depends on a local estimate of drift. The current
 benchmark suggests that the remaining gap to the oracle comes mostly from drift
 estimation. At the same time, a short observable calibration prefix can
 materially improve the regulator, so drift estimation is part of the method
-rather than a hidden nuisance
-parameter. Better local geometry estimators may therefore sharpen horizon
-recovery without changing the law.
+rather than a hidden nuisance parameter. Better local geometry estimators may
+therefore sharpen horizon recovery without changing the law.
 
 \paragraph{Geometry beyond the current metric.}
 The formulation uses Wasserstein geometry and a debiased Sinkhorn measurement
@@ -28,10 +27,10 @@ analogous trade-offs, but the constants and the calibration of useful memory may
 change.
 
 \paragraph{What the experiments show.}
-The current experiments are not a leaderboard over drift detectors. The public
-stream results show the same operational distinction seen in the synthetic
-benchmarks: a tracker can still have statistically insufficient changepoint
-evidence while already being stale in the sense of useful memory.
+The experiments are not a leaderboard over drift detectors. Their role is to
+show the operational distinction between temporal validity and changepoint
+evidence, together with the cap-only regime that distinction creates. The
+public-stream results are confirmatory rather than decisive.
 
 \paragraph{Scope of the comparison suite.}
 The benchmark suite now includes a Window-Dilemma-style switcher and a
