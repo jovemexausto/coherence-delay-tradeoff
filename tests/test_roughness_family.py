@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from experiments.roughness_family import (
+from useful_memory_horizon.roughness_family import (
     RoughnessScalingConfig,
     run_roughness_scaling_experiment,
 )

@@ -1,10 +1,11 @@
 \section{Introduction}\label{sec:intro}
 
-Adaptive systems rarely track a fixed target. In streaming estimation,
-monitoring, and online decision-making, the data-generating distribution itself
-drifts over time. A learner with finite memory therefore faces a basic question:
-how much of the past should still count once the world that produced it has
-started to move away?
+In stationary settings, memory is an unambiguous statistical resource: more data
+reduces variance because the target distribution does not move. Under drift,
+that premise fails. In streaming estimation, monitoring, and online
+decision-making, the data-generating distribution itself changes over time, so a
+learner with finite memory faces a different question: how much of the past
+should still count once the world that produced it has started to move away?
 
 That question creates a structural trade-off. More past data reduces sampling
 noise, but it also increases the age of the evidence used to represent the
@@ -13,16 +14,17 @@ windows are fresh but noisy, while long windows are stable but stale. The paper
 studies this tension as a horizon problem for temporal validity, and the main
 object is a roughness-indexed family of horizon laws.
 
-Our main theorem package begins with a roughness-indexed trade-off between
-finite-sample variance and drift-induced staleness. In the worst-case
-$W_2$-Lipschitz envelope, that family specializes to the cube-root law and a
-structural finite-memory floor. A Gaussian location subclass provides a matching
-lower bound establishing the same structural finite-memory floor.
+The theorem package begins with a roughness-indexed trade-off between
+finite-sample variance and drift-induced staleness. That family includes the
+worst-case $W_2$-Lipschitz cube-root law as its $H=1$ member, recovers the
+intermediate $H=1/2$ case inside the same object, and, in the worst-case
+Lipschitz regime, admits a Gaussian location lower bound establishing the same
+structural finite-memory floor.
 
-The same object extends beyond the worst-case Lipschitz regime. For deterministic
-Holder-type path classes, temporal roughness changes how staleness accumulates,
-and the horizon law becomes a family indexed by roughness. This makes the cube-
-root law the $H=1$ member of the family.
+For deterministic Holder-type path classes, temporal roughness changes how
+staleness accumulates, and the horizon law becomes a family indexed by
+roughness. The cube-root law is therefore the $H=1$ member of the family rather
+than the whole theory.
 
 The practical conflict is between two clocks. One clock measures the age at
 which retained evidence stops being valid for the present. The other measures
@@ -34,14 +36,15 @@ present.
 
 The contributions are fivefold:
 \begin{itemize}
-  \item It formalizes useful memory under drift as a variance-staleness
+  \item The analysis formalizes useful memory under drift as a variance-staleness
   trade-off in Wasserstein geometry.
-  \item It proves a worst-case finite-memory horizon law under local
-  $W_2$-Lipschitz drift.
+  \item It proves a Holder-type roughness-indexed family of useful-memory
+  horizon laws, with the worst-case $W_2$-Lipschitz cube-root regime recovered
+  as the $H=1$ member.
+  \item It makes key special cases explicit inside the same
+  family, including $H=1$ and $H=1/2$.
   \item It shows a Gaussian-location lower bound establishing a structural
   tracking floor in the critical-window regime.
-  \item It extends the same analysis to Holder-type path classes and their
-  roughness-indexed horizon laws.
   \item It identifies detector-silent staleness and measures the invalidity gap
   between temporal validity and changepoint evidence.
 \end{itemize}
@@ -49,13 +52,11 @@ The contributions are fivefold:
 The empirical evidence follows that logic in stages. It first recovers the
 predicted $U$-curve and the finite useful-memory optimum. It then shows the gap
 between temporal validity and changepoint evidence, the regime-dependent scaling
-across roughness classes, and the nonlinear cost of horizon misalignment. Real-
-stream evidence, when kept, serves only as weak confirmation of the same
-structural picture.
+across roughness classes, and the nonlinear cost of horizon misalignment.
 
 The theoretical results are stated in $W_2$; the Sinkhorn divergence is the
 computational measurement layer used in the synthetic experiments. The window
 size result of \citet{hinder2023window} motivates the broader issue, but the
-contribution here is more specific: memory has a finite temporal validity horizon
-under worst-case drift, and that horizon law extends naturally to Holder-type
+object here is more specific: finite memory has a temporal validity horizon
+under drift, and temporal roughness determines how that horizon scales across
 path classes.

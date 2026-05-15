@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "useful-memory-horizon"
+version = "0.1.0"
+description = "Minimal artifact-generation tools for the Useful Memory Has a Horizon paper"
+requires-python = ">=3.11"
+dependencies = [
+  "matplotlib>=3.8",
+  "numpy>=1.26",
+  "river>=0.22",
+  "scipy>=1.13",
+]
+
+[project.scripts]
+umh-generate-conceptual = "useful_memory_horizon.conceptual:main"
+umh-generate-gaussian = "useful_memory_horizon.gaussian:main"
+umh-generate-roughness = "useful_memory_horizon.roughness_family:main"
+umh-generate-invalidity-gap = "useful_memory_horizon.invalidity_gap:main"
+umh-generate-finite-sample = "useful_memory_horizon.finite_sample_geometry:main"
+
+[tool.setuptools]
+package-dir = {"" = "code"}
+
+[tool.setuptools.packages.find]
+where = ["code"]

@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-title: "Useful Memory Has a Horizon: Structural Limits of Drift Tracking"
+title: "Useful Memory Has a Horizon"
 version: "v2"
 message: "If you use this repository, please cite the title recorded below."
 type: software
@@ -9,19 +9,20 @@ authors:
     email: "figueiredo@pm.me"
     orcid: "https://orcid.org/0009-0005-0201-9308"
 repository-code: "https://github.com/jovemexausto/useful-memory-horizon"
-abstract: "LaTeX source and experiment code for the preprint 'Useful Memory Has a Horizon: Structural Limits of Drift Tracking'."
+license: "CC-BY-4.0"
+abstract: "LaTeX source and artifact-generation code for the paper 'Useful Memory Has a Horizon: Temporal Validity, Roughness, and Structural Limits for Finite-Memory Tracking under Drift'."
 doi: "10.5281/zenodo.20041349"
 date-released: "2026-05-09"
 keywords:
   - tracking under drift
   - useful memory
-  - coherence lag
+  - temporal validity
   - concept drift
-  - temporal coherence
-  - adaptive memory
+  - roughness-indexed horizon law
+  - invalidity gap
 preferred-citation:
   type: software
-  title: "Useful Memory Has a Horizon: Structural Limits of Drift Tracking"
+  title: "Useful Memory Has a Horizon"
   authors:
     - family-names: "Parreira"
       given-names: "Vinicius"

@@ -1,5 +1,0 @@
-event,method,count,first_time
-drift_detected,ADWIN,5,895
-drift_detected,ADWIN + UMR,0,
-cap_triggered,ADWIN + UMR,1558,209
-cap_only,ADWIN + UMR,1558,209

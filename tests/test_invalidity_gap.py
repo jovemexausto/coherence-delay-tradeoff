@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from experiments.invalidity_gap import (
+from useful_memory_horizon.invalidity_gap import (
     InvalidityGapConfig,
     run_invalidity_gap_experiment,
 )

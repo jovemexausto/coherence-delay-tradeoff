@@ -1,11 +1,11 @@
 {
   "typeCheckingMode": "standard",
   "pythonVersion": "3.11",
-  "venvPath": "experiments",
+  "venvPath": ".",
   "venv": ".venv",
   "extraPaths": [
     ".",
-    "experiments",
+    "code"
   ],
   "reportImplicitStringConcatenation": "none",
   "reportUnannotatedClassAttribute": "none",

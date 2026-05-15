@@ -12,9 +12,9 @@ variance gain.
 \includegraphics[width=0.92\linewidth]{artifacts/figures/conceptual/fig_two_clocks_of_drift.pdf}
 \caption{Two clocks of drift in normalized theorem units. The finite-sample
 term falls with horizon, the staleness term rises with age, and total error is
-minimized at the useful-memory horizon $n^*$. The shaded region marks
-detector-silent staleness: temporal invalidity can arrive before changepoint
-evidence.}
+minimized at the useful-memory horizon $n^*$. The shaded interval marks the
+invalidity gap: retained evidence can lose temporal validity before sufficient
+changepoint evidence accumulates.}
 \label{fig:two_clocks_of_drift}
 \end{figure}
 
@@ -36,11 +36,23 @@ For a uniform window, $A(w)=(n-1)/2$, so temporal age and window length are the
 same object up to constants. This is why horizon choice becomes the central
 statistical question.
 
+At the theorem level, the structural object is the decomposition
+\[
+  \mathcal E(n)
+  \leq
+  C_K n^{-1/2} + \mathrm{Staleness}(n;\zeta,H),
+\]
+where the first term is the finite-sample contribution and the second is the
+cost of retaining old evidence under drift. The path class determines how the
+staleness term grows with lag, and therefore determines the useful-memory
+horizon.
+
 \subsection{Roughness-Indexed Horizon Family}
 
-The family of horizon laws comes first. Temporal roughness controls how
-staleness accumulates with lag, so different path classes induce different
-useful-memory scales.
+The family of horizon laws comes first. The theorem-level object is a
+deterministic Holder-type envelope on paths of distributions: temporal
+roughness controls how staleness accumulates with lag, so different path
+classes induce different useful-memory scales.
 
 \begin{proposition}[Roughness-indexed horizon law]\label{prop:holder_horizon}
 Let a deterministic Holder-type path class have roughness index $H\in(0,1]$ and
@@ -59,7 +71,13 @@ is minimized at
   \qquad
   \mathcal E_{H,\min} \asymp C_K^{2H/(1+2H)}\,\zeta^{1/(1+2H)}.
 \]
-In particular, $H=1$ recovers the cube-root law.
+In particular, $H=1$ recovers the cube-root law
+\(
+  n_1^* \asymp (C_K/\zeta)^{2/3}
+\), while $H=1/2$ gives the intermediate special case
+\(
+  n_{1/2}^* \asymp C_K/\zeta
+\).
 \end{proposition}
 
 \begin{proof}
@@ -79,9 +97,10 @@ Substituting this scale back into either term gives the stated minimum error.
 
 \begin{remark}[Family interpretation]
 The point is not that the cube-root law is wrong. The point is that it is the
-$H=1$ member of a broader roughness-indexed family. As $H$ decreases,
-staleness accumulates more slowly with lag, so the useful-memory horizon moves
-accordingly.
+$H=1$ member of a broader roughness-indexed family. The $H=1/2$ case is not a
+separate theorem story; it is simply an intermediate member recovered inside
+the same balance. As $H$ decreases, staleness accumulates more slowly with lag,
+so the useful-memory horizon moves accordingly.
 \end{remark}
 
 \subsection{Worst-Case Lipschitz Envelope}
@@ -238,7 +257,8 @@ the stated class.
 \caption{Lower-bound witness on the Gaussian location subclass. The two paths
 share most of the retained history and differ only on a short recent segment of
 width $h$, yet they remain separated at the present. That unresolved recent
-segment is enough to create a structural finite-memory floor.}
+segment is enough to produce a structural finite-memory floor at the same scale
+as the upper-law optimum.}
 \label{fig:lower_bound_witness}
 \end{figure}
 
@@ -254,11 +274,12 @@ that:
 \end{enumerate}
 Measure risk by the endpoint $W_2$ error, which coincides with Euclidean
 endpoint error on the Gaussian location subclass. Then, in the critical-window
-regime, the minimax tracking error over that class cannot beat the same
-variance-plus-staleness scaling:
+regime, there exist explicit constants $c_0,c>0$ such that the minimax
+tracking error over that class cannot beat the same variance-plus-staleness
+scaling:
 \[
   \inf_{\hat\Pot_m}\sup_{\Pot^*}\,\mathbb{E}\,d\bigl(\hat\Pot_m,\Pot^*\bigr)
-  \;\gtrsim\; \max\!\left\{C_K\,m^{-1/2},\; c\,\sigma^{2/3}\zeta^{1/3}\right\}.
+  \;\gtrsim\; \max\!\left\{c_0\,\sigma\,m^{-1/2},\; c\,\sigma^{2/3}\zeta^{1/3}\right\}.
 \]
 Consequently, the cube-root horizon is not merely the optimum of one estimator;
 it is the structural finite-memory floor on this class.

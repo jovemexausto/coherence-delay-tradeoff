@@ -1,1 +1,0 @@
-"""KuaiRand experiment package."""
