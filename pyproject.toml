@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "useful-memory-horizon"
 version = "0.1.0"
-description = "Minimal artifact-generation tools for the Useful Memory Has a Horizon paper"
+description = "Reproduction scripts for the Useful Memory Has a Horizon paper"
 requires-python = ">=3.11"
 dependencies = [
   "matplotlib>=3.8",

@@ -4,18 +4,13 @@
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20041349-blue.svg)](https://doi.org/10.5281/zenodo.20041349)
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-blue.svg)](LICENSE)
 
-**Useful Memory Has a Horizon**
-
-Temporal Validity, Roughness, and Structural Limits for Finite-Memory Tracking under Drift
-
 Under drift, retained evidence is both useful and dangerous: more memory reduces
 variance, but it also accumulates temporal misalignment with the present.
 
-The repository is now trimmed to the current paper only. The manuscript centers
-the roughness-indexed family of useful-memory horizon laws, the worst-case
-Lipschitz cube-root regime as the $H=1$ member of that family, the structural
-Gaussian lower-bound witness, and the invalidity gap between temporal validity
-and changepoint evidence.
+The manuscript studies the roughness-indexed family of useful-memory horizon
+laws, the worst-case Lipschitz cube-root regime as the $H=1$ member of that
+family, the structural Gaussian lower-bound witness, and the invalidity gap
+between temporal validity and changepoint evidence.
 
 ## Core idea
 
@@ -28,14 +23,14 @@ and changepoint evidence.
 
 ## Repository layout
 
-- `main.tex` and the section files contain the current manuscript.
-- `code/useful_memory_horizon/` contains the minimal generation pipeline that still matters for the paper.
-- `artifacts/` contains only the figures, tables, and CSVs used by the current manuscript.
-- `tests/` contains small regression checks for the roughness-family and invalidity-gap pipelines.
+- `main.tex` and the section files contain the manuscript.
+- `code/useful_memory_horizon/` contains the reproduction scripts for the figures, tables, and CSV outputs used in the paper.
+- `artifacts/` contains the generated figures, tables, and CSVs used by the manuscript.
+- `tests/` contains regression checks for the roughness-family and invalidity-gap pipelines.
 
 ## Regeneration
 
-To regenerate the current paper artifacts:
+To regenerate the paper artifacts:
 
 ```bash
 uv run umh-generate-conceptual

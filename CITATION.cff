@@ -10,7 +10,7 @@ authors:
     orcid: "https://orcid.org/0009-0005-0201-9308"
 repository-code: "https://github.com/jovemexausto/useful-memory-horizon"
 license: "CC-BY-4.0"
-abstract: "LaTeX source and artifact-generation code for the paper 'Useful Memory Has a Horizon: Temporal Validity, Roughness, and Structural Limits for Finite-Memory Tracking under Drift'."
+abstract: "LaTeX source, generated artifacts, and reproduction scripts for the paper 'Useful Memory Has a Horizon: Temporal Validity, Roughness, and Structural Limits for Finite-Memory Tracking under Drift'."
 doi: "10.5281/zenodo.20041349"
 date-released: "2026-05-09"
 keywords:
