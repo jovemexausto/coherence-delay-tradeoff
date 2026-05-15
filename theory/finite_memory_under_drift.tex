@@ -7,11 +7,14 @@ stale.
 
 \begin{figure}[!htbp]
 \centering
-\input{figures/two_clocks_of_drift}
-\caption{Two clocks of drift. One clock rewards more memory by reducing
-statistical cost; the other penalizes more memory by increasing staleness. The
-shaded region is the central operational gap: memory can already be stale
-before a detector has enough evidence to alarm.}
+\includegraphics[width=0.92\linewidth]{artifacts/figures/conceptual/fig_two_clocks_of_drift.pdf}
+\caption{Two clocks of drift. The vertical axis is tracking error and the
+horizontal axis is the memory horizon, shown in normalized theorem units.
+More memory reduces the finite-sample variance term but increases staleness,
+producing a U-shaped total error. The optimum $n^*$ occurs before the point
+where the two cost levels cross, because the optimum is determined by marginal
+balance rather than equality of the two cost values. The shaded region marks
+detector-silent staleness.}
 \label{fig:two_clocks_of_drift}
 \end{figure}
 
@@ -218,12 +221,13 @@ $S_t(w)\approx \zeta(n-1)/2$, which is the same age term that appears in
 
 \begin{figure}[!htbp]
 \centering
-\resizebox{0.9\linewidth}{!}{\input{figures/lower_bound_witness}}
-\caption{Lower-bound witness on the Gaussian location subclass. Two mean paths
-separate at the endpoint while remaining hard to distinguish over the retained
-window. This is the structural obstruction behind the finite-memory floor: the
-window can be too short to estimate reliably and too long to stay temporally
-valid.}
+\includegraphics[width=0.88\linewidth]{artifacts/figures/conceptual/fig_lower_bound_witness.pdf}
+\caption{Lower-bound witness on the Gaussian location subclass. The vertical
+axis is the mean shift and the horizontal axis is sample age inside the retained
+memory. The two paths are far apart at the present but differ only over a short
+recent segment of width $h$, while they are identical over the remaining
+retained history. This is the structural obstruction behind the finite-memory
+floor.}
 \label{fig:lower_bound_witness}
 \end{figure}
 

@@ -7,9 +7,11 @@ finite-memory horizon itself, the conflict between temporal validity and
 detector evidence, and the predictive cost of horizon misalignment.
 
 In the experiments, UMR is a backend-agnostic conservative horizon cap driven by
-a smoothed local drift proxy. It is applied to fixed-window, EWMA, and
-multi-horizon backends, and it is also wrapped around ADWIN as one
-detector-side instance of the same temporal-validity rule. The resulting
+a smoothed local drift proxy. It is evaluated in two roles. First, it acts as a
+runtime horizon policy for estimators whose effective memory can be adjusted,
+such as capped sliding-window, EWMA, and multi-horizon backends. Second, it is
+wrapped around ADWIN as one detector-side instance of the same temporal-validity
+rule. Fixed-window methods remain uncapped baselines. The resulting
 comparisons make detector-silent staleness visible.
 
 \subsection{Structural U-Curve}\label{sec:validation_law}

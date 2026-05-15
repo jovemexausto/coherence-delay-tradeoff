@@ -29,14 +29,18 @@ through $n_{\min}$ and $n_{\max}$, plus the EMA smoothing in $\hat\zeta_t$.
 
 \subsection{Horizon-Capped Backends}
 
-For estimators whose natural state is a window size or effective horizon
-(fixed-window mean, EWMA, Window-Dilemma-style switching, MELO-style expert
-mixing), the runtime horizon is simply clipped by the regulator:
+For estimators whose natural state is an adjustable window size or effective
+horizon (sliding-window mean, EWMA, Window-Dilemma-style switching,
+MELO-style expert mixing), the runtime horizon is simply clipped by the
+regulator:
 \[
   h_t^{\mathrm{eff}} = \min(h_t^{\mathrm{backend}}, n_t^*).
 \]
 The backend then computes its estimate using $h_t^{\mathrm{eff}}$ exactly as it
 would have used $h_t^{\mathrm{backend}}$.
+
+Uncapped fixed-window baselines are separate controls: they hold their window
+length constant throughout the run and do not receive the regulator.
 
 \subsection{Detector Wrapper Instance}
 
