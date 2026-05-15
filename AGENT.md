@@ -19,7 +19,7 @@ legacy framing, that:
 - memory is both a statistical resource and a temporal liability under drift;
 - useful memory has a finite horizon;
 - the roughness-indexed family of horizon laws is the main theory object;
-- the Lipschitz cube-root law is the worst-case anchor inside that family;
+- the Lipschitz cube-root law is the worst-case Lipschitz regime, corresponding to the `H=1` member of that family;
 - temporal validity is not changepoint evidence;
 - memory can become invalid before change becomes statistically detectable.
 
@@ -82,7 +82,7 @@ The tone should remain cold, structural, and mathematical.
 Protect the following at all times:
 - the variance-staleness decomposition;
 - the roughness-indexed family as the primary object;
-- the Lipschitz worst-case anchor;
+- the worst-case Lipschitz regime;
 - the Holder generalization as part of the same object;
 - the lower bound as central, not decorative;
 - the detectability-validity distinction as a consequence, not a replacement for the theory.
@@ -173,8 +173,8 @@ In practice, this usually means the order is:
 5. figures and captions;
 6. appendices and residual cleanup.
 
-When the roughness-indexed family and the cube-root anchor compete for emphasis,
-the family wins. The cube-root law is an anchor case, not the paper's identity.
+When the roughness-indexed family and the cube-root case compete for emphasis,
+the family wins. The cube-root law is the `H=1` member of the family, not the paper's identity.
 
 ## Editing Rules
 
@@ -198,7 +198,7 @@ When dealing with appendices:
 The rewrite is successful only when:
 - the paper reads as one discovery rather than stitched papers;
 - no named mechanism is needed to justify the work;
-- the roughness-indexed family appears as the primary object, with the Lipschitz case as the anchor;
+- the roughness-indexed family appears as the primary object, with the worst-case Lipschitz regime as the `H=1` member;
 - the lower bound is central both mathematically and editorially;
 - the empirical section reads as phenomenon validation rather than method validation;
 - a reviewer could summarize the paper as:

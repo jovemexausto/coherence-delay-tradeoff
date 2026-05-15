@@ -17,8 +17,8 @@ evidence.}
 \end{figure}
 
 The family of horizon laws comes first: temporal roughness controls how
-staleness accumulates, and the Lipschitz case is the $H=1$ anchor inside that
-family.
+staleness accumulates, and the worst-case Lipschitz regime corresponds to the
+$H=1$ member of that family.
 
 \subsection{Roughness-Indexed Horizon Family}
 
@@ -38,7 +38,7 @@ is minimized at
   \qquad
   \mathcal E_{H,\min} \asymp C_K^{2H/(1+2H)}\,\zeta^{1/(1+2H)}.
 \]
-In particular, $H=1$ recovers the cube-root anchor.
+In particular, $H=1$ recovers the cube-root law.
 \end{proposition}
 
 \begin{proof}
@@ -48,14 +48,15 @@ order.
 \end{proof}
 
 \begin{remark}[Family interpretation]
-This proposition is the roughness-indexed completion of the Lipschitz case.
+This proposition is the roughness-indexed completion of the worst-case
+Lipschitz regime.
 As $H$ decreases, staleness accumulates differently with lag and the
 useful-memory horizon shifts accordingly. The point is not that cube-root is
 special in itself; the point is that it is the $H=1$ member of a broader
 geometry.
 \end{remark}
 
-\subsection{Worst-Case Lipschitz Anchor}
+\subsection{Worst-Case Lipschitz Regime}
 
 \begin{theorem}[Lag-Inclusive Tracking Error Bound]\label{thm:lag_error}
 Let $X_{t-j} \sim P^*_{t-j}$ and let
@@ -161,7 +162,7 @@ with minimum value
 \]
 \end{proposition}
 
-\begin{remark}[Anchor case]
+\begin{remark}[Worst-case Lipschitz regime]
 The cube-root law is the worst-case Lipschitz member of a broader horizon
 family.
 \end{remark}
@@ -212,7 +213,7 @@ $\tau_\alpha = (1-\alpha)/\alpha$ and the effective sample size scales as
 $n_{\mathrm{eff}} \asymp 1/\alpha$. Balancing the same statistical and
 staleness terms therefore yields the same cube-root exponent in the effective
 memory scale. This gives the exponentially weighted analogue of the Lipschitz
-anchor.
+case.
 \end{corollary}
 
 \subsection{A Structural Finite-Memory Floor}
@@ -367,7 +368,7 @@ that subclass is automatically a lower bound for the larger class.
 
 The preceding proposition already states the family law. This subsection keeps
 the Holder terminology explicit for the reader and emphasizes that the Lipschitz
-case is the $H=1$ anchor inside the same family.
+case is the $H=1$ member of the same family.
 
 \subsection{Temporal Validity and Memory Age}
 
@@ -409,7 +410,7 @@ operational validity with the current distribution.
 The quantity $A(w)$ gives a compact description of the temporal age of a
 finite-memory estimator. Short windows preserve temporal validity at the cost
 of variance; long windows reduce variance at the cost of staleness. In the
-Lipschitz anchor, the cube-root horizon marks the point where that exchange
+worst-case Lipschitz regime, the cube-root horizon marks the point where that exchange
 stops improving. For a
 uniform window under approximately constant local drift, the induced staleness
 scales as $S_t(w)\approx \zeta(n-1)/2$, which is the same age term that appears
