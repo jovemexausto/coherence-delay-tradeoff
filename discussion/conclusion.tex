@@ -1,41 +1,30 @@
 \section{Conclusion}\label{sec:conclusion}
 
-How long can memory remain useful when the target distribution keeps moving?
-Under the drift class studied here, useful memory has a finite temporal horizon,
-and in the worst-case linear-staleness regime that horizon obeys a cube-root
-law. The governing object is a variance-staleness trade-off: preserving
-temporally valid evidence requires limiting the lag induced by old memory.
+Under drift, memory is never purely beneficial. It reduces finite-sample noise,
+but it also ages. The resulting variance--staleness trade-off makes useful
+memory a finite-horizon object rather than an unlimited statistical resource.
 
-The theoretical contribution is a decomposition of tracking error into a
-variance term and a staleness term, together with a lower bound showing that the
-resulting finite-memory floor is structural. The operational contribution is a
-horizon regulator: UMR turns the worst-case law into a temporal-validity cap,
-which keeps the effective horizon from drifting far into stale-memory territory.
+The analysis shows that this horizon is roughness indexed. For path classes in
+which temporal misalignment grows like $\zeta n^H$, the useful-memory scale is
+\[
+  n_H^* \asymp (C_K/\zeta)^{2/(1+2H)}.
+\]
+The cube-root law is therefore not the whole theory. It is the worst-case
+Lipschitz, $H=1$, member of a broader family. The Gaussian location lower bound
+shows that the same scale is structural rather than an artifact of one
+particular estimator.
 
-The strongest empirical lesson is that temporal validity and changepoint
-evidence are distinct objects. The signature regime is \emph{cap-only}: the
-memory horizon becomes operationally stale before there is enough statistical
-evidence for a changepoint alarm. Horizon misalignment carries a nonlinear
-operational cost, but the transfer from gap to predictive error depends on the
-backend and on the drift regime. The alternating-timescales benchmark adds a
-secondary lesson: contraction is easier to induce than re-expansion, so
-EMA-driven horizon regulators have a recoverability gap.
+The empirical section makes the same structure visible in finite samples. It
+reveals a structural U-curve, roughness-dependent scaling across path classes, a
+strictly positive invalidity gap between temporal validity and changepoint
+evidence, and measurable cost when the operating horizon departs from the
+useful-memory scale.
 
-The real-stream evidence is intentionally secondary. ELEC2, with a short Bikes
-summary in the appendix, shows that the temporal-validity gap is not
-synthetic-only, but the main claim of the paper remains worst-case and
-structural.
+The paper therefore supports a simple conclusion. Useful memory has a finite
+horizon determined by how temporal roughness accumulates staleness, and retained
+evidence can become invalid before change becomes statistically detectable.
 
-Finite-memory systems are best judged by how long their retained evidence
-remains current enough to matter. The design consequence is simple: treat memory
-as a resource with a finite horizon, separate temporal validity from changepoint
-evidence, and use conservative horizon regulation to avoid stale-memory carryover.
-
-The cube-root exponent is tied to the worst-case linear-staleness envelope
-studied here, and the lower bound is established through a Gaussian location
-subclass. The next step is correspondingly disciplined: characterize narrower
-path classes and better local drift estimators without diluting the current
-worst-case statement.
-
-Code and reproducibility artifacts are available in the project repository
-\citep{parreira2026useful_memory_horizon}.
+What remains open is equally clear: sharper constants, fuller lower-bound
+characterizations beyond the Gaussian witness, and online identification of the
+relevant roughness class. Those questions refine the theory; they do not alter
+its main object.

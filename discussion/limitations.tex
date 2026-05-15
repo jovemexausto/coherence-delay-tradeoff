@@ -1,53 +1,34 @@
 \section{Limitations and Scope}\label{sec:open}
 
-\paragraph{Scope of the law.}
-The cube-root law is exact for the finite-memory averaging class studied here,
-and the lower bound is stated for window-restricted estimators on a
-$W_2$-Lipschitz drift class. The lower bound itself is proved through a Gaussian
-location subclass and endpoint $W_2$ error, so its structural claim is worst-case
-and subclass-based.
+\paragraph{Path-class scope.}
+The main upper law is stated for deterministic path classes in which staleness
+can be controlled as a function of lag. The worst-case Lipschitz result is the
+$H=1$ member of that family, while other roughness classes induce different
+horizon exponents.
 
-More refined drift classes may admit tighter staleness growth and different
-horizon exponents. The analysis here isolates the linear-staleness law induced
-by the $W_2$-Lipschitz path bound.
+\paragraph{Lower-bound scope.}
+The structural floor is proved through a Gaussian location witness embedded in
+the ambient $W_2$-Lipschitz class. That is enough for a subclass-based minimax
+lower bound, but it does not characterize the full extremal geometry of the
+entire class. The exponent is structural; the exact hardest path and the sharp
+constant are left open.
 
-\paragraph{Dependence on local drift estimation.}
-The operational regulator depends on a local estimate of drift. The current
-benchmark suggests that the remaining gap to the oracle comes mostly from drift
-estimation. At the same time, a short observable calibration prefix can
-materially improve the regulator, so drift estimation is part of the method
-and enters the operational picture directly. Better local geometry estimators may
-therefore sharpen horizon recovery without changing the law.
+\paragraph{Finite-sample carrier regime.}
+The clean cube-root law uses the regime in which the finite-sample term behaves
+like $C_K n^{-1/2}$. That is the relevant low-dimensional Wasserstein regime and
+also the regime induced by fixed-$\varepsilon$ Sinkhorn surrogates on bounded
+domains. Outside that carrier exponent, the same balancing argument gives a
+different horizon law, as noted in \cref{rem:carrier_exponent}.
 
-\paragraph{Geometry beyond the current metric.}
-The formulation uses Wasserstein geometry and a debiased Sinkhorn measurement
-layer when samples must be compared computationally. Other geometries may admit
-analogous trade-offs, but the constants and the calibration of useful memory may
-change.
+\paragraph{Detectability versus validity.}
+The invalidity gap is an empirical consequence of the structural theory, not the
+primary theorem object. The paper shows that temporal validity can fail before a
+detector fires, but it does not claim a universal detection-delay theorem across
+all detector classes.
 
-\paragraph{What the experiments show.}
-The experiments show the operational distinction between temporal validity and
-changepoint evidence, together with the cap-only regime that distinction
-creates. The public-stream results provide supporting evidence with weaker
-identification than the synthetic benchmarks.
-
-\paragraph{Scope of the comparison suite.}
-The benchmark suite now includes a Window-Dilemma-style switcher and a
-MELO-style multi-horizon hedge, but it does not cover the full space of adaptive
-tracking methods. The analysis remains centered on the worst-case cube-root law
-and on the temporal-validity interpretation of memory.
-
-The drift proxy itself has a practical resolution limit: very small block sizes
-can grossly overestimate $\widehat\zeta_t$, so the calibration prefix needs blocks
-large enough to smooth local noise. In the current sweep, $d=50$ is acceptable,
-while $d=100$ is effectively stable.
-
-On the current ELEC2 and Bikes arenas, adding UMR to the multi-horizon hedge
-changes results only modestly and in a benchmark-dependent way; it acts as a
-horizon prior within those experiments.
-
-\paragraph{Path-class refinement.}
-The linear staleness term comes from the local $W_2$-Lipschitz path bound and is
-therefore a worst-case statement for that class. Characterizing narrower drift
-classes in which temporal misalignment accumulates more slowly, together with
-matching lower bounds, remains open.
+\paragraph{What remains open.}
+Several questions remain deliberately open: sharp constants in the horizon laws,
+matching lower bounds for broader Holder classes, online identification of the
+relevant roughness class, and transfer from deterministic path-class statements
+to stronger stochastic-process formulations. Those are natural next steps, but
+they are not prerequisites for the main structural claim.

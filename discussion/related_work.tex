@@ -1,72 +1,52 @@
 \section{Related Work}\label{sec:related}
 
-\paragraph{Tracking under nonstationarity.}
-Dynamic regret, online least-squares, and adaptive filtering ask how much past
-evidence should remain relevant once the target is moving
+\paragraph{Nonstationary optimization and dynamic regret.}
+Dynamic-regret and variation-budget results show that under drift, window size
+or forgetting scale must depend on how quickly the target moves
 \citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,YuanLamperski2020,
-MazzettoUpfal2023}. Here the same question is kept in distributional form, with
-the memory horizon as the main object of analysis.
+MazzettoUpfal2023,WangXieChenLuiZhou2024}. Those works are close in spirit, but
+their primary object is regret under a moving comparator. Here the primary
+object is different: the temporal validity of retained evidence in a
+distribution-tracking problem. The horizon is not a tuning parameter attached to
+regret analysis; it is the statistical object being characterized.
 
-\paragraph{Variation budgets and horizon selection.}
-The $\zeta^{1/3}$ exponent also appears in non-stationary stochastic
-optimization and bandits \citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,
-WangXieChenLuiZhou2024,YuanLamperski2020}. Those results concern gradient-based
-methods on convex losses in Euclidean space. Here, drift is
-$\mathsf{W}_2$-Lipschitz on measures, the estimator class is causal averaging
-kernels, and Proposition~\ref{prop:window_minimax} makes the $\zeta^{1/3}$ rate a
-minimax lower bound for arbitrary window-restricted estimators.
+\paragraph{Adaptive windowing and drift detection.}
+Adaptive-window and concept-drift methods ask when accumulated evidence is
+sufficient to react \citep{BifetGavalda2007,Gama2004,GamaSurvey2014}.
+\citet{hinder2023window} emphasize that the relevant window scale is itself part
+of the problem. The present question is adjacent but distinct. Temporal validity
+is not changepoint evidence: memory can stop representing the present before the
+available data support a detector alarm. The invalidity gap makes that
+distinction measurable rather than rhetorical.
 
-The same cube-root tuning shows up in sliding-window analyses of drifting data
-\citep{BifetGavalda2007}:
- the window length is the control variable, but the quantity being protected is
- temporal validity. The same perspective appears here,
- but with the geometry changed from scalar losses to distributional tracking.
+\paragraph{Distribution tracking under transport geometry.}
+Wasserstein distance and Sinkhorn-type estimators are natural when drift lives
+on paths of distributions rather than on scalar losses
+\citep{GenevayEtAl2019,NilesWeedBach2019,GoldfeldEtAl2022,AkyildizEtAl2024}.
+They supply the geometric language in which staleness becomes a transport error
+between past and present. In this setting, the trade-off is not simply between
+adaptation and variance, but between finite-sample accuracy and temporal
+misalignment measured in distributional geometry.
 
+\paragraph{Wasserstein nonstationarity and robust optimization.}
 Jiang, Li, and Zhang study online stochastic optimization under a Wasserstein
 nonstationarity measure and obtain distribution-aware regret guarantees
-\citep{JiangLiZhang2020}. Keehan, Anderson, and Wiesemann analyze a related
-drift-aware weighting problem in Wasserstein distributionally robust
-optimization \citep{KeehanAndersonWiesemann2025}. The present focus is narrower:
-when memory itself is finite, how long can retained evidence remain useful
-before age becomes the dominant source of error?
-
-\paragraph{Transport geometry.}
-Wasserstein distance and Sinkhorn-type estimators are natural because they
-respect the geometry of the signal space
-\citep{GenevayEtAl2019,NilesWeedBach2019,GoldfeldEtAl2022,AkyildizEtAl2024}.
-In our setting, geometry quantifies how much old evidence can be retained before
-it becomes stale.
-
-\paragraph{Adaptive forgetting and detection.}
-EWMA, forgetting-factor RLS, and Kalman filtering all balance variance reduction
-against responsiveness \citep{Jazwinski1970}. The cube-root law makes temporal
-validity explicit. The asymmetry result is adjacent to changepoint detection and
-EMA-based control, but the contribution here is the gap between those questions:
-once drift evidence is mapped into a horizon rule, re-expansion can be slower
-than contraction.
-
-This also connects to the concept-drift literature more broadly
-\citep{Gama2004,GamaSurvey2014}. In particular, the ``Window Dilemma'' argument
-of \citet{hinder2023window} emphasizes that drift detection is ill-posed when
-the window scale is itself uncertain. The same issue appears here in a different
-form: temporal validity is not fixed in advance, so the horizon becomes part of
-the object that must be estimated.
-
-\paragraph{Public-stream baselines.}
-Window-Dilemma-style and MELO-style baselines widen the empirical comparison.
-The comparison is broader, and the main claim stays the same: the cube-root
-regime describes the worst-case horizon law for the class studied here.
-
-Multi-horizon ensembles attack the same practical issue from another angle by
-maintaining several historical windows and combining their predictions through
-uncertainty or expert weighting. The public-stream experiments use that family
-as a neighboring design point in the comparison suite
-\citep{RajputSchramSammuliLin2025}.
+\citep{JiangLiZhang2020}. Keehan, Anderson, and Wiesemann analyze related
+drift-aware weighting questions in Wasserstein distributionally robust
+optimization \citep{KeehanAndersonWiesemann2025}. The present focus is narrower
+and more structural: for finite-memory tracking, how long can retained evidence
+continue to improve estimation of the current distribution before age becomes a
+dominant error source?
 
 \paragraph{Freshness and Age of Information.}
-The Age-of-Information literature asks how old the last received update is and
-how update policies should balance communication cost against information
-staleness~\citep{KaulYatesGruteser2012,YatesEtAl2021AoI}. The distributional
-analogue is the same question under $\mathsf{W}_2$ drift: useful memory has a
-finite worst-case horizon, and the cube-root law quantifies that worst-case
-scale for the class studied here.
+The Age-of-Information literature treats age as a resource constraint and asks
+how update policies balance communication cost against stale information
+\citep{KaulYatesGruteser2012,YatesEtAl2021AoI}. The present paper gives a
+distributional analogue. Age is costly because it induces geometric error under
+drift, and temporal roughness determines how quickly that cost accumulates.
+
+Across these neighboring literatures, the closest theme is that nonstationarity
+makes retention scale matter. The distinguishing claim here is more specific:
+finite memory has a roughness-indexed temporal horizon, the worst-case
+cube-root law is the $H=1$ member of that family, and temporal validity can fail
+before change becomes statistically detectable.

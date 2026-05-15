@@ -1,278 +1,124 @@
 \section{Empirical Evidence}\label{sec:validation}
 
-The experiments show that under continuous drift, memory has a finite useful-
-memory horizon and can become temporally invalid before changepoint evidence
-appears. The evidence separates layers that are often collapsed: the useful-
-memory horizon itself, the gap between temporal validity and detector evidence,
-the resulting stale-memory regime, and the predictive cost of horizon
-misalignment.
+The experiments make the theory visible in finite samples. They do not compare
+named interventions. They read observed tracking behavior against the
+useful-memory scale implied by the regime under study. Throughout, the oracle
+reference is the horizon predicted by the same variance--staleness law that
+drives the theory section.
 
-In the experiments, UMR is a backend-agnostic conservative horizon cap driven by
-a smoothed local drift proxy. It is evaluated in two roles. First, it acts as a
-runtime horizon policy for estimators whose effective memory can be adjusted,
-such as capped sliding-window, EWMA, and multi-horizon backends. Second, it is
-wrapped around ADWIN as one detector-side instance of the same temporal-validity
-rule. Fixed-window methods remain uncapped baselines. The resulting
-comparisons expose detector-silent staleness.
+Four signatures matter. First, horizon sweeps should exhibit a finite optimum.
+Second, that optimum should scale differently across roughness classes. Third,
+the operating horizon can lose temporal validity before a detector accumulates
+enough evidence to signal change. Fourth, excess error should increase once the
+operating horizon departs materially from the useful-memory scale.
 
-\subsection{Structural U-Curve}\label{sec:validation_law}
+\subsection{Structural U-Curve}\label{sec:validation_ucurve}
 
-We begin with the Gaussian sweep used to validate the finite-memory trade-off.
-The setup produces the characteristic U-curve: for small windows, error is
-dominated by variance; for large windows, error is dominated by staleness. The
-empirical minimum remains finite and moves in the expected direction as drift
-strengthens, and EWMA follows the same finite-memory pattern on its effective
-memory scale.
+The Gaussian sweep isolates the variance--staleness trade-off directly. Small
+windows are variance dominated, large windows are stale, and the optimum lies at
+an interior horizon rather than at either boundary.
 
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.92\linewidth]{artifacts/figures/gaussian/fig_ucurve}
-\caption{Finite-memory law validation on the Gaussian sweep. Left: tracking
-error as a function of window size, showing the predicted U-shape for multiple
-drift rates. Right: the minimum achievable error decreases as drift weakens,
-consistent with the variance-staleness trade-off. The figure shows that the
-useful-memory optimum is finite and stable across drift rates.}
+\caption{Structural U-curve for finite-memory tracking. Left: tracking error as
+a function of horizon for several drift strengths. Right: the minimum achievable
+error decreases as drift weakens. The optimum remains finite across regimes,
+which makes the useful-memory horizon visible before any path-class refinement.}
 \label{fig:ucurve}
 \end{figure}
 
-The same pattern is visible from the lag--variance frontier in
-\cref{fig:lag_variance_frontier}, which exposes the frontier knee where extra
-memory stops paying off. Bootstrap intervals in
-Appendix~\ref{app:empirical_support} support the same ordering.
+This is the basic finite-memory signature. Under stationarity, more memory would
+continue to reduce variance. Under drift, the sweep bends upward once temporal
+misalignment overtakes the remaining variance gain.
+
+\subsection{Regime-Dependent Scaling Across Roughness Classes}\label{sec:validation_roughness}
+
+The next experiment varies the roughness index directly. For each
+Holder-type regime, the benchmark samples a finite-sample surrogate whose error
+obeys the same variance--staleness decomposition as the theory,
+\[
+\mathcal E(n) \approx \sigma n^{-1/2} + \zeta n^H,
+\]
+then measures the empirically optimal horizon across a sweep of $\zeta$ values.
 
 \begin{figure}[!htbp]
 \centering
-\safeincludegraphics[width=0.95\linewidth]{artifacts/figures/cuberoot_adwin/fig_lag_variance_frontier}
-\caption{Lag--variance frontier for useful memory. The fixed-window sweep traces
-the empirical frontier: short horizons are noisy, long horizons are stale, and
-the knee marks the useful-memory optimum. The frontier is asymmetric because the
-gain from more memory saturates while the cost of age keeps accumulating.}
-\label{fig:lag_variance_frontier}
+\safeincludegraphics[width=0.96\linewidth]{artifacts/figures/roughness_family/fig_roughness_family}
+\caption{Roughness-dependent horizon scaling. Left: each roughness class still
+produces a finite optimum, but the location of that optimum shifts with $H$.
+Right: the empirical optimal horizon follows a distinct log--log scaling law in
+each class. The $H=1$ curve recovers the worst-case Lipschitz member, while
+smaller $H$ values produce different exponents inside the same family.}
+\label{fig:roughness_family}
 \end{figure}
 
-\subsection{Temporal Validity Is Not Changepoint Evidence}\label{sec:validation_delay}
+The point of this figure is structural rather than cosmetic. If the cube-root
+law were the whole story, the right panel would collapse to a single slope. It
+does not. The empirical optima separate by roughness class, and the fitted
+slopes track the predicted family in the exported roughness-scaling summaries.
 
-The detector asks whether there is enough statistical evidence of a change. The
-horizon asks whether the retained evidence is still temporally valid for the
-present. Those questions need not be synchronized.
+\subsection{Detector-Silent Staleness}\label{sec:validation_invalidity_gap}
+
+Temporal validity and changepoint evidence are different clocks. To make that
+separation explicit, consider a stream whose local drift rate ramps upward over
+time. The useful-memory horizon $n_t^*$ contracts as the ramp steepens, while a
+long operating horizon remains fixed. Define
+\[
+\Delta_{\mathrm{inv}} \coloneqq t_{\mathrm{detect}} - t_{\mathrm{valid}},
+\]
+where $t_{\mathrm{valid}}$ is the first time the operating horizon persistently
+exceeds the useful-memory scale, and $t_{\mathrm{detect}}$ is the first detector
+alarm that follows.
 
 \begin{figure}[!htbp]
 \centering
-\safeincludegraphics[width=0.95\linewidth]{artifacts/figures/cuberoot_adwin/fig_cap_vs_detection_delay}
-\caption{Cap leads detection under continuous drift. The top panel compares the
-first ADWIN+$\,$UMR cap event with the first ADWIN detection, and the bottom
-panel shows the resulting lead time. Under slow drift, memory becomes stale
-well before changepoint evidence is available; under faster drift, the gap
-narrows but remains positive.}
-\label{fig:cap_vs_detection_delay}
+\safeincludegraphics[width=0.94\linewidth]{artifacts/figures/invalidity_gap/fig_invalidity_gap}
+\caption{Detector-silent staleness. As drift intensifies, the useful-memory
+horizon contracts until the operating horizon becomes stale at
+$t_{\mathrm{valid}}$; the detector responds only later at
+$t_{\mathrm{detect}}$, leaving a strictly positive invalidity gap. In the lower
+panel, stale memory already imposes excess tracking error before the alarm
+appears.}
+\label{fig:invalidity_gap}
 \end{figure}
 
-\subsection{The Cap-Only Regime}\label{sec:validation_cap_only}
+Across detector settings, the measured gap remains positive in every run of the
+default benchmark. The detector-threshold ablation shows mean gaps of roughly
+$5 \times 10^2$ steps over the tested settings. This is the
+observable form of detector-silent staleness: evidence can become obsolete while
+standard detection remains silent.
 
-The gap becomes concrete on the continuous-drift benchmark. We compare a short
-fixed window, a long fixed window, EWMA, ADWIN, and an ADWIN wrapper equipped
-with the UMR horizon cap. ADWIN can retain far more memory than the useful-
-memory scale, while a conservative cap contracts that stale window earlier.
+\subsection{Horizon Misalignment Cost}\label{sec:validation_misalignment}
 
-\input{artifacts/tables/cuberoot_adwin/continuous_benchmark}
+The final question is how sharply performance degrades when the operating
+horizon misses the useful-memory scale. Using the same roughness-indexed
+surrogate, \cref{fig:horizon_misalignment} plots excess error against the
+relative horizon gap $|\log(n / n^*)|$.
 
 \begin{figure}[!htbp]
 \centering
-\safeincludegraphics[width=0.95\linewidth]{artifacts/figures/cuberoot_adwin/fig_cuberoot_adwin}
-\caption{Cap-only regime on the continuous-drift benchmark. Fixed-500 is the
-stale-memory baseline, plain ADWIN can retain far more memory than the
-useful-memory scale, and ADWIN+$\,$UMR contracts the effective horizon earlier.
-The gain comes from capping stale memory before detector evidence is strong
-enough to fire.}
-\label{fig:cuberoot_adwin}
+\safeincludegraphics[width=0.72\linewidth]{artifacts/figures/roughness_family/fig_horizon_misalignment}
+\caption{Cost of horizon misalignment. Excess tracking error is smallest near
+the useful-memory scale and rises as the operating horizon moves away from it.
+Being too short is noisy, being too long is stale, and the penalty steepens at
+class-dependent rates once the operating horizon leaves the low-cost band around
+$n^*$.}
+\label{fig:horizon_misalignment}
 \end{figure}
 
-\subsection{Recovery Asymmetry Under Alternating Drift}\label{sec:validation_instability}
-
-The next benchmark makes local horizon instability visible. The stream
-alternates between slow drift, fast bursts, recovery plateaus, and micro-bursts
-with irregular durations, so the local oracle horizon need not be globally
-stable. In that setting, a single fixed window can look reasonable on average
-while remaining locally misaligned for long stretches.
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=0.95\linewidth]{artifacts/figures/cuberoot_adwin/fig_horizon_instability}
-\caption{Alternating-timescales benchmark. The top panel shows the drift
-schedule, the middle panel compares the local oracle horizon with fixed windows
-and ADWIN+$\,$UMR, and the bottom panel shows horizon regret over time.
-Contraction is easier to trigger under bursts than re-expansion after a
-low-drift stretch.}
-\label{fig:horizon_instability}
-\end{figure}
-
-The benchmark makes two things visible. First, horizon validity can vary even
-when aggregate prediction error stays competitive. Second, the adjustment is
-asymmetric: contraction of the useful horizon is easier to trigger than
-re-expansion after a low-drift stretch. Proposition~\ref{prop:asymmetric_horizon_recovery}
-formalizes the same asymmetry in the idealized EMA-to-horizon map. The
-transition-window table and the EMA-sensitivity sweep appear in
-Appendix~\ref{app:empirical_support}.
-
-\begin{proposition}[Asymmetric Horizon Recovery]\label{prop:asymmetric_horizon_recovery}
-Let the drift estimator satisfy the EMA recursion
-\[
-  \hat\zeta_t \,=\, \alpha\,\Delta_t + q\,\hat\zeta_{t-1},
-  \qquad q \coloneqq 1-\alpha \in (0,1),
-\]
-with $\Delta_t = \delta_{\mathrm{slow}}$ in the slow regime and $\Delta_t = M$
-in the burst regime. Assume the horizon map is unclipped on
-$[\delta_{\mathrm{slow}}, M]$ so that
-\[
-  n^*(\delta) \,=\, \left(\frac{C_K}{\delta}\right)^{2/3}
-\]
-throughout the transition. Write
-$n_b \coloneqq n^*(M)$ and $n_s \coloneqq n^*(\delta_{\mathrm{slow}})$.
-For any $0 < \varepsilon < n_s - n_b$, define the inverse thresholds
-\[
-  \delta_b(\varepsilon) \coloneqq C_K\,(n_b + \varepsilon)^{-3/2},
-  \qquad
-  \delta_s(\varepsilon) \coloneqq C_K\,(n_s - \varepsilon)^{-3/2}.
-\]
-Then the exact recovery time from the slow regime to the burst regime is
-\[
-  T_{\mathrm{contract}}(\varepsilon)
-  \,=\,
-  \left\lceil
-  \frac{\log\!\bigl((M-\delta_{\mathrm{slow}})/(M-\delta_b(\varepsilon))\bigr)}{\log(1/q)}
-  \right\rceil,
-\]
-while, after a burst of duration $T_{\mathrm{burst}}$ steps, the exact recovery
-time back to the slow regime is
-\[
-  T_{\mathrm{expand}}(\varepsilon)
-  \,=\,
-  \left\lceil
-  \frac{\log\!\bigl((\hat\zeta_{\mathrm{end}}-\delta_{\mathrm{slow}})/
-  (\delta_s(\varepsilon)-\delta_{\mathrm{slow}})\bigr)}{\log(1/q)}
-  \right\rceil,
-\]
-where
-\[
-  \hat\zeta_{\mathrm{end}} \,=\, M - (M-\delta_{\mathrm{slow}})q^{T_{\mathrm{burst}}}
-\]
-is the burst-end drift estimate. If
-\[
-  T_{\mathrm{burst}} \,\geq\, T_0(\varepsilon)
-  \;\coloneqq\;
-  \left\lceil \frac{\log(1-\rho_\varepsilon)}{\log q} \right\rceil,
-  \qquad
-  \rho_\varepsilon \coloneqq
-  \frac{\delta_s(\varepsilon)-\delta_{\mathrm{slow}}}{M-\delta_b(\varepsilon)},
-\]
-then $T_{\mathrm{expand}}(\varepsilon) > T_{\mathrm{contract}}(\varepsilon)$.
-Moreover, for small $\varepsilon$,
-\[
-  M-\delta_b(\varepsilon)
-  = \tfrac{3}{2} C_K n_b^{-5/2}\,\varepsilon + O(\varepsilon^2),
-  \qquad
-  \delta_s(\varepsilon)-\delta_{\mathrm{slow}}
-  = \tfrac{3}{2} C_K n_s^{-5/2}\,\varepsilon + O(\varepsilon^2),
-\]
- so the slow-side threshold distance is smaller by a factor
- $\bigl(\delta_{\mathrm{slow}}/M\bigr)^{5/3}(1+o(1))$.
-\end{proposition}
-
-\begin{proof}
-The EMA recursion has the closed form
-\[
-  \hat\zeta_{t_0+k} = \Delta^* + \bigl(\hat\zeta_{t_0}-\Delta^*\bigr)q^k
-\]
-whenever the regime is constant with fixed point $\Delta^*$. Hence after the
-transition from $\delta_{\mathrm{slow}}$ to $M$,
-\[
-  \hat\zeta_{t_0+k} = M - (M-\delta_{\mathrm{slow}})q^k,
-\]
-and after the return to the slow regime,
-\[
-  \hat\zeta_{t_0+T_{\mathrm{burst}}+k}
-  = \delta_{\mathrm{slow}} + (\hat\zeta_{\mathrm{end}}-\delta_{\mathrm{slow}})q^k.
-\]
-
-Because $n^*(\delta)$ is monotone decreasing on the unclipped interval and
-its inverse is $g(n)=C_K n^{-3/2}$, the condition
-$|n^*(\hat\zeta_{t_0+k})-n_b|\leq \varepsilon$ is equivalent to
-\(\hat\zeta_{t_0+k} \geq \delta_b(\varepsilon)\), which gives the displayed
-formula for $T_{\mathrm{contract}}(\varepsilon)$. Likewise,
-$|n^*(\hat\zeta_{t_0+T_{\mathrm{burst}}+k})-n_s|\leq \varepsilon$
-is equivalent to
-\(\hat\zeta_{t_0+T_{\mathrm{burst}}+k} \leq \delta_s(\varepsilon)\),
-which yields $T_{\mathrm{expand}}(\varepsilon)$.
-
-The inequality $T_{\mathrm{expand}}(\varepsilon) > T_{\mathrm{contract}}(\varepsilon)$
-holds whenever the burst lasts long enough that
-\[
-  1-q^{T_{\mathrm{burst}}} \geq \rho_\varepsilon,
-\]
-since this makes the numerator of $T_{\mathrm{expand}}$ larger than that of
-$T_{\mathrm{contract}}$ by the exact threshold relation above. The small-$\varepsilon$
-expansions follow by Taylor expansion of $n \mapsto C_K n^{-3/2}$ around
-$n_b$ and $n_s$.
-\end{proof}
-
-\begin{remark}[Effect of clipping]
-If clipping at $n_{\min}$ is active near the burst side, then contraction can only
-be faster. The observed asymmetry is therefore conservative: clipping weakens the
-theoretical barrier in the burst regime, but it cannot eliminate the longer slow-
-side recovery. In streams with gradual bursts, the observed ratio can exceed the
-step-burst threshold because $\hat\zeta_{\mathrm{end}}$ does not reach $M$.
-\end{remark}
-
-\subsection{Horizon Misalignment Carries Cost}\label{sec:validation_gap_cost}
-
-The next question is when horizon misalignment becomes operationally expensive.
-For each backend, we compare its instantaneous horizon $n_t$ with the local
-horizon target $n_t^*$ and plot the excess error $E_t - E_t^\star$ against both
-the absolute gap $|n_t - n_t^*|$ and the relative gap $|\log(n_t / n_t^*)|$.
-Here $E_t^\star$ is the best error achieved at time $t$ by the fixed-window
-oracle grid, and the curve is binned over all seeds and time points.
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=0.95\linewidth]{artifacts/figures/cuberoot_adwin/fig_horizon_gap_cost}
-\caption{Excess error as a function of horizon misalignment. The relation is
-backend dependent: fixed-100 stays inside a low-cost band, whereas fixed-500
-and ADWIN pay substantially more once the gap widens.
-ADWIN+$\,$UMR sits between these extremes.}
-\label{fig:horizon_gap_cost}
-\end{figure}
-
-These results expose a measurable tolerance band around the useful-memory scale,
-together with backend-specific degradation once that band is exceeded.
-
-\subsection{Representative Real-Stream Case Study}\label{sec:validation_real_world}
-
-The synthetic experiments carry the clearest identification, but ELEC2 provides
-the same qualitative phenomenon on public data. Coarse horizon adaptation still
-changes the operating regime outside the synthetic setting, although the effect
-is smaller and more backend dependent. A Bikes summary is given in
-\cref{app:real_stream_arena}.
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=0.95\linewidth]{artifacts/figures/elec2/fig_umr_arena}
-\caption{Public-stream case study on ELEC2. The real-stream effect is smaller
-and more backend dependent than in the synthetic benchmarks, but coarse horizon
-adaptation still changes the operating regime on public data.}
-\label{fig:elec2_case_study}
-\end{figure}
-
-Additional stability and sensitivity results appear in the appendix: bootstrap
-intervals and EMA-sensitivity in Appendix~\ref{app:empirical_support},
-phase-wise recovery in Appendix~\ref{app:piecewise_recovery}, the Bikes summary
-in Appendix~\ref{app:real_stream_arena}, and the controlled downstream check in
-Appendix~\ref{app:downstream_temporal_invalidity}.
+This is the finite-sample reason the horizon itself matters. The optimum is not
+only finite; it is operationally relevant. Errors remain modest in a narrow band
+around the useful-memory scale, then increase on either side as variance or
+staleness takes over.
 
 \subsection{What the Evidence Shows}\label{sec:validation_summary}
 
-Taken together, the evidence supports five claims. First, the finite-memory
-optimum is real. Second, temporal validity and
-changepoint evidence are distinct objects. Third, the cap-only regime is
-operationally visible. Fourth, horizon recovery is asymmetric under alternating
-timescales. Fifth, horizon control has operational value, but its predictive
-payoff depends on the backend and on the drift regime.
+Taken together, the experiments reveal four features that match the theory.
+First, finite-memory tracking exhibits a structural U-curve rather than a
+boundary optimum. Second, the useful-memory scale is roughness dependent, with
+the worst-case Lipschitz cube-root law appearing as the $H=1$ member of a wider
+family. Third, temporal validity can fail before changepoint evidence appears,
+which produces a measurable invalidity gap. Fourth, missing the useful-memory
+scale carries a visible finite-sample cost even when the operating horizon is
+only moderately misaligned.

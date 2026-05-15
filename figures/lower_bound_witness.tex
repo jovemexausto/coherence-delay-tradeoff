@@ -5,20 +5,23 @@
   \draw[->,thick] (0,-3.2) -- (0,3.2) node[above left] {mean path};
 
   \draw[densely dashed] (1.2,-3.0) -- (1.2,3.0);
-  \draw[densely dashed] (8.2,-3.0) -- (8.2,3.0);
+  \draw[densely dashed] (4.2,-3.0) -- (4.2,3.0);
+  \draw[densely dashed] (7.2,-3.0) -- (7.2,3.0);
   \node[below] at (1.2,0) {present};
-  \node[below] at (8.2,0) {$h$};
+  \node[below] at (4.2,0) {$h$};
 
-  \draw[pathblue,very thick] (1.2,0) -- (8.2,2.4) -- (10.5,2.4);
-  \draw[pathred,very thick] (1.2,0) -- (8.2,-2.4) -- (10.5,-2.4);
+  \draw[pathblue,very thick] (1.2,0) -- (4.2,1.2) -- (7.2,2.4) -- (10.5,2.4);
+  \draw[pathred,very thick] (1.2,0) -- (4.2,-1.2) -- (7.2,-2.4) -- (10.5,-2.4);
 
   \draw[<->,thick] (1.7,2.4) -- (1.7,-2.4);
   \node[right] at (1.9,0) {endpoint gap};
 
-  \draw[thick] (1.2,-2.9) -- (8.2,-2.9);
+  \draw[thick] (1.2,-2.9) -- (4.2,-2.9);
+  \draw[thick] (4.2,-2.9) -- (7.2,-2.9);
   \draw[thick] (1.2,-2.75) -- (1.2,-3.05);
-  \draw[thick] (8.2,-2.75) -- (8.2,-3.05);
-  \node[below=5pt] at (4.7,-2.9) {critical bump width};
+  \draw[thick] (4.2,-2.75) -- (4.2,-3.05);
+  \draw[thick] (7.2,-2.75) -- (7.2,-3.05);
+  \node[below=5pt] at (4.2,-2.9) {critical bump width};
 
   \node[align=left,font=\small] at (8.7,1.1) {small KL over\\the retained window};
   \node[pathblue,anchor=west] at (9.1,2.5) {$\mu^{+,h}$};

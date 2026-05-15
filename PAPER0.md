@@ -123,6 +123,12 @@ C_K n^{-1/2} + \mathrm{Staleness}(n; \zeta, H).
 
 ### Roughness-indexed horizon family
 
+The theorem object should be a deterministic Holder-type envelope class on paths
+of distributions, not a stochastic-process claim in disguise.
+Hurst or fractional-Brownian motivation may appear only as motivation if useful;
+the theorem-level object remains deterministic unless a stronger statement is
+actually proved.
+
 For deterministic Holder-type path classes, temporal misalignment accumulates like:
 
 ```tex
@@ -262,6 +268,9 @@ At this point, the reader should believe that memory has a finite horizon even b
 
 Generalize from Lipschitz to Holder-type path classes.
 Make the reader feel that the cube-root law was not wrong; it was the `H=1` member of the family.
+The unification should also make clear that editorially useful special cases,
+especially `H=1/2`, are recovered inside the same family rather than added as
+separate stories.
 
 ### Act 4: Validity and detectability are different clocks
 
@@ -345,10 +354,12 @@ The unified paper should revolve around a clean theorem package:
 4. Worst-case Lipschitz envelope as the `H=1` member.
 5. Lipschitz optimal horizon and minimum error.
 6. Structural finite-memory floor.
-7. Explicit special-case recovery of `H=1` and any other editorially useful case.
+7. Explicit special-case recovery of `H=1`, `H=1/2`, and any other editorially useful case.
 
 The special-case structure matters.
 It is how the reader sees that the theory is unified rather than patched together.
+It is also how the worst-case Lipschitz result remains the cornerstone of the
+paper rather than looking provisional or superseded.
 
 ## Lower Bound Priority
 

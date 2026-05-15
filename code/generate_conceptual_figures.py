@@ -146,7 +146,7 @@ def generate_two_clocks(output_path: Path, csv_path: Path) -> None:
 
 def generate_lower_bound(output_path: Path, csv_path: Path) -> None:
     # Exact witness shape up to scale: mu^{\pm,h}(j) = \pm (1 - j / h)_+
-    m = 8.0
+    m = 6.0
     h = 3.0
     age = np.linspace(0.0, m, 500)
     mu_plus = np.maximum(1.0 - age / h, 0.0)
@@ -215,7 +215,7 @@ def generate_lower_bound(output_path: Path, csv_path: Path) -> None:
     ax.text(
         1.5, 1.20, "short differing segment", ha="center", fontsize=9, color="#2f4f8f"
     )
-    ax.text(5.45, 0.1, "shared history", ha="center", fontsize=9, color="#666666")
+    ax.text(4.5, 0.1, "shared history", ha="center", fontsize=9, color="#666666")
 
     ax.annotate(
         "endpoint gap",
