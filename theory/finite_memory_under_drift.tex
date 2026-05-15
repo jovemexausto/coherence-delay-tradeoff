@@ -257,8 +257,8 @@ the stated class.
 \caption{Lower-bound witness on the Gaussian location subclass. The two paths
 share most of the retained history and differ only on a short recent segment of
 width $h$, yet they remain separated at the present. That unresolved recent
-segment is enough to produce a structural finite-memory floor at the same scale
-as the upper-law optimum.}
+segment is enough to produce a structural finite-memory floor at the same
+cube-root scale as the upper-law optimum.}
 \label{fig:lower_bound_witness}
 \end{figure}
 
@@ -275,14 +275,15 @@ that:
 Measure risk by the endpoint $W_2$ error, which coincides with Euclidean
 endpoint error on the Gaussian location subclass. Then, in the critical-window
 regime, there exist explicit constants $c_0,c>0$ such that the minimax
-tracking error over that class cannot beat the same variance-plus-staleness
+tracking error over that class cannot beat the same exponent-level
+variance-plus-staleness
 scaling:
 \[
   \inf_{\hat\Pot_m}\sup_{\Pot^*}\,\mathbb{E}\,d\bigl(\hat\Pot_m,\Pot^*\bigr)
   \;\gtrsim\; \max\!\left\{c_0\,\sigma\,m^{-1/2},\; c\,\sigma^{2/3}\zeta^{1/3}\right\}.
 \]
 Consequently, the cube-root horizon is not merely the optimum of one estimator;
-it is the structural finite-memory floor on this class.
+it is the structural finite-memory floor on this class at the cube-root scale.
 \end{proposition}
 
 \paragraph{Proof.}
@@ -391,4 +392,8 @@ to make the result minimax for any larger class containing the same witness,
 including the ambient $W_2$-Lipschitz path class. The proposition therefore does
 not claim that every path is Gaussian; it claims that the worst case already
 appears inside the Gaussian mean-shift subproblem.
+
+The result is not constant sharp. Its role is to show that the cube-root floor
+is structural at the exponent level, not to characterize the best numerical
+constant in the lower law.
 \end{remark}
