@@ -1,0 +1,14 @@
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Prefix-validated auto-calibration on the synthetic benchmarks. The calibration prefix chooses $(d,\alpha)$ by observable one-step-ahead prequential error, then the selected parameters are run on the full stream.}
+\label{tab:zeta_autocalibration}
+\begin{tabular}{lrrrr}
+\toprule
+Scenario & Mean $\alpha$ & Mean $d$ & Tail MAE (default) & Tail MAE (calibrated) \\
+\midrule
+Constant drift & 0.07 & 83.8 & 0.0978 & 0.1015 \\
+Alternating drift & 0.03 & 93.8 & 0.0925 & 0.0952 \\
+\bottomrule
+\end{tabular}
+\end{table}

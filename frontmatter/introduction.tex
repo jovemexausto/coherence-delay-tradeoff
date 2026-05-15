@@ -2,79 +2,55 @@
 
 Adaptive systems rarely track a fixed target. In streaming estimation,
 monitoring, and online decision-making, the data-generating distribution itself
-drifts over time. A learner with finite memory must therefore solve a basic but
-easy-to-miss problem: how much of the past should still count once the world
+drifts over time. A learner with finite memory must therefore answer a basic but
+easy-to-miss question: how much of the past should still count once the world
 that produced it has started to move away?
 
-That question creates a structural trade-off. Using more past data reduces
-sampling noise, but it also increases the age of the information being used to
-track the present. Under drift, memory is simultaneously helpful and harmful:
-short windows are fresh but noisy, while long windows are stable but stale. The
-constraint is temporal rather than parametric: one cannot overparameterize time.
-The central claim here is that this tension defines a coherence-lag
-trade-off and induces a quantitative law for finite-memory tracking under
-Wasserstein nonstationarity. The cube-root exponents themselves are not unique;
-the finite-memory horizon interpretation and the temporal-validity floor are the
-new pieces here.
+That question creates a structural trade-off. More past data reduces sampling
+noise, but it also increases the age of the evidence used to describe the
+present. Under drift, memory is simultaneously helpful and harmful: short
+windows are fresh but noisy, while long windows are stable but stale. The
+resulting problem is a worst-case horizon problem, not a detector comparison.
 
 For the finite-memory averaging class analyzed here, the tracking error splits
-into a statistical term that decreases with memory length and a staleness term
-that increases with drift and effective data age. In the worst-case linear
-staleness regime induced by the $W_2$-Lipschitz path bound, optimizing that
-balance yields a cube-root law:
-$\mathcal{E}_{\min} \asymp C_K^{2/3}\zeta^{1/3}$ with
-$n^* \asymp (C_K/\zeta)^{2/3}$. The law is exact for the averaging class
-considered here. Beyond that class, the paper proves a minimax lower bound for
-window-restricted estimators in the critical-window regime, establishing that
-the finite-memory floor is structural rather than a quirk of one specific rule.
+into a statistical term that decreases with memory and a staleness term that
+increases with drift. In the linear staleness regime induced by the local
+$W_2$-Lipschitz path bound, optimizing that balance yields a cube-root law:
+$n^* \asymp (C_K/\zeta)^{2/3}$ and
+$\mathcal{E}_{\min} \asymp C_K^{2/3}\zeta^{1/3}$. The same class also admits a
+minimax lower bound in the critical-window regime, so the finite-memory floor is
+structural rather than a quirk of one estimator.
 
-The cube-root scaling corresponds to the carrier regime where the finite-sample
-term decays as $n^{-1/2}$; more generally, carrier-dependent exponents lead to
-carrier-dependent horizon scaling \cref{rem:carrier_exponent}. The analysis
-below is stated for the linear-staleness regime induced by the local
-$W_2$-Lipschitz path bound.
+The central conceptual distinction is simple: temporal validity is not
+changepoint evidence. A detector can remain statistically silent while retained
+memory is already stale for the present. That separation creates the
+operational gap that makes a conservative horizon cap useful even when no
+detector has fired.
 
-The same decomposition also has a simple interpretation: the limiting factor is
-the age of the information that finite memory forces the estimator to retain,
-alongside the usual finite-sample cost. The learner pays for variance reduction
-by carrying older evidence, and optimal tracking occurs at a memory horizon that
-balances statistical stability against operational staleness.
+The contributions are fivefold:
+\begin{itemize}
+  \item It formalizes useful memory under drift as a variance-staleness
+  trade-off in Wasserstein geometry.
+  \item It proves a worst-case finite-memory horizon law under local
+  $W_2$-Lipschitz drift.
+  \item It shows a Gaussian-location lower bound establishing a structural
+  tracking floor in the critical-window regime.
+  \item It distinguishes temporal validity from changepoint evidence and
+  identifies a cap-only regime.
+  \item It instantiates the theory as a conservative horizon regulator and
+  evaluates where it helps, saturates, and fails.
+\end{itemize}
 
-Horizon geometry, horizon tracking, and predictive payoff are not the same
-object. A regulator can be geometrically right and still be operationally
-limited; it can also preserve temporal validity without dominating every
-backend. The empirical sequence asks when the memory horizon is locally right,
-when it becomes stale, and how much that staleness costs.
-
-Every backend need not collapse to the same horizon. Short fixed windows can
-remain strong compromises even when the local oracle horizon moves over time.
-What the UMR horizon cap contributes is a notion of validity: it tells us
-when remembered evidence is still current enough to matter, and when it has
-become stale before a detector has enough evidence to complain.
-
-The empirical section follows that logic in stages. The first checks recover the
-`U`-curve and show that the finite-memory optimum is not a fitting artifact. The
-next checks separate temporal validity from changepoint evidence, and the
-alternating-timescales benchmark shows that contraction is easier to induce than
-re-expansion. The gap-cost analysis then asks how a mismatch between the chosen
-horizon and the local oracle translates into predictive loss.
-
-ELEC2 stays in the main text as the representative real-stream case, while a
-short Bikes summary moves to the appendix. The controlled downstream check in
-Appendix~\ref{app:downstream_temporal_invalidity} adds a synthetic classification
-test of the same cap-only logic. The order is geometry first, temporal validity
-second, predictive payoff third.
+The empirical evidence follows that logic in stages. It first recovers the
+predicted $U$-curve and the finite useful-memory optimum. It then shows the gap
+between temporal validity and changepoint evidence, the cap-only regime, the
+recovery asymmetry under alternating drift, and the nonlinear cost of horizon
+misalignment. ELEC2 shows the same qualitative issue outside the synthetic
+setting, while additional stability and sensitivity checks appear in the
+appendix.
 
 The theoretical results are stated in $W_2$; the Sinkhorn divergence is the
-computational realization used in the synthetic measurement layer. In the
-public-stream arena, a secondary effect remains visible: EMA-based horizon
-recovery is asymmetric, with contraction after bursts faster than re-expansion
-after low-drift stretches.
-
-The window size is a fundamental parameter whose mischoice can create spurious
-or missed detections~\cite{hinder2023window}; the coherence-lag law provides a
-principled answer when the drift rate is estimable.
-
-Finite-memory tracking under drift raises a simple question: what tracking
-accuracy is possible when the learner's memory is finite and the target
-distribution keeps moving?
+computational measurement layer used in the synthetic experiments. The window
+size result of \citet{hinder2023window} motivates the broader issue, but the
+contribution here is more specific: memory has a finite temporal validity horizon
+under worst-case drift.

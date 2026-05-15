@@ -1,9 +1,21 @@
-\section{Useful Memory Geometry}\label{sec:memory_geometry}
+\section{Finite Memory Under Drift}\label{sec:finite_memory_under_drift}
 
-Under continuous drift, memory is not only a statistical resource but also a
-temporal liability. The core question is therefore not whether one can react to
-change, but how long a sample should remain operationally useful before it
-becomes stale.
+Under continuous drift, memory is both a statistical resource and a temporal
+liability. The core question is therefore not whether one can react to change,
+but how long a sample should remain operationally useful before it becomes
+stale.
+
+\begin{figure}[!htbp]
+\centering
+\input{figures/two_clocks_of_drift}
+\caption{Two clocks of drift. One clock rewards more memory by reducing
+statistical cost; the other penalizes more memory by increasing staleness. The
+shaded region is the central operational gap: memory can already be stale
+before a detector has enough evidence to alarm.}
+\label{fig:two_clocks_of_drift}
+\end{figure}
+
+\subsection{Variance-Staleness Decomposition}
 
 \begin{theorem}[Lag-Inclusive Tracking Error Bound]\label{thm:lag_error}
 Let $X_{t-j} \sim P^*_{t-j}$ and let
@@ -49,22 +61,25 @@ $\hat Q_n := n^{-1}\sum_{i=1}^n \delta_{X_i}$. Then:
 	\end{itemize}
 
 	In that regime, the statistical fluctuations do not follow the
-	$n^{-1/2}$ carrier exponent, so the resulting horizon scaling becomes
-	carrier-dependent (see \cref{rem:carrier_exponent}).
+	$n^{-1/2}$ carrier exponent, so the resulting horizon scaling stays outside
+	the displayed cube-root regime.
 If the geometry is computed with debiased Sinkhorn divergence $S_\varepsilon$
 on a bounded domain of diameter $D$, then for fixed $\varepsilon>0$ the
 empirical fluctuations remain $O(n^{-1/2})$ with a constant
 $L(D,\varepsilon)$ that is dimension-free at fixed $\varepsilon$ and increases
 as $\varepsilon\downarrow 0$.
 
-A short numerical sanity check for this regime is reported in
+A short numerical sanity check for this regime appears in
 Appendix~\ref{app:finite_sample_geometry}; it is not used as a theorem, but it
 matches the intended low-dimensional interpretation of the finite-sample term.
 \end{lemma}
 
-\begin{remark}[Carrier-dependent horizon scaling]\label{rem:carrier_exponent}
+\subsection{A Structural Worst-Case Horizon}
+
+\begin{remark}[Scope of the horizon law]\label{rem:carrier_exponent}
 The cube-root law follows when the finite-sample term behaves as
 \(\mathbb E\,W_2(\widehat P_t^{(n)},\bar P_t^{(n)})\lesssim C_K n^{-1/2}\).
+The discussion below uses only that regime.
 More generally, if the finite-sample term admits the scaling
 
 \[
@@ -86,15 +101,13 @@ then balancing it against the drift-induced staleness cost
 In the setting of \cref{lem:finite_sample_term}, the effective exponent is
 \(a=1/2\) for \(d_\mathrm{eff}<4\), with an additional \((\log n)^{1/2}\)
 factor for \(d_\mathrm{eff}=4\); for \(d_\mathrm{eff}>4\) the raw Wasserstein
-rate is slower than \(n^{-1/2}\), so the exponent is strictly smaller than
-\(1/2\) (carrier-dependent). The cube-root law is therefore the
-\emph{$a=1/2$ carrier instance} of a broader carrier-dependent horizon
-scaling.
+rate is slower than \(n^{-1/2}\). That case is outside the displayed cube-root
+regime.
 \end{remark}
 
 The two terms in \cref{thm:lag_error} pull in opposite directions. Increasing
 $n$ reduces variance but raises the age of the retained evidence. That tension is
-the basic coherence-lag trade-off that governs useful memory under drift.
+the basic variance-staleness trade-off that governs useful memory under drift.
 
 \begin{proposition}[Optimal Window Under Drift]\label{prop:coherence_delay}
 Under \cref{thm:lag_error}, the error $\mathcal{E}(n)$ is minimised at
@@ -155,6 +168,8 @@ staleness terms therefore yields the same cube-root exponent in the effective
 memory scale.
 \end{corollary}
 
+\subsection{Temporal Validity and Memory Age}
+
 \begin{definition}[Effective Memory Age]\label{def:memory_age}
 Let an estimator place weights $w_0,\dots,w_{n-1}$ on the most recent
 observations, with $\sum_j w_j = 1$. Its \emph{effective memory age} is
@@ -167,14 +182,14 @@ the retained evidence is before any local drift scale is specified. For a
 uniform window, $A(w)=(n-1)/2$.
 \end{definition}
 
-\begin{definition}[Temporal Coherence]\label{def:temporal_coherence}
+\begin{definition}[Temporal Validity]\label{def:temporal_coherence}
 For an estimator with weights $w$ at time $t$, define its \emph{operational
 staleness}
 \[
   S_t(w) \;=\; \sum_{j=0}^{n-1} w_j\,
   W_2\!\left(\Pot^*(S,t-j),\Pot^*(S,t)\right).
 \]
-Its \emph{temporal coherence} is the inverse alignment score
+Its \emph{temporal validity} is the inverse alignment score
 \[
   C_t(w) \;=\; \frac{1}{1 + S_t(w)}.
 \]
@@ -187,17 +202,30 @@ relevant lags, then
   C_t(w) \;\geq\; \frac{1}{1+\zeta_t A(w)}.
 \]
 In that sense, $F(w)$ is the rate-free freshness proxy, while $C_t(w)$ measures
-operational alignment with the current distribution.
+operational validity with the current distribution.
 \end{definition}
 
-The quantity $A(w)$ gives a compact description of the temporal geometry of a
-finite-memory estimator. Short windows preserve temporal coherence at the cost
+The quantity $A(w)$ gives a compact description of the temporal age of a
+finite-memory estimator. Short windows preserve temporal validity at the cost
 of variance; long windows reduce variance at the cost of staleness. The
 cube-root horizon marks the point where that exchange stops improving. For a
 uniform window under
 approximately constant local drift, the induced staleness scales as
 $S_t(w)\approx \zeta(n-1)/2$, which is the same age term that appears in
 \cref{thm:lag_error} up to constants.
+
+\subsection{A Structural Finite-Memory Floor}
+
+\begin{figure}[!htbp]
+\centering
+\resizebox{0.9\linewidth}{!}{\input{figures/lower_bound_witness}}
+\caption{Lower-bound witness on the Gaussian location subclass. Two mean paths
+separate at the endpoint while remaining hard to distinguish over the retained
+window. This is the structural obstruction behind the finite-memory floor: the
+window can be too short to estimate reliably and too long to stay temporally
+valid.}
+\label{fig:lower_bound_witness}
+\end{figure}
 
 \begin{proposition}[Finite-Memory Floor via Gaussian Location Subclass]\label{prop:window_minimax}
 Let $\mathcal P_{\zeta,m}$ be the class of length-$m$ distribution paths for

@@ -1,0 +1,19 @@
+\begin{table}[!htbp]
+\centering
+\small
+\caption{Empirical scaling check for the finite-sample term. The bounded-support $W_2$ experiment is close to the expected $n^{-1/2}$ rate in low dimension, and the slope degrades as intrinsic dimension increases. The Sinkhorn proxy is reported at fixed $\varepsilon$, where the measured slope and constant both vary with regularization.}
+\label{tab:finite_sample_geometry}
+\begin{tabular}{lrr}
+\toprule
+Setting & Estimated slope & Comment \\
+\midrule
+$W_2$, $d=1$ & -0.48 & close to $-1/2$ \\
+$W_2$, $d=2$ & -0.41 & slower decay \\
+$W_2$, $d=4$ & -0.25 & slower decay \\
+$W_2$, $d=5$ & -0.24 & slower decay \\
+Sinkhorn $\varepsilon=0.50$ & -0.21 & proxy constant changes \\
+Sinkhorn $\varepsilon=0.10$ & -0.53 & proxy constant changes \\
+Sinkhorn $\varepsilon=0.05$ & -0.67 & proxy constant changes \\
+\bottomrule
+\end{tabular}
+\end{table}

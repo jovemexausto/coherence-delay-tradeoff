@@ -1,0 +1,8 @@
+setting,estimated_slope,comment
+"$W_2$, $d=1$",-0.48,close to $-1/2$
+"$W_2$, $d=2$",-0.41,slower decay
+"$W_2$, $d=4$",-0.25,slower decay
+"$W_2$, $d=5$",-0.24,slower decay
+Sinkhorn $\varepsilon=0.50$,-0.21,proxy constant changes
+Sinkhorn $\varepsilon=0.10$,-0.53,proxy constant changes
+Sinkhorn $\varepsilon=0.05$,-0.67,proxy constant changes

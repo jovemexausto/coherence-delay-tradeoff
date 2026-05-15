@@ -1,0 +1,16 @@
+\begin{table}[!htbp]
+\centering
+\caption{Continuous-drift benchmark. The key gap is between statistical evidence and temporal validity: ADWIN keeps a much wider window than the UMR-capped horizon scale, while the long fixed window collapses under lag.}
+\label{tab:continuous_benchmark}
+\begin{tabular}{lrrrr}
+\toprule
+Method & Tail MAE & Mean horizon & Detector events & Cap events \\
+\midrule
+Fixed-100 & 0.0849 & 100.0 & -- & -- \\
+Fixed-500 & 0.2388 & 500.0 & -- & -- \\
+EWMA & 0.1291 & 39.0 & -- & -- \\
+ADWIN & 0.1757 & 335.8 & 3.9 & 0.0 \\
+ADWIN + UMR & 0.0978 & 88.9 & 0.0 & 1374.7 \\
+\bottomrule
+\end{tabular}
+\end{table}

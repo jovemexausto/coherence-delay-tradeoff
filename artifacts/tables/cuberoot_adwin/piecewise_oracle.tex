@@ -1,0 +1,14 @@
+\begin{table}[!htbp]
+\centering
+\caption{Oracle horizon recovery on piecewise drift. The same calibrated cap tracks the oracle scale across regimes: it is close in the fast-drift phase and remains within the right order of magnitude in the smoother phases.}
+\label{tab:piecewise_oracle}
+\begin{tabular}{lrrrr}
+\toprule
+Drift & Oracle window & Regulated $n^*$ & Oracle MAE & ADWIN + UMR MAE \\
+\midrule
+$0.0005$ & 200 & 191.2 & 0.0741 & 0.0874 \\
+$0.0030$ & 50 & 58.1 & 0.1258 & 0.1381 \\
+$0.0010$ & 100 & 89.7 & 0.0876 & 0.1033 \\
+\bottomrule
+\end{tabular}
+\end{table}

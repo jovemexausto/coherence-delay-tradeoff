@@ -1,20 +1,18 @@
-\section{Empirical Validation}\label{sec:validation}
+\section{Empirical Evidence}\label{sec:validation}
 
 The experiments test a single claim: under continuous drift, memory must be
 regulated by temporal validity rather than by statistical evidence of abrupt
-change alone. Empirically, the paper separates three layers that are often
-collapsed: horizon geometry, horizon tracking, and predictive payoff. The
-Gaussian sweep and lag--variance frontier validate geometry. The
-continuous-drift, temporal-validity, and alternating-timescales benchmarks probe
-tracking. The horizon cost curve assesses predictive payoff. A compact piecewise
-benchmark is retained only as a phase-wise calibration check.
+change alone. The evidence separates three layers that are often collapsed: the
+finite-memory horizon itself, the conflict between temporal validity and
+detector evidence, and the predictive cost of horizon misalignment.
 
-In the experiments, UMR is a backend-agnostic horizon cap driven by a smoothed
-local drift proxy. It is applied to fixed-window, EWMA, and multi-horizon
-backends, and it is also wrapped around ADWIN as one detector-side instance of
-the same temporal-validity rule.
+In the experiments, UMR is a backend-agnostic conservative horizon cap driven by
+a smoothed local drift proxy. It is applied to fixed-window, EWMA, and
+multi-horizon backends, and it is also wrapped around ADWIN as one
+detector-side instance of the same temporal-validity rule. The resulting
+comparisons make detector-silent staleness visible.
 
-\subsection{Law Validation}\label{sec:validation_law}
+\subsection{Structural U-Curve}\label{sec:validation_law}
 
 We begin with the Gaussian sweep used to validate the finite-memory trade-off.
 The setup produces the characteristic U-curve: for small windows, error is
@@ -23,152 +21,95 @@ empirical minimum remains finite and moves in the expected direction as drift
 strengthens, and EWMA behaves as the natural finite-memory analogue rather than
 as a competing theory.
 
-To make the comparison statistically explicit, we also ran a paired bootstrap
-over the 20 synthetic seeds (50{,}000 resamples). Table~\ref{tab:bootstrap_tail_mae}
-reports the tail-MAE mean and 95\% interval for each method, together with the
-paired difference relative to the UMR-capped detector instance. The horizon cap
-remains better than ADWIN, EWMA, and the long fixed window on this benchmark,
-while the short fixed window remains the strongest baseline.
-
-\begin{table}[!htbp]
-\centering
-\small
-\caption{Seed-wise bootstrap summary for the main synthetic benchmark. The first
-column block reports tail-MAE means with 95\% bootstrap intervals across the 20
-seeds; the second block reports paired differences versus ADWIN+$\,$UMR.}
-\label{tab:bootstrap_tail_mae}
-\begin{tabular}{lrr}
-\toprule
-Method & Tail MAE [95\% CI] & $\Delta$ vs capped ADWIN [95\% CI] \\
-\midrule
-Fixed-100 & 0.0849 [0.0815, 0.0884] & $-0.0130$ [$-0.0144$, $-0.0115$] \\
-Fixed-500 & 0.2388 [0.2274, 0.2501] & $+0.1409$ [$+0.1319$, $+0.1504$] \\
-EWMA & 0.1292 [0.1263, 0.1319] & $+0.0313$ [$+0.0278$, $+0.0350$] \\
-ADWIN & 0.1757 [0.1662, 0.1853] & $+0.0779$ [$+0.0704$, $+0.0857$] \\
-ADWIN + UMR & 0.0978 [0.0942, 0.1016] & -- \\
-\bottomrule
-\end{tabular}
-\end{table}
-
 \begin{figure}[!htbp]
 \centering
-\safeincludegraphics[width=0.92\linewidth]{figures/fig_ucurve}
+\safeincludegraphics[width=0.92\linewidth]{artifacts/figures/gaussian/fig_ucurve}
 \caption{Finite-memory law validation on the Gaussian sweep. Left: tracking
 error as a function of window size, showing the predicted U-shape for multiple
 drift rates. Right: the minimum achievable error decreases as drift weakens,
-consistent with the variance--staleness trade-off. The figure validates the
-existence of a finite useful-memory optimum, which underlies the rest of the
-paper.}\label{fig:ucurve}
+consistent with the variance-staleness trade-off. The figure shows that the
+useful-memory optimum is finite and structural rather than a tuning artifact.}
+\label{fig:ucurve}
 \end{figure}
 
-\subsection{Lag--Variance Frontier}\label{sec:validation_frontier}
-
-The U-curve becomes more informative when viewed as a frontier in horizon space.
-The next figure plots tail error against effective memory horizon for a
-fixed-window sweep and overlays the operating points of the main methods. The
-curve is asymmetric: on the left, extra memory still buys visible noise
-reduction; on the right, extra memory mainly adds age. The knee is where that
-trade stops paying off.
+The same pattern is visible from the lag--variance frontier in
+\cref{fig:lag_variance_frontier}, which exposes the frontier knee where extra
+memory stops paying off. Bootstrap intervals in
+Appendix~\ref{app:empirical_support} support the same ordering.
 
 \begin{figure}[!htbp]
 \centering
-\safeincludegraphics[width=0.95\linewidth]{figures/cuberoot_adwin/fig_lag_variance_frontier}
+\safeincludegraphics[width=0.95\linewidth]{artifacts/figures/cuberoot_adwin/fig_lag_variance_frontier}
 \caption{Lag--variance frontier for useful memory. The fixed-window sweep traces
 the empirical frontier: short horizons are noisy, long horizons are stale, and
 the knee marks the useful-memory optimum. The frontier is asymmetric because the
-gain from more memory saturates while the cost of age keeps accumulating. ADWIN
-sits far to the stale side, whereas ADWIN+$\,$UMR lies close to the frontier knee.}\label{fig:lag_variance_frontier}
+gain from more memory saturates while the cost of age keeps accumulating.}
+\label{fig:lag_variance_frontier}
 \end{figure}
 
-\subsection{Over-Memory Under Continuous Drift}\label{sec:validation_continuous}
+\subsection{Temporal Validity Is Not Changepoint Evidence}\label{sec:validation_delay}
 
-The next benchmark focuses on the operational failure mode. We compare five
-methods on a smooth drifting stream: a short fixed window, a long fixed window,
-EWMA, ADWIN, and an ADWIN wrapper equipped with the UMR horizon cap. The
-question is when memory becomes stale before changepoint evidence accumulates.
-
-\begin{table}[!htbp]
-\centering
-\caption{Continuous-drift benchmark under a smooth drift rate. The key gap is
-between statistical evidence and temporal validity: ADWIN keeps a much wider
-window than the UMR-capped horizon scale, while the long fixed window collapses
-under lag.}
-\label{tab:continuous_benchmark}
-\begin{tabular}{lrrrr}
-\toprule
-Method & Tail MAE & Mean horizon & Drift events & Cap events \\
-\midrule
-Fixed-100 & 0.0849 & 100.0 & -- & -- \\
-Fixed-500 & 0.2388 & 500.0 & -- & -- \\
-EWMA & 0.1291 & 39.0 & -- & -- \\
-ADWIN & 0.1757 & 335.8 & 3.9 & 0.0 \\
-ADWIN + UMR & 0.0978 & 88.9 & 0.0 & 1374.7 \\
-\bottomrule
-\end{tabular}
-\end{table}
+The central empirical contrast is the gap between two questions. The detector
+asks whether there is enough statistical evidence of a change. The horizon asks
+whether the retained evidence is still temporally valid for the present. Those
+questions need not be synchronized.
 
 \begin{figure}[!htbp]
 \centering
-\safeincludegraphics[width=0.95\linewidth]{figures/cuberoot_adwin/fig_cuberoot_adwin}
+\safeincludegraphics[width=0.95\linewidth]{artifacts/figures/cuberoot_adwin/fig_cap_vs_detection_delay}
+\caption{Temporal validity gap across drift rates. The top panel compares the
+first ADWIN+$\,$UMR cap activation with the first ADWIN detection. The bottom
+panel shows the resulting lead time. Under slow drift, memory becomes
+operationally stale long before changepoint evidence is available; under faster
+drift, the gap narrows but remains positive.}
+\label{fig:cap_vs_detection_delay}
+\end{figure}
+
+The gap becomes concrete on the continuous-drift benchmark. We compare a short
+fixed window, a long fixed window, EWMA, ADWIN, and an ADWIN wrapper equipped
+with the UMR horizon cap. ADWIN can retain far more memory than the
+useful-memory scale, while a conservative cap contracts that stale window
+earlier.
+
+\input{artifacts/tables/cuberoot_adwin/continuous_benchmark}
+
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=0.95\linewidth]{artifacts/figures/cuberoot_adwin/fig_cuberoot_adwin}
 \caption{Continuous-drift benchmark. Fixed-500 is the stale-memory baseline;
 ADWIN retains far more memory than the oracle-scale horizon; ADWIN+$\,$UMR
 pulls the effective horizon toward the useful-memory scale and exposes a
-`cap-only' regime, where memory becomes operationally stale before statistical
-changepoint evidence appears.}\label{fig:cuberoot_adwin}
+cap-only regime in which memory becomes operationally stale before statistical
+changepoint evidence appears.}
+\label{fig:cuberoot_adwin}
 \end{figure}
 
-The key phenomenon is the separation between cap activation and the Hoeffding
-test. The cap can activate while the test remains silent, which makes memory
-validity distinct from the evidence threshold for abrupt change.
+\subsection{Recovery Asymmetry Under Alternating Drift}\label{sec:validation_instability}
 
-\subsection{Temporal Validity Gap}\label{sec:validation_delay}
-
-The gap becomes more explicit when the drift rate varies. The next figure plots
-the first UMR cap activation for the detector wrapper and the first changepoint
-decision of ADWIN as the drift rate changes. In the smooth-drift regime, the
-cap activates much earlier than the detector; as the drift becomes faster, the
-gap shrinks but does not disappear.
+The next benchmark makes local horizon instability visible. The stream
+alternates between slow drift, fast bursts, recovery plateaus, and micro-bursts
+with irregular durations, so the local oracle horizon need not be globally
+stable. In that setting, a single fixed window can look reasonable on average
+while remaining locally misaligned for long stretches.
 
 \begin{figure}[!htbp]
 \centering
-\safeincludegraphics[width=0.95\linewidth]{figures/cuberoot_adwin/fig_cap_vs_detection_delay}
-\caption{Temporal validity gap across drift rates. The top panel compares the
-first ADWIN+$\,$UMR cap activation with the first ADWIN detection. The bottom panel shows
-the resulting lead time. Under slow drift, memory becomes operationally
-stale long before changepoint evidence is available; under faster drift, the gap
-narrows but remains positive.}\label{fig:cap_vs_detection_delay}
-\end{figure}
-
-\subsection{Fixed-Horizon Instability and Recovery Asymmetry}\label{sec:validation_instability}
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=0.95\linewidth]{figures/cuberoot_adwin/fig_horizon_instability}
+\safeincludegraphics[width=0.95\linewidth]{artifacts/figures/cuberoot_adwin/fig_horizon_instability}
 \caption{Alternating-timescales instability. The top panel shows the drift
 schedule, the middle panel compares the local oracle horizon with fixed windows
 and ADWIN+$\,$UMR, and the bottom panel shows horizon regret over time. The
-figure exposes local horizon instability under regime changes.}
+figure shows that contraction is easier to trigger than re-expansion after a
+low-drift stretch.}
 \label{fig:horizon_instability}
 \end{figure}
 
-The next benchmark makes fixed-horizon instability visible. The
-stream alternates between slow drift, fast bursts, recovery plateaus, and
-micro-bursts with irregular durations, so the local oracle horizon need not be
-globally stable. In that setting, a single fixed window can look reasonable on
-average while remaining locally misaligned for long stretches. This benchmark
-separates three questions that are often conflated: whether the oracle horizon
-is time-varying, whether an online regulator can track that changing scale, and
-how far each method remains from the local oracle horizon over time.
-
-This benchmark makes two things visible. First, horizon validity can vary even
+The benchmark makes two things visible. First, horizon validity can vary even
 when aggregate prediction error stays competitive. Second, the adjustment is
 asymmetric: contraction of the useful horizon is easier to trigger than
-re-expansion after a low-drift stretch. The pattern is operational evidence of
-path dependence in temporal memory adaptation. Proposition~\ref{prop:asymmetric_horizon_recovery}
-formalizes the same asymmetry in the idealized EMA-to-horizon map.
-
-This asymmetry reflects the temporal update dynamics of EMA-driven regulators:
-contraction is easier to trigger than re-expansion after a low-drift stretch.
+re-expansion after a low-drift stretch. Proposition~\ref{prop:asymmetric_horizon_recovery}
+formalizes the same asymmetry in the idealized EMA-to-horizon map. The
+transition-window table and the EMA-sensitivity sweep appear in
+Appendix~\ref{app:empirical_support}.
 
 \begin{proposition}[Asymmetric Horizon Recovery]\label{prop:asymmetric_horizon_recovery}
 Let the drift estimator satisfy the EMA recursion
@@ -279,112 +220,56 @@ side recovery. In streams with gradual bursts, the observed ratio can exceed the
 step-burst threshold because $\hat\zeta_{\mathrm{end}}$ does not reach $M$.
 \end{remark}
 
-\begin{table}[!htbp]
-\centering
-\caption{Mean horizon regret over the first 50 steps after each regime change.
-The transition-window ablation shows that contraction and re-expansion are not
-symmetrical. Lower is better.}
-\label{tab:hysteresis_transition}
-\begin{tabular}{lrr}
-\toprule
-Method & Contraction & Expansion \\
-\midrule
-fixed-100 & 63.3 & 254.2 \\
-fixed-200 & 163.3 & 154.2 \\
-ADWIN & 888.8 & 435.8 \\
-ADWIN + UMR & 58.4 & 307.7 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\subsection{Drift-EMA Sensitivity}\label{sec:validation_ema_sensitivity}
-
-The recovery asymmetry persists when the drift estimator itself is varied. The
-next sweep changes the EMA coefficient $\alpha$ in the drift estimator while
-keeping the alternating-timescales benchmark fixed. Larger $\alpha$ makes the
-drift estimate more reactive, reducing contraction regret while expansion regret
-stays persistently larger; the expansion-to-contraction ratio remains above one
-throughout the sweep and is higher at the larger $\alpha$ values.
-Appendix~\ref{app:zeta} then shows that this sensitivity can be reduced by an
-observable prefix-validation study for $(d,\alpha)$, which shifts the operating
-point of the regulator and helps interpret the sensitivity of the drift proxy.
-To keep the closed-form claims auditable, the repository also includes a short
-numerical check for Proposition~2.8, Proposition~3.1, and Theorem~2.1 against
-the simulation code used in the paper.
-The same appendix quantifies the local calibration cost of misestimating
-$C_K$: near the optimum, the excess tracking error is quadratic in relative
-calibration error, so moderate bias is tolerable while large bias moves the
-operating horizon materially.
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=0.95\linewidth]{figures/cuberoot_adwin/fig_drift_ema_ablation}
-\caption{EMA sensitivity of horizon recovery on alternating timescales. The
- drift-EMA coefficient changes how quickly the regulator reacts to bursts, but the
- asymmetry remains: expansion regret stays above contraction regret across the
- sweep, and the ratio is larger at higher $\alpha$ in this benchmark.}
-\label{fig:drift_ema_ablation}
-\end{figure}
-
-\subsection{Horizon Cost Curve}\label{sec:validation_gap_cost}
+\subsection{Horizon Misalignment Carries Cost}\label{sec:validation_gap_cost}
 
 The next question is when horizon misalignment becomes operationally expensive.
 For each backend, we compare its instantaneous horizon $n_t$ with the local
 horizon target $n_t^*$ and plot the excess error $E_t - E_t^\star$ against both
 the absolute gap $|n_t - n_t^*|$ and the relative gap $|\log(n_t / n_t^*)|$.
-Here $E_t^\star$ is the best error achieved at time $t$ by the fixed-window oracle
-grid, and the curve is binned over all seeds and time points.
+Here $E_t^\star$ is the best error achieved at time $t$ by the fixed-window
+oracle grid, and the curve is binned over all seeds and time points.
 
 \begin{figure}[!htbp]
 \centering
-\safeincludegraphics[width=0.95\linewidth]{figures/cuberoot_adwin/fig_horizon_gap_cost}
+\safeincludegraphics[width=0.95\linewidth]{artifacts/figures/cuberoot_adwin/fig_horizon_gap_cost}
 \caption{Excess error as a function of horizon misalignment. The relation is
 backend dependent rather than universal: fixed-100 stays inside a low-cost band,
-whereas fixed-500 and ADWIN pay substantially more once the gap widens. ADWIN+$\,$UMR sits
-between these extremes. Some curves terminate early because the corresponding
-method has no observations beyond that gap range; the visible endpoints are
-data-limited, not clipped.}
+whereas fixed-500 and ADWIN pay substantially more once the gap widens.
+ADWIN+$\,$UMR sits between these extremes.}
 \label{fig:horizon_gap_cost}
 \end{figure}
 
-The main lesson is that the paper exposes a measurable tolerance band around the
-useful-memory scale, together with backend-specific degradation once that band
-is exceeded.
-
-\subsection{Phase-Wise Recovery Check}\label{sec:validation_piecewise}
-
-The piecewise-drift benchmark changes the local drift rate in three phases, and
-the adaptive horizon is compared with the offline oracle fixed window for each
-phase. The calibration is held fixed across phases; only the stream changes.
-The detailed calibration check is reported in \cref{app:piecewise_recovery}. In
-the main text, the point is simply that one calibration remains in the right
-operational range when the drift regime changes discretely.
+These results expose a measurable tolerance band around the useful-memory scale,
+together with backend-specific degradation once that band is exceeded.
 
 \subsection{Representative Real-Stream Case Study}\label{sec:validation_real_world}
 
-The synthetic experiments isolate the geometry of horizon control and carry the
-main claim of the paper. The public-stream evidence is therefore kept light:
-ELEC2 remains the representative case study, while a short Bikes summary is
-provided in \cref{app:real_stream_arena}. The main point is simply that coarse
-horizon adaptation still matters on public data, but the payoff remains backend
-dependent.
+The synthetic experiments carry the clearest identification, but ELEC2 shows
+the same qualitative phenomenon on public data. Coarse horizon adaptation still
+changes the operating regime outside the synthetic setting, although the effect
+is smaller and more backend dependent. A Bikes summary is given in
+\cref{app:real_stream_arena}.
 
-\subsection{Controlled Downstream Check}\label{sec:validation_downstream}
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=0.95\linewidth]{artifacts/figures/elec2/fig_umr_arena}
+\caption{Public-stream case study on ELEC2. The real-stream effect is smaller
+and more backend dependent than in the synthetic benchmarks, but coarse horizon
+adaptation still changes the operating regime on public data.}
+\label{fig:elec2_case_study}
+\end{figure}
 
-The downstream classification benchmark is reported in
-Appendix~\ref{app:downstream_temporal_invalidity}. Its role is purely
-mechanistic: it checks whether the cap-only regime carries a measurable
-predictive cost when the backend is a windowed classifier rather than a drift
-detector. The effect is directionally consistent with the main claim but modest
-  in magnitude, so it is a supporting check rather than a dominant result.
+Additional stability and sensitivity results appear in the appendix: bootstrap
+intervals and EMA-sensitivity in Appendix~\ref{app:empirical_support},
+phase-wise recovery in Appendix~\ref{app:piecewise_recovery}, the Bikes summary
+in Appendix~\ref{app:real_stream_arena}, and the controlled downstream check in
+Appendix~\ref{app:downstream_temporal_invalidity}.
 
-\subsection{What the Figures Show}\label{sec:validation_summary}
+\subsection{What the Evidence Shows}\label{sec:validation_summary}
 
-Taken together, the figures support three claims. First, the finite-memory
-optimum is real and not a fitting artifact. Second,
-horizon tracking is distinct from changepoint detection: memory can become stale
-before statistical evidence is strong enough to declare a change. Third,
-horizon control has operational value, but its predictive payoff depends on the
-backend and on the drift regime. The ELEC2 case study reinforces the same
-temporal-validity gap on public data, but the effect is modest relative to the
-main synthetic result.
+Taken together, the evidence supports five claims. First, the finite-memory
+optimum is real and not a fitting artifact. Second, temporal validity and
+changepoint evidence are distinct objects. Third, the cap-only regime is
+operationally visible. Fourth, horizon recovery is asymmetric under alternating
+timescales. Fifth, horizon control has operational value, but its predictive
+payoff depends on the backend and on the drift regime.

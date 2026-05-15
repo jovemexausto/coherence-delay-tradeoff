@@ -3,21 +3,22 @@
 All implementations are publicly available in the project repository
 \citep{parreira2026useful_memory_horizon}.
 
-For reproducibility, the repository also includes a short numerical check for
-Proposition~2.8, Proposition~3.1, and Theorem~2.1 against the simulation code
-used in the paper.
+For reproducibility, the repository exposes a small set of generation scripts in
+\texttt{code/} together with the corresponding outputs in \texttt{artifacts/}.
 
 The repository contains:
 \begin{itemize}[noitemsep]
-  \item \texttt{experiments/run.py} --- single entry point for all experiment domains;
-  \item \texttt{experiments/gaussian/} and \texttt{experiments/particle/} --- core experiment logic;
-  \item \texttt{experiments/bikes/}, \texttt{experiments/elec2/}, and \texttt{experiments/kuairand/} --- domain-specific benchmarks;
-  \item \texttt{experiments/temporal_invalidity/} --- controlled downstream benchmark for cap-only classification cost;
-  \item \texttt{scripts/numerical\_validation.py} --- numerical checks for the main propositions;
-  \item \texttt{scripts/calibration\_cost.py} --- calibration-cost sensitivity for $C_K$ misestimation;
-  \item \texttt{REPRODUCIBILITY.md} --- setup and run instructions.
+  \item \texttt{code/generate\_gaussian.py} --- Gaussian $U$-curve and related support artifacts;
+  \item \texttt{code/generate\_cuberoot\_adwin.py} --- continuous-drift benchmark figures and CSV summaries;
+  \item \texttt{code/generate\_elec2.py} and \texttt{code/generate\_bikes.py} --- public-stream case-study artifacts;
+  \item \texttt{code/generate\_temporal\_invalidity.py} --- controlled downstream benchmark;
+  \item \texttt{code/generate\_tables.py} --- LaTeX table exports used by the manuscript;
+  \item \texttt{code/generate\_zeta\_support.py}, \texttt{code/generate\_zeta\_self\_calibration.py}, and \texttt{code/generate\_finite\_sample\_geometry.py} --- appendix support artifacts;
+  \item \texttt{artifacts/figures/}, \texttt{artifacts/csv/}, and \texttt{artifacts/tables/} --- canonical generated outputs consumed by the manuscript.
 \end{itemize}
 
-All experiments use \texttt{uv} for dependency management
-(\texttt{uv sync}) and are reproducible with fixed random seeds as
-specified in each script.
+The experiment modules under \texttt{experiments/} and the shared horizon logic
+under \texttt{drift/} remain as implementation support, but the
+manuscript-facing pipeline is the one rooted in \texttt{code/} and
+\texttt{artifacts/}. All runs use fixed random seeds as specified in the
+generation scripts.

@@ -3,8 +3,8 @@
 How long can memory remain useful when the target distribution keeps moving?
 Under the drift class studied here, useful memory has a finite temporal horizon,
 and in the worst-case linear-staleness regime that horizon obeys a cube-root
-law. The governing object is a coherence-lag trade-off: preserving temporally
-coherent evidence requires limiting the lag induced by old memory.
+law. The governing object is a variance-staleness trade-off: preserving
+temporally valid evidence requires limiting the lag induced by old memory.
 
 The theoretical contribution is a decomposition of tracking error into a
 variance term and a staleness term, together with a lower bound showing that the
@@ -12,7 +12,7 @@ resulting finite-memory floor is structural. The operational contribution is a
 horizon regulator: UMR turns the worst-case law into a temporal-validity cap,
 which keeps the effective horizon from drifting far into stale-memory territory.
 
-The strongest empirical lesson is that horizon geometry, horizon tracking, and
+The strongest empirical lesson is that horizon scale, horizon tracking, and
 predictive payoff are distinct objects. Horizon misalignment carries a nonlinear
 operational cost, but the transfer from gap to error depends on the backend and
 on the drift regime.
@@ -24,16 +24,19 @@ memory is the main conceptual payoff here. The alternating-timescales benchmark
 adds a secondary lesson: contraction is easier to induce than re-expansion, so
 EMA-driven horizon regulators have a recoverability gap.
 
-ELEC2 is the representative real-stream case in the main text, with a short Bikes
-summary in the appendix. Together they show that the temporal-validity gap is not
-synthetic-only.
+ELEC2 is the representative real-stream case, with a short Bikes summary in the
+appendix. Together they show that the temporal-validity gap is not synthetic-only.
 
 Finite-memory systems are best judged by how long their retained evidence remains
 current enough to matter. The design consequence is simple: regulate useful
 memory and track the age at which evidence stops being current.
 
-Useful memory under drift has geometry, but its predictive value is policy-
-dependent.
+Useful memory under drift has a finite temporal horizon, but its predictive
+value is policy-dependent.
+
+The cube-root exponent is tied to the worst-case linear-staleness envelope
+studied here. Characterizing how this horizon changes under narrower stochastic
+path classes is the next step.
 
 Code and reproducibility artifacts are available in the project repository
 \citep{parreira2026useful_memory_horizon}.

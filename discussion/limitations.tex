@@ -1,8 +1,8 @@
 \section{Limitations and Scope}\label{sec:open}
 
 \paragraph{Scope of the law.}
-The cube-root law is exact for the finite-memory averaging class analyzed in
-this paper, and the lower bound is stated for window-restricted estimators on a
+The cube-root law is exact for the finite-memory averaging class studied here,
+and the lower bound is stated for window-restricted estimators on a
 $W_2$-Lipschitz drift class. The lower bound itself is proved through a Gaussian
 location subclass and endpoint $W_2$ error, so its structural claim is worst-case
 and subclass-based rather than a universal theorem over all possible online
@@ -15,9 +15,9 @@ by the $W_2$-Lipschitz path bound.
 \paragraph{Dependence on local drift estimation.}
 The operational regulator depends on a local estimate of drift. The current
 benchmark suggests that the remaining gap to the oracle comes mostly from drift
-estimation. At the same time, this is not just a weakness: the paper now shows
-that a short observable calibration prefix can materially improve the regulator,
-so drift estimation is part of the method rather than a hidden nuisance
+estimation. At the same time, a short observable calibration prefix can
+materially improve the regulator, so drift estimation is part of the method
+rather than a hidden nuisance
 parameter. Better local geometry estimators may therefore sharpen horizon
 recovery without changing the law.
 
@@ -29,8 +29,8 @@ change.
 
 \paragraph{What the experiments show.}
 The current experiments are not a leaderboard over drift detectors. The public
-stream result is a representative case study. It shows a specific operational
-distinction: a tracker can still have statistically insufficient changepoint
+stream results show the same operational distinction seen in the synthetic
+benchmarks: a tracker can still have statistically insufficient changepoint
 evidence while already being stale in the sense of useful memory.
 
 \paragraph{Scope of the comparison suite.}

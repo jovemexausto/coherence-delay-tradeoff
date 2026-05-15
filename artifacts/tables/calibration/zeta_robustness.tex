@@ -1,0 +1,17 @@
+\begin{table}[!htbp]
+\centering
+\small
+\caption{EMA robustness check for a constant drift proxy with additive noise. The empirical mean matches the target drift, the empirical variance matches the closed-form $\alpha/(2-\alpha)$ law, and the implied horizon distortion stays close to one when the proxy is unbiased.}
+\label{tab:zeta_robustness}
+\begin{tabular}{lrrrr}
+\toprule
+$\alpha$ & $\mathbb E[\widehat\zeta_t]$ & $\mathrm{Var}(\widehat\zeta_t)$ & Theory & $\mathbb E[\widehat n^*]/n^*$ \\
+\midrule
+0.01 & 1.0002 & 0.00032 & 0.00031 & 1.0000 \\
+0.02 & 0.9999 & 0.00062 & 0.00063 & 1.0004 \\
+0.05 & 1.0004 & 0.00161 & 0.00160 & 1.0006 \\
+0.1 & 1.0001 & 0.00330 & 0.00329 & 1.0018 \\
+0.2 & 1.0000 & 0.00693 & 0.00694 & 1.0039 \\
+\bottomrule
+\end{tabular}
+\end{table}
