@@ -1,0 +1,585 @@
+# PAPER 0
+
+## Identity
+
+Working title:
+`Useful Memory Has a Horizon`
+
+Preferred subtitle:
+`Temporal Validity, Roughness, and Structural Limits for Finite-Memory Tracking under Drift`
+
+Alternative subtitles:
+- `Structural Limits and Horizon Laws for Finite-Memory Tracking under Drift`
+- `Temporal Validity and Path-Dependent Horizon Laws under Drift`
+- `Variance, Staleness, and the Geometry of Useful Memory`
+
+One-sentence thesis:
+Under drift, memory is both a statistical resource and a temporal liability, so useful memory has a finite horizon determined by how temporal roughness accumulates staleness.
+
+One-sentence reviewer summary:
+The paper shows that finite-memory tracking is governed by a variance-staleness trade-off, that the cube-root law is the worst-case Lipschitz member of a broader family of horizon laws, and that memory can become temporally invalid before change becomes statistically detectable.
+
+Core conceptual message:
+`Temporal roughness determines how staleness accumulates, and therefore determines the horizon of useful memory.`
+
+Core phenomenological message:
+`Finite memory can become stale before change becomes detectable.`
+
+Core contrast sentence:
+`Temporal validity is not changepoint evidence.`
+
+## Unified Abstract
+
+We study the temporal validity of finite memory under drift.
+Its starting point is a structural trade-off between finite-sample variance and
+drift-induced staleness. In the worst-case Lipschitz envelope, that trade-off
+induces the cube-root horizon law and a structural finite-memory floor. In
+deterministic Holder-type path classes, the same object becomes a family of
+roughness-indexed horizon laws and minimax rates. The main observable
+consequence is detector-silent staleness: retained memory can become invalid
+before change becomes statistically detectable. The empirical section exists to
+make those structural signatures visible, not to validate a named adaptive
+policy.
+
+## What This Work Is
+
+This work is about:
+- the temporal validity of retained evidence under drift;
+- finite-memory tracking as a variance-staleness problem;
+- worst-case and regime-dependent horizon laws;
+- structural lower bounds for finite-memory tracking;
+- detector-silent staleness as the key observable failure mode;
+- the geometry of useful memory across path classes.
+
+This work is not about:
+- a named adaptive mechanism;
+- improving ADWIN;
+- a benchmark suite for adaptive systems;
+- a universal single memory law;
+- a productized adaptive policy;
+- a sequel split across two artificially separated papers.
+
+## The Discovery
+
+The unified paper should present one coherent discovery with beginning, middle, and end.
+
+### Beginning
+
+In stationary statistics, more memory reduces variance.
+Under drift, more memory also increases temporal misalignment.
+The retained past is therefore never purely beneficial.
+
+### Middle
+
+That tension induces a structural trade-off between finite-sample error and staleness.
+Under a local drift envelope, this trade-off yields a finite useful-memory horizon.
+For the Lipschitz worst case, the horizon obeys the cube-root law.
+For deterministic Holder-type path classes, the horizon becomes regime-dependent.
+
+### End
+
+Because validity and detectability are different clocks, memory can become stale while detectors remain statistically silent.
+This is the main empirical phenomenon and the main conceptual payoff.
+
+The paper is therefore not the story of an intervention.
+It is the story of a structural object: the horizon of useful memory.
+
+## The Scientific Object
+
+The paper studies the lifetime of evidence.
+
+The relevant question is not:
+`When should a detector fire?`
+
+The relevant question is:
+`How long can retained evidence remain representative of the present?`
+
+That question turns memory into a dynamic statistical object.
+The paper is about the limits of that object.
+
+## The Mathematical Core
+
+The mathematical skeleton of the paper is:
+
+```tex
+\mathcal E(n)
+\le
+C_K n^{-1/2} + \mathrm{Staleness}(n; \zeta, H).
+```
+
+### Worst-case Lipschitz anchor
+
+Under local Lipschitz drift, staleness is linear in lag:
+
+```tex
+\mathrm{Staleness}(n;\zeta,1) \asymp \zeta n.
+```
+
+Balancing this against the finite-sample term yields:
+
+```tex
+n^* \asymp (C_K/\zeta)^{2/3},
+\qquad
+\mathcal E_{\min} \asymp C_K^{2/3}\zeta^{1/3}.
+```
+
+This is the anchor case.
+It is the worst-case linear-staleness envelope.
+It is not the whole theory.
+
+### Holder generalization
+
+For deterministic Holder-type path classes, temporal misalignment accumulates like:
+
+```tex
+\mathrm{Staleness}(n;\zeta,H) \asymp \zeta n^H.
+```
+
+Then the balancing law becomes:
+
+```tex
+n^*(H,\zeta) \asymp (C_K/\zeta)^{2/(1+2H)},
+\qquad
+R^*(H,\zeta) \asymp \sigma^{2H/(1+2H)}\zeta^{1/(1+2H)}.
+```
+
+The horizon is therefore not universal.
+It depends on temporal roughness because roughness changes the way staleness accumulates with lag.
+
+### Structural floor
+
+The lower-bound half of the paper must show that the finite-memory floor is structural.
+
+That means:
+- the lower bound is not ornamentation;
+- the paper must visibly prove that the optimum is not a tuning artifact;
+- the lower-bound witness is a first-class object in the narrative.
+
+## The Main Novelty
+
+The novelty is not merely that a cube-root exponent appears.
+
+The novelty is the combination of five things:
+
+1. The object of analysis is the temporal validity of finite memory itself.
+2. The error is decomposed into a statistical term and a staleness term in a distribution-tracking setting.
+3. The worst-case Lipschitz law is identified as a structural horizon law, not just a heuristic tuning rule.
+4. That law is placed inside a broader family indexed by temporal roughness.
+5. The work identifies and visualizes detector-silent staleness: memory can expire before change becomes detectable.
+
+Dynamic regret work, window-tuning work, adaptive forgetting, and concept-drift detection each touch neighboring questions, but the unified paper should argue that they do not make temporal validity the primary object.
+
+## Relationship to Existing Literatures
+
+The unified paper should position itself carefully.
+
+### Relative to dynamic regret and nonstationary optimization
+
+Those works show that window or forgetting scales matter under drift.
+This paper is different because:
+- the object is distribution tracking rather than regret;
+- the drift geometry is on paths of distributions;
+- the emphasis is on temporal validity of memory, not only performance bounds.
+
+### Relative to adaptive windowing and drift detection
+
+Those works ask when enough statistical evidence exists to react.
+This paper asks whether retained evidence is still valid even before that evidence exists.
+The distinction is not rhetorical.
+It is the main phenomenon of the paper.
+
+### Relative to density estimation under drift
+
+Those works are close in spirit and should be taken seriously.
+The unified paper should distinguish itself by centering the horizon itself as the object, tying the upper law to a lower-bound witness, and connecting the theory explicitly to the detectability-validity gap.
+
+### Relative to Age of Information
+
+AoI gives a language for age as a resource constraint.
+This paper offers a distributional and statistical analogue: age becomes costly because staleness is geometric error, not just elapsed time.
+
+## What the Paper Must Not Do
+
+The paper must not:
+- pretend the worst-case Lipschitz law is universal;
+- hide the Holder generalization to preserve an artificial sequel;
+- sell a named adaptive method;
+- read like a detector paper;
+- read like a systems paper with theory attached;
+- make ADWIN a protagonist;
+- frame empirical results as a leaderboard;
+- overclaim stochastic-process theorems that are not actually proved.
+
+## Legacy Material to Exclude
+
+The current project contains a large amount of legacy framing that should not
+survive into the unified paper.
+
+Exclude or demote the following categories:
+- UMR and any renamed version of the same idea;
+- any `ADWIN + something` identity;
+- language of regulator, wrapper, controller, or backend-agnostic cap;
+- protocol-style supporting material;
+- calibration-heavy material whose only purpose is to support a named adaptive policy;
+- public-stream arenas or tables that read like method comparison showcases;
+- contribution bullets whose subject is an intervention.
+
+The unified paper should look as if it was conceived from the start around temporal validity and path-dependent horizon laws.
+
+## Narrative Architecture
+
+The unified paper should feel inevitable.
+
+### Act 1: Memory is helpful and dangerous
+
+Introduce the paradox cleanly.
+Memory lowers variance and increases age.
+Under drift, those incentives conflict.
+
+### Act 2: There is a structural horizon
+
+State the worst-case upper law.
+Show the finite optimum.
+Show the lower bound.
+At this point, the reader should believe that memory has a finite horizon even before the generalization arrives.
+
+### Act 3: The horizon has geometry
+
+Generalize from Lipschitz to Holder-type path classes.
+Make the reader feel that the cube-root law was not wrong; it was the `H=1` member of the family.
+
+### Act 4: Validity and detectability are different clocks
+
+This is where the phenomenon becomes real.
+Introduce detector-silent staleness.
+Show that statistical evidence can lag temporal invalidity.
+
+### Act 5: The empirical section makes the structure legible
+
+The experiments are not about winning.
+They are about showing that the theory leaves visible signatures in finite samples.
+
+### Act 6: The ending is honest
+
+The exponent family is the theorem-level contribution.
+Sharp constants and online identification of path class remain open.
+
+## Conceptual Structure
+
+If born correctly, the unified paper would read as:
+
+1. Introduction
+2. Temporal Validity Under Drift
+3. The Worst-Case Lipschitz Envelope
+4. Holder Path Classes and Horizon Laws
+5. Structural Lower Bounds
+6. Detector-Silent Staleness
+7. Empirical Evidence
+8. Related Work
+9. Limitations and Scope
+10. Conclusion
+
+This is a statement of intellectual structure, not implementation.
+
+## Opening Standard
+
+The opening must do exactly this:
+- state that memory helps and ages;
+- define the useful-memory horizon problem;
+- state the worst-case Lipschitz result;
+- reveal that the cube-root law is the anchor, not the total theory;
+- state the Holder family cleanly and early enough that the paper does not look artificially split;
+- state the detectability-validity distinction;
+- explain that the empirical section studies finite-sample signatures of the theory.
+
+The opening must not:
+- introduce a named mechanism;
+- sound like a detector paper;
+- sound like a method paper;
+- hide the real theory to save material for a sequel.
+
+## Writing Discipline
+
+The manuscript should prefer derivational language over proposal language.
+
+Prefer:
+- `the analysis shows`
+- `the law implies`
+- `the horizon is determined by`
+- `the experiments reveal`
+- `the lower bound shows`
+
+Avoid:
+- `we propose a mechanism`
+- `we introduce a controller`
+- `our method improves`
+- `we cap memory to fix`
+- any phrasing that turns a consequence of the theory into a product pitch.
+
+The tone should remain cold, structural, and mathematical.
+The paper is strongest when it sounds like it discovered a constraint, not when it sounds like it invented a gadget.
+
+## Theorem Package
+
+The unified paper should revolve around a clean theorem package:
+
+1. Upper law under the Lipschitz envelope.
+2. Optimal horizon and minimum error for the Lipschitz case.
+3. Lower bound showing a structural finite-memory floor.
+4. General Holder-class upper law.
+5. Holder-class optimized horizon and minimax rate.
+6. Holder-class lower bound with matching exponent.
+7. Explicit special-case recovery of `H=1` and any other editorially useful case.
+
+The special-case structure matters.
+It is how the reader sees that the theory is unified rather than patched together.
+
+## Lower Bound Priority
+
+The lower bound must remain central throughout the manuscript.
+
+Its role is not auxiliary.
+It is what prevents the paper from collapsing into an empirical or heuristic story.
+
+The manuscript should repeatedly make clear that:
+- the finite horizon is not merely the optimum of one estimator;
+- the floor is structural for the stated class;
+- the hard subclass witnesses a genuine information constraint rather than a design failure.
+
+If the lower bound becomes visually or rhetorically secondary, the paper weakens immediately.
+
+## Limits and Honesty
+
+The paper should be explicit about what is and is not closed.
+
+Closed enough for the main claim:
+- the variance-staleness object;
+- the worst-case Lipschitz law;
+- the Holder family of exponents;
+- the lower-bound story at the level of exponent and structural floor;
+- the detectability-validity gap as an observable phenomenon.
+
+Still open:
+- sharp constants;
+- exact extremal path structure;
+- exact extremal estimator characterization;
+- online identification of roughness class;
+- stronger stochastic-process transfer if the theorems are stated deterministically.
+
+The paper should never pretend that the open problems are already solved.
+But it should also not undersell the fact that the main family of horizon laws is already the central discovery.
+
+## Empirical Program
+
+The empirical section should justify the theory, not carry it.
+
+It should show exactly four things.
+
+### 1. Structural U-curve
+
+Purpose:
+show the variance-staleness trade-off directly.
+
+What it demonstrates:
+- the optimum is finite;
+- the optimum moves with drift strength;
+- the U-shape is structural, not a tuning artifact.
+
+### 2. Regime-dependent scaling across roughness classes
+
+Purpose:
+show that the horizon law is path-dependent.
+
+What it demonstrates:
+- `H=1` recovers cube-root;
+- rougher classes alter the scaling law;
+- the exponent family is visible, not just algebraic.
+
+This is the experiment that justifies unification most strongly.
+Without it, the paper risks looking like a worst-case paper with a speculative generalization tacked on.
+
+### 3. Detector-silent staleness
+
+Purpose:
+show the invalidity gap.
+
+What it demonstrates:
+- the onset of temporal invalidity can precede statistical detection;
+- detectors and validity clocks answer different questions;
+- the phenomenon survives without method branding.
+
+The detector appears only as a witness for detectability.
+It is not a competitor and not a character arc.
+
+The correct empirical stance is oracle-relative.
+The useful-memory law defines the reference scale, and detector behavior is read against that structural reference.
+The question is not whether a detector loses to another method.
+The question is how far detectability lags the validity scale implied by the theory.
+
+### 4. Horizon misalignment cost
+
+Purpose:
+show that missing the useful-memory scale carries measurable cost.
+
+What it demonstrates:
+- being too short is noisy;
+- being too long is stale;
+- the cost surface around the horizon matters in finite samples.
+
+### Optional fifth element
+
+If real-stream evidence is kept, it must be weak confirmation only.
+It must not dominate the paper's empirical identity.
+
+## Figures
+
+The paper should be readable from figures alone.
+
+### Indispensable figures
+
+1. `Two Clocks of Drift`
+   Purpose: the conceptual opener.
+
+2. `Structural U-Curve`
+   Purpose: the finite optimum is visible.
+
+3. `Lower-Bound Witness`
+   Purpose: the structural floor is visible.
+
+4. `Regime Family Figure`
+   Purpose: visualize how staleness accumulation and horizon scaling change across `H`.
+   This is new and should become one of the paper's signatures.
+
+5. `Detector-Silent Staleness`
+   Purpose: visualize the invalidity gap between `t_valid` and `t_detect`.
+
+6. `Horizon Misalignment Cost`
+   Purpose: visualize the price of being above or below the useful-memory scale.
+
+### Figures that should be cut first
+
+- any figure whose legend centers a named method;
+- any figure that reads like a performance arena;
+- any figure that requires a cap mechanism to be conceptually legible;
+- any figure whose main message is calibration of an adaptive policy.
+
+## Current Asset Triage
+
+Good raw material already exists:
+- `Two Clocks of Drift`;
+- `Lower-Bound Witness`;
+- the Gaussian `U-curve`;
+- the current delay figure, after full reframing as `Detector-Silent Staleness`;
+- the current gap-cost figure, if all method branding is removed.
+
+Material that should not survive in its current semantic form:
+- any figure family centered on `cuberoot_adwin` as identity;
+- any `UMR arena` figure;
+- calibration and EMA-ablation figures as main text material;
+- phase-wise recovery figures if they still read like a method paper.
+
+## The Main Phenomenon
+
+The paper needs one quantity that converts metaphor into science.
+
+That quantity is the invalidity gap:
+
+```tex
+\Delta_{\mathrm{inv}} = t_{\mathrm{detect}} - t_{\mathrm{valid}}.
+```
+
+Where:
+- `t_valid` is the first time at which the retained horizon exceeds the useful-memory scale implied by the law being studied, or equivalently the first time the staleness burden overtakes the statistical benefit under the chosen operational definition;
+- `t_detect` is the first time a detector has enough statistical evidence to signal change.
+
+The paper should define and use this quantity.
+It is the scientific version of the informal `boiling frog` intuition.
+
+The manuscript should never use the metaphor itself as central language.
+It should use the measurable gap.
+
+## Oracle Reference Principle
+
+Whenever the empirical section needs a standard of comparison, that standard should be the horizon implied by the law under the regime being studied.
+
+That means:
+- the horizon law acts as the oracle reference, not as a named intervention;
+- detector-side behavior is evaluated by its lag relative to validity expiry;
+- fixed-horizon sweeps are evaluated by their distance from the useful-memory scale;
+- empirical comparisons remain structural rather than competitive.
+
+This is the cleanest way to keep the experiments scientific.
+The paper compares observed behavior to the geometry of the limit, not to a house method.
+
+## Language Discipline
+
+Use consistently:
+- useful-memory horizon
+- temporal validity
+- staleness
+- temporal roughness
+- worst-case Lipschitz envelope
+- Holder path class
+- detector-silent staleness
+- invalidity gap
+- finite-memory floor
+- horizon misalignment
+
+Avoid:
+- UMR
+- regulator
+- wrapper
+- booster
+- controller
+- backend-agnostic
+- cap-only regime
+- adaptive memory policy
+- product-like naming
+- law of nature / thermodynamics rhetoric
+
+Use with caution:
+- counterpoint to the law of large numbers
+
+That phrase can help in the opening as contrast, but it should not become the identity of the paper.
+Otherwise the paper starts sounding larger than what it strictly proves.
+
+## Contribution List
+
+The final paper should be able to state its contributions like this:
+
+- We formalize finite-memory tracking under drift as a variance-staleness trade-off in distributional geometry.
+- We prove a worst-case Lipschitz horizon law and a corresponding structural finite-memory floor.
+- We show that this worst-case law is one member of a broader Holder-indexed family of horizon laws and minimax rates.
+- We identify detector-silent staleness as a structural phenomenon: temporal validity can fail before changepoint evidence appears.
+- We show empirically that the theory leaves visible finite-sample signatures through a structural U-curve, regime-dependent scaling, an invalidity gap, and horizon-misalignment cost.
+
+No contribution bullet should have a mechanism as its grammatical subject.
+
+## Scope Discipline
+
+The paper should maintain five scope constraints:
+- the cube-root law is the worst-case Lipschitz member, not a universal law;
+- the lower bound is structural but subclass-based and should be described that way;
+- detectability enters as an observable consequence, not as the primary theorem object;
+- the paper proves deterministic path-class statements unless stochastic ones are explicitly established;
+- the work has no central method claim.
+
+## Definition of Success
+
+The unified paper is successful only if all of the following are true:
+- the paper reads as one discovery rather than two stitched papers;
+- the Lipschitz case appears as the worst-case anchor, not as the whole theory;
+- the Holder family appears as the natural completion of the object, not as an appendix to save for later;
+- the lower bound is visually and mathematically central;
+- no named mechanism is needed to justify the work;
+- the empirical section reads as phenomenon validation, not product validation;
+- a reviewer can summarize the paper as:
+
+`useful memory has a finite horizon determined by how temporal roughness accumulates staleness, and memory can become invalid before change becomes detectable`
+
+## Final Positioning
+
+This paper is:
+`a theory of temporal validity for finite memory under drift, from the worst-case Lipschitz envelope to roughness-indexed horizon laws, together with the observable phenomenon of detector-silent staleness.`
+
+Anything in the current project that cannot survive under that identity should be removed without sentiment.
