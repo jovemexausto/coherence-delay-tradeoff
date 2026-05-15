@@ -289,9 +289,9 @@ the stated class.
 \includegraphics[width=0.88\linewidth]{artifacts/figures/conceptual/fig_lower_bound_witness.pdf}
 \caption{Lower-bound witness on the Gaussian location subclass. The two paths
 share most of the retained history and differ only on a short recent segment of
-width $h$, yet they remain separated at the present. That unresolved recent
-segment is enough to produce a structural finite-memory floor at the same
-cube-root scale as the upper-law optimum.}
+width $h$, yet they remain separated at the present. Optimizing that recent ramp
+segment already yields a substantially stronger explicit witness constant at the
+same cube-root scale as the upper-law optimum.}
 \label{fig:lower_bound_witness}
 \end{figure}
 
@@ -350,72 +350,84 @@ so one valid explicit choice is $c_0 = 1/8$.
 
 The second obstruction is local drift. Fix any $1\leq h\leq m$ and define
 \[
-  \beta_h \coloneqq \min\!\left\{\zeta,\; \frac{\sigma}{4h^{3/2}}\right\},
-  \qquad
-  \mu^{\pm,h}_{t-j} \coloneqq \pm \,\beta_h\,(h-j)_+,
+  \mu^{\pm,h}_{t-j} \coloneqq \pm \,\zeta\,(h-j)_+,
   \qquad 0\leq j\leq m-1,
 \]
 where $(u)_+ \coloneqq \max\{u,0\}$. Each path belongs to the admissible class
-because its slope magnitude is at most $\beta_h \leq \zeta$. The endpoint gap is
+because its slope magnitude is exactly $\zeta$ on the active segment. The
+endpoint gap is
 \[
-  |\mu_t^{+,h} - \mu_t^{-,h}| = 2\beta_h h.
+  |\mu_t^{+,h} - \mu_t^{-,h}| = 2\zeta h.
 \]
 The corresponding Gaussian product laws satisfy
 \[
   \mathrm{KL}(P_{+,h},P_{-,h})
   = \frac{1}{2\sigma^2} \sum_{j=0}^{m-1}
-    \bigl(2\beta_h (h-j)_+\bigr)^2
-  \leq \frac{2\beta_h^2}{\sigma^2} \sum_{r=1}^{h} r^2
-  \leq \frac{2\beta_h^2}{\sigma^2} h^3
-  \leq \frac{1}{8}.
+    \bigl(2\zeta (h-j)_+\bigr)^2
+  = \frac{2\zeta^2}{\sigma^2} \sum_{r=1}^{h} r^2.
 \]
 Applying the same reduction from estimation to testing, now with endpoint error
-threshold $\beta_h h$, and using Le Cam together with Pinsker gives average
+threshold $\zeta h$, and using Le Cam together with Pinsker gives average
 testing error at least
 \[
   \frac{1-\mathrm{TV}(P_{+,h},P_{-,h})}{2}
   \geq
   \frac{1-\sqrt{\mathrm{KL}(P_{+,h},P_{-,h})/2}}{2}
-  \geq \frac{3}{8}.
 \]
 Therefore
 \[
-  R_m^* \;\geq\; \frac{3}{8}\,\beta_h h
-  \;\geq\;
-  \frac{3}{32}\,\min\!\left\{\zeta h,\; \sigma h^{-1/2}\right\},
+  R_m^* \;\geq\; \frac{\zeta h}{2}
+  \left(1-\sqrt{\frac{\zeta^2}{\sigma^2}\sum_{r=1}^{h} r^2}\right),
 \]
-which is again a fully explicit numerical lower bound. Since $h$ was arbitrary,
+which holds for every $1\leq h\leq m$.
+
+To optimize the same ramp witness in the critical-window regime, write
+$h_\star \coloneqq (\sigma/\zeta)^{2/3}$ and choose
+\[
+  a_\star \coloneqq \left(\frac{2\sqrt{3}}{5}\right)^{2/3},
+  \qquad
+  \bar h \coloneqq \lfloor a_\star h_\star \rfloor.
+\]
+When $1\leq \bar h\leq m$, we have
+\[
+  \sum_{r=1}^{\bar h} r^2 = \frac{\bar h^3}{3} + O(\bar h^2),
+\]
+so, since $\bar h = a_\star h_\star + O(1)$,
+\[
+  \mathrm{KL}(P_{+,\bar h},P_{-,\bar h})
+  = \frac{2\zeta^2}{\sigma^2}\sum_{r=1}^{\bar h} r^2
+  = \frac{2a_\star^3}{3} + o(1)
+  = \frac{8}{25} + o(1).
+\]
+Hence
+\[
+  \frac{1-\mathrm{TV}(P_{+,\bar h},P_{-,\bar h})}{2}
+  \geq
+  \frac{1-\sqrt{\mathrm{KL}(P_{+,\bar h},P_{-,\bar h})/2}}{2}
+  = \frac{3}{10} + o(1),
+\]
+while the endpoint threshold obeys
+\[
+  \zeta \bar h = a_\star\,\sigma^{2/3}\zeta^{1/3} + o(\sigma^{2/3}\zeta^{1/3}).
+\]
+Therefore the ramp witness gives
 \[
   R_m^* \;\geq\;
-  \frac{3}{32}\,\sup_{1\leq h\leq m}
-  \min\!\left\{\zeta h,\; \sigma h^{-1/2}\right\}.
+  \left(\frac{3}{10}\,a_\star + o(1)\right)
+  \sigma^{2/3}\zeta^{1/3}
+  =
+  \left(\frac{3}{10}\left(\frac{2\sqrt{3}}{5}\right)^{2/3} + o(1)\right)
+  \sigma^{2/3}\zeta^{1/3}.
 \]
-
 Taking the maximum of the constant-path and ramp bounds proves the displayed
-lower bound. For the cube-root regime, assume
-$1 \leq h_\star \coloneqq (\sigma/\zeta)^{2/3} \leq m$. Choose an integer
-$\bar h \in [h_\star/2, h_\star]$. Then
+lower bound. In particular, the same ramp family already yields the explicit
+asymptotic constant
 \[
-  \zeta \bar h \geq \frac{1}{2}\,\zeta h_\star
-  = \frac{1}{2}\,\sigma^{2/3}\zeta^{1/3},
+  c = \frac{3}{10}\left(\frac{2\sqrt{3}}{5}\right)^{2/3} \approx 0.2349,
 \]
-and
-\[
-  \sigma \bar h^{-1/2}
-  \geq \sigma h_\star^{-1/2}
-  = \sigma^{2/3}\zeta^{1/3}.
-\]
-Therefore
-\[
-  \min\!\left\{\sigma \bar h^{-1/2},\; \zeta \bar h\right\}
-  \geq \frac{1}{2}\,\sigma^{2/3}\zeta^{1/3},
-\]
-and the ramp bound gives
-\[
-  R_m^* \geq \frac{3}{64}\,\sigma^{2/3}\zeta^{1/3}.
-\]
-So one admissible explicit constant in the critical-window regime is
-$c = 3/64$.
+which is substantially larger than the more conservative witness constant used
+in earlier drafts, even though the result remains exponent-level rather than
+constant-sharp.
 
 \begin{remark}[Scope of the lower bound]\label{rem:lower_bound_scope}
 The lower bound is subclass-based. It uses a Gaussian location witness whose
