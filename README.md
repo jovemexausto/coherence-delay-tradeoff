@@ -23,10 +23,6 @@ The current paper is organized around temporal coherence, temporal validity, and
 - Appendix: phase-wise recovery details for the UMR horizon cap
 - Archival materials: earlier masking / logged-feedback work, retained for history only
 
-## Reproducibility
-
-See `REPRODUCIBILITY.md` for setup and run instructions.
-
 ## Citation
 
 If you cite the repository artifact, please use:

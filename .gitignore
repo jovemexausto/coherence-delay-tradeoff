@@ -44,10 +44,12 @@ Thumbs.db
 
 # Misc
 archive
-.tcc_work/
+.archive/
 .backup
 .ruff_cache
 /data/
 docs/
 AGENTS.md
 # Compiled PDFs are committed intentionally — do not ignore *.pdf
+
+scripts
