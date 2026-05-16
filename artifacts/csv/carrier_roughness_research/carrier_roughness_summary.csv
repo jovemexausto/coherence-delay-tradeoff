@@ -1,0 +1,72 @@
+experiment,setting,estimated_slope,carrier_a,comment
+raw-iid,raw W2 iid ambient d=1,-0.5486,0.5486,ambient-dimension benchmark
+raw-iid,raw W2 iid ambient d=2,-0.4297,0.4297,ambient-dimension benchmark
+raw-iid,raw W2 iid ambient d=4,-0.2651,0.2651,ambient-dimension benchmark
+raw-iid,raw W2 iid ambient d=6,-0.1797,0.1797,ambient-dimension benchmark
+intrinsic-iid,"raw W2 iid ambient d=4, intrinsic k=1",-0.4978,0.4978,embedded low-dimensional support
+intrinsic-iid,"raw W2 iid ambient d=8, intrinsic k=1",-0.4406,0.4406,embedded low-dimensional support
+intrinsic-iid,"raw W2 iid ambient d=8, intrinsic k=2",-0.4022,0.4022,embedded low-dimensional support
+triangular-fixed-span,"iid mixture fixed span d=1, H=0.5, span=0.10",-0.4837,0.4837,mixture benchmark
+triangular-fixed-span,"triangular fixed span d=1, H=0.5, span=0.10",-0.5263,0.5263,inheritance check
+triangular-fixed-span,"iid mixture fixed span d=1, H=0.5, span=0.25",-0.4829,0.4829,mixture benchmark
+triangular-fixed-span,"triangular fixed span d=1, H=0.5, span=0.25",-0.5291,0.5291,inheritance check
+triangular-fixed-span,"iid mixture fixed span d=1, H=0.5, span=0.50",-0.4803,0.4803,mixture benchmark
+triangular-fixed-span,"triangular fixed span d=1, H=0.5, span=0.50",-0.5301,0.5301,inheritance check
+triangular-growing-span,"iid mixture fixed zeta d=1, H=0.5, zeta=0.04",-0.3773,0.3773,mixture benchmark under growing span
+triangular-growing-span,"triangular fixed zeta d=1, H=0.5, zeta=0.04",-0.4598,0.4598,heterogeneity stress test
+triangular-span-growth,"iid mixture span growth d=1, H=0.5, frac=0.25",-0.3234,0.3234,mixture benchmark under growing span
+triangular-span-growth,"triangular span growth d=1, H=0.5, frac=0.25",-0.4401,0.4401,intermediate heterogeneity regime
+triangular-span-growth,"iid mixture span growth d=1, H=0.5, frac=0.50",-0.5122,0.5122,mixture benchmark under growing span
+triangular-span-growth,"triangular span growth d=1, H=0.5, frac=0.50",-0.4409,0.4409,intermediate heterogeneity regime
+triangular-span-growth,"iid mixture span growth d=1, H=0.5, frac=0.75",-0.4014,0.4014,mixture benchmark under growing span
+triangular-span-growth,"triangular span growth d=1, H=0.5, frac=0.75",-0.4682,0.4682,intermediate heterogeneity regime
+triangular-fixed-span,"iid mixture fixed span d=1, H=1.0, span=0.10",-0.4486,0.4486,mixture benchmark
+triangular-fixed-span,"triangular fixed span d=1, H=1.0, span=0.10",-0.4239,0.4239,inheritance check
+triangular-fixed-span,"iid mixture fixed span d=1, H=1.0, span=0.25",-0.4545,0.4545,mixture benchmark
+triangular-fixed-span,"triangular fixed span d=1, H=1.0, span=0.25",-0.4231,0.4231,inheritance check
+triangular-fixed-span,"iid mixture fixed span d=1, H=1.0, span=0.50",-0.4611,0.4611,mixture benchmark
+triangular-fixed-span,"triangular fixed span d=1, H=1.0, span=0.50",-0.4306,0.4306,inheritance check
+triangular-growing-span,"iid mixture fixed zeta d=1, H=1.0, zeta=0.04",-0.0113,0.0113,mixture benchmark under growing span
+triangular-growing-span,"triangular fixed zeta d=1, H=1.0, zeta=0.04",-0.0619,0.0619,heterogeneity stress test
+triangular-span-growth,"iid mixture span growth d=1, H=1.0, frac=0.25",-0.3635,0.3635,mixture benchmark under growing span
+triangular-span-growth,"triangular span growth d=1, H=1.0, frac=0.25",-0.3851,0.3851,intermediate heterogeneity regime
+triangular-span-growth,"iid mixture span growth d=1, H=1.0, frac=0.50",-0.3703,0.3703,mixture benchmark under growing span
+triangular-span-growth,"triangular span growth d=1, H=1.0, frac=0.50",-0.2955,0.2955,intermediate heterogeneity regime
+triangular-span-growth,"iid mixture span growth d=1, H=1.0, frac=0.75",0.003,-0.003,mixture benchmark under growing span
+triangular-span-growth,"triangular span growth d=1, H=1.0, frac=0.75",-0.024,0.024,intermediate heterogeneity regime
+triangular-fixed-span,"iid mixture fixed span d=2, H=0.5, span=0.10",-0.3564,0.3564,mixture benchmark
+triangular-fixed-span,"triangular fixed span d=2, H=0.5, span=0.10",-0.35,0.35,inheritance check
+triangular-fixed-span,"iid mixture fixed span d=2, H=0.5, span=0.25",-0.3559,0.3559,mixture benchmark
+triangular-fixed-span,"triangular fixed span d=2, H=0.5, span=0.25",-0.3512,0.3512,inheritance check
+triangular-fixed-span,"iid mixture fixed span d=2, H=0.5, span=0.50",-0.3555,0.3555,mixture benchmark
+triangular-fixed-span,"triangular fixed span d=2, H=0.5, span=0.50",-0.3543,0.3543,inheritance check
+triangular-growing-span,"iid mixture fixed zeta d=2, H=0.5, zeta=0.04",-0.3913,0.3913,mixture benchmark under growing span
+triangular-growing-span,"triangular fixed zeta d=2, H=0.5, zeta=0.04",-0.3504,0.3504,heterogeneity stress test
+triangular-span-growth,"iid mixture span growth d=2, H=0.5, frac=0.25",-0.389,0.389,mixture benchmark under growing span
+triangular-span-growth,"triangular span growth d=2, H=0.5, frac=0.25",-0.3958,0.3958,intermediate heterogeneity regime
+triangular-span-growth,"iid mixture span growth d=2, H=0.5, frac=0.50",-0.4005,0.4005,mixture benchmark under growing span
+triangular-span-growth,"triangular span growth d=2, H=0.5, frac=0.50",-0.3277,0.3277,intermediate heterogeneity regime
+triangular-span-growth,"iid mixture span growth d=2, H=0.5, frac=0.75",-0.3484,0.3484,mixture benchmark under growing span
+triangular-span-growth,"triangular span growth d=2, H=0.5, frac=0.75",-0.335,0.335,intermediate heterogeneity regime
+triangular-fixed-span,"iid mixture fixed span d=2, H=1.0, span=0.10",-0.3724,0.3724,mixture benchmark
+triangular-fixed-span,"triangular fixed span d=2, H=1.0, span=0.10",-0.3756,0.3756,inheritance check
+triangular-fixed-span,"iid mixture fixed span d=2, H=1.0, span=0.25",-0.3749,0.3749,mixture benchmark
+triangular-fixed-span,"triangular fixed span d=2, H=1.0, span=0.25",-0.3774,0.3774,inheritance check
+triangular-fixed-span,"iid mixture fixed span d=2, H=1.0, span=0.50",-0.379,0.379,mixture benchmark
+triangular-fixed-span,"triangular fixed span d=2, H=1.0, span=0.50",-0.3775,0.3775,inheritance check
+triangular-growing-span,"iid mixture fixed zeta d=2, H=1.0, zeta=0.04",-0.1296,0.1296,mixture benchmark under growing span
+triangular-growing-span,"triangular fixed zeta d=2, H=1.0, zeta=0.04",-0.1429,0.1429,heterogeneity stress test
+triangular-span-growth,"iid mixture span growth d=2, H=1.0, frac=0.25",-0.404,0.404,mixture benchmark under growing span
+triangular-span-growth,"triangular span growth d=2, H=1.0, frac=0.25",-0.3818,0.3818,intermediate heterogeneity regime
+triangular-span-growth,"iid mixture span growth d=2, H=1.0, frac=0.50",-0.3262,0.3262,mixture benchmark under growing span
+triangular-span-growth,"triangular span growth d=2, H=1.0, frac=0.50",-0.3037,0.3037,intermediate heterogeneity regime
+triangular-span-growth,"iid mixture span growth d=2, H=1.0, frac=0.75",-0.0758,0.0758,mixture benchmark under growing span
+triangular-span-growth,"triangular span growth d=2, H=1.0, frac=0.75",-0.0989,0.0989,intermediate heterogeneity regime
+sinkhorn-fixed-span,Sinkhorn iid mixture eps=0.50,-0.5227,0.5227,fixed-span measurement layer
+sinkhorn-fixed-span,Sinkhorn triangular eps=0.50,-0.5269,0.5269,fixed-span inheritance check
+sinkhorn-fixed-span,Sinkhorn iid mixture eps=0.20,-0.391,0.391,fixed-span measurement layer
+sinkhorn-fixed-span,Sinkhorn triangular eps=0.20,-0.4982,0.4982,fixed-span inheritance check
+sinkhorn-fixed-span,Sinkhorn iid mixture eps=0.10,-0.4071,0.4071,fixed-span measurement layer
+sinkhorn-fixed-span,Sinkhorn triangular eps=0.10,-0.4025,0.4025,fixed-span inheritance check
+sinkhorn-fixed-span,Sinkhorn iid mixture eps=0.05,-0.4942,0.4942,fixed-span measurement layer
+sinkhorn-fixed-span,Sinkhorn triangular eps=0.05,-0.4075,0.4075,fixed-span inheritance check

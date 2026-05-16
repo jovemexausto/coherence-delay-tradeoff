@@ -15,6 +15,8 @@ dependencies = [
 ]
 
 [project.scripts]
+umh-research-carrier-roughness = "useful_memory_horizon.carrier_roughness_research:main"
+umh-research-holder-lower-bound = "useful_memory_horizon.holder_lower_bound_research:main"
 umh-generate-conceptual = "useful_memory_horizon.conceptual:main"
 umh-generate-gaussian = "useful_memory_horizon.gaussian:main"
 umh-generate-roughness = "useful_memory_horizon.roughness_family:main"

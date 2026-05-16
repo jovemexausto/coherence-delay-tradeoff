@@ -4,6 +4,25 @@ from .gaussian import (
     run_ucurve_experiment,
     save_ucurve_figure,
 )
+from .carrier_roughness_research import (
+    CarrierRoughnessResearchConfig,
+    CarrierRoughnessResearchResult,
+    estimate_log_slope,
+    joint_horizon_exponent,
+    joint_minimum_error_exponents,
+    run_carrier_roughness_research,
+)
+from .holder_lower_bound_research import (
+    HolderLowerBoundResearchConfig,
+    HolderLowerBoundResearchResult,
+    holder_asymptotic_constant,
+    holder_critical_window_scale,
+    holder_optimal_shape_parameter,
+    holder_predicted_optimal_h,
+    holder_scaling_exponents,
+    holder_witness_bound,
+    run_holder_lower_bound_research,
+)
 from .invalidity_gap import (
     InvalidityGapConfig,
     InvalidityGapResult,
@@ -24,6 +43,10 @@ from .roughness_family import (
 )
 
 __all__ = [
+    "CarrierRoughnessResearchConfig",
+    "CarrierRoughnessResearchResult",
+    "HolderLowerBoundResearchConfig",
+    "HolderLowerBoundResearchResult",
     "InvalidityGapConfig",
     "InvalidityGapResult",
     "RoughnessScalingConfig",
@@ -35,6 +58,17 @@ __all__ = [
     "build_slope_rows",
     "build_trace_rows",
     "build_ucurve_rows",
+    "estimate_log_slope",
+    "holder_asymptotic_constant",
+    "holder_critical_window_scale",
+    "holder_optimal_shape_parameter",
+    "holder_predicted_optimal_h",
+    "holder_scaling_exponents",
+    "holder_witness_bound",
+    "joint_horizon_exponent",
+    "joint_minimum_error_exponents",
+    "run_carrier_roughness_research",
+    "run_holder_lower_bound_research",
     "run_invalidity_gap_experiment",
     "run_roughness_scaling_experiment",
     "run_ucurve_experiment",
