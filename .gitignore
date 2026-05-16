@@ -46,3 +46,4 @@ Thumbs.db
 archive
 .ruff_cache/
 # Compiled PDFs are committed intentionally — do not ignore *.pdf
+.opencode

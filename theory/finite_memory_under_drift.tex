@@ -200,6 +200,12 @@ $\varepsilon>0$ the empirical fluctuations remain $O(n^{-1/2})$ with a constant
 $L(D,\varepsilon)$ that is dimension-free at fixed $\varepsilon$ and increases
 as $\varepsilon\downarrow 0$.
 
+The low-dimensional $W_2$ threshold follows the standard empirical-measure rate
+theory of \citet{FournierGuillin2015} and \citet{NilesWeedBach2019}. The
+fixed-$\varepsilon$ Sinkhorn statement is the corresponding regularized
+measurement-layer regime studied by \citet{GenevayEtAl2019} and, at the level of
+limit theorems, by \citet{GoldfeldEtAl2022}.
+
 A short numerical sanity check for this regime appears in
 Appendix~\ref{app:finite_sample_geometry}; it is not used as a theorem, but it
 matches the intended low-dimensional interpretation of the finite-sample term.
@@ -211,7 +217,13 @@ windowed triangular array $X_{t-j}\sim P_{t-j}^*$. \Cref{lem:finite_sample_term}
 records the i.i.d. reference case that motivates this carrier exponent in the
 low-dimensional Wasserstein regime. Extending that rate from a fixed law $Q$ to
 the non-identically distributed window requires additional stability or coupling
-assumptions and is not claimed as a general theorem here.
+assumptions and is not claimed as a general theorem here. Recent concentration
+results for weighted empirical measures under Wasserstein drift and for
+triangular-array or dependent empirical measures in $W_1$
+\citep{KeehanAndersonWiesemann2025,AminiVinas2026} indicate related
+concentration mechanisms under additional bounded-support or regularity
+assumptions, but they do not directly yield the present $W_2$ window-mixture
+statement, and we do not rely on such adaptations here.
 \end{remark}
 
 The two terms in \cref{thm:lag_error} pull in opposite directions. Increasing

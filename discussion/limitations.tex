@@ -25,7 +25,14 @@ carrier exponent, the same balancing argument gives a different horizon law, as
 noted in \cref{rem:carrier_exponent}. Appendix~\ref{app:finite_sample_geometry}
 adds a one-dimensional triangular-array sanity check in a fixed-span regime,
 which supports this carrier interpretation empirically but does not replace a
-theorem.
+theorem. The main open technical question is therefore to identify natural
+conditions under which the windowed triangular array satisfies
+\[
+  \mathbb E\,W_2\!\left(\widehat P_t^{(n)}, \bar P_t^{(n)}\right)
+  \le C n^{-1/2},
+\]
+or, failing that, to characterize the correct carrier exponent for the
+non-identically distributed window directly.
 
 \paragraph{Detectability versus validity.}
 The invalidity gap is an empirical consequence of the structural theory, not the
@@ -34,11 +41,12 @@ detector fires, but it does not claim a universal detection-delay theorem across
 all detector classes.
 
 \paragraph{What remains open.}
-Several questions remain deliberately open: sharp constants in the horizon laws,
-matching lower bounds for broader Holder classes, online identification of the
-relevant roughness class, and transfer from deterministic path-class statements
-to stronger stochastic-process formulations. Those are natural next steps, but
-they are not prerequisites for the main structural claim. The present lower
-bound is already materially stronger than the conservative witness used in
-earlier drafts, but it should still be read as a structural floor rather than a
-final extremal characterization.
+Several questions remain deliberately open. The most immediate is the
+windowed triangular-array carrier theorem above. Beyond that, sharp constants in
+the horizon laws, matching lower bounds for broader Holder classes, online
+identification of the relevant roughness class, and transfer from deterministic
+path-class statements to stronger stochastic-process formulations all remain of
+interest. Those are natural next steps, but they are not prerequisites for the
+main structural claim. The present lower bound is already materially stronger
+than the conservative witness used in earlier drafts, but it should still be
+read as a structural floor rather than a final extremal characterization.

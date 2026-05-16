@@ -70,7 +70,10 @@ long operating horizon remains fixed. Define
 \]
 where $t_{\mathrm{valid}}$ is the first time the operating horizon persistently
 exceeds the useful-memory scale, and $t_{\mathrm{detect}}$ is the first detector
-alarm that follows.
+alarm that follows. This separation is consistent with the basic logic of
+sequential changepoint tests: thresholds are tuned to suppress false alarms, so
+an integrated detector statistic typically requires additional accumulation time
+before crossing an alarm boundary \citep{Page1954,Hinkley1970}.
 
 \begin{figure}[!htbp]
 \centering

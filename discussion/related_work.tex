@@ -37,7 +37,7 @@ distributions, and the age penalty is measured directly in transport geometry.
 \paragraph{Distribution tracking under transport geometry.}
 Wasserstein distance and Sinkhorn-type estimators are natural when drift lives
 on paths of distributions rather than on scalar losses
-\citep{GenevayEtAl2019,NilesWeedBach2019,GoldfeldEtAl2022,AkyildizEtAl2024}.
+\citep{FournierGuillin2015,GenevayEtAl2019,NilesWeedBach2019,GoldfeldEtAl2022,AkyildizEtAl2024}.
 They supply the geometric language in which staleness becomes a transport error
 between past and present. In this setting, the trade-off is not simply between
 adaptation and variance, but between finite-sample accuracy and temporal
@@ -48,10 +48,14 @@ Jiang, Li, and Zhang study online stochastic optimization under a Wasserstein
 nonstationarity measure and obtain distribution-aware regret guarantees
 \citep{JiangLiZhang2020}. Keehan, Anderson, and Wiesemann analyze related
 drift-aware weighting questions in Wasserstein distributionally robust
-optimization \citep{KeehanAndersonWiesemann2025}. The present focus is narrower
-and more structural: for finite-memory tracking, how long can retained evidence
-continue to improve estimation of the current distribution before age becomes a
-dominant error source?
+optimization \citep{KeehanAndersonWiesemann2025}. Amini and Vinas give a recent
+moment-method route to triangular-array concentration in $W_1$
+\citep{AminiVinas2026}. Those results are adjacent to the carrier-regime issue
+studied here, but they do not by themselves close the present $W_2$
+window-mixture concentration problem. The present focus is narrower and more
+structural: for finite-memory tracking, how long can retained evidence continue
+to improve estimation of the current distribution before age becomes a dominant
+error source?
 
 \paragraph{Freshness and Age of Information.}
 The Age-of-Information literature treats age as a resource constraint and asks
