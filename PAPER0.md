@@ -97,7 +97,7 @@ The retained past is therefore never purely beneficial.
 
 That tension induces a structural trade-off between finite-sample error and staleness.
 Under a local drift envelope, this trade-off yields a finite useful-memory horizon.
-For deterministic Holder-type path classes, the horizon becomes roughness-dependent.
+For deterministic Hölder-type path classes, the horizon becomes roughness-dependent.
 For the Lipschitz worst case, the horizon obeys the cube-root law as the
 $H=1$ case inside the same family.
 
@@ -134,13 +134,13 @@ C_K n^{-a} + \mathrm{Staleness}(n; \zeta, H).
 
 ### Roughness-indexed horizon family
 
-The theorem object should be a deterministic Holder-type envelope class on paths
+The theorem object should be a deterministic Hölder-type envelope class on paths
 of distributions, not a stochastic-process claim in disguise.
 Hurst or fractional-Brownian motivation may appear only as motivation if useful;
 the theorem-level object remains deterministic unless a stronger statement is
 actually proved.
 
-For deterministic Holder-type path classes, temporal misalignment accumulates like:
+For deterministic Hölder-type path classes, temporal misalignment accumulates like:
 
 ```tex
 \mathrm{Staleness}(n;\zeta,H) \asymp \zeta n^H.
@@ -235,7 +235,7 @@ This paper offers a distributional and statistical analogue: age becomes costly 
 
 The paper must not:
 - pretend the worst-case Lipschitz law is universal;
-- hide the Holder generalization to preserve an artificial sequel;
+- hide the Hölder generalization to preserve an artificial sequel;
 - sell a named adaptive method;
 - read like a detector paper;
 - read like a systems paper with theory attached;
@@ -278,7 +278,7 @@ At this point, the reader should believe that memory has a finite horizon even b
 
 ### Act 3: The horizon has geometry
 
-Generalize from Lipschitz to Holder-type path classes.
+Generalize from Lipschitz to Hölder-type path classes.
 Make the reader feel that the cube-root law was not wrong; it was the `H=1` member of the family.
 The unification should also make clear that editorially useful special cases,
 especially `H=1/2`, are recovered inside the same family rather than added as
@@ -307,7 +307,7 @@ If born correctly, the unified paper would read as:
 1. Introduction
 2. Temporal Validity Under Drift
 3. The Worst-Case Lipschitz Envelope
-4. Holder Path Classes and Horizon Laws
+4. Hölder Path Classes and Horizon Laws
 5. Structural Lower Bounds
 6. Detector-Silent Staleness
 7. Empirical Evidence
@@ -325,7 +325,7 @@ The opening must do exactly this:
 - present the carrier-roughness useful-memory horizon family;
 - state the worst-case Lipschitz result;
 - identify the cube-root law as the $H=1$ case inside the family;
-- state the Holder family cleanly and early enough that the paper does not look artificially split;
+- state the Hölder family cleanly and early enough that the paper does not look artificially split;
 - state the detectability-validity distinction;
 - explain that the empirical section studies finite-sample signatures of the theory.
 
@@ -360,9 +360,9 @@ The paper is strongest when it sounds like it discovered a constraint, not when 
 
 The unified paper should revolve around a clean theorem package:
 
-1. General Holder-class upper law.
-2. Holder-class optimized horizon and minimax rate.
-3. Holder-class lower bound with matching exponent.
+1. General Hölder-class upper law.
+2. Hölder-class optimized horizon and minimax rate.
+3. Hölder-class lower bound with matching exponent.
 4. Worst-case Lipschitz envelope as the `H=1` member.
 5. Lipschitz optimal horizon and minimum error.
 6. Structural finite-memory floor.
@@ -395,7 +395,7 @@ Closed enough for the main claim:
 - the variance-staleness object;
 - the carrier-roughness useful-memory horizon family;
 - the worst-case Lipschitz regime;
-- the Holder family of exponents;
+- the Hölder family of exponents;
 - the lower-bound story at the level of exponent and structural floor;
 - the detectability-validity gap as an observable phenomenon.
 
@@ -561,7 +561,7 @@ Use consistently:
 - carrier-roughness useful-memory horizon law
 - worst-case Lipschitz regime
 - worst-case Lipschitz envelope
-- Holder path class
+- Hölder path class
 - detector-silent staleness
 - invalidity gap
 - finite-memory floor

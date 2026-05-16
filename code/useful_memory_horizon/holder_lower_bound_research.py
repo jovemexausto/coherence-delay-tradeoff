@@ -9,14 +9,14 @@ from .common import export_rows_csv
 
 
 @dataclass(slots=True)
-class HolderLowerBoundResearchConfig:
+class HölderLowerBoundResearchConfig:
     H_values: tuple[float, ...] = (0.35, 0.5, 0.75, 1.0)
     sigma_zeta_ratios: tuple[float, ...] = (1_000.0, 3_000.0, 10_000.0)
     max_multiplier: float = 4.0
 
 
 @dataclass(slots=True)
-class HolderLowerBoundResearchResult:
+class HölderLowerBoundResearchResult:
     summary_rows: list[dict[str, str | float]]
     curve_rows: list[dict[str, str | float]]
 
@@ -25,7 +25,7 @@ def sum_powers(h: int, exponent: float) -> float:
     return float(sum(r**exponent for r in range(1, h + 1)))
 
 
-def holder_witness_bound(sigma: float, zeta: float, H: float, h: int) -> float:
+def Hölder_witness_bound(sigma: float, zeta: float, H: float, h: int) -> float:
     if sigma <= 0.0 or zeta <= 0.0:
         raise ValueError("sigma and zeta must be positive")
     if not (0.0 < H <= 1.0):
@@ -39,14 +39,14 @@ def holder_witness_bound(sigma: float, zeta: float, H: float, h: int) -> float:
     return beta * (h**H) * (1.0 - math.sqrt(kl / 2.0)) / 2.0
 
 
-def holder_scaling_exponents(H: float) -> tuple[float, float]:
+def Hölder_scaling_exponents(H: float) -> tuple[float, float]:
     if not (0.0 < H <= 1.0):
         raise ValueError("H must lie in (0, 1]")
     denominator = 2.0 * H + 1.0
     return 2.0 * H / denominator, 1.0 / denominator
 
 
-def holder_critical_window_scale(sigma: float, zeta: float, H: float) -> float:
+def Hölder_critical_window_scale(sigma: float, zeta: float, H: float) -> float:
     if sigma <= 0.0 or zeta <= 0.0:
         raise ValueError("sigma and zeta must be positive")
     if not (0.0 < H <= 1.0):
@@ -54,7 +54,7 @@ def holder_critical_window_scale(sigma: float, zeta: float, H: float) -> float:
     return (sigma / zeta) ** (2.0 / (2.0 * H + 1.0))
 
 
-def holder_optimal_shape_parameter(H: float) -> float:
+def Hölder_optimal_shape_parameter(H: float) -> float:
     if not (0.0 < H <= 1.0):
         raise ValueError("H must lie in (0, 1]")
     exponent = H + 0.5
@@ -62,35 +62,35 @@ def holder_optimal_shape_parameter(H: float) -> float:
     return shape_power ** (1.0 / exponent)
 
 
-def holder_asymptotic_constant(H: float) -> float:
+def Hölder_asymptotic_constant(H: float) -> float:
     if not (0.0 < H <= 1.0):
         raise ValueError("H must lie in (0, 1]")
-    a_star = holder_optimal_shape_parameter(H)
+    a_star = Hölder_optimal_shape_parameter(H)
     return 0.5 * (a_star**H) * (2.0 * H + 1.0) / (4.0 * H + 1.0)
 
 
-def holder_predicted_optimal_h(sigma: float, zeta: float, H: float) -> float:
-    return holder_optimal_shape_parameter(H) * holder_critical_window_scale(
+def Hölder_predicted_optimal_h(sigma: float, zeta: float, H: float) -> float:
+    return Hölder_optimal_shape_parameter(H) * Hölder_critical_window_scale(
         sigma, zeta, H
     )
 
 
-def run_holder_lower_bound_research(
-    config: HolderLowerBoundResearchConfig | None = None,
-) -> HolderLowerBoundResearchResult:
+def run_Hölder_lower_bound_research(
+    config: HölderLowerBoundResearchConfig | None = None,
+) -> HölderLowerBoundResearchResult:
     if config is None:
-        config = HolderLowerBoundResearchConfig()
+        config = HölderLowerBoundResearchConfig()
 
     summary_rows: list[dict[str, str | float]] = []
     curve_rows: list[dict[str, str | float]] = []
 
     for H in config.H_values:
-        sigma_power, zeta_power = holder_scaling_exponents(H)
-        asymptotic_constant = holder_asymptotic_constant(H)
+        sigma_power, zeta_power = Hölder_scaling_exponents(H)
+        asymptotic_constant = Hölder_asymptotic_constant(H)
         for ratio in config.sigma_zeta_ratios:
             sigma = ratio
             zeta = 1.0
-            predicted_h = holder_predicted_optimal_h(sigma, zeta, H)
+            predicted_h = Hölder_predicted_optimal_h(sigma, zeta, H)
             h_max = max(5, int(config.max_multiplier * predicted_h) + 20)
 
             best_h = 1
@@ -133,30 +133,30 @@ def run_holder_lower_bound_research(
                 }
             )
 
-    return HolderLowerBoundResearchResult(
+    return HölderLowerBoundResearchResult(
         summary_rows=summary_rows, curve_rows=curve_rows
     )
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run Holder lower-bound witness sweeps."
+        description="Run Hölder lower-bound witness sweeps."
     )
     parser.add_argument(
         "--csv-dir",
         type=Path,
-        default=Path("artifacts/csv/holder_lower_bound_research"),
+        default=Path("artifacts/csv/Hölder_lower_bound_research"),
     )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
-    result = run_holder_lower_bound_research()
+    result = run_Hölder_lower_bound_research()
     export_rows_csv(
-        result.summary_rows, args.csv_dir / "holder_lower_bound_summary.csv"
+        result.summary_rows, args.csv_dir / "Hölder_lower_bound_summary.csv"
     )
-    export_rows_csv(result.curve_rows, args.csv_dir / "holder_lower_bound_curves.csv")
+    export_rows_csv(result.curve_rows, args.csv_dir / "Hölder_lower_bound_curves.csv")
 
 
 if __name__ == "__main__":

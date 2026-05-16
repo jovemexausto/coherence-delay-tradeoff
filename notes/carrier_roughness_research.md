@@ -20,7 +20,7 @@ If the finite-sample term scales as `C_K n^{-a}` and staleness grows as `zeta n^
 5. Lower-bound frontier.
 The Lipschitz Gaussian witness is exponent-tight at `H = 1`. Matching lower bounds for `H in (0,1)` should require roughness-matched witness paths rather than only the linear ramp geometry.
 
-6. Holder witness conjecture.
+6. Hölder witness conjecture.
 For the Gaussian location subclass with witness path `mu_{t-j}^{\pm,h} = \pm beta (h-j)_+^H`, the same Le Cam / Pinsker argument should yield a lower law of order `sigma^{2H/(2H+1)} zeta^{1/(2H+1)}`. This would match the `(a,H)` family when `a = 1/2`, still at a subclass-based rather than class-tight level.
 
 ## Priority numerical tests
@@ -40,8 +40,8 @@ Contrast raw `W_2` slopes for ambient cubes with embedded low-dimensional suppor
 5. Sinkhorn epsilon sweep.
 Track how the estimated carrier changes with `epsilon` for both `iid-mixture` and `triangular` comparisons. The target signature is exponent stability with shifting constants.
 
-6. Holder witness sweep.
-For `H in (0,1]`, optimize the roughness-matched Gaussian witness numerically and compare the normalized optimum against the asymptotic constant predicted by the Holder ramp calculation.
+6. Hölder witness sweep.
+For `H in (0,1]`, optimize the roughness-matched Gaussian witness numerically and compare the normalized optimum against the asymptotic constant predicted by the Hölder ramp calculation.
 
 ## Theorem targets
 
@@ -87,12 +87,12 @@ That is the moderate theorem in the form the current experiments can support.
 
 ### Ambitious
 
-Establish a measurement-layer theorem for fixed-`epsilon` debiased Sinkhorn and combine it with a roughness-indexed drift law to obtain a fully rigorous `(a,H)` horizon theory with `a = 1/2` at the measurement layer. Parallel to that, extend the lower-bound program from the Lipschitz endpoint to roughness-matched Holder witnesses.
+Establish a measurement-layer theorem for fixed-`epsilon` debiased Sinkhorn and combine it with a roughness-indexed drift law to obtain a fully rigorous `(a,H)` horizon theory with `a = 1/2` at the measurement layer. Parallel to that, extend the lower-bound program from the Lipschitz endpoint to roughness-matched Hölder witnesses.
 
 ## New computational support
 
 - `umh-research-carrier-roughness` runs empirical carrier identification sweeps for raw `W_2`, intrinsic-dimension proxies, triangular-array inheritance, and fixed-`epsilon` Sinkhorn.
-- `umh-research-holder-lower-bound` runs the roughness-matched Gaussian witness sweep for `H in (0,1]`, reporting the optimal witness width and the normalized lower-law constant.
+- `umh-research-Hölder-lower-bound` runs the roughness-matched Gaussian witness sweep for `H in (0,1]`, reporting the optimal witness width and the normalized lower-law constant.
 
 ## Current lab signal for the next layer up
 

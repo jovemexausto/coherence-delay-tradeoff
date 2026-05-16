@@ -116,8 +116,8 @@ $H\in(0,1]$ and $\zeta>0$, write
 The case $H=1$ is the local Lipschitz envelope; smaller $H$ correspond to slower
 accumulation of staleness with lag.
 
-\begin{lemma}[Holder staleness bound via averaged couplings]
-\label{lem:holder_staleness_bound}
+\begin{lemma}[Hölder staleness bound via averaged couplings]
+\label{lem:Hölder_staleness_bound}
 Let
 \[
   \bar P_t^{(n)} \coloneqq \frac{1}{n}\sum_{j=0}^{n-1} P_{t-j}.
@@ -150,10 +150,10 @@ couples $\bar P_t^{(n)}$ with $P_t$, so
   =
   \frac{1}{n}\sum_{j=0}^{n-1} W_2^2\!\left(P_{t-j},P_t\right).
 \]
-Applying the Holder envelope and taking square roots gives the result.
+Applying the Hölder envelope and taking square roots gives the result.
 \end{proof}
 
-Combining \cref{lem:holder_staleness_bound} with
+Combining \cref{lem:Hölder_staleness_bound} with
 \cref{cor:optimized_horizon} yields the family
 \[
   n^*(a,H) \asymp (C_K/\zeta)^{1/(a+H)}.
@@ -184,7 +184,7 @@ Assume:
   \item all $P_{n,j}$ are supported on a common compact interval $[L,U]$;
   \item the within-window drift span is uniformly bounded in $n$;
   \item on an interior quantile band $u\in[\varepsilon,1-\varepsilon]$, the mixture
-  density $\bar f_n$ is bounded below and uniformly Holder;
+  density $\bar f_n$ is bounded below and uniformly Hölder;
   \item the triangular-array empirical quantile process admits a Bahadur
   representation with integrated remainder $o(n^{-1})$ on that interior band.
 \end{enumerate}

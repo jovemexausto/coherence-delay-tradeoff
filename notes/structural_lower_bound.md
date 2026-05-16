@@ -50,7 +50,7 @@ The standard Le Cam choice is to set `beta` as large as the roughness budget all
 
 `beta = min(zeta, sigma / (2 sqrt(sum_{r=1}^h r^{2H})))`.
 
-That is the exact choice implemented in `code/useful_memory_horizon/holder_lower_bound_research.py`.
+That is the exact choice implemented in `code/useful_memory_horizon/Hölder_lower_bound_research.py`.
 
 ## Lower-bound template
 
@@ -96,7 +96,7 @@ Current status:
 
 ## What is already supported
 
-The numerical witness sweep in `umh-research-holder-lower-bound` supports this scaling by:
+The numerical witness sweep in `umh-research-Hölder-lower-bound` supports this scaling by:
 
 - optimizing the witness width `h`;
 - checking the normalized lower-bound value against the predicted asymptotic constant;
