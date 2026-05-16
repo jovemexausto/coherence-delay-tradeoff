@@ -14,10 +14,10 @@ Alternative subtitles:
 - `Variance, Staleness, and the Geometry of Useful Memory`
 
 One-sentence thesis:
-Under drift, memory is both a statistical resource and a temporal liability, so useful memory has a finite horizon determined by how temporal roughness accumulates staleness.
+Under drift, useful memory obeys a horizon law coupling finite-sample carrier behavior to drift roughness, so temporal validity ends when staleness overtakes variance reduction.
 
 One-sentence reviewer summary:
-The paper shows that finite-memory tracking is governed by a roughness-indexed variance-staleness trade-off, that the cube-root law is the worst-case Lipschitz member of a broader family of horizon laws, and that memory can become temporally invalid before change becomes statistically detectable.
+The paper develops a three-layer theory of useful memory under drift: a minimum kernel, a low-dimensional carrier-inheritance layer, and a practically relevant measurement layer; it shows that finite-memory tracking is governed by a roughness-indexed variance-staleness trade-off, that the cube-root law is the worst-case Lipschitz member of a broader family of horizon laws, and that memory can become temporally invalid before change becomes statistically detectable.
 
 Core conceptual message:
 `Temporal roughness determines how staleness accumulates, and therefore determines the horizon of useful memory.`
@@ -59,6 +59,8 @@ useful-memory scale.
 This work is about:
 - the temporal validity of retained evidence under drift;
 - finite-memory tracking as a variance-staleness problem;
+- a three-layer theory: minimum proof kernel, useful carrier inheritance, and practically relevant measurement-layer guarantees;
+- a three-layer theory: minimum kernel, useful carrier inheritance, and practically relevant measurement-layer guarantees;
 - roughness-indexed horizon laws with a worst-case Lipschitz regime;
 - structural lower bounds for finite-memory tracking;
 - detector-silent staleness as the key observable failure mode;
@@ -71,6 +73,17 @@ This work is not about:
 - a universal single memory law;
 - a productized adaptive policy;
 - a sequel split across two artificially separated papers.
+
+## The Ladder
+
+The paper should read as a nested theory with a minimum kernel, a useful inheritance layer, and a practically relevant measurement layer.
+
+- `Minimum`: the bounded-support fixed-span kernel that closes the Bahadur/quantile remainder story.
+- `Useful`: low-dimensional / low-intrinsic-dimensional carrier inheritance from the i.i.d. mixture benchmark.
+- `Practically relevant`: fixed-`epsilon` Sinkhorn or comparable measurement layers where the carrier exponent is robust in practice.
+
+The minimum layer establishes the core technical mechanism.
+The useful and practically relevant layers are the scientific destination.
 
 ## The Discovery
 

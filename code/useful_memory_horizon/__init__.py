@@ -4,6 +4,38 @@ from .gaussian import (
     run_ucurve_experiment,
     save_ucurve_figure,
 )
+from .glue_theorem_research import (
+    GlueTheoremResearchConfig,
+    GlueTheoremResearchResult,
+    asymptotic_quantile_constants,
+    fixed_span_means,
+    kappa_identity_value,
+    kappa_value,
+    run_glue_theorem_research,
+)
+from .glue_theorem_minimal import (
+    MinimalGlueConfig,
+    MinimalGlueResult,
+    run_minimal_glue_research,
+    uniform_mixture_cdf,
+    uniform_mixture_quantiles,
+)
+from .glue_theorem_bahadur import BahadurConfig, BahadurResult, run_bahadur_research
+from .glue_theorem_bahadur_residual import (
+    BahadurResidualConfig,
+    BahadurResidualResult,
+    run_bahadur_residual_research,
+)
+from .glue_theorem_bahadur_rough_kernel import (
+    BahadurRoughKernelConfig,
+    BahadurRoughKernelResult,
+    run_bahadur_rough_kernel_research,
+)
+from .glue_theorem_bahadur_rough_growth import (
+    BahadurRoughGrowthConfig,
+    BahadurRoughGrowthResult,
+    run_bahadur_rough_growth_research,
+)
 from .carrier_roughness_research import (
     CarrierRoughnessResearchConfig,
     CarrierRoughnessResearchResult,
@@ -45,6 +77,18 @@ from .roughness_family import (
 __all__ = [
     "CarrierRoughnessResearchConfig",
     "CarrierRoughnessResearchResult",
+    "GlueTheoremResearchConfig",
+    "GlueTheoremResearchResult",
+    "MinimalGlueConfig",
+    "MinimalGlueResult",
+    "BahadurConfig",
+    "BahadurResult",
+    "BahadurResidualConfig",
+    "BahadurResidualResult",
+    "BahadurRoughKernelConfig",
+    "BahadurRoughKernelResult",
+    "BahadurRoughGrowthConfig",
+    "BahadurRoughGrowthResult",
     "HolderLowerBoundResearchConfig",
     "HolderLowerBoundResearchResult",
     "InvalidityGapConfig",
@@ -59,6 +103,8 @@ __all__ = [
     "build_trace_rows",
     "build_ucurve_rows",
     "estimate_log_slope",
+    "asymptotic_quantile_constants",
+    "fixed_span_means",
     "holder_asymptotic_constant",
     "holder_critical_window_scale",
     "holder_optimal_shape_parameter",
@@ -67,9 +113,19 @@ __all__ = [
     "holder_witness_bound",
     "joint_horizon_exponent",
     "joint_minimum_error_exponents",
+    "kappa_identity_value",
+    "kappa_value",
     "run_carrier_roughness_research",
+    "run_glue_theorem_research",
+    "run_bahadur_research",
+    "run_bahadur_residual_research",
+    "run_bahadur_rough_kernel_research",
+    "run_bahadur_rough_growth_research",
+    "run_minimal_glue_research",
     "run_holder_lower_bound_research",
     "run_invalidity_gap_experiment",
+    "uniform_mixture_cdf",
+    "uniform_mixture_quantiles",
     "run_roughness_scaling_experiment",
     "run_ucurve_experiment",
     "save_horizon_misalignment_figure",
