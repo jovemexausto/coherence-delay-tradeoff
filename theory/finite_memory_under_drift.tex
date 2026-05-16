@@ -64,6 +64,50 @@ for the deterministic path class whose temporal misalignment is controlled by a
 one-sided Holder envelope at the present time $t$. The local Lipschitz regime is
 the special case $H=1$.
 
+\begin{lemma}[Holder staleness bound via averaged couplings]
+\label{lem:holder_staleness_bound}
+Let
+\[
+  \bar P_t^{(n)} \coloneqq \frac{1}{n}\sum_{j=0}^{n-1} P_{t-j}^*.
+\]
+If the target path belongs to $\mathfrak P_H(\zeta)$, then
+\[
+  W_2^2\!\left(\bar P_t^{(n)}, P_t^*\right)
+  \leq
+  \frac{\zeta^2}{n}\sum_{j=0}^{n-1} j^{2H},
+\]
+and therefore
+\[
+  W_2\!\left(\bar P_t^{(n)}, P_t^*\right)
+  \leq
+  c_H\,\zeta\,n^H
+\]
+for some constant $c_H>0$ depending only on $H$.
+\end{lemma}
+
+\begin{proof}
+For each lag $j$, let $\pi_j$ be an optimal coupling between $P_{t-j}^*$ and
+$P_t^*$. Their average
+\[
+  \bar\pi \coloneqq \frac{1}{n}\sum_{j=0}^{n-1} \pi_j
+\]
+couples $\bar P_t^{(n)}$ with $P_t^*$, so
+\[
+  W_2^2\!\left(\bar P_t^{(n)}, P_t^*\right)
+  \leq
+  \int \|x-y\|^2\,d\bar\pi(x,y)
+  = \frac{1}{n}\sum_{j=0}^{n-1} W_2^2\!\left(P_{t-j}^*, P_t^*\right).
+\]
+Under the Holder envelope,
+\[
+  W_2^2\!\left(\bar P_t^{(n)}, P_t^*\right)
+  \leq
+  \frac{\zeta^2}{n}\sum_{j=0}^{n-1} j^{2H}.
+\]
+Since $n^{-1}\sum_{j=0}^{n-1} j^{2H} \asymp n^{2H}$ for fixed $H\in(0,1]$,
+taking square roots gives the stated bound.
+\end{proof}
+
 \begin{proposition}[Roughness-indexed horizon law]\label{prop:holder_horizon}
 Let the target path belong to $\mathfrak P_H(\zeta)$ for some roughness index
 $H\in(0,1]$, so that the staleness growth obeys
@@ -91,8 +135,9 @@ In particular, $H=1$ recovers the cube-root law
 \end{proposition}
 
 \begin{proof}
-Balancing the decreasing statistical term against the increasing staleness term
-gives
+By \cref{lem:holder_staleness_bound}, the deterministic staleness term is of
+order $\zeta n^H$. Balancing the decreasing statistical term against the
+increasing staleness term gives
 \[
   C_K n^{-1/2} \asymp \zeta n^H,
 \]
