@@ -28,6 +28,12 @@ Then
 
 This is the theorem-level object of the paper.
 
+Status:
+
+- theorem-ready once the carrier and staleness assumptions are stated for the chosen measurement layer and path class;
+- the proof is immediate from the triangle inequality plus expectation;
+- the main remaining work is not this theorem itself but supplying rigorous carrier instantiations.
+
 ## Corollary 1: Optimized useful-memory horizon law
 
 Balancing the two terms yields the useful-memory horizon
@@ -57,6 +63,12 @@ with a Le Cam / Pinsker argument giving a matching exponent at least in the `a =
 
 The key scientific role of the lower bound is to certify that the useful-memory horizon law is not just the optimum of one procedure.
 
+Status:
+
+- theorem-ready at the structural level for the main `a = 1/2` slice;
+- the consolidated note is `notes/structural_lower_bound.md`;
+- class-tight and constant-sharp extensions remain open.
+
 ## Proposition 3: Minimum kernel instantiation
 
 In the bounded-support fixed-span minimum kernel, the carrier satisfies
@@ -66,6 +78,12 @@ In the bounded-support fixed-span minimum kernel, the carrier satisfies
 under the 1-D quantile/Bahadur route with interior regularity.
 
 This provides the canonical `a = 1/2` instantiation of the abstract upper law.
+
+Status:
+
+- theorem-ready in the safe-zone assumptions collected in `notes/minimum_kernel_proposition.md`;
+- the natural first statement is `E W_2^2(\hat P_n^{tri}, \bar P_n) = O(n^{-1})`, followed by Jensen;
+- the consolidated proof narrative now lives in `notes/minimum_kernel_proof.md`.
 
 ## Proposition 4: Useful-layer instantiation
 
@@ -80,11 +98,23 @@ The useful-layer bridge is:
 
 This is the bridge from the minimum kernel to the useful layer.
 
+Status:
+
+- supported by the current low-intrinsic-dimension experiments;
+- theorem-target note is `notes/useful_layer_bridge.md`;
+- not yet a closed theorem in the same sense as the minimum kernel target.
+
 ## Proposition 5: Practically relevant instantiation
 
 For a dimension-robust measurement layer such as fixed-`epsilon` debiased Sinkhorn, the goal is to obtain a stable carrier exponent that can feed directly into the abstract law.
 
 This is not yet the main closed theorem. It is the next measurement-layer instantiation once the useful bridge is in place.
+
+Status:
+
+- empirical signal exists for fixed-`epsilon` Sinkhorn;
+- theorem-target note is `notes/practical_layer_measurement.md`;
+- no claim should currently say that the practical layer is closed as a theorem.
 
 ## What is already enough for the paper
 
@@ -97,6 +127,24 @@ The package has a real contribution if it delivers:
 - supporting evidence for the useful and practically relevant layers.
 
 This is already a complete theory in the relevant sense: the law is abstract, the carriers are modular, and the lower bound makes the horizon structural.
+
+## Current status line
+
+What is already closed or theorem-ready:
+
+- the abstract upper law;
+- the horizon optimization corollary;
+- the minimum-kernel proposition in theorem-ready form;
+- the structural role of the lower bound at the main `a = 1/2` slice.
+
+What is still open at paper level:
+
+- porting the consolidated minimum-kernel proof into final manuscript form;
+- the useful-layer inheritance theorem beyond experimental evidence;
+- the practically relevant measurement-layer theorem;
+- lower-bound extensions beyond the main slice.
+
+The boundary between theorem-ready results, theorem targets, conjectures, and future work is tracked in `notes/package_boundaries.md`.
 
 ## What should stop consuming time
 

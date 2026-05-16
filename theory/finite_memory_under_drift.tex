@@ -1,20 +1,20 @@
-\section{Temporal Validity Under Drift}\label{sec:finite_memory_under_drift}
+\section{The Carrier-Roughness Useful-Memory Horizon Law}
+\label{sec:finite_memory_under_drift}
 
 Under drift, memory is both a statistical resource and a temporal liability.
 Retaining more data reduces finite-sample noise, but it also increases the age
-of the evidence used to represent the present. The structural question is
-therefore not whether memory helps in the abstract, but how long retained
-evidence can remain temporally valid before staleness overwhelms the remaining
-variance gain.
+of the evidence used to represent the present. The object of interest is
+therefore not a detector threshold or a particular adaptive rule, but the error
+of finite-memory representation itself.
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.92\linewidth]{artifacts/figures/conceptual/fig_two_clocks_of_drift.pdf}
-\caption{Two clocks of drift in normalized theorem units. The finite-sample
-term falls with horizon, the staleness term rises with age, and total error is
-minimized at the useful-memory horizon $n^*$. The shaded interval marks the
-invalidity gap: retained evidence can lose temporal validity before sufficient
-changepoint evidence accumulates.}
+\caption{Two clocks of drift. The finite-sample term falls with horizon, the
+staleness term rises with age, and total error is minimized at the useful-memory
+horizon $n^*$. The shaded region represents detector-silent staleness: retained
+evidence can lose temporal validity before enough changepoint evidence
+accumulates to trigger an alarm.}
 \label{fig:two_clocks_of_drift}
 \end{figure}
 
@@ -23,480 +23,299 @@ age variable is the effective lag
 \[
   A(w) \coloneqq \sum_{j=0}^{n-1} j\,w_j.
 \]
-Its operational staleness at time $t$ is the weighted misalignment
+Its corresponding staleness at time $t$ is the weighted transport misalignment
 \[
   S_t(w) \coloneqq \sum_{j=0}^{n-1} w_j\,
-  W_2\!\left(P^*_{t-j},P_t^*\right).
+  W_2\!\left(P_{t-j},P_t\right).
 \]
-Under a local $W_2$-Lipschitz drift envelope with rate $\zeta_t$,
+For a uniform window, $A(w)=(n-1)/2$, so window length and temporal age are the
+same object up to constants. This is why memory length becomes a statistical
+question rather than a purely algorithmic one.
+
+\subsection{Abstract Upper Law}\label{subsec:abstract_upper_law}
+
+The top-level theorem separates finite-sample carrier behavior from
+drift-induced staleness.
+
+\begin{theorem}[Abstract upper law]\label{thm:abstract_upper_law}
+Let $d$ be a probability metric satisfying the triangle inequality. At time $t$,
+let $P_t$ be the present target law, let $\bar P_t^{(n)}$ be the window target,
+and let $\widehat P_t^{(n)}$ be the estimator built from the last $n$
+observations. Assume that for some constants $C_K>0$, $C_S>0$, exponent $a>0$,
+roughness index $H\in(0,1]$, and amplitude $\zeta>0$,
 \[
-  S_t(w) \leq \zeta_t A(w).
+  \mathbb E\,d\!\left(\widehat P_t^{(n)},\bar P_t^{(n)}\right)
+  \le C_K n^{-a}
 \]
-For a uniform window, $A(w)=(n-1)/2$, so temporal age and window length are the
-same object up to constants. This is why horizon choice becomes the central
-statistical question.
-
-At the theorem level, the structural object is the decomposition
+and
 \[
-  \mathcal E(n)
-  \leq
-  C_K n^{-a} + \mathrm{Staleness}(n;\zeta,H),
+  d\!\left(\bar P_t^{(n)},P_t\right)
+  \le C_S\zeta n^H
 \]
-where the first term is the finite-sample contribution and the second is the
-cost of retaining old evidence under drift. The main text specializes to the
-root-$n$ carrier case $a=1/2$. The path class determines how the staleness term
-grows with lag, and therefore determines the useful-memory horizon.
+hold for all $n$ in the regime of interest. Then
+\[
+  \mathbb E\,d\!\left(\widehat P_t^{(n)},P_t\right)
+  \le C_K n^{-a} + C_S\zeta n^H.
+\]
+\end{theorem}
 
-\subsection{Roughness-Indexed Horizon Family}
+\begin{proof}
+By the triangle inequality,
+\[
+  d\!\left(\widehat P_t^{(n)},P_t\right)
+  \le
+  d\!\left(\widehat P_t^{(n)},\bar P_t^{(n)}\right)
+  + d\!\left(\bar P_t^{(n)},P_t\right).
+\]
+Taking expectations and applying the two assumptions yields the claim.
+\end{proof}
 
-The family of horizon laws comes first. The theorem-level object is a
-deterministic Holder-type envelope on paths of distributions: temporal
-roughness controls how staleness accumulates with lag, so different path
-classes induce different useful-memory scales. For $H\in(0,1]$ and
-$\zeta>0$, write
+The proof is immediate, but the theorem makes the modular structure explicit:
+the path class supplies the staleness term, while the measurement layer supplies
+the carrier term.
+
+\begin{corollary}[Optimized useful-memory horizon law]
+\label{cor:optimized_horizon}
+Under the assumptions of \cref{thm:abstract_upper_law}, the upper envelope
+\[
+  \Phi(n) \coloneqq C_K n^{-a} + C_S\zeta n^H
+\]
+is minimized, up to constant factors, at
+\[
+  n^*(a,H) \asymp (C_K/\zeta)^{1/(a+H)},
+\]
+and the corresponding optimized error scale is
+\[
+  \Phi(n^*) \asymp C_K^{H/(a+H)}\zeta^{a/(a+H)}.
+\]
+\end{corollary}
+
+\begin{proof}
+Balance the decreasing carrier term against the increasing staleness term:
+\[
+  C_K n^{-a} \asymp C_S\zeta n^H.
+\]
+This gives $n^{a+H}\asymp C_K/\zeta$, hence the displayed horizon law. Substituting
+that scale back into either term gives the optimized error scale.
+\end{proof}
+
+The cube-root law is recovered when $a=1/2$ and $H=1$. More generally, the
+carrier exponent and the roughness exponent jointly determine the useful-memory
+scale. There is no universal horizon independent of those two ingredients.
+
+\subsection{Path Classes and the Roughness Index}
+
+The staleness side of the law is controlled by a deterministic path class. For
+$H\in(0,1]$ and $\zeta>0$, write
 \[
   \mathfrak P_H(\zeta)
   \coloneqq
-  \left\{(P_s^*)_{s\in\mathbb Z}: W_2(P_{t-j}^*,P_t^*) \le \zeta j^H
-  \text{ for all } j\ge 0\right\}
+  \left\{(P_s)_{s\in\mathbb Z}: W_2(P_{t-j},P_t) \le \zeta j^H
+  \text{ for all } j\ge 0\right\}.
 \]
-for the deterministic path class whose temporal misalignment is controlled by a
-one-sided Holder envelope at the present time $t$. The local Lipschitz regime is
-the special case $H=1$.
+The case $H=1$ is the local Lipschitz envelope; smaller $H$ correspond to slower
+accumulation of staleness with lag.
 
 \begin{lemma}[Holder staleness bound via averaged couplings]
 \label{lem:holder_staleness_bound}
 Let
 \[
-  \bar P_t^{(n)} \coloneqq \frac{1}{n}\sum_{j=0}^{n-1} P_{t-j}^*.
+  \bar P_t^{(n)} \coloneqq \frac{1}{n}\sum_{j=0}^{n-1} P_{t-j}.
 \]
 If the target path belongs to $\mathfrak P_H(\zeta)$, then
 \[
-  W_2^2\!\left(\bar P_t^{(n)}, P_t^*\right)
-  \leq
+  W_2^2\!\left(\bar P_t^{(n)},P_t\right)
+  \le
   \frac{\zeta^2}{n}\sum_{j=0}^{n-1} j^{2H},
 \]
 and therefore
 \[
-  W_2\!\left(\bar P_t^{(n)}, P_t^*\right)
-  \leq
-  c_H\,\zeta\,n^H
+  W_2\!\left(\bar P_t^{(n)},P_t\right)
+  \le c_H\zeta n^H
 \]
-for some constant $c_H>0$ depending only on $H$.
+for a constant $c_H>0$ depending only on $H$.
 \end{lemma}
 
 \begin{proof}
-For each lag $j$, let $\pi_j$ be an optimal coupling between $P_{t-j}^*$ and
-$P_t^*$. Their average
+For each lag $j$, let $\pi_j$ be an optimal coupling between $P_{t-j}$ and $P_t$.
+Their average
 \[
-  \bar\pi \coloneqq \frac{1}{n}\sum_{j=0}^{n-1} \pi_j
+  \bar \pi \coloneqq \frac{1}{n}\sum_{j=0}^{n-1} \pi_j
 \]
-couples $\bar P_t^{(n)}$ with $P_t^*$, so
+couples $\bar P_t^{(n)}$ with $P_t$, so
 \[
-  W_2^2\!\left(\bar P_t^{(n)}, P_t^*\right)
-  \leq
+  W_2^2\!\left(\bar P_t^{(n)},P_t\right)
+  \le
   \int \|x-y\|^2\,d\bar\pi(x,y)
-  = \frac{1}{n}\sum_{j=0}^{n-1} W_2^2\!\left(P_{t-j}^*, P_t^*\right).
+  =
+  \frac{1}{n}\sum_{j=0}^{n-1} W_2^2\!\left(P_{t-j},P_t\right).
 \]
-Under the Holder envelope,
-\[
-  W_2^2\!\left(\bar P_t^{(n)}, P_t^*\right)
-  \leq
-  \frac{\zeta^2}{n}\sum_{j=0}^{n-1} j^{2H}.
-\]
-Since $n^{-1}\sum_{j=0}^{n-1} j^{2H} \asymp n^{2H}$ for fixed $H\in(0,1]$,
-taking square roots gives the stated bound.
+Applying the Holder envelope and taking square roots gives the result.
 \end{proof}
 
-\begin{proposition}[Roughness-indexed horizon law]\label{prop:holder_horizon}
-Let the target path belong to $\mathfrak P_H(\zeta)$ for some roughness index
-$H\in(0,1]$, so that the staleness growth obeys
+Combining \cref{lem:holder_staleness_bound} with
+\cref{cor:optimized_horizon} yields the family
 \[
-  \mathrm{Staleness}_H(n;\zeta) \asymp \zeta n^H.
+  n^*(a,H) \asymp (C_K/\zeta)^{1/(a+H)}.
 \]
-If the finite-sample term remains of order $C_K n^{-1/2}$, then the tracking
-error bound
+On the canonical statistical slice $a=1/2$,
 \[
-  \mathcal E_H(n) \le C_K n^{-1/2} + c_H\,\zeta n^H
+  n^*(1/2,H) \asymp (C_K/\zeta)^{2/(1+2H)}.
 \]
-is minimized at
-\[
-  n_H^* \asymp (C_K/\zeta)^{2/(1+2H)},
-  \qquad
-  \mathcal E_{H,\min} \asymp C_K^{2H/(1+2H)}\,\zeta^{1/(1+2H)}.
-\]
-In particular, $H=1$ recovers the cube-root law
-\(
-  n_1^* \asymp (C_K/\zeta)^{2/3}
-\), while $H=1/2$ gives the intermediate special case
-\(
-  n_{1/2}^* \asymp C_K/\zeta
-\).
-\end{proposition}
+At $H=1$, this recovers the cube-root horizon; at $H=1/2$, it yields the
+intermediate $n^*\asymp C_K/\zeta$ regime. These are members of the same law,
+not separate theorem stories.
 
-\begin{proof}
-By \cref{lem:holder_staleness_bound}, the deterministic staleness term is of
-order $\zeta n^H$. Balancing the decreasing statistical term against the
-increasing staleness term gives
+\subsection{Minimum Kernel: A Rigorous Carrier Instantiation}
+\label{subsec:minimum_kernel}
+
+The abstract law needs at least one rigorous carrier instantiation. The minimum
+kernel is the bounded-support fixed-span one-dimensional triangular array. It
+provides the first clean carrier feeding the abstract horizon law.
+
+\begin{proposition}[Minimum-kernel carrier]\label{prop:minimum_kernel}
+Let $X_{n,1},\dots,X_{n,n}$ be independent one-dimensional observations with laws
+$P_{n,1},\dots,P_{n,n}$, and define the window mixture
 \[
-  C_K n^{-1/2} \asymp \zeta n^H,
+  \bar P_n = \frac{1}{n}\sum_{j=1}^n P_{n,j}.
 \]
-which yields
+Assume:
+\begin{enumerate}[label=(\roman*)]
+  \item all $P_{n,j}$ are supported on a common compact interval $[L,U]$;
+  \item the within-window drift span is uniformly bounded in $n$;
+  \item on an interior quantile band $u\in[\varepsilon,1-\varepsilon]$, the mixture
+  density $\bar f_n$ is bounded below and uniformly Holder;
+  \item the triangular-array empirical quantile process admits a Bahadur
+  representation with integrated remainder $o(n^{-1})$ on that interior band.
+\end{enumerate}
+Then
 \[
-  n^{H+1/2} \asymp C_K/\zeta,
-  \qquad
-  n_H^* \asymp (C_K/\zeta)^{2/(1+2H)}.
+  \mathbb E\,W_2^2\!\left(\widehat P_n^{\mathrm{tri}},\bar P_n\right)=O(n^{-1}),
 \]
-Substituting this scale back into either term gives the stated minimum error.
-\end{proof}
-
-\begin{remark}[Family interpretation]
-The point is not that the cube-root law is wrong. The point is that it is the
-$H=1$ member of a broader roughness-indexed family. The $H=1/2$ case is not a
-separate theorem story; it is simply an intermediate member recovered inside
-the same balance. As $H$ decreases, staleness accumulates more slowly with lag,
-so the useful-memory horizon moves accordingly.
-\end{remark}
-
-\subsection{Worst-Case Lipschitz Envelope}
-
-The worst-case Lipschitz regime is the linear-staleness envelope inside that
-family. It isolates the sharpest age penalty permitted by the local path bound.
-
-\begin{theorem}[Lag-inclusive tracking error bound]\label{thm:lag_error}
-Let $X_{t-j} \sim P^*_{t-j}$ and let
+and therefore
 \[
-  \widehat P_t^{(n)} \,=\, \frac{1}{n}\sum_{j=0}^{n-1} \delta_{X_{t-j}}
-\]
-be the uniform-window empirical estimator. Assume the target path is locally
-$W_2$-Lipschitz with rate $\zeta$, so that
-\[
-  W_2\!\left(P^*_{t-j}, P^*_t\right) \leq \zeta j
-  \qquad \text{for all } 0 \leq j < n,
-\]
-and assume the finite-sample term obeys the carrier-regime bound
-\[
-  \mathbb{E}\!\left[W_2\!\left(\widehat P_t^{(n)}, \bar P_t^{(n)}\right)\right]
-  \leq C_K n^{-1/2},
-\]
-where $\bar P_t^{(n)} := n^{-1}\sum_{j=0}^{n-1} P^*_{t-j}$. Then the expected
-tracking error satisfies
-\[
-  \mathcal{E}(n) \;\leq\; C_K\,n^{-1/2} \;+\; 3^{-1/2}\,\zeta\,n,
-\]
-where the first term is the finite-sample statistical cost and the second term
-is the staleness cost induced by retaining old information.
-\end{theorem}
-
-\begin{proof}
-Apply the triangle inequality:
-\[
-  W_2\!\left(\widehat P_t^{(n)}, P_t^*\right)
-  \leq
-  W_2\!\left(\widehat P_t^{(n)}, \bar P_t^{(n)}\right)
-  + W_2\!\left(\bar P_t^{(n)}, P_t^*\right).
-\]
-The first term is controlled by the assumed finite-sample bound. For the second
-term, let $\pi_j$ be an optimal coupling between $P^*_{t-j}$ and $P_t^*$. The
-averaged coupling $\bar\pi := n^{-1}\sum_{j=0}^{n-1} \pi_j$ couples
-$\bar P_t^{(n)}$ with $P_t^*$, so the quadratic transport cost of that explicit
-coupling yields
-\[
-  W_2^2\!\left(\bar P_t^{(n)}, P_t^*\right)
-  \leq \int \|x-y\|^2\,d\bar\pi(x,y)
-  = \frac{1}{n}\sum_{j=0}^{n-1} W_2^2\!\left(P^*_{t-j}, P_t^*\right).
-\]
-Under the local Lipschitz envelope,
-\[
-  W_2^2\!\left(\bar P_t^{(n)}, P_t^*\right)
-  \leq \frac{\zeta^2}{n}\sum_{j=0}^{n-1} j^2
-  \leq \frac{\zeta^2 n^2}{3},
-\]
-so
-\[
-  W_2\!\left(\bar P_t^{(n)}, P_t^*\right)
-  \leq 3^{-1/2}\,\zeta n.
-\]
-Combining the two bounds gives the claim.
-\end{proof}
-
-\begin{lemma}[I.i.d. reference for the carrier regime]\label{lem:finite_sample_term}
-Let $Q$ be a probability measure on $\mathbb R^{d_\mathrm{eff}}$ with support
-contained in a ball of radius $R$ and finite second moment. Let
-$X_1,\dots,X_n$ be i.i.d. samples from $Q$, and let
-$\hat Q_n := n^{-1}\sum_{i=1}^n \delta_{X_i}$. Then:
-\begin{itemize}
-  \item If $d_\mathrm{eff}<4$, there exists a constant $C_{d_\mathrm{eff},R}$
-  such that
-  \[
-    \mathbb E\,W_2(\hat Q_n,Q) \le C_{d_\mathrm{eff},R}\,n^{-1/2}.
-  \]
-  \item If $d_\mathrm{eff}=4$, the same bound holds with an additional
-  $(\log n)^{1/2}$ factor.
-  \item If $d_\mathrm{eff}>4$, the raw Wasserstein rate is slower than
-  $n^{-1/2}$, so the constant-only form above should not be used.
-\end{itemize}
-
-In that high-dimensional regime, the statistical fluctuations do not follow the
-$n^{-1/2}$ carrier exponent, so the resulting horizon scaling lies outside the
-displayed cube-root regime. If the geometry is computed with debiased Sinkhorn
-divergence $S_\varepsilon$ on a bounded domain of diameter $D$, then for fixed
-$\varepsilon>0$ the empirical fluctuations remain $O(n^{-1/2})$ with a constant
-$L(D,\varepsilon)$ that is dimension-free at fixed $\varepsilon$ and increases
-as $\varepsilon\downarrow 0$.
-
-The low-dimensional $W_2$ threshold follows the standard empirical-measure rate
-theory of \citet{FournierGuillin2015} and \citet{NilesWeedBach2019}. The
-fixed-$\varepsilon$ Sinkhorn statement is the corresponding regularized
-measurement-layer regime studied by \citet{GenevayEtAl2019} and, at the level of
-limit theorems, by \citet{GoldfeldEtAl2022}.
-
-A short numerical sanity check for this regime appears in
-Appendix~\ref{app:finite_sample_geometry}; it is not used as a theorem, but it
-matches the intended low-dimensional interpretation of the finite-sample term.
-\end{lemma}
-
-\begin{remark}[Carrier-regime status]\label{rem:triangular_array_status}
-\Cref{thm:lag_error} specializes to the $a=1/2$ carrier case for the
-windowed triangular array $X_{t-j}\sim P_{t-j}^*$. \Cref{lem:finite_sample_term}
-records the i.i.d. reference case that motivates this carrier exponent in the
-low-dimensional Wasserstein regime. Extending that rate from a fixed law $Q$ to
-the non-identically distributed window requires additional stability or coupling
-assumptions and is not claimed as a general theorem here. Recent concentration
-results for weighted empirical measures under Wasserstein drift and for
-triangular-array or dependent empirical measures in $W_1$
-\citep{KeehanAndersonWiesemann2025,AminiVinas2026} indicate related
-concentration mechanisms under additional bounded-support or regularity
-assumptions, but they do not directly yield the present $W_2$ window-mixture
-statement, and we do not rely on such adaptations here.
-\end{remark}
-
-The two terms in \cref{thm:lag_error} pull in opposite directions. Increasing
-$n$ reduces variance but raises the age of the retained evidence. That tension
-produces the worst-case Lipschitz horizon law.
-
-\begin{proposition}[Optimal horizon in the Lipschitz case]\label{prop:coherence_delay}
-Under \cref{thm:lag_error}, the error $\mathcal{E}(n)$ is minimized at
-\[
-  n^* \;=\; \left(\frac{\sqrt{3}\,C_K}{2\zeta}\right)^{2/3},
-\]
-with minimum value
-\[
-  \mathcal{E}_{\min} \;=\; \frac{3^{5/6}}{2^{2/3}}\,C_K^{2/3}\,\zeta^{1/3}.
+  \mathbb E\,W_2\!\left(\widehat P_n^{\mathrm{tri}},\bar P_n\right)=O(n^{-1/2}).
 \]
 \end{proposition}
 
-\begin{proof}
-Differentiate the upper envelope
-$C_K n^{-1/2} + 3^{-1/2}\zeta n$ and solve
+\paragraph{Proof sketch.}
+In one dimension,
 \[
-  -\tfrac12 C_K n^{-3/2} + 3^{-1/2} \zeta = 0.
+  W_2^2\!\left(\widehat P_n^{\mathrm{tri}},\bar P_n\right)
+  = \int_0^1 \bigl(\widehat q_n(u)-q_n(u)\bigr)^2\,du,
 \]
-This gives $n^*=(\sqrt{3}C_K/(2\zeta))^{2/3}$. Substituting back yields the
-displayed minimum.
-\end{proof}
-
-\begin{remark}[Scope of the horizon law]\label{rem:carrier_exponent}
-The cube-root law follows when the finite-sample term behaves as
-\(\mathbb E\,W_2(\widehat P_t^{(n)},\bar P_t^{(n)})\lesssim C_K n^{-1/2}\).
-More generally, if the finite-sample term admits scaling
+so the problem reduces to the integrated $L_2$ error of the empirical quantile
+process. On the interior band, the Bahadur representation gives
 \[
-  \mathbb E\,W_2(\widehat P_t^{(n)},\bar P_t^{(n)})\lesssim C_K n^{-a}
-  \quad \text{for some } a>0,
+  \widehat q_n(u)-q_n(u)
+  =
+  \frac{u-\widehat F_n(q_n(u))}{\bar f_n(q_n(u))} + R_n(u).
 \]
-then balancing it against the linear staleness cost $c_{\mathrm{lin}}\zeta n$
-for some explicit constant $c_{\mathrm{lin}}>0$ yields
-\[
-  n^*(a)
-  \;=\;\left(\frac{a\,C_K}{c_{\mathrm{lin}}\zeta}\right)^{\!\frac{1}{a+1}},
-  \qquad
-  \mathcal E_{\min}(a)
-  \;=\;(a+1)\,a^{-a/(a+1)}\,c_{\mathrm{lin}}^{a/(a+1)}
-  \,C_K^{1/(a+1)}\,\zeta^{a/(a+1)}.
-\]
-The main text uses only the $a=1/2$ regime with
-$c_{\mathrm{lin}}=3^{-1/2}$. The displayed cube-root law is therefore the
-worst-case linear-staleness member of the broader family.
-\end{remark}
+The leading term has integrated variance $O(n^{-1})$ because the observations are
+independent and the fixed-span triangular design changes only constants relative
+to the i.i.d. mixture benchmark. The remainder splits into an empirical
+increment term and a Taylor term; the empirical increment term is the dominant
+one, but under the stated interior regularity it still satisfies an integrated
+$o(n^{-1})$ bound. Bounded support makes the boundary-band contribution
+lower-order. Summing the leading term, the lower-order cross term, and the
+integrated remainder gives $\mathbb E W_2^2=O(n^{-1})$, and Jensen yields the
+displayed $W_2$ rate.
 
-\begin{remark}[Measurement layer]
-The theorem is stated in $W_2$, so $\varepsilon$ does not enter the drift law
-itself. In the synthetic experiments, the observable geometry is often a
-debiased Sinkhorn divergence with fixed $\varepsilon$, which keeps the same
-$n^{-1/2}$ carrier exponent while changing constants. The computational layer is
-therefore separate from the structural horizon law.
-\end{remark}
+The main point is the exponent. Inside this safe zone, the triangular-array
+carrier remains root-$n$ and differs from the i.i.d. mixture benchmark only
+through a design effect.
 
-\begin{corollary}[EWMA analogue]\label{cor:ewma_cube_root}
-For exponential weights $w_j = \alpha(1-\alpha)^j$, the effective lag is
-$\tau_\alpha = (1-\alpha)/\alpha$ and the effective sample size scales as
-$n_{\mathrm{eff}} \asymp 1/\alpha$. Balancing the same statistical and
-staleness terms therefore yields the same cube-root exponent in the effective
-memory scale. This is the exponentially weighted analogue of the $H=1$ case.
-\end{corollary}
+\subsection{A Structural Lower Bound}\label{subsec:lower_bound}
 
-\subsection{A Structural Finite-Memory Floor}
-
-The upper law is not merely the optimum of one estimator. The same scale appears
-in a lower-bound witness, which makes the useful-memory horizon structural for
-the stated class.
+The upper law would be much less interesting if it were only the optimum of one
+estimator. The lower bound shows that, on the main carrier slice $a=1/2$, the
+useful-memory scale is imposed by the drift geometry itself.
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.88\linewidth]{artifacts/figures/conceptual/fig_lower_bound_witness.pdf}
-\caption{Lower-bound witness on the Gaussian location subclass. The two paths
-share most of the retained history and differ only on a short recent segment of
-width $h$, yet they remain separated at the present. Optimizing that recent ramp
-segment already yields a substantially stronger explicit witness constant at the
-same cube-root scale as the upper-law optimum.}
+\caption{Gaussian witness for the structural lower bound. The two paths share
+most of the retained history and differ only on a recent segment of width $h$,
+yet remain separated at the present. Optimizing that recent segment already
+produces the same horizon exponent as the upper law on the main carrier slice.}
 \label{fig:lower_bound_witness}
 \end{figure}
 
-\begin{proposition}[Finite-memory floor via a Gaussian location witness]\label{prop:window_minimax}
-Let $\mathcal P_{\zeta,m}$ be the class of length-$m$ distribution paths such
-that:
-\begin{enumerate}
-  \item each path is $W_2$-Lipschitz with rate at most $\zeta$;
-  \item the lower-bound construction is carried out on the Gaussian location
-  subclass $X_t \sim \mathcal N(\mu_t,\sigma^2 I_d)$ with
-  $\|\mu_t-\mu_s\|_2 \le \zeta |t-s|$;
-  \item the estimator at time $m$ only uses the last $m$ samples.
-\end{enumerate}
-Measure risk by the endpoint $W_2$ error, which coincides with Euclidean
-endpoint error on the Gaussian location subclass. Then, in the critical-window
-regime, there exist explicit constants $c_0,c>0$ such that the minimax
-tracking error over that class cannot beat the same exponent-level
-variance-plus-staleness
-scaling:
+\begin{proposition}[Structural lower bound on the main carrier slice]
+\label{prop:structural_lower_bound}
+Fix $H\in(0,1]$ and work on the Gaussian location subclass with known variance
+$\sigma^2$ and witness paths
 \[
-  \inf_{\hat\Pot_m}\sup_{\Pot^*}\,\mathbb{E}\,d\bigl(\hat\Pot_m,\Pot^*\bigr)
-  \;\gtrsim\; \max\!\left\{c_0\,\sigma\,m^{-1/2},\; c\,\sigma^{2/3}\zeta^{1/3}\right\}.
+  \mu_{t-j}^{\pm,h} = \pm \beta (h-j)_+^H,
+  \qquad j=0,1,\dots,h,
 \]
-Consequently, the cube-root horizon is not merely the optimum of one estimator;
-it is the structural finite-memory floor on this class at the cube-root scale.
+where $\beta\le \zeta$ enforces the roughness budget. Then there exists a
+constant $c_H>0$ depending only on $H$ such that the endpoint tracking risk over
+this subclass satisfies
+\[
+  \inf_{\widehat P}\sup_{P\in\mathcal G_{H,\zeta}}
+  \mathbb E\,W_2\!\left(\widehat P_t,P_t\right)
+  \ge c_H\,\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)}.
+\]
+Consequently, on the main carrier slice $a=1/2$, the useful-memory scale
+\[
+  h^*(H) \asymp (\sigma/\zeta)^{2/(2H+1)}
+\]
+is structural even on this restricted subclass.
 \end{proposition}
 
-\paragraph{Proof.}
-Write $R_m^* \coloneqq \inf_{\delta_m} R_m(\delta_m)$. We exhibit two
-independent obstructions. The first is the ordinary finite-sample estimation
-floor, obtained by restricting to the constant-path subclass $\mu_s \equiv
-\theta$, which is contained in the admissible drift class. For the two
-hypotheses $\theta_\pm = \pm \sigma /(2\sqrt{m})$, the induced product-Gaussian
-laws have Kullback--Leibler divergence
+\paragraph{Proof sketch.}
+Compare two hypotheses generated by the witness paths
+$\mu_{t-j}^{+,h}$ and $\mu_{t-j}^{-,h}$. At the present time, the endpoint
+separation is of order $\beta h^H$. On the Gaussian location subclass, this is
+also the $W_2$ separation. The Kullback--Leibler divergence between the two
+hypotheses is proportional to
 \[
-  \mathrm{KL}(P_+,P_-)
-  = \frac{1}{2\sigma^2} \sum_{j=1}^{m} (\theta_+ - \theta_-)^2
-  = \frac{1}{2\sigma^2} m\left(\frac{\sigma}{\sqrt{m}}\right)^2
-  = \frac{1}{2}.
+  \beta^2 \sum_{r=1}^h r^{2H}/\sigma^2.
 \]
-For any estimator $\delta_m$, the plug-in test $\psi = \mathbf{1}\{\delta_m \geq 0\}$
-must err whenever the estimate falls on the wrong side of the origin; on that
-event the endpoint error is at least $\sigma /(2\sqrt{m})$. By Le Cam's
-two-point lemma and Pinsker's inequality, the average testing error is at least
+Choosing
 \[
-  \frac{1-\mathrm{TV}(P_+,P_-)}{2}
-  \geq
-  \frac{1-\sqrt{\mathrm{KL}(P_+,P_-)/2}}{2}
-  \geq \frac{1}{4}.
+  \beta = \min\!\left\{\zeta,\frac{\sigma}{2\sqrt{\sum_{r=1}^h r^{2H}}}\right\}
 \]
-Hence
-\[
-  R_m^* \;\geq\; \frac{\sigma}{8\sqrt{m}},
-\]
-so one valid explicit choice is $c_0 = 1/8$.
+keeps the testing problem in the Le Cam regime while respecting the roughness
+budget. The resulting two-point lower bound is of order $\beta h^H$. Balancing
+the active roughness constraint against the testing constraint gives
+$h^*(H)\asymp (\sigma/\zeta)^{2/(2H+1)}$ and therefore the displayed lower law.
 
-The second obstruction is local drift. Fix any $1\leq h\leq m$ and define
-\[
-  \mu^{\pm,h}_{t-j} \coloneqq \pm \,\zeta\,(h-j)_+,
-  \qquad 0\leq j\leq m-1,
-\]
-where $(u)_+ \coloneqq \max\{u,0\}$. Each path belongs to the admissible class
-because its slope magnitude is exactly $\zeta$ on the active segment. The
-endpoint gap is
-\[
-  |\mu_t^{+,h} - \mu_t^{-,h}| = 2\zeta h.
-\]
-The corresponding Gaussian product laws satisfy
-\[
-  \mathrm{KL}(P_{+,h},P_{-,h})
-  = \frac{1}{2\sigma^2} \sum_{j=0}^{m-1}
-    \bigl(2\zeta (h-j)_+\bigr)^2
-  = \frac{2\zeta^2}{\sigma^2} \sum_{r=1}^{h} r^2.
-\]
-Applying the same reduction from estimation to testing, now with endpoint error
-threshold $\zeta h$, and using Le Cam together with Pinsker gives average
-testing error at least
-\[
-  \frac{1-\mathrm{TV}(P_{+,h},P_{-,h})}{2}
-  \geq
-  \frac{1-\sqrt{\mathrm{KL}(P_{+,h},P_{-,h})/2}}{2}
-\]
-Therefore
-\[
-  R_m^* \;\geq\; \frac{\zeta h}{2}
-  \left(1-\sqrt{\frac{\zeta^2}{\sigma^2}\sum_{r=1}^{h} r^2}\right),
-\]
-which holds for every $1\leq h\leq m$.
+At $H=1$, this recovers the cube-root horizon and the lower scale
+$\sigma^{2/3}\zeta^{1/3}$. The lower bound is subclass based rather than
+class-tight, but that is enough for the paper's central claim: the horizon is
+not just an estimator artifact.
 
-To optimize the same ramp witness in the critical-window regime, write
-$h_\star \coloneqq (\sigma/\zeta)^{2/3}$ and choose
-\[
-  a_\star \coloneqq \left(\frac{2\sqrt{3}}{5}\right)^{2/3},
-  \qquad
-  \bar h \coloneqq \lfloor a_\star h_\star \rfloor.
-\]
-When $1\leq \bar h\leq m$, we have
-\[
-  \sum_{r=1}^{\bar h} r^2 = \frac{\bar h^3}{3} + O(\bar h^2),
-\]
-so, since $\bar h = a_\star h_\star + O(1)$,
-\[
-  \mathrm{KL}(P_{+,\bar h},P_{-,\bar h})
-  = \frac{2\zeta^2}{\sigma^2}\sum_{r=1}^{\bar h} r^2
-  = \frac{2a_\star^3}{3} + o(1)
-  = \frac{8}{25} + o(1).
-\]
-Hence
-\[
-  \frac{1-\mathrm{TV}(P_{+,\bar h},P_{-,\bar h})}{2}
-  \geq
-  \frac{1-\sqrt{\mathrm{KL}(P_{+,\bar h},P_{-,\bar h})/2}}{2}
-  = \frac{3}{10} + o(1),
-\]
-while the endpoint threshold obeys
-\[
-  \zeta \bar h = a_\star\,\sigma^{2/3}\zeta^{1/3} + o(\sigma^{2/3}\zeta^{1/3}).
-\]
-Therefore the ramp witness gives
-\[
-  R_m^* \;\geq\;
-  \left(\frac{3}{10}\,a_\star + o(1)\right)
-  \sigma^{2/3}\zeta^{1/3}
-  =
-  \left(\frac{3}{10}\left(\frac{2\sqrt{3}}{5}\right)^{2/3} + o(1)\right)
-  \sigma^{2/3}\zeta^{1/3}.
-\]
-Taking the maximum of the constant-path and ramp bounds proves the displayed
-lower bound. In particular, the same ramp family already yields the explicit
-asymptotic constant
-\[
-  c = \frac{3}{10}\left(\frac{2\sqrt{3}}{5}\right)^{2/3} \approx 0.2349,
-\]
-which is substantially larger than the more conservative witness constant used
-in earlier drafts, even though the result remains exponent-level rather than
-constant-sharp.
+\subsection{Beyond the Minimum Kernel}
 
-\begin{remark}[Scope of the lower bound]\label{rem:lower_bound_scope}
-The lower bound is subclass-based. It uses a Gaussian location witness whose
-mean path is itself $W_2$-Lipschitz, and the distance in the lower bound is the
-endpoint $W_2$ error, which becomes Euclidean on that subclass. That is enough
-to make the result minimax for any larger class containing the same witness,
-including the ambient $W_2$-Lipschitz path class. The proposition therefore does
-not claim that every path is Gaussian; it claims that the worst case already
-appears inside the Gaussian mean-shift subproblem.
+The one-dimensional minimum kernel is the first rigorous carrier instantiation.
+Two broader settings are also important for interpreting the law.
 
-At the Lipschitz endpoint $H=1$, this witness matches the cube-root scaling of
-the upper law, so the lower bound is exponent-tight there. It is not intended
-to identify the exact hardest path for the full class, to be constant sharp, or
-to furnish matching lower bounds for the broader Holder family $H\in(0,1)$.
-\end{remark}
+\paragraph{Useful layer.}
+In low-dimensional or low-intrinsic-dimensional settings, the natural question
+is whether the triangular-array carrier inherits the same exponent as the i.i.d.
+mixture benchmark up to a constant-level gap. The clearest evidence comes from
+embedded $k=1$ support inside a larger ambient space, where triangular and
+i.i.d. slopes remain near the $a=1/2$ slice under fixed span.
+
+\paragraph{Practical layer.}
+For a practical measurement layer such as fixed-$\varepsilon$ debiased Sinkhorn,
+the corresponding question is whether the induced finite-sample carrier is
+stable enough to feed the same horizon law. The experiments reported below are
+consistent with that interpretation: across the tested regularization values,
+they show a stable measurement-layer signal rather than a qualitative change of
+behavior.
+
+Together, these settings show how the abstract law extends beyond the
+one-dimensional minimum kernel while keeping the formal claims within their
+proper scope.
+
+\begin{corollary}[EWMA analogue]\label{cor:ewma_cube_root}
+For exponential weights $w_j=\alpha(1-\alpha)^j$, the effective lag is
+$\tau_\alpha=(1-\alpha)/\alpha$ and the effective sample size scales as
+$n_{\mathrm{eff}}\asymp 1/\alpha$. Balancing the same carrier and staleness terms
+therefore yields the same exponent in the effective-memory scale. In
+particular, on the main slice $a=1/2$, $H=1$, the EWMA analogue of the
+cube-root horizon is recovered up to constants.
+\end{corollary}

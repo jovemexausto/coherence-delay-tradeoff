@@ -12,13 +12,20 @@ Target:
 
 for independent, non-identical samples in a window, with the population target `\bar P_n` given by the mixture of the windowed laws.
 
+The theorem-ready statement now lives in `notes/minimum_kernel_proposition.md`.
+The proof narrative now lives in `notes/minimum_kernel_proof.md`.
+
 ## Useful
 
 Upgrade from the minimum kernel to low-dimensional / low-intrinsic-dimensional settings and show that the triangular array inherits the i.i.d. benchmark carrier exponent `a` whenever that benchmark is known.
 
+The focused theorem target is now in `notes/useful_layer_bridge.md`.
+
 ## Practically relevant
 
 Move to a measurement layer that is dimension-robust in practice, e.g. fixed-`\epsilon` Sinkhorn, or to raw `W_2` under explicit intrinsic-dimension assumptions.
+
+The focused measurement-layer target is now in `notes/practical_layer_measurement.md`.
 
 The current useful-layer bridge is the fixed-span low-intrinsic carrier inheritance theorem, which is the moderate theorem targeted by the current experiments.
 
@@ -28,6 +35,8 @@ The current useful-layer bridge is the fixed-span low-intrinsic carrier inherita
 - Growing span degrades the effective constant and the observed rate.
 - The cleanest theorem target is bounded support first, Gaussian tails second.
 - The main paper contribution should be organized through the abstract `(a,H)` law, with the ladder supplying carrier instantiations.
+- The abstract paper-level theorem is now separated cleanly in `notes/abstract_upper_law.md`.
+- The package boundary note is `notes/package_boundaries.md`.
 
 ## Proof skeleton for the minimum theorem
 
@@ -37,6 +46,8 @@ The current useful-layer bridge is the fixed-span low-intrinsic carrier inherita
 4. Control the remainder uniformly so that it is `o(n^{-1/2})` after integration.
 5. Integrate over `u` to obtain `E W_2^2 = O(1/n)` and therefore `E W_2 = O(n^{-1/2})`.
 6. Compare the triangular-array variance constant with the i.i.d. mixture constant to identify the design effect.
+
+At this point the main remaining task is consolidation into one proof narrative, not searching for a different exponent.
 
 ## What could break the proof
 

@@ -1,63 +1,90 @@
 \section{Empirical Evidence}\label{sec:validation}
 
-The experiments make the theory visible in finite samples. They do not compare
-named interventions. They read observed tracking behavior against the
-useful-memory scale implied by the regime under study. Throughout, the oracle
-reference is the horizon predicted by the same variance--staleness law that
-drives the theory section.
+The empirical section makes the theoretical picture visible in finite samples.
+Its role is twofold: to show the main signatures of the variance--staleness law,
+and to calibrate the broader useful and practical settings beyond the
+minimum-kernel result.
 
-Four signatures matter. First, horizon sweeps should exhibit a finite optimum.
-Second, that optimum should scale differently across roughness classes. Third,
-the operating horizon can lose temporal validity before a detector accumulates
-enough evidence to signal change. Fourth, excess error should increase once the
-operating horizon departs materially from the useful-memory scale.
+Four signatures matter. First, horizon sweeps should exhibit a finite optimum
+rather than a boundary solution. Second, that optimum should move with temporal
+roughness. Third, carrier inheritance should remain visible beyond the minimum
+kernel in useful and practical regimes. Fourth, temporal validity can fail
+before changepoint evidence becomes statistically visible.
 
-\subsection{Structural U-Curve}\label{sec:validation_ucurve}
+\subsection{A Visible Finite-Memory Optimum}\label{sec:validation_ucurve}
 
-The Gaussian sweep isolates the variance--staleness trade-off directly. Small
-windows are variance dominated, large windows are stale, and the optimum lies at
-an interior horizon rather than at either boundary.
+The Gaussian horizon sweep isolates the variance--staleness trade-off directly.
+Small windows are variance dominated, large windows are stale, and the minimum
+lies at an interior horizon rather than at either boundary.
 
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.92\linewidth]{artifacts/figures/gaussian/fig_ucurve}
-\caption{Structural U-curve for finite-memory tracking. Left: tracking error as
-a function of horizon for several drift strengths. Right: the minimum achievable
-error decreases as drift weakens. The optimum remains finite across regimes,
-which makes the useful-memory horizon visible before any path-class refinement.}
+\caption{Structural U-curve for finite-memory tracking. Tracking error first
+falls with horizon and then rises once staleness overtakes the remaining
+variance gain. The optimum remains finite across drift strengths.}
 \label{fig:ucurve}
 \end{figure}
 
-This is the basic finite-memory signature. Under stationarity, more memory would
-continue to reduce variance. Under drift, the sweep bends upward once temporal
-misalignment overtakes the remaining variance gain.
+This is the most basic finite-memory signature. Under stationarity, more memory
+would continue to help. Under drift, the same horizon that reduces variance also
+ages the evidence.
 
-\subsection{Regime-Dependent Scaling Across Roughness Classes}\label{sec:validation_roughness}
+\subsection{Roughness-Dependent Horizon Scaling}
+\label{sec:validation_roughness}
 
 The next experiment varies the roughness index directly. For each
-Holder-type regime, the construction uses a finite-sample surrogate whose error
-obeys the same variance--staleness decomposition as the theory,
+Holder-type regime, the surrogate error obeys the same structural decomposition
+as the theory,
 \[
-\mathcal E(n) \approx \sigma n^{-1/2} + \zeta n^H,
+  \mathcal E(n) \approx \sigma n^{-1/2} + \zeta n^H,
 \]
-then measures the empirically optimal horizon across a sweep of $\zeta$ values.
+and the experiment records the empirically optimal horizon across a sweep of
+$\zeta$ values.
 
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.96\linewidth]{artifacts/figures/roughness_family/fig_roughness_family}
-\caption{Roughness-dependent horizon scaling. Left: each roughness class still
-produces a finite optimum, but the location of that optimum shifts with $H$.
-Right: the empirical optimal horizon follows a distinct log--log scaling law in
-each class. The $H=1$ curve recovers the worst-case Lipschitz member, the
-$H=1/2$ curve gives the intermediate special case, and smaller $H$ values fall
-on the same roughness-indexed family rather than defining separate stories.}
+\caption{Roughness-dependent horizon scaling. Each path class still exhibits a
+finite optimum, but the location of that optimum changes with $H$. The
+worst-case Lipschitz cube-root law appears as the $H=1$ member of a broader
+carrier-roughness useful-memory horizon family.}
 \label{fig:roughness_family}
 \end{figure}
 
-The point of this figure is structural rather than cosmetic. If the cube-root
-law were the whole story, the right panel would collapse to a single slope. It
-does not. The empirical optima separate by roughness class, and the recovered
-log--log slopes follow the predicted roughness-indexed family.
+The point is structural rather than cosmetic. If the cube-root law were the only
+story, the right panel would collapse to a single slope. It does not. The
+empirical optima separate by roughness class, matching the path-dependent horizon
+logic of \cref{cor:optimized_horizon}.
+
+\subsection{Useful and Practical Carrier Regimes}
+\label{sec:validation_carrier_layers}
+
+The next figure summarizes two broader carrier settings: a useful setting based
+on low intrinsic dimension, and a practical measurement setting based on fixed-
+$\varepsilon$ Sinkhorn geometry.
+
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=0.92\linewidth]{artifacts/figures/conceptual/fig_carrier_layers}
+\caption{Useful and practical carrier settings. Left: in the useful setting,
+embedded low-intrinsic-dimensional support preserves a carrier near the
+$a=1/2$ slice, and triangular slopes stay close to the i.i.d. mixture
+benchmark. Right: in the practical setting, fixed-$\varepsilon$ Sinkhorn produces
+a measurement-layer carrier whose triangular and i.i.d. slopes remain
+qualitatively close across the tested $\varepsilon$ values.}
+\label{fig:carrier_layers}
+\end{figure}
+
+The left panel concerns bounded-support fixed-span samples with low intrinsic
+dimension. In that setting, the triangular-array carrier tracks the i.i.d.
+mixture benchmark rather than exhibiting a visibly different exponent.
+
+The right panel concerns fixed-$\varepsilon$ Sinkhorn geometry. It shows that the
+corresponding measurement-layer carrier remains stable across the tested
+regularization values and can therefore be read against the same abstract
+horizon law. Appendix~\ref{app:finite_sample_geometry} reports the corresponding
+summary table.
 
 \subsection{Detector-Silent Staleness}\label{sec:validation_invalidity_gap}
 
@@ -66,42 +93,32 @@ separation explicit, consider a stream whose local drift rate ramps upward over
 time. The useful-memory horizon $n_t^*$ contracts as the ramp steepens, while a
 long operating horizon remains fixed. Define
 \[
-\Delta_{\mathrm{inv}} \coloneqq t_{\mathrm{detect}} - t_{\mathrm{valid}},
+  \Delta_{\mathrm{inv}} \coloneqq t_{\mathrm{detect}} - t_{\mathrm{valid}},
 \]
 where $t_{\mathrm{valid}}$ is the first time the operating horizon persistently
 exceeds the useful-memory scale, and $t_{\mathrm{detect}}$ is the first detector
-alarm that follows. This separation is consistent with the basic logic of
-sequential changepoint tests: thresholds are tuned to suppress false alarms, so
-an integrated detector statistic typically requires additional accumulation time
-before crossing an alarm boundary \citep{Page1954,Hinkley1970}.
+alarm that follows.
 
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.94\linewidth]{artifacts/figures/invalidity_gap/fig_invalidity_gap}
 \caption{Detector-silent staleness. As drift intensifies, the useful-memory
 horizon contracts until the operating horizon becomes stale at
-$t_{\mathrm{valid}}$; the detector responds only later at
-$t_{\mathrm{detect}}$, leaving a strictly positive invalidity gap
-$\Delta_{\mathrm{inv}}$. In the lower panel, stale memory already imposes
-excess tracking error before the alarm appears.}
+$t_{\mathrm{valid}}$; the detector responds only later at $t_{\mathrm{detect}}$,
+leaving a strictly positive invalidity gap. The lower panel shows excess
+tracking error accumulating before the alarm appears.}
 \label{fig:invalidity_gap}
 \end{figure}
 
-Across detector settings, the measured gap remains positive in every reported
-run. The detector-threshold ablation in \cref{tab:invalidity_gap_ablation}
-shows mean gaps of roughly $5 \times 10^2$ steps over the tested settings. This
-is the observable form of detector-silent staleness: evidence can become
-obsolete while standard detection remains silent.
-
-The phenomenon is not specific to ADWIN. The detector-family comparison in
-\cref{tab:invalidity_gap_detectors} shows that the gap remains strictly positive
-for Page--Hinkley as well, even though the alarm timing changes.
+Across the reported runs, the measured gap remains positive. This is the
+empirical form of detector-silent staleness: retained evidence can already be
+invalid for the present while detector statistics remain below alarm threshold.
 
 \begin{table}[!htbp]
 \centering
 \small
 \caption{Detector-threshold ablation for the invalidity gap. Across the tested
-ADWIN thresholds, the mean detection time remains strictly later than the mean
+ADWIN thresholds, mean detection time remains strictly later than mean
 validity-expiry time, so the measured invalidity gap stays positive throughout.}
 \label{tab:invalidity_gap_ablation}
 \begin{tabular}{lrrr}
@@ -135,34 +152,30 @@ Page--Hinkley & 1108.0 & 1410.6 & 302.6 \\
 
 \subsection{Horizon Misalignment Cost}\label{sec:validation_misalignment}
 
-The final question is how sharply performance degrades when the operating
-horizon misses the useful-memory scale. Using the same roughness-indexed
-surrogate, \cref{fig:horizon_misalignment} plots excess error against the
-relative horizon gap $|\log(n / n^*)|$.
+The final empirical question is how sharply performance degrades when the
+operating horizon misses the useful-memory scale. Using the same roughness-
+indexed surrogate, \cref{fig:horizon_misalignment} plots excess error against the
+relative horizon gap $|\log(n/n^*)|$.
 
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.72\linewidth]{artifacts/figures/roughness_family/fig_horizon_misalignment}
-\caption{Cost of horizon misalignment. Excess tracking error is smallest near
-the useful-memory scale and rises as the operating horizon moves away from it.
-Being too short is noisy, being too long is stale, and the penalty steepens at
-class-dependent rates once the operating horizon leaves the low-cost band
-around $n^*$.}
+\caption{Cost of horizon misalignment. Excess tracking error is smallest near the
+useful-memory scale and rises once the operating horizon moves away from it.
+Being too short is noisy; being too long is stale.}
 \label{fig:horizon_misalignment}
 \end{figure}
 
-This is the finite-sample reason the horizon itself matters. The optimum is not
-only finite; it is operationally relevant. Errors remain modest in a narrow band
-around the useful-memory scale, then increase on either side as variance or
-staleness takes over.
+This is the operational reason the horizon matters. The optimum is not only
+finite; it is a scale around which performance is visibly better than on either
+side.
 
 \subsection{What the Evidence Shows}\label{sec:validation_summary}
 
-Taken together, the experiments reveal four features that match the theory.
-First, finite-memory tracking exhibits a structural U-curve rather than a
-boundary optimum. Second, the useful-memory scale is roughness dependent, with
-the worst-case Lipschitz cube-root law appearing as the $H=1$ member of a wider
-family. Third, temporal validity can fail before changepoint evidence appears,
-which produces a measurable invalidity gap. Fourth, missing the useful-memory
-scale carries a visible finite-sample cost even when the operating horizon is
-only moderately misaligned.
+Taken together, the experiments support four claims that match the theory.
+Finite-memory tracking exhibits a structural U-curve rather than an ever-growing
+memory benefit. The useful-memory scale is roughness dependent, with the
+cube-root law appearing as the $H=1$ member of a broader family. Carrier
+stability remains visible beyond the minimum kernel in both useful and practical
+settings. Temporal validity can also fail before changepoint evidence appears,
+producing a measurable invalidity gap.

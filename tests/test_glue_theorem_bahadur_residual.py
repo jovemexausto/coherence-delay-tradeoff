@@ -45,6 +45,28 @@ class BahadurResidualResearchTest(unittest.TestCase):
         self.assertLess(float(row["tri_interior_residual_over_mse"]), 0.4)
         self.assertLess(float(row["iid_interior_residual_over_mse"]), 0.4)
 
+    def test_boundary_band_is_lower_order_than_total_residual(self) -> None:
+        result = run_bahadur_residual_research(
+            BahadurResidualConfig(
+                n_values=(50,), replications=8, quantile_grid_size=128
+            )
+        )
+        row = result.summary_rows[0]
+        tri_boundary_fraction = (
+            float(row["tri_residual"]) - float(row["tri_interior_residual"])
+        ) / float(row["tri_residual"])
+        iid_boundary_fraction = (
+            float(row["iid_residual"]) - float(row["iid_interior_residual"])
+        ) / float(row["iid_residual"])
+        self.assertGreaterEqual(
+            float(row["tri_residual"]), float(row["tri_interior_residual"])
+        )
+        self.assertGreaterEqual(
+            float(row["iid_residual"]), float(row["iid_interior_residual"])
+        )
+        self.assertLess(tri_boundary_fraction, 0.4)
+        self.assertLess(iid_boundary_fraction, 0.4)
+
     def test_split_terms_sanity_check(self) -> None:
         result = run_bahadur_residual_research(
             BahadurResidualConfig(

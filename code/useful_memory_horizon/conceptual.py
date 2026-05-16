@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import re
 from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
@@ -19,6 +20,11 @@ def write_csv(path: Path, rows: Sequence[dict[str, Any]]) -> None:
         writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()))
         writer.writeheader()
         writer.writerows(rows)
+
+
+def write_text(path: Path, content: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content, encoding="utf-8")
 
 
 def conceptual_style() -> None:
@@ -266,6 +272,174 @@ def generate_lower_bound(output_path: Path, csv_path: Path) -> None:
     plt.close(fig)
 
 
+def _extract_float(setting: str, marker: str) -> float:
+    match = re.search(rf"{re.escape(marker)}([0-9.]+)", setting)
+    if match is None:
+        raise ValueError(f"could not parse {marker!r} from {setting!r}")
+    return float(match.group(1))
+
+
+def generate_carrier_layers(
+    output_path: Path, csv_path: Path, table_path: Path
+) -> None:
+    from .carrier_roughness_research import (
+        CarrierRoughnessResearchConfig,
+        run_carrier_roughness_research,
+    )
+    from .glue_theorem_useful import UsefulCarrierConfig, run_useful_carrier_research
+
+    useful_result = run_useful_carrier_research(
+        UsefulCarrierConfig(
+            ambient_intrinsic_pairs=((8, 1),),
+            spans=(0.10, 0.25, 0.50),
+            sample_sizes=(32, 64, 128, 256, 512),
+            replications=8,
+        )
+    )
+    practical_result = run_carrier_roughness_research(
+        CarrierRoughnessResearchConfig(
+            raw_dims=(),
+            ambient_intrinsic_pairs=(),
+            triangular_dims=(),
+            H_values=(),
+            fixed_spans=(),
+            span_growth_fractions=(),
+            sinkhorn_epsilons=(0.50, 0.20, 0.10, 0.05),
+            sinkhorn_sample_sizes=(24, 48, 96, 160),
+            sinkhorn_seed_count=10,
+        )
+    )
+
+    useful_rows = [
+        row
+        for row in useful_result.summary_rows
+        if row["experiment"] == "useful-fixed-span"
+    ]
+    practical_rows = [
+        row
+        for row in practical_result.summary_rows
+        if row["experiment"] == "sinkhorn-fixed-span"
+    ]
+
+    rows: list[dict[str, str | float]] = []
+    useful_tri_x: list[float] = []
+    useful_tri_y: list[float] = []
+    useful_iid_x: list[float] = []
+    useful_iid_y: list[float] = []
+    for row in useful_rows:
+        span = _extract_float(str(row["setting"]), "span=")
+        carrier_a = float(row["carrier_a"])
+        rows.append(
+            {
+                "layer": "useful",
+                "setting": str(row["setting"]),
+                "parameter": round(span, 2),
+                "carrier_a": round(carrier_a, 4),
+                "comment": str(row["comment"]),
+            }
+        )
+        if "triangular" in str(row["setting"]):
+            useful_tri_x.append(span)
+            useful_tri_y.append(carrier_a)
+        else:
+            useful_iid_x.append(span)
+            useful_iid_y.append(carrier_a)
+
+    practical_tri_x: list[float] = []
+    practical_tri_y: list[float] = []
+    practical_iid_x: list[float] = []
+    practical_iid_y: list[float] = []
+    for row in practical_rows:
+        epsilon = _extract_float(str(row["setting"]), "eps=")
+        carrier_a = float(row["carrier_a"])
+        rows.append(
+            {
+                "layer": "practical",
+                "setting": str(row["setting"]),
+                "parameter": round(epsilon, 2),
+                "carrier_a": round(carrier_a, 4),
+                "comment": str(row["comment"]),
+            }
+        )
+        if "triangular" in str(row["setting"]):
+            practical_tri_x.append(epsilon)
+            practical_tri_y.append(carrier_a)
+        else:
+            practical_iid_x.append(epsilon)
+            practical_iid_y.append(carrier_a)
+
+    write_csv(csv_path, rows)
+
+    fig, (ax_useful, ax_practical) = plt.subplots(1, 2, figsize=(9.0, 3.6))
+
+    ax_useful.plot(
+        useful_tri_x, useful_tri_y, marker="o", color="#315caf", linewidth=2.1
+    )
+    ax_useful.plot(
+        useful_iid_x,
+        useful_iid_y,
+        marker="o",
+        color="#b23a3a",
+        linewidth=2.1,
+    )
+    ax_useful.set_title("Useful layer")
+    ax_useful.set_xlabel("span")
+    ax_useful.set_ylabel(r"estimated carrier $a$")
+    ax_useful.set_ylim(0.38, 0.58)
+    ax_useful.spines["top"].set_visible(False)
+    ax_useful.spines["right"].set_visible(False)
+    ax_useful.grid(axis="y", alpha=0.18, linewidth=0.6)
+    ax_useful.legend(["triangular", "i.i.d. mixture"], frameon=False, loc="best")
+
+    ax_practical.plot(
+        practical_tri_x,
+        practical_tri_y,
+        marker="o",
+        color="#315caf",
+        linewidth=2.1,
+    )
+    ax_practical.plot(
+        practical_iid_x,
+        practical_iid_y,
+        marker="o",
+        color="#b23a3a",
+        linewidth=2.1,
+    )
+    ax_practical.set_title("Practical layer")
+    ax_practical.set_xlabel(r"Sinkhorn $\epsilon$")
+    ax_practical.set_ylabel(r"estimated carrier $a$")
+    ax_practical.set_ylim(0.40, 0.56)
+    ax_practical.spines["top"].set_visible(False)
+    ax_practical.spines["right"].set_visible(False)
+    ax_practical.grid(axis="y", alpha=0.18, linewidth=0.6)
+    ax_practical.legend(["triangular", "i.i.d. mixture"], frameon=False, loc="best")
+
+    fig.suptitle("Carrier layers beyond the minimum kernel", y=1.02, fontsize=10)
+    fig.tight_layout()
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(output_path, bbox_inches="tight")
+    plt.close(fig)
+
+    table_lines = [
+        r"\begin{table}[!htbp]",
+        r"\centering",
+        r"\small",
+        r"\caption{Summary rows for the useful and practical carrier layers. The useful slice compares triangular and i.i.d. mixture carriers across span, while the practical slice compares fixed-$\epsilon$ Sinkhorn across $\epsilon$.}",
+        r"\label{tab:carrier_layers}",
+        r"\begin{tabular}{llrr}",
+        r"\toprule",
+        r"Layer & Setting & Parameter & Carrier $a$ " + r"\\",
+        r"\midrule",
+    ]
+    for row in rows:
+        table_lines.append(
+            f"{row['layer']} & {row['setting']} & {row['parameter']:.2f} & {row['carrier_a']:.4f} "
+            + r"\\"
+        )
+    table_lines.extend([r"\bottomrule", r"\end{tabular}", r"\end{table}", ""])
+    write_text(table_path, "\n".join(table_lines))
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Generate conceptual paper figures.")
     parser.add_argument(
@@ -287,4 +461,9 @@ def main() -> None:
     generate_lower_bound(
         args.figures_dir / "fig_lower_bound_witness.pdf",
         args.csv_dir / "lower_bound_witness.csv",
+    )
+    generate_carrier_layers(
+        args.figures_dir / "fig_carrier_layers.pdf",
+        args.csv_dir / "carrier_layers.csv",
+        Path("artifacts/tables/conceptual") / "carrier_layers.tex",
     )

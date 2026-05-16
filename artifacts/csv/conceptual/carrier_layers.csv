@@ -1,0 +1,15 @@
+layer,setting,parameter,carrier_a,comment
+useful,"triangular ambient d=8, intrinsic k=1, span=0.10",0.1,0.4652,fixed-span inheritance check
+useful,"iid mixture ambient d=8, intrinsic k=1, span=0.10",0.1,0.5722,mixture benchmark
+useful,"triangular ambient d=8, intrinsic k=1, span=0.25",0.25,0.4737,fixed-span inheritance check
+useful,"iid mixture ambient d=8, intrinsic k=1, span=0.25",0.25,0.5588,mixture benchmark
+useful,"triangular ambient d=8, intrinsic k=1, span=0.50",0.5,0.4792,fixed-span inheritance check
+useful,"iid mixture ambient d=8, intrinsic k=1, span=0.50",0.5,0.5425,mixture benchmark
+practical,Sinkhorn iid mixture eps=0.50,0.5,0.5227,fixed-span measurement layer
+practical,Sinkhorn triangular eps=0.50,0.5,0.5269,fixed-span inheritance check
+practical,Sinkhorn iid mixture eps=0.20,0.2,0.391,fixed-span measurement layer
+practical,Sinkhorn triangular eps=0.20,0.2,0.4982,fixed-span inheritance check
+practical,Sinkhorn iid mixture eps=0.10,0.1,0.4071,fixed-span measurement layer
+practical,Sinkhorn triangular eps=0.10,0.1,0.4025,fixed-span inheritance check
+practical,Sinkhorn iid mixture eps=0.05,0.05,0.4942,fixed-span measurement layer
+practical,Sinkhorn triangular eps=0.05,0.05,0.4075,fixed-span inheritance check

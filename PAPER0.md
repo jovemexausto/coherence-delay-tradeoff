@@ -69,9 +69,8 @@ This work is not about:
 - a named adaptive mechanism;
 - improving ADWIN;
 - a benchmark suite for adaptive systems;
-- a universal single memory law;
 - a productized adaptive policy;
-- a sequel split across two artificially separated papers.
+- a sequel split across artificially separated papers.
 
 ## The Ladder
 
