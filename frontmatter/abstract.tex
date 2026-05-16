@@ -1,43 +1,37 @@
 \begin{abstract}
-In stationary settings, memory is an unambiguous statistical resource: more data
-improves estimation because the target distribution does not move. Under drift,
-that premise fails. Retained evidence reduces sampling noise, but it also
-accumulates temporal misalignment with the present. Finite-memory tracking is
-therefore governed by a temporal-validity problem: how long can past evidence
-continue to improve estimation of the current distribution before staleness
-overtakes variance reduction?
+Memory is not always an asset under drift. Past data reduce sampling noise, but
+as the target distribution moves, retaining more evidence also accumulates
+temporal misalignment with the present.
+Finite-memory distribution tracking is therefore governed by a
+temporal-validity problem: how long can retained evidence improve estimation of
+the present before drift-induced misalignment overtakes variance reduction?
 
-We study this question through a carrier-roughness useful-memory horizon law.
-The main theorem object is an abstract upper law of the form
+We answer this question by separating finite-memory error into the carrier of
+the measurement layer and the roughness-controlled staleness of the drift path.
+This yields a carrier-roughness useful-memory horizon law,
 \[
   \mathbb E\,d\!\left(\widehat P_t^{(n)},P_t\right)
   \leq
   C_K n^{-a} + C_S\zeta n^H,
 \]
-which couples a finite-sample carrier exponent $a$ to a temporal roughness
-index $H\in(0,1]$. Optimizing the trade-off yields the useful-memory scale
+where $a$ is the carrier exponent and $H\in(0,1]$ is the roughness exponent.
+Optimizing this balance gives the useful-memory scale
 $n^*(a,H)\asymp (C_K/\zeta)^{1/(a+H)}$ and the corresponding optimized error
-law. The familiar cube-root horizon appears as the special case $a=1/2$, $H=1$.
+law.
 
-The analysis anchors this law with a rigorous minimum-kernel result: in a
-one-dimensional bounded-support fixed-span triangular array,
-$\mathbb E W_2(\widehat P_n^{\mathrm{tri}},\bar P_n)=O(n^{-1/2})$ via a
-quantile/Bahadur route. A Gaussian witness lower bound shows that on this main
-carrier slice, the useful-memory scale is structural rather than an artifact of
-a particular estimator. The analysis also identifies two broader settings: a
-useful layer in which low intrinsic dimension preserves the carrier exponent
-relative to the i.i.d. mixture benchmark, and a practical measurement layer
-based on fixed-$\varepsilon$ Sinkhorn geometry whose carrier appears stable in
-finite-sample experiments.
+We instantiate the law with a rigorous minimum kernel: a one-dimensional
+bounded-support fixed-span triangular array in which a quantile/Bahadur argument
+gives the canonical $a=1/2$ carrier. A Gaussian witness lower bound shows that
+the resulting horizon is structural on this main slice. The same decomposition
+also identifies regimes where useful memory persists beyond the minimum kernel:
+low intrinsic dimension can preserve the raw $W_2$ carrier, while fixed-
+$\varepsilon$ Sinkhorn geometry provides a practical measurement layer with
+stable finite-sample carriers.
 
-The empirical section makes the theory visible through four signatures: a
-finite-memory U-curve, roughness-dependent horizon scaling, carrier inheritance
-beyond the minimum kernel, and detector-silent staleness. The resulting picture
-is that useful memory has a path-dependent horizon, and temporal validity can
-fail before changepoint evidence becomes statistically visible. The framing is
-therefore adjacent to dynamic regret and adaptive windowing, but its primary
-object is different: the temporal validity of retained evidence for
-distribution tracking under drift.
+The resulting viewpoint is adjacent to dynamic regret and adaptive windowing,
+but the object is different: temporal validity of retained evidence. Useful
+memory has a path-dependent horizon, and retained evidence can become invalid
+for the present before changepoint evidence becomes statistically visible.
 
 \end{abstract}
 
