@@ -1,5 +1,8 @@
 # Bahadur Target for P2
 
+This note supports the minimum kernel in `notes/main_theorem_package.md`.
+Its role is to isolate the quantile-process ingredient needed for Proposition 3.
+
 ## Statement to test
 
 For bounded support and fixed span in 1-D, the triangular-array empirical quantile process should admit a Bahadur-type linearization with `o(n^{-1/2})` integrated remainder.
@@ -49,3 +52,15 @@ If this holds, then integrating the leading term gives
 for an explicit design-dependent constant `C^2`.
 
 This is the cleanest route to the minimum theorem.
+
+## Literature-backed refinement
+
+The external summary suggests that the uniform remainder can be supported under the standard interior assumptions for triangular arrays:
+
+- compact support;
+- `\bar f_n` uniformly bounded below on `[\epsilon, 1-\epsilon]`;
+- `\bar f_n` uniformly Hölder on an interior neighborhood.
+
+In that formulation, the full remainder is controlled by the empirical increment term plus the Taylor remainder, with the overall rate still sufficient for the integrated `W_2^2` expansion.
+
+This is not a change of direction. It is a stronger justification for the same minimum theorem target.

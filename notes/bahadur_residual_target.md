@@ -1,5 +1,8 @@
 # Bahadur Residual Target for P2
 
+This note tracks the remainder term that closes the minimum kernel.
+Its scope is deliberately local to Proposition 3 in `notes/main_theorem_package.md`.
+
 ## What to check next
 
 The remaining theorem ingredient should be a uniform control of the remainder

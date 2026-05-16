@@ -1,5 +1,8 @@
 # Design Effect Lemma
 
+This note is a local ingredient for Proposition 3 in `notes/main_theorem_package.md`.
+It is not a paper-level theorem by itself; it explains why the minimum kernel should differ from the i.i.d. benchmark only through constants.
+
 ## Setting
 
 Let `P_1, ..., P_n` be independent laws on a common interval `[L, U]` in one dimension, and let
@@ -59,4 +62,4 @@ This is a pure design effect:
 - potentially different constants,
 - triangular design removes random mixture-count fluctuations.
 
-The lemma is the right local target for proving the minimum theorem in P2.
+The lemma is the right local target for proving the minimum kernel and for identifying the constant-level design effect inside the abstract carrier law.

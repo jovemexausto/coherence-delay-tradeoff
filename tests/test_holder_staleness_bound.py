@@ -34,6 +34,15 @@ class HolderStalenessBoundTest(unittest.TestCase):
             slope = numerator / denominator
             self.assertAlmostEqual(slope, H, delta=0.03)
 
+    def test_hypothetical_linear_average_bound_fails_for_dirac_lipschitz_path(
+        self,
+    ) -> None:
+        zeta = 1.0
+        n = 64
+        exact_w2 = dirac_holder_staleness(zeta, 1.0, n)
+        hypothetical_linear_average = zeta * sum(range(n)) / n
+        self.assertGreater(exact_w2, hypothetical_linear_average)
+
 
 if __name__ == "__main__":
     unittest.main()

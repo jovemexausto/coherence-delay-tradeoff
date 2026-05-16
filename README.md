@@ -7,19 +7,20 @@
 Under drift, retained evidence is both useful and dangerous: more memory reduces
 variance, but it also accumulates temporal misalignment with the present.
 
-The manuscript studies the roughness-indexed family of useful-memory horizon
-laws, the worst-case Lipschitz cube-root regime as the $H=1$ member of that
-family, the structural Gaussian lower-bound witness, and the invalidity gap
-between temporal validity and changepoint evidence.
+The manuscript studies a carrier-roughness useful-memory horizon law, the
+family of useful-memory scales it induces, the worst-case
+Lipschitz cube-root regime as the $H=1$, $a=1/2$ case, a structural Gaussian
+lower-bound witness, and the invalidity gap between temporal validity and
+changepoint evidence.
 
 ## Core idea
 
-- useful memory under drift has temporal geometry
-- the horizon is finite
-- temporal roughness determines how staleness accumulates
-- horizon misalignment has measurable operational cost
-- the cube-root law is the worst-case Lipschitz member of a broader family
-- temporal validity is not changepoint evidence
+- useful memory under drift is governed by a carrier-roughness useful-memory horizon law
+- finite-sample carrier behavior and temporal roughness jointly determine the useful-memory scale
+- the cube-root law is the `a=1/2, H=1` case of the carrier-roughness useful-memory horizon law
+- the lower bound shows that the finite-memory optimum is structural, not a tuning artifact
+- multiple carrier instantiations feed the same useful-memory horizon law
+- temporal validity can fail before changepoint evidence becomes statistically visible
 
 ## Repository layout
 

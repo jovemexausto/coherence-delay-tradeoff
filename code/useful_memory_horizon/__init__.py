@@ -36,6 +36,11 @@ from .glue_theorem_bahadur_rough_growth import (
     BahadurRoughGrowthResult,
     run_bahadur_rough_growth_research,
 )
+from .glue_theorem_useful import (
+    UsefulCarrierConfig,
+    UsefulCarrierResult,
+    run_useful_carrier_research,
+)
 from .carrier_roughness_research import (
     CarrierRoughnessResearchConfig,
     CarrierRoughnessResearchResult,
@@ -89,6 +94,8 @@ __all__ = [
     "BahadurRoughKernelResult",
     "BahadurRoughGrowthConfig",
     "BahadurRoughGrowthResult",
+    "UsefulCarrierConfig",
+    "UsefulCarrierResult",
     "HolderLowerBoundResearchConfig",
     "HolderLowerBoundResearchResult",
     "InvalidityGapConfig",
@@ -121,6 +128,7 @@ __all__ = [
     "run_bahadur_residual_research",
     "run_bahadur_rough_kernel_research",
     "run_bahadur_rough_growth_research",
+    "run_useful_carrier_research",
     "run_minimal_glue_research",
     "run_holder_lower_bound_research",
     "run_invalidity_gap_experiment",

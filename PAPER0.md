@@ -14,10 +14,10 @@ Alternative subtitles:
 - `Variance, Staleness, and the Geometry of Useful Memory`
 
 One-sentence thesis:
-Under drift, useful memory obeys a horizon law coupling finite-sample carrier behavior to drift roughness, so temporal validity ends when staleness overtakes variance reduction.
+Under drift, useful memory obeys a carrier-roughness useful-memory horizon law, so temporal validity ends when staleness overtakes variance reduction.
 
 One-sentence reviewer summary:
-The paper develops a three-layer theory of useful memory under drift: a minimum kernel, a low-dimensional carrier-inheritance layer, and a practically relevant measurement layer; it shows that finite-memory tracking is governed by a roughness-indexed variance-staleness trade-off, that the cube-root law is the worst-case Lipschitz member of a broader family of horizon laws, and that memory can become temporally invalid before change becomes statistically detectable.
+The paper develops a three-layer theory of useful memory under drift: a minimum kernel, a low-dimensional carrier-inheritance layer, and a practically relevant measurement layer; it shows that finite-memory tracking is governed by a carrier-roughness variance-staleness trade-off, that the cube-root law is the worst-case Lipschitz member of a broader carrier-roughness useful-memory horizon family, and that memory can become temporally invalid before change becomes statistically detectable.
 
 Core conceptual message:
 `Temporal roughness determines how staleness accumulates, and therefore determines the horizon of useful memory.`
@@ -41,7 +41,7 @@ tracking is therefore governed by a temporal-validity problem: how long can
 retained evidence continue to improve estimation of the present?
 
 For drift path classes in which temporal misalignment grows as $\zeta n^H$, this
-variance-staleness trade-off induces a roughness-indexed useful-memory horizon
+variance-staleness trade-off induces a carrier-roughness useful-memory horizon
 $n_H^* \asymp (C_K/\zeta)^{2/(1+2H)}$ together with the corresponding minimax
 rates. The worst-case $W_2$-Lipschitz envelope is the $H=1$ case, recovering
 the cube-root horizon $n^* \asymp (C_K/\zeta)^{2/3}$. A Gaussian location lower
@@ -59,9 +59,8 @@ useful-memory scale.
 This work is about:
 - the temporal validity of retained evidence under drift;
 - finite-memory tracking as a variance-staleness problem;
-- a three-layer theory: minimum proof kernel, useful carrier inheritance, and practically relevant measurement-layer guarantees;
 - a three-layer theory: minimum kernel, useful carrier inheritance, and practically relevant measurement-layer guarantees;
-- roughness-indexed horizon laws with a worst-case Lipschitz regime;
+- a carrier-roughness useful-memory horizon family with a worst-case Lipschitz regime;
 - structural lower bounds for finite-memory tracking;
 - detector-silent staleness as the key observable failure mode;
 - the geometry of useful memory across path classes.
@@ -76,14 +75,14 @@ This work is not about:
 
 ## The Ladder
 
-The paper should read as a nested theory with a minimum kernel, a useful inheritance layer, and a practically relevant measurement layer.
+The theory is organized through a minimum kernel, a useful inheritance layer, and a practically relevant measurement layer.
 
 - `Minimum`: the bounded-support fixed-span kernel that closes the Bahadur/quantile remainder story.
 - `Useful`: low-dimensional / low-intrinsic-dimensional carrier inheritance from the i.i.d. mixture benchmark.
 - `Practically relevant`: fixed-`epsilon` Sinkhorn or comparable measurement layers where the carrier exponent is robust in practice.
 
 The minimum layer establishes the core technical mechanism.
-The useful and practically relevant layers are the scientific destination.
+The useful and practically relevant layers carry the broader scientific scope.
 
 ## The Discovery
 
@@ -131,7 +130,7 @@ The mathematical skeleton of the paper is:
 ```tex
 \mathcal E(n)
 \le
-C_K n^{-1/2} + \mathrm{Staleness}(n; \zeta, H).
+C_K n^{-a} + \mathrm{Staleness}(n; \zeta, H).
 ```
 
 ### Roughness-indexed horizon family
@@ -151,14 +150,16 @@ For deterministic Holder-type path classes, temporal misalignment accumulates li
 Balancing this against the finite-sample term yields:
 
 ```tex
-n^*(H,\zeta) \asymp (C_K/\zeta)^{2/(1+2H)},
+n^*(a,H,\zeta) \asymp (C_K/\zeta)^{1/(a+H)},
 \qquad
-R^*(H,\zeta) \asymp \sigma^{2H/(1+2H)}\zeta^{1/(1+2H)}.
+R^*(a,H,\zeta) \asymp C_K^{H/(a+H)}\zeta^{a/(a+H)}.
 ```
 
 The horizon is therefore not universal.
 It depends on temporal roughness because roughness changes the way staleness
 accumulates with lag.
+
+The `a=1/2` slice is the canonical statistical instantiation of the carrier-roughness useful-memory horizon law.
 
 ### Worst-case Lipschitz regime
 
@@ -178,7 +179,6 @@ n^* \asymp (C_K/\zeta)^{2/3},
 
 This is the $H=1$ member.
 It is the worst-case linear-staleness envelope.
-It is not the whole theory.
 
 ### Structural floor
 
@@ -197,7 +197,7 @@ The novelty is the combination of five things:
 
 1. The object of analysis is the temporal validity of finite memory itself.
 2. The error is decomposed into a statistical term and a staleness term in a distribution-tracking setting.
-3. The worst-case Lipschitz law is identified as the $H=1$ member within a broader roughness-indexed family.
+3. The worst-case Lipschitz law is identified as the $H=1$ member within a broader carrier-roughness useful-memory horizon family.
 4. The family is the main theory object, not an appendix to the worst-case Lipschitz regime.
 5. The work identifies and visualizes detector-silent staleness: memory can expire before change becomes detectable.
 
@@ -258,7 +258,7 @@ Exclude or demote the following categories:
 - public-stream arenas or tables that read like method comparison showcases;
 - contribution bullets whose subject is an intervention.
 
-The unified paper should look as if it was conceived from the start around temporal validity and path-dependent horizon laws.
+The unified paper should look as if it was conceived from the start around temporal validity and a path-dependent carrier-roughness useful-memory horizon law.
 
 ## Narrative Architecture
 
@@ -272,7 +272,7 @@ Under drift, those incentives conflict.
 
 ### Act 2: There is a structural horizon
 
-State the roughness-indexed horizon family.
+State the carrier-roughness useful-memory horizon family.
 Show the worst-case Lipschitz regime as the first member.
 Show the lower bound.
 At this point, the reader should believe that memory has a finite horizon even before the generalization arrives.
@@ -323,7 +323,7 @@ This is a statement of intellectual structure, not implementation.
 The opening must do exactly this:
 - state that memory helps and ages;
 - define the useful-memory horizon problem;
-- present the roughness-indexed horizon family;
+- present the carrier-roughness useful-memory horizon family;
 - state the worst-case Lipschitz result;
 - identify the cube-root law as the $H=1$ case inside the family;
 - state the Holder family cleanly and early enough that the paper does not look artificially split;
@@ -394,7 +394,7 @@ The paper should be explicit about what is and is not closed.
 
 Closed enough for the main claim:
 - the variance-staleness object;
-- the roughness-indexed family of horizon laws;
+- the carrier-roughness useful-memory horizon family;
 - the worst-case Lipschitz regime;
 - the Holder family of exponents;
 - the lower-bound story at the level of exponent and structural floor;
@@ -408,7 +408,7 @@ Still open:
 - stronger stochastic-process transfer if the theorems are stated deterministically.
 
 The paper should never pretend that the open problems are already solved.
-But it should also not undersell the fact that the main family of horizon laws is already the central discovery.
+But it should also not undersell the fact that the main carrier-roughness useful-memory horizon family is already the central discovery.
 
 ## Empirical Program
 
@@ -429,7 +429,7 @@ What it demonstrates:
 ### 2. Regime-dependent scaling across roughness classes
 
 Purpose:
-show that the horizon law is path-dependent.
+show that the carrier-roughness useful-memory horizon law is path-dependent.
 
 What it demonstrates:
 - `H=1` recovers cube-root;
@@ -544,7 +544,7 @@ It should use the measurable gap.
 Whenever the empirical section needs a standard of comparison, that standard should be the horizon implied by the law under the regime being studied.
 
 That means:
-- the horizon law acts as the oracle reference, not as a named intervention;
+- the carrier-roughness useful-memory horizon law acts as the oracle reference, not as a named intervention;
 - detector-side behavior is evaluated by its lag relative to validity expiry;
 - fixed-horizon sweeps are evaluated by their distance from the useful-memory scale;
 - empirical comparisons remain structural rather than competitive.
@@ -559,7 +559,7 @@ Use consistently:
 - temporal validity
 - staleness
 - temporal roughness
-- roughness-indexed horizon law
+- carrier-roughness useful-memory horizon law
 - worst-case Lipschitz regime
 - worst-case Lipschitz envelope
 - Holder path class
@@ -591,7 +591,7 @@ Otherwise the paper starts sounding larger than what it strictly proves.
 The final paper should be able to state its contributions like this:
 
 - We formalize finite-memory tracking under drift as a roughness-indexed variance-staleness trade-off in distributional geometry.
-- We show that the worst-case Lipschitz horizon law is the `H=1` member of a broader Holder-indexed family of horizon laws and minimax rates.
+- We show that the worst-case Lipschitz useful-memory horizon law is the `H=1` member of a broader carrier-roughness useful-memory horizon family and minimax rates.
 - We prove a structural finite-memory floor that rules out treating the horizon as an estimator artifact.
 - We identify detector-silent staleness as a structural phenomenon: temporal validity can fail before changepoint evidence appears.
 - We show empirically that the theory leaves visible finite-sample signatures through a structural U-curve, roughness-dependent scaling, an invalidity gap, and horizon-misalignment cost.
@@ -611,7 +611,7 @@ The paper should maintain five scope constraints:
 
 The unified paper is successful only if all of the following are true:
 - the paper reads as one discovery rather than two stitched papers;
-- the roughness-indexed family is the primary object, with the worst-case Lipschitz regime as the `H=1` member;
+- the carrier-roughness useful-memory horizon family is the primary object, with the worst-case Lipschitz regime as the `H=1` member;
 - the lower bound is visually and mathematically central;
 - no named mechanism is needed to justify the work;
 - the empirical section reads as phenomenon validation, not product validation;
@@ -622,6 +622,6 @@ The unified paper is successful only if all of the following are true:
 ## Final Positioning
 
 This paper is:
-`a theory of temporal validity for finite memory under drift, from the worst-case Lipschitz envelope to roughness-indexed horizon laws, together with the observable phenomenon of detector-silent staleness.`
+`a theory of temporal validity for finite memory under drift, from the worst-case Lipschitz envelope to the carrier-roughness useful-memory horizon family, together with the observable phenomenon of detector-silent staleness.`
 
 Anything in the current project that cannot survive under that identity should be removed without sentiment.

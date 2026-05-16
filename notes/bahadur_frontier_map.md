@@ -1,5 +1,8 @@
 # Bahadur Frontier Map
 
+This note is a boundary map for the minimum kernel in `notes/main_theorem_package.md`.
+Its purpose is to delimit where Proposition 3 is stable and where it should stop being extrapolated.
+
 ## Safe zone
 
 - 1-D bounded support
@@ -33,7 +36,7 @@ The first genuine failure is the combined roughness + span-growth regime.
 
 That is the boundary where the empirical increment and the geometry of the moving window stop supporting the fixed-span proof.
 
-## Proof takeaway
+## Package takeaway
 
-The minimum theorem is closed in the safe zone.
-The theorem should not be stated beyond fixed span unless the span-growth degradation is built into the conclusion.
+The minimum kernel is closed in the safe zone.
+The abstract `(a,H)` law should not depend on extending this note beyond fixed span; outside the safe zone, the carrier instantiation has to change or the degradation has to be built into the conclusion.

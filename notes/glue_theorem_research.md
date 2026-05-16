@@ -1,5 +1,8 @@
 # Glue Theorem Research Note
 
+This note is now best read as background for the minimum kernel and its fixed-span design effect.
+It supports Proposition 3 in `notes/main_theorem_package.md`, rather than defining the main paper contribution.
+
 ## Current P2 target
 
 The current goal is a theorem in the 1-D Gaussian location model for the windowed triangular array under fixed within-window span.
@@ -38,7 +41,7 @@ When the within-window span grows with `n`, the estimated `kappa(Delta_n)` is no
 6. Bounded-support target is cleaner than Gaussian tails.
 The Gaussian location model is useful for intuition, but the explicit asymptotic constant is tail-delicate. Numerically, the bounded-support uniform-noise model gives a cleaner fixed-span inheritance picture and is the better immediate theorem target.
 
-## Theorem target
+## Local theorem target
 
 ### Conservative
 
@@ -61,3 +64,4 @@ for the corresponding i.i.d. mixture benchmark, yielding an inheritance theorem 
 The remaining theorem-level gap is a Bahadur / empirical-quantile representation for the non-identically distributed triangular array with uniform control strong enough to pass from pointwise quantile fluctuations to the integrated `W_2^2` statement.
 
 For the next proof attempt, bounded support and fixed span should be treated as the primary target assumptions.
+At the package level, this note feeds the minimum carrier instantiation; the main theorem object remains the abstract `(a,H)` law.

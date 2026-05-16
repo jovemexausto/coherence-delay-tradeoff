@@ -1,5 +1,8 @@
 # Bahadur-Kiefer Resolution for the i.n.i.d. Triangular Array
 
+This note is the technical resolution path for the minimum kernel in `notes/main_theorem_package.md`.
+It is not the paper-level theorem package; it explains why Proposition 3 is believable and where its boundary lies.
+
 ## Main point
 
 The uniform remainder can be closed, but the correct rate is not just the Taylor rate.
@@ -107,3 +110,14 @@ The first frontier sweep suggests:
 - the reconstruction error remains tiny, so the decomposition is numerically stable.
 
 This is consistent with the empirical increment term being the real bottleneck and with the fixed-span bounded-support theorem being robust.
+
+## External literature synthesis
+
+The external summary is compatible with this note and strengthens the minimum theorem target:
+
+- triangular-array i.n.i.d. is the right formal setting;
+- the interior assumptions are first-order only: uniform lower bound plus uniform Hölder continuity;
+- the remainder can be stated at the classical `n^{-3/4}`-type scale up to logs, which is still enough for `o(n^{-1/2})`;
+- the integrated remainder `o(n^{-1})` is the right quantity for the Wasserstein expansion.
+
+So this does not change the direction of the research. It confirms that the minimum kernel can be stated with the existing assumptions, and that the remaining work belongs in the moderate and practically relevant layers.

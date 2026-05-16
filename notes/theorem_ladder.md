@@ -1,5 +1,7 @@
 # P2 Theorem Ladder
 
+This note is a routing map for the theorem package in `notes/main_theorem_package.md`.
+
 ## Minimum
 
 Prove the fixed-span triangular-array carrier under bounded support and uniform density control.
@@ -12,17 +14,20 @@ for independent, non-identical samples in a window, with the population target `
 
 ## Useful
 
-Upgrade from 1-D to low-dimensional / low-intrinsic-dimensional settings and show that the triangular array inherits the i.i.d. benchmark carrier exponent `a` whenever that benchmark is known.
+Upgrade from the minimum kernel to low-dimensional / low-intrinsic-dimensional settings and show that the triangular array inherits the i.i.d. benchmark carrier exponent `a` whenever that benchmark is known.
 
 ## Practically relevant
 
 Move to a measurement layer that is dimension-robust in practice, e.g. fixed-`\epsilon` Sinkhorn, or to raw `W_2` under explicit intrinsic-dimension assumptions.
+
+The current useful-layer bridge is the fixed-span low-intrinsic carrier inheritance theorem, which is the moderate theorem targeted by the current experiments.
 
 ## Current research signal
 
 - Fixed-span inheritance is numerically stable.
 - Growing span degrades the effective constant and the observed rate.
 - The cleanest theorem target is bounded support first, Gaussian tails second.
+- The main paper contribution should be organized through the abstract `(a,H)` law, with the ladder supplying carrier instantiations.
 
 ## Proof skeleton for the minimum theorem
 

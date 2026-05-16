@@ -1,5 +1,8 @@
 # Carrier-Roughness Research Note
 
+This note supports the abstract carrier side of `notes/main_theorem_package.md`.
+Its role is to identify which carrier instantiations are strong enough to feed the carrier-roughness useful-memory horizon law.
+
 ## Formal conjectures
 
 1. Carrier inheritance at fixed span.
@@ -8,10 +11,10 @@ For a windowed triangular array with independent samples `X_{t-j} ~ P^*_{t-j}` a
 2. Carrier identification is geometric.
 For raw `W_2`, the carrier exponent should be controlled by effective Wasserstein dimension: `a = 1/2` in low-dimensional or low-intrinsic-dimensional regimes, and `a < 1/2` once the volumetric barrier dominates.
 
-3. Sinkhorn restores the statistical carrier.
-For fixed `epsilon > 0`, the debiased Sinkhorn measurement layer should preserve a root-`n` carrier exponent `a = 1/2` across dimensions, with the dependence moved into constants rather than exponents.
+3. Sinkhorn may stabilize the measurement-layer carrier.
+For fixed `epsilon > 0`, the debiased Sinkhorn measurement layer is conjectured to preserve a stable carrier exponent across dimensions, with more of the dimensional dependence moved into constants than in raw `W_2`.
 
-4. Joint carrier-roughness horizon law.
+4. Joint carrier-roughness useful-memory horizon law.
 If the finite-sample term scales as `C_K n^{-a}` and staleness grows as `zeta n^H`, then the useful-memory horizon should satisfy `n^*(a,H) ~ (C_K / zeta)^{1 / (a + H)}`.
 
 5. Lower-bound frontier.
@@ -44,11 +47,43 @@ For `H in (0,1]`, optimize the roughness-matched Gaussian witness numerically an
 
 ### Conservative
 
-Assume a carrier law `E W_2(\hat P_t^{(n)}, \bar P_t^{(n)}) <= C_K n^{-a}` and derive the full `(a,H)` carrier-roughness horizon family. Keep the triangular-array carrier identification and the general-H lower matching as explicit future work.
+Assume a carrier law `E W_2(\hat P_t^{(n)}, \bar P_t^{(n)}) <= C_K n^{-a}` and derive the full `(a,H)` useful-memory horizon family. Keep the triangular-array carrier identification and the general-H lower matching as explicit future work.
 
 ### Moderate
 
-Prove triangular-array inheritance of the i.i.d. mixture carrier under strong conditions: bounded support, uniform moment control, low effective dimension, and fixed within-window span. This would justify the root-`n` slice rigorously in the most relevant low-dimensional regime.
+Prove triangular-array inheritance of the i.i.d. mixture carrier under strong conditions: bounded support, uniform moment control, low effective dimension, and fixed within-window span. This would justify the `a=1/2` slice rigorously in the most relevant low-dimensional regime.
+
+### Current moderate theorem target
+
+Under bounded support, fixed span, and low effective dimension, the triangular-array carrier should match the i.i.d. mixture carrier up to a small constant-level gap. The point is not that the raw `W_2` rate becomes dimension-free, but that the triangular window inherits the same exponent as the i.i.d. mixture benchmark in the regime where effective dimension is low enough for the carrier to remain near `1/2`.
+
+Operationally, the numerical target is:
+
+- `a_tri` and `a_iid` both stay near the `a=1/2` carrier slice;
+- `|a_tri - a_iid|` stays small under fixed span;
+- increasing ambient dimension without increasing intrinsic dimension does not destroy the carrier.
+
+That is the bridge from Proposition 3 to Proposition 4 in the main theorem package.
+
+### Moderate theorem formulation
+
+The cleanest current statement is:
+
+- on a bounded-support window with fixed span;
+- for an embedded low-intrinsic-dimension support;
+- the triangular-array `W_2` carrier exponent matches the i.i.d. mixture benchmark up to a small constant-level gap.
+
+In the present lab, the strongest stable signal is for an embedded `k=1` support inside a larger ambient space. With the same fixed-span schedule, both the triangular window and the i.i.d. mixture benchmark remain near the `a=1/2` carrier slice, and the slope gap stays small.
+
+This is the first theorem-shaped bridge from the minimum kernel to the useful layer.
+
+The practical numerical formulation now used by the lab is:
+
+- `a_tri > 0.45` and `a_iid > 0.45` in the `k=1` embedded case;
+- `|a_tri - a_iid| < 0.08` under fixed span;
+- increasing ambient dimension while keeping intrinsic dimension fixed does not destroy the carrier.
+
+That is the moderate theorem in the form the current experiments can support.
 
 ### Ambitious
 
@@ -65,7 +100,7 @@ Two focused sweeps now support the `Useful` and `Practically relevant` layers in
 
 ### Low intrinsic dimension, bounded support
 
-For an embedded cube supported on a 1-D or 2-D intrinsic subspace inside a higher ambient space, the raw `W_2` slopes move back toward the root-`n` regime.
+For an embedded cube supported on a 1-D or 2-D intrinsic subspace inside a higher ambient space, the raw `W_2` slopes move back toward the `a=1/2` carrier slice.
 
 Representative sweep on `ambient_dim = 8`:
 
@@ -103,4 +138,4 @@ A larger sweep on `ambient_dim = 8`, `intrinsic_dim = 1` gives:
 - `\epsilon = 0.10` -> triangular `a \approx 0.451`, i.i.d. `a \approx 0.534`
 - `\epsilon = 0.05` -> triangular `a \approx 0.449`, i.i.d. `a \approx 0.534`
 
-So the practical-layer signal is not yet a proof of root-`n` in the lab, but it is consistent with a stable measurement-layer carrier and with `\epsilon` behaving as a constant-level control knob rather than a qualitative phase change.
+So the practical-layer signal is not yet a closed theorem, but it is consistent with a stable measurement-layer carrier and with `\epsilon` behaving as a constant-level control knob rather than a qualitative phase change.
