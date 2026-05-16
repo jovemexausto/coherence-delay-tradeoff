@@ -14,9 +14,10 @@ windows are fresh but noisy, while long windows are stable but stale. The paper
 studies this tension as a horizon problem for temporal validity, and the main
 object is a roughness-indexed family of horizon laws.
 
-In the low-dimensional carrier regime where the finite-sample term scales like
-$C_K n^{-1/2}$, the theorem package begins with a roughness-indexed trade-off
-between finite-sample variance and drift-induced staleness. That family
+In the low-dimensional carrier regime the finite-sample term is modeled by a
+carrier law $C_K n^{-a}$, and the main text specializes to the root-$n$ case
+$a=1/2$. In that regime, the theorem package begins with a roughness-indexed
+trade-off between finite-sample variance and drift-induced staleness. That family
 includes the worst-case $W_2$-Lipschitz cube-root law as its $H=1$ member,
 recovers the intermediate $H=1/2$ case inside the same object, and, in the
 worst-case Lipschitz regime, admits a Gaussian location lower bound
@@ -42,7 +43,8 @@ present.
 The contributions are fivefold:
 \begin{itemize}
   \item The analysis formalizes useful memory under drift as a variance-staleness
-  trade-off in Wasserstein geometry.
+  trade-off in Wasserstein geometry, with the carrier law written abstractly as
+  $C_K n^{-a}$ and the main text specializing to the root-$n$ case $a=1/2$.
   \item It proves a Holder-type roughness-indexed family of useful-memory
   horizon laws, with the worst-case $W_2$-Lipschitz cube-root regime recovered
   as the $H=1$ member.

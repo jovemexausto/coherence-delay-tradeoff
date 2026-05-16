@@ -16,9 +16,11 @@ one particular estimator. The optimized ramp witness substantially strengthens
 the explicit lower-law constant, even though the result is still not
 constant-sharp.
 
-The Lipschitz upper law itself is stated with the correct $W_2^2$ convexity
-constant and with the $n^{-1/2}$ finite-sample term treated as the carrier
-regime of the theory rather than as a universal triangular-array theorem.
+The carrier law is written abstractly as $C_K n^{-a}$, and the main text
+specializes to the root-$n$ case $a=1/2$. The Lipschitz upper law itself is
+stated with the correct $W_2^2$ convexity constant and with the carrier term
+treated as a regime assumption for the windowed triangular array rather than as
+a universal theorem.
 
 The empirical section makes the same structure visible in finite samples. It
 reveals a structural U-curve, roughness-dependent scaling across path classes, a
@@ -30,9 +32,8 @@ The paper therefore supports a simple conclusion. Useful memory has a finite
 horizon determined by how temporal roughness accumulates staleness, and retained
 evidence can become invalid before change becomes statistically detectable.
 
-What remains open is equally clear. The main unresolved technical step is a
-windowed triangular-array concentration theorem for
-$W_2(\widehat P_t^{(n)},\bar P_t^{(n)})$ in the carrier regime. Sharper
-constants, fuller lower-bound characterizations beyond the Gaussian witness, and
-online identification of the relevant roughness class come after that. Those
-questions refine the theory; they do not alter its main object.
+The main remaining technical gap is to justify the assumed carrier regime for
+the windowed triangular array in $W_2$ under natural conditions. Sharper
+constants, fuller lower-bound characterizations beyond the Gaussian witness,
+and online identification of the relevant roughness class come after that.
+Those questions refine the theory; they do not alter its main object.

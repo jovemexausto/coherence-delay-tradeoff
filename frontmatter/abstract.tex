@@ -9,9 +9,10 @@ increases tracking error relative to the current distribution. Finite-memory
 tracking is therefore governed by a temporal-validity problem: how long can
 retained evidence continue to improve estimation of the present?
 
-In the low-dimensional carrier regime where the finite-sample term scales as
-$C_K n^{-1/2}$, drift path classes in which temporal misalignment grows as
-$\zeta n^H$ induce a roughness-indexed useful-memory horizon
+In the low-dimensional carrier regime the finite-sample term is modeled as a
+carrier law $C_K n^{-a}$, and the main text specializes to the root-$n$ case
+$a=1/2$. For drift path classes in which temporal misalignment grows as
+$\zeta n^H$, this induces a roughness-indexed useful-memory horizon
 $n_H^* \asymp (C_K/\zeta)^{2/(1+2H)}$ together with the corresponding optimized
 upper-law scales. The worst-case $W_2$-Lipschitz envelope is the $H=1$ member,
 recovering the cube-root horizon $n^* \asymp (C_K/\zeta)^{2/3}$. A Gaussian

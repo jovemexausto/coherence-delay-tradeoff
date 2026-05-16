@@ -40,12 +40,12 @@ At the theorem level, the structural object is the decomposition
 \[
   \mathcal E(n)
   \leq
-  C_K n^{-1/2} + \mathrm{Staleness}(n;\zeta,H),
+  C_K n^{-a} + \mathrm{Staleness}(n;\zeta,H),
 \]
 where the first term is the finite-sample contribution and the second is the
-cost of retaining old evidence under drift. The path class determines how the
-staleness term grows with lag, and therefore determines the useful-memory
-horizon.
+cost of retaining old evidence under drift. The main text specializes to the
+root-$n$ carrier case $a=1/2$. The path class determines how the staleness term
+grows with lag, and therefore determines the useful-memory horizon.
 
 \subsection{Roughness-Indexed Horizon Family}
 
@@ -212,7 +212,7 @@ matches the intended low-dimensional interpretation of the finite-sample term.
 \end{lemma}
 
 \begin{remark}[Carrier-regime status]\label{rem:triangular_array_status}
-\Cref{thm:lag_error} assumes the $n^{-1/2}$ finite-sample term for the
+\Cref{thm:lag_error} specializes to the $a=1/2$ carrier case for the
 windowed triangular array $X_{t-j}\sim P_{t-j}^*$. \Cref{lem:finite_sample_term}
 records the i.i.d. reference case that motivates this carrier exponent in the
 low-dimensional Wasserstein regime. Extending that rate from a fixed law $Q$ to
@@ -450,7 +450,8 @@ including the ambient $W_2$-Lipschitz path class. The proposition therefore does
 not claim that every path is Gaussian; it claims that the worst case already
 appears inside the Gaussian mean-shift subproblem.
 
-The result is not constant sharp. Its role is to show that the cube-root floor
-is structural at the exponent level, not to characterize the best numerical
-constant in the lower law.
+At the Lipschitz endpoint $H=1$, this witness matches the cube-root scaling of
+the upper law, so the lower bound is exponent-tight there. It is not intended
+to identify the exact hardest path for the full class, to be constant sharp, or
+to furnish matching lower bounds for the broader Holder family $H\in(0,1)$.
 \end{remark}

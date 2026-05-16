@@ -9,24 +9,29 @@ horizon exponents.
 \paragraph{Lower-bound scope.}
 The structural floor is proved through a Gaussian location witness embedded in
 the ambient $W_2$-Lipschitz class. That is enough for a subclass-based minimax
-lower bound, but it does not characterize the full extremal geometry of the
-entire class. The optimized ramp witness shows that the explicit lower-law
-constant can be improved substantially within the same argument, but the exact
-hardest path and the constant-sharp lower law for the full class are still open.
+lower bound. The important distinction is between exponent-tightness,
+class-tightness, and constant-sharpness. At the Lipschitz endpoint $H=1$, the
+Gaussian witness settles the first: it matches the cube-root scaling and shows
+that the horizon law is structural there. What remains open is the latter two
+questions for the full drift class, together with matching lower bounds for the
+broader Holder family $H\in(0,1)$. The optimized ramp witness shows that the
+explicit lower-law constant can be improved substantially within the same
+argument, but the exact hardest path and the constant-sharp lower law for the
+full class are still open.
 
 \paragraph{Finite-sample carrier regime.}
-The clean cube-root law uses the regime in which the finite-sample term behaves
-like $C_K n^{-1/2}$. That is the relevant low-dimensional Wasserstein regime and
-also the regime induced by fixed-$\varepsilon$ Sinkhorn surrogates on bounded
-domains. In the theorem statements this enters as a carrier-regime assumption
-for the non-identically distributed windowed sample, while
-\cref{lem:finite_sample_term} records the i.i.d. reference case. Outside that
-carrier exponent, the same balancing argument gives a different horizon law, as
-noted in \cref{rem:carrier_exponent}. Appendix~\ref{app:finite_sample_geometry}
-adds a one-dimensional triangular-array sanity check in a fixed-span regime,
-which supports this carrier interpretation empirically but does not replace a
-theorem. The main open technical question is therefore to identify natural
-conditions under which the windowed triangular array satisfies
+The clean cube-root law uses a carrier law of the form $C_K n^{-a}$, and the
+main text specializes to the root-$n$ case $a=1/2$. That is the relevant
+low-dimensional Wasserstein regime and also the regime induced by fixed-$\varepsilon$
+Sinkhorn surrogates on bounded domains. In the theorem statements this enters as
+a carrier-regime assumption for the non-identically distributed windowed sample,
+while \cref{lem:finite_sample_term} records the i.i.d. reference case. Outside
+that carrier exponent, the same balancing argument gives a different horizon
+law, as noted in \cref{rem:carrier_exponent}. Appendix~\ref{app:finite_sample_geometry}
+adds a triangular-array sanity check in a fixed-span regime, which supports this
+carrier interpretation empirically but does not replace a theorem. The main open
+technical question is therefore to identify natural conditions under which the
+windowed triangular array satisfies
 \[
   \mathbb E\,W_2\!\left(\widehat P_t^{(n)}, \bar P_t^{(n)}\right)
   \le C n^{-1/2},
