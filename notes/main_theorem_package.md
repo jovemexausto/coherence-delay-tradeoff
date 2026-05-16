@@ -4,6 +4,8 @@
 
 The main theorem package revolves around the carrier-roughness useful-memory horizon law rather than any single carrier instantiation.
 
+Its primary object is the temporal validity of retained evidence for distribution tracking under drift. The package is adjacent to dynamic regret and adaptive windowing, but it is organized around a validity horizon, not around regret against a moving comparator or the stopping time of a reaction rule.
+
 The governing upper envelope is:
 
 `error_t(n) <= C_K n^{-a} + C_S zeta n^H`
@@ -27,6 +29,8 @@ Then
 `E d(\hat P_t^{(n)}, P_t) <= C_K n^{-a} + C_S zeta n^H`.
 
 This is the theorem-level object of the paper.
+
+In particular, the horizon is the statistical object being characterized, not just a tuning parameter for a detector or an online-learning policy.
 
 Status:
 

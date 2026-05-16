@@ -3,6 +3,8 @@
 This note separates the current project into proved or theorem-ready components, theorem targets, conjectures, and future work.
 Its role is to stop scope drift and keep the manuscript honest.
 
+The central framing constraint is simple: the paper studies the temporal validity of retained evidence for distribution tracking under drift. Neighboring regret and detection literatures can be discussed, but they are not the primary object here.
+
 ## Proved or theorem-ready
 
 - `Theorem 1`: the abstract upper law in `notes/abstract_upper_law.md`.

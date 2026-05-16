@@ -1,6 +1,7 @@
 # P2 Theorem Ladder
 
 This note is a routing map for the theorem package in `notes/main_theorem_package.md`.
+The ladder exists to supply carrier instantiations for the temporal-validity law, not to define a detector rule or a regret-tuning scheme.
 
 ## Minimum
 

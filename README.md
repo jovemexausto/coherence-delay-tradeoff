@@ -13,6 +13,10 @@ Lipschitz cube-root regime as the $H=1$, $a=1/2$ case, a structural Gaussian
 lower-bound witness, and the invalidity gap between temporal validity and
 changepoint evidence.
 
+This framing is adjacent to dynamic regret and adaptive windowing, but its
+primary object is different: the temporal validity of retained evidence for
+distribution tracking under drift.
+
 ## Core idea
 
 - useful memory under drift is governed by a carrier-roughness useful-memory horizon law

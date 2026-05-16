@@ -17,7 +17,7 @@ One-sentence thesis:
 Under drift, useful memory obeys a carrier-roughness useful-memory horizon law, so temporal validity ends when staleness overtakes variance reduction.
 
 One-sentence reviewer summary:
-The paper develops a three-layer theory of useful memory under drift: a minimum kernel, a low-dimensional carrier-inheritance layer, and a practically relevant measurement layer; it shows that finite-memory tracking is governed by a carrier-roughness variance-staleness trade-off, that the cube-root law is the worst-case Lipschitz member of a broader carrier-roughness useful-memory horizon family, and that memory can become temporally invalid before change becomes statistically detectable.
+The paper develops a three-layer theory of useful memory under drift: a minimum kernel, a low-dimensional carrier-inheritance layer, and a practically relevant measurement layer; it shows that finite-memory tracking is governed by a carrier-roughness variance-staleness trade-off, that the cube-root law is the worst-case Lipschitz member of a broader carrier-roughness useful-memory horizon family, and that memory can become temporally invalid before change becomes statistically detectable. The framing is adjacent to dynamic regret and adaptive windowing, but the main object is the temporal validity of retained evidence for distribution tracking under drift.
 
 Core conceptual message:
 `Temporal roughness determines how staleness accumulates, and therefore determines the horizon of useful memory.`
@@ -64,6 +64,8 @@ This work is about:
 - structural lower bounds for finite-memory tracking;
 - detector-silent staleness as the key observable failure mode;
 - the geometry of useful memory across path classes.
+
+Its primary object is not regret against a moving comparator and not the stopping time of a reaction rule.
 
 This work is not about:
 - a named adaptive mechanism;
@@ -112,6 +114,10 @@ It is the story of a structural object: the horizon of useful memory.
 ## The Scientific Object
 
 The paper studies the lifetime of evidence.
+
+Dynamic regret asks how well one tracks a moving comparator.
+Adaptive windowing and drift detection ask when accumulated evidence is sufficient to react.
+This paper asks a different question: how long retained evidence remains temporally valid for estimating the present distribution.
 
 The relevant question is not:
 `When should a detector fire?`
@@ -200,7 +206,7 @@ The novelty is the combination of five things:
 4. The family is the main theory object, not an appendix to the worst-case Lipschitz regime.
 5. The work identifies and visualizes detector-silent staleness: memory can expire before change becomes detectable.
 
-Dynamic regret work, window-tuning work, adaptive forgetting, and concept-drift detection each touch neighboring questions, but the unified paper should argue that they do not make temporal validity the primary object.
+Dynamic regret work, window-tuning work, adaptive forgetting, and concept-drift detection each touch neighboring questions, but the unified paper should argue that they do not make temporal validity the primary object. The paper should say plainly that regret analysis centers performance against a moving comparator, detection work centers alarm timing, and the present work centers the validity horizon of retained evidence.
 
 ## Relationship to Existing Literatures
 
@@ -212,12 +218,12 @@ Those works show that window or forgetting scales matter under drift.
 This paper is different because:
 - the object is distribution tracking rather than regret;
 - the drift geometry is on paths of distributions;
-- the emphasis is on temporal validity of memory, not only performance bounds.
+- the emphasis is on temporal validity of retained evidence, not only performance bounds against a moving comparator.
 
 ### Relative to adaptive windowing and drift detection
 
 Those works ask when enough statistical evidence exists to react.
-This paper asks whether retained evidence is still valid even before that evidence exists.
+This paper asks whether retained evidence is still valid for representing the present before a detector has enough evidence to react.
 The distinction is not rhetorical.
 It is the main phenomenon of the paper.
 

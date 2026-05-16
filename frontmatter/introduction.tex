@@ -76,10 +76,13 @@ statistically silent while retained evidence is already stale for the present.
 
 This framing is adjacent to several literatures---dynamic regret, adaptive
 windowing, locally stationary smoothing, adaptive filtering, and distributional
-tracking under transport geometry---but it is not reducible to any one of them.
-The question here is narrower and more structural: for finite-memory tracking
-under drift, how long can retained evidence continue to improve estimation of the
-present before age becomes the dominant source of error?
+tracking under transport geometry---but the paper asks a different question.
+Dynamic-regret analysis asks how well one tracks a moving comparator, and
+adaptive-window or drift-detection methods ask when the accumulated evidence is
+sufficient to react. The question here is different: for finite-memory tracking
+under drift, how long does retained evidence remain temporally valid for
+estimating the present distribution before age becomes the dominant source of
+error?
 
 The paper proceeds as follows. \Cref{sec:finite_memory_under_drift} develops the
 carrier-roughness useful-memory horizon law, including the minimum-kernel

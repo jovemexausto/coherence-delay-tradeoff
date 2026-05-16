@@ -3,6 +3,8 @@
 This note states the paper's main theorem object in a proof-ready form.
 It is the top-level law that the carrier instantiations are meant to feed.
 
+The law is meant as a statistical statement about the temporal validity horizon of retained evidence. It is adjacent to dynamic regret and adaptive windowing, but the object here is different from regret against a moving comparator or alarm timing.
+
 ## Setup
 
 Let `d` be any probability metric satisfying the triangle inequality.
