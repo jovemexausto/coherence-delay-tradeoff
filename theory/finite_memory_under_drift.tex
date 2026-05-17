@@ -131,9 +131,15 @@ If the target path belongs to $\mathfrak P_H(\zeta)$, then
 and therefore
 \[
   W_2\!\left(\bar P_t^{(n)},P_t\right)
-  \le c_H\zeta n^H
+  \le C_{H,n}\,\zeta n^H,
 \]
-for a constant $c_H>0$ depending only on $H$.
+where
+\[
+  C_{H,n}
+  \coloneqq
+  \left(n^{-(2H+1)}\sum_{j=0}^{n-1} j^{2H}\right)^{1/2}.
+\]
+In particular, $C_{H,n}\to (2H+1)^{-1/2}$ as $n\to\infty$.
 \end{lemma}
 
 \begin{proof}
@@ -150,7 +156,8 @@ couples $\bar P_t^{(n)}$ with $P_t$, so
   =
   \frac{1}{n}\sum_{j=0}^{n-1} W_2^2\!\left(P_{t-j},P_t\right).
 \]
-Applying the Hölder envelope and taking square roots gives the result.
+Applying the Hölder envelope gives the displayed finite-$n$ constant, and taking
+square roots completes the proof.
 \end{proof}
 
 Combining \cref{lem:Hölder_staleness_bound} with
@@ -286,6 +293,15 @@ At $H=1$, this recovers the cube-root horizon and the lower scale
 $\sigma^{2/3}\zeta^{1/3}$. The lower bound is subclass based rather than
 class-tight, but that is enough for the paper's central claim: the horizon is
 not just an estimator artifact.
+
+Two refinements sharpen this witness story without changing the theorem object.
+First, using the exact Gaussian two-point testing error improves the witness
+constant relative to the Pinsker-style relaxation while keeping the same
+exponent and horizon scale. Second, for $H<1$ the ramp profile is not the
+lowest-energy endpoint-saturating H\"older witness; a sharper endpoint-minimal
+profile further improves the subclass constant. Those refinements clarify the
+constant-level frontier of the main slice, but the paper's central lower-bound
+claim remains the structural exponent law stated above.
 
 \subsection{Beyond the Minimum Kernel}
 

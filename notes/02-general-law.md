@@ -1,7 +1,12 @@
-# Abstract Upper Law
+# 02. General Law
+Status: closed
+Category: law
+Prev: 01. Main Theorem Package
+Next: 03. Minimum-Kernel Carrier
 
-This note states the paper's main theorem object in a proof-ready form.
-It is the top-level law that the carrier instantiations are meant to feed.
+Paper's main theorem object in proof-ready form.
+
+This is the top-level law that the carrier instantiations are meant to feed.
 
 The law is meant as a statistical statement about the temporal validity horizon of retained evidence. It is adjacent to dynamic regret and adaptive windowing, but the object here is different from regret against a moving comparator or alarm timing.
 
@@ -13,7 +18,7 @@ At time `t`, let:
 
 - `P_t` be the present target law;
 - `\bar P_t^{(n)}` be the window target induced by the last `n` observations or weights;
-- `\hat P_t^{(n)}` be the empirical or measurement-layer estimate built from that window.
+- `\hat P_t^{(n)}` be the empirical estimate built from that window.
 
 The error decomposition is between:
 
@@ -75,13 +80,13 @@ Substituting the resulting scale back into either term gives the optimized error
 
 - `a = 1/2`, `H = 1` gives the cube-root scale `n^* ~ (C_K / zeta)^{2/3}`.
 - `a = 1/2`, general `H` gives `n^* ~ (C_K / zeta)^{2/(1+2H)}`.
-- changing the measurement layer changes `a` and `C_K`, not the logic of the theorem.
+- changing the measurement geometry changes `a` and `C_K`, not the logic of the theorem.
 
 ## What this theorem does and does not require
 
 This theorem does require:
 
-- a carrier bound for the chosen measurement layer;
+- a carrier bound for the chosen measurement geometry;
 - a staleness bound for the chosen path class.
 
 This theorem does not require:

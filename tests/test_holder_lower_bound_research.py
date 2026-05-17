@@ -3,7 +3,7 @@ from __future__ import annotations
 import math
 import unittest
 
-from useful_memory_horizon.Hölder_lower_bound_research import (
+from useful_memory_horizon.holder_lower_bound_research import (
     HölderLowerBoundResearchConfig,
     Hölder_asymptotic_constant,
     Hölder_optimal_shape_parameter,

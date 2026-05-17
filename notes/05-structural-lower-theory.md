@@ -1,13 +1,19 @@
-# Structural Lower Bound
+# 05. Structural Lower Theory
+Status: closed
+Category: lower
+Prev: 04. Minimum-Kernel Proof
+Next: 06. Exact Gaussian Witness Frontier
 
-This note states the lower-bound half of the theorem package in a theorem-ready form for the main slice `a = 1/2`.
+Lower-bound half of the theorem package in theorem-ready form for the canonical
+`a = 1/2` regime.
+
 Its role is to show that the useful-memory horizon is structural, not an artifact of a particular estimator.
 
 ## Goal
 
 Show that even on a restricted Gaussian subclass, no estimator can beat the main useful-memory scale once the carrier slice is `a = 1/2`.
 
-For the main slice, the target lower law is of order
+For the canonical `a = 1/2` regime, the target lower law is of order
 
 `sigma^{2H/(2H+1)} zeta^{1/(2H+1)}`
 
@@ -50,7 +56,8 @@ The standard Le Cam choice is to set `beta` as large as the roughness budget all
 
 `beta = min(zeta, sigma / (2 sqrt(sum_{r=1}^h r^{2H})))`.
 
-That is the exact choice implemented in `code/useful_memory_horizon/Hölder_lower_bound_research.py`.
+That is the exact Pinsker-style choice implemented in
+`code/useful_memory_horizon/holder_lower_bound_research.py`.
 
 ## Lower-bound template
 
@@ -68,7 +75,7 @@ and the corresponding lower law
 
 for a constant `c_H > 0` depending only on `H` within this witness construction.
 
-## Main slice: `H = 1`
+## Distinguished case: `H = 1`
 
 At `H = 1`,
 
@@ -90,21 +97,47 @@ This matches the abstract `(a,H)` law on the main carrier slice `a = 1/2`.
 
 Current status:
 
-- theorem-ready as a subclass lower bound for the main slice logic;
+- theorem-ready as a subclass lower bound for the canonical `a = 1/2` regime;
 - strongest closed interpretation remains the structural role of the lower bound;
 - full class-tight minimax statements and constant-sharp extensions remain open.
+- the exact Gaussian two-point testing frontier is now numerically mapped in
+  `code/useful_memory_horizon/gaussian_witness_frontier.py`.
 
 ## What is already supported
 
-The numerical witness sweep in `umh-research-Hölder-lower-bound` supports this scaling by:
+The numerical witness sweep in `umh-research-holder-lower-bound` supports this scaling by:
 
 - optimizing the witness width `h`;
 - checking the normalized lower-bound value against the predicted asymptotic constant;
 - confirming the `sigma` and `zeta` exponents across `H in (0,1]`.
 
+The sharper follow-up sweep in `umh-research-gaussian-witness-frontier` replaces
+the Pinsker-style relaxation with the exact Gaussian testing error. On the same
+witness family it leads to the scalar shape equation
+
+`p_H Phi(-x_H) = x_H phi(x_H)`, where `p_H = 2H / (2H + 1)`,
+
+and therefore to the asymptotic candidate constant
+
+`C_H^{Gauss} = (2H+1)^{H/(2H+1)} x_H^{2H/(2H+1)} Phi(-x_H)`.
+
+This is not yet promoted to the theorem package, but it is the best available
+refinement target for the lower-regime constants.
+
+There is now a second refinement step. The ramp witness is not shape-optimal
+inside the larger endpoint-saturating Hölder class when `H < 1`. The note
+`notes/07-witness-shape-extremality.md` shows that the pointwise minimal feasible
+profile is
+
+`g_r^{min} = h^H - (h-r)^H`,
+
+which has strictly smaller testing energy than the ramp except at `H = 1`.
+Combined with the exact Gaussian testing bound, this yields an even stronger
+candidate lower-regime constant on the same exponent scale.
+
 ## What this note proves and what it does not
 
-This note is enough for the paper's structural message because it shows that the main useful-memory scale has a lower-bound witness.
+This is enough for the paper's structural message because the main useful-memory scale has a lower-bound witness.
 
 This note does not claim:
 

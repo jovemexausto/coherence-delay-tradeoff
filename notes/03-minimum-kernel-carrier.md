@@ -1,9 +1,13 @@
-# Minimum Kernel Proposition
+# 03. Minimum-Kernel Carrier
+Status: closed
+Category: carrier
+Prev: 02. General Law
+Next: 04. Minimum-Kernel Proof
 
-This note states the minimum-kernel carrier in a theorem-ready form.
+Minimum-kernel carrier in theorem-ready form.
 Its role is to close the first rigorous carrier instantiation for the abstract upper law.
 
-The consolidated proof narrative is in `notes/minimum_kernel_proof.md`.
+The consolidated proof narrative is in `notes/04-minimum-kernel-proof.md`.
 
 ## Setting
 
@@ -50,7 +54,7 @@ This is the canonical `a = 1/2` carrier instantiation used by the paper.
 
 3. The leading term has variance `O(1/n)` after integration because the array is independent and the fixed-span design only changes constants.
 
-4. The integrated remainder is `o(n^{-1})` by assumption and by the decomposition tracked in `notes/bahadur_kiefer_resolution.md`.
+4. The integrated remainder is `o(n^{-1})` by assumption, with the needed decomposition and rate discussion consolidated in `notes/04-minimum-kernel-proof.md`.
 
 5. The boundary band contributes only lower-order mass under bounded support and the interior density assumptions.
 
@@ -63,7 +67,7 @@ This is the canonical `a = 1/2` carrier instantiation used by the paper.
 The exponent is the same as the i.i.d. mixture benchmark.
 The triangular design changes the leading constant through a design effect, not through a change of exponent.
 
-That comparison is isolated in `notes/design_effect_lemma.md`.
+That comparison is summarized directly in `notes/04-minimum-kernel-proof.md`.
 
 ## What remains to write cleanly
 
@@ -74,5 +78,5 @@ The remaining consolidation task is to merge four ingredients into a single proo
 - the Bahadur-Kiefer remainder bound;
 - the boundary-band cleanup.
 
-These ingredients are now assembled in `notes/minimum_kernel_proof.md`.
+These ingredients are now assembled in `notes/04-minimum-kernel-proof.md`.
 The remaining work is to port that proof into the manuscript in final paper style.

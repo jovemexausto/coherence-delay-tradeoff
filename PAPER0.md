@@ -17,7 +17,7 @@ One-sentence thesis:
 Under drift, useful memory obeys a carrier-roughness useful-memory horizon law, so temporal validity ends when staleness overtakes variance reduction.
 
 One-sentence reviewer summary:
-The paper develops a three-layer theory of useful memory under drift: a minimum kernel, a low-dimensional carrier-inheritance layer, and a practically relevant measurement layer; it shows that finite-memory tracking is governed by a carrier-roughness variance-staleness trade-off, that the cube-root law is the worst-case Lipschitz member of a broader carrier-roughness useful-memory horizon family, and that memory can become temporally invalid before change becomes statistically detectable. The framing is adjacent to dynamic regret and adaptive windowing, but the main object is the temporal validity of retained evidence for distribution tracking under drift.
+The paper develops a unified theory of temporal validity under drift: a general carrier-staleness horizon law, an explicit staleness theory, a carrier theory with a minimum-kernel theorem and broader extended and operational regimes, and a structural lower theory showing that finite-memory tracking is governed by a carrier-roughness trade-off rather than by an estimator-specific tuning artifact. The framing is adjacent to dynamic regret and adaptive windowing, but the main object is the temporal validity of retained evidence for distribution tracking under drift.
 
 Core conceptual message:
 `Temporal roughness determines how staleness accumulates, and therefore determines the horizon of useful memory.`
@@ -59,7 +59,8 @@ useful-memory scale.
 This work is about:
 - the temporal validity of retained evidence under drift;
 - finite-memory tracking as a variance-staleness problem;
-- a three-layer theory: minimum kernel, useful carrier inheritance, and practically relevant measurement-layer guarantees;
+- one integrated theory: general law, staleness theory, carrier theory, and structural lower theory;
+- a minimum-kernel theorem plus extended and operational carrier regimes;
 - a carrier-roughness useful-memory horizon family with a worst-case Lipschitz regime;
 - structural lower bounds for finite-memory tracking;
 - detector-silent staleness as the key observable failure mode;
@@ -74,16 +75,18 @@ This work is not about:
 - a productized adaptive policy;
 - a sequel split across artificially separated papers.
 
-## The Ladder
+## Theoretical Architecture
 
-The theory is organized through a minimum kernel, a useful inheritance layer, and a practically relevant measurement layer.
+The theory is organized as one object with several constitutive parts.
 
-- `Minimum`: the bounded-support fixed-span kernel that closes the Bahadur/quantile remainder story.
-- `Useful`: low-dimensional / low-intrinsic-dimensional carrier inheritance from the i.i.d. mixture benchmark.
-- `Practically relevant`: fixed-`epsilon` Sinkhorn or comparable measurement layers where the carrier exponent is robust in practice.
+- `General law`: retained-evidence error decomposes into carrier plus staleness.
+- `Staleness theory`: path roughness governs how temporal invalidity accumulates.
+- `Carrier theory`: the measurement side of the law, with multiple theorem forms.
+- `Structural lower theory`: the horizon is structurally forced, not estimator-specific.
+- `Extended regime`: low-dimensional / low-intrinsic-dimensional carrier inheritance from the i.i.d. mixture benchmark.
+- `Operational regime`: fixed-`epsilon` Sinkhorn or comparable geometries where the carrier appears stable enough to operationalize the law.
 
-The minimum layer establishes the core technical mechanism.
-The useful and practically relevant layers carry the broader scientific scope.
+The minimum kernel is one rigorous carrier theorem inside the carrier theory. It is not the sovereign center of the paper.
 
 ## The Discovery
 
@@ -164,7 +167,7 @@ The horizon is therefore not universal.
 It depends on temporal roughness because roughness changes the way staleness
 accumulates with lag.
 
-The `a=1/2` slice is the canonical statistical instantiation of the carrier-roughness useful-memory horizon law.
+The `a=1/2` regime is the canonical statistical instantiation of the carrier-roughness useful-memory horizon law.
 
 ### Worst-case Lipschitz regime
 
@@ -366,18 +369,19 @@ The paper is strongest when it sounds like it discovered a constraint, not when 
 
 The unified paper should revolve around a clean theorem package:
 
-1. General Hölder-class upper law.
-2. Hölder-class optimized horizon and minimax rate.
-3. Hölder-class lower bound with matching exponent.
-4. Worst-case Lipschitz envelope as the `H=1` member.
-5. Lipschitz optimal horizon and minimum error.
-6. Structural finite-memory floor.
-7. Explicit special-case recovery of `H=1`, `H=1/2`, and any other editorially useful case.
+1. General law for retained-evidence error under drift.
+2. Uniform-window staleness theory with explicit constants.
+3. Optimized useful-memory horizon law.
+4. Carrier theorem in the minimum-kernel regime.
+5. Structural lower theorem on the canonical `a=1/2` regime.
+6. Extended-regime carrier theorem form.
+7. Operational-regime carrier theorem form.
+8. Explicit recovery of `H=1`, `H=1/2`, and other editorially useful cases.
 
 The special-case structure matters.
 It is how the reader sees that the theory is unified rather than patched together.
-It is also how the worst-case Lipschitz result remains the cornerstone of the
-paper rather than looking provisional or superseded.
+It is also how the worst-case Lipschitz result remains a distinguished member of
+the general law rather than looking provisional or superseded.
 
 ## Lower Bound Priority
 
