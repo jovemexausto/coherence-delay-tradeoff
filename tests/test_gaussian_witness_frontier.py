@@ -15,6 +15,7 @@ from useful_memory_horizon.gaussian_witness_frontier import (
     minimal_endpoint_energy_constant,
     normal_cdf,
     normal_pdf,
+    present_envelope_minimal_lag_profile,
     profile_energy,
     ramp_energy_constant,
     ramp_profile,
@@ -99,6 +100,16 @@ class GaussianWitnessFrontierTest(unittest.TestCase):
             profile_energy(ramp_profile(1.0, 256)),
             places=8,
         )
+
+    def test_present_envelope_minimal_lag_profile_matches_reversed_endpoint_profile(
+        self,
+    ) -> None:
+        for H in (0.35, 0.5, 0.75, 1.0):
+            for h in (8, 32, 128):
+                self.assertEqual(
+                    present_envelope_minimal_lag_profile(H, h),
+                    tuple(reversed(endpoint_minimal_profile(H, h))),
+                )
 
     def test_minimal_profile_constant_improves_on_ramp_for_H_below_one(self) -> None:
         for H in (0.35, 0.5, 0.75):

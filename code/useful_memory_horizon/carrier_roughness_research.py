@@ -30,6 +30,7 @@ class CarrierRoughnessResearchConfig:
     triangular_sample_sizes: tuple[int, ...] = (32, 64, 128, 256)
     triangular_seed_count: int = 16
     sinkhorn_epsilons: tuple[float, ...] = (0.5, 0.2, 0.1, 0.05)
+    sinkhorn_ambient_intrinsic_pairs: tuple[tuple[int, int], ...] = ((8, 1),)
     sinkhorn_sample_sizes: tuple[int, ...] = (24, 48, 96, 160)
     sinkhorn_seed_count: int = 10
 
@@ -95,6 +96,46 @@ def _mixture_sample(
 def _sqrt_sinkhorn(x: np.ndarray, y: np.ndarray, epsilon: float) -> float:
     result = debiased_sinkhorn_divergence(x, y, epsilon)
     return float(abs(result.cost) ** 0.5)
+
+
+def _embedded_fixed_span_means(n: int, ambient_dim: int, span: float) -> np.ndarray:
+    raw = np.arange(n, dtype=float)
+    raw -= raw.min()
+    scale = float(raw.max()) if raw.max() > 0.0 else 1.0
+    means = np.zeros((n, ambient_dim), dtype=float)
+    means[:, 0] = span * raw / scale
+    return means
+
+
+def _embedded_uniform_window_sample(
+    n: int,
+    ambient_dim: int,
+    intrinsic_dim: int,
+    span: float,
+    rng: np.random.Generator,
+) -> np.ndarray:
+    if intrinsic_dim > ambient_dim:
+        raise ValueError("intrinsic_dim cannot exceed ambient_dim")
+    means = _embedded_fixed_span_means(n, ambient_dim, span)
+    sample = means.copy()
+    sample[:, :intrinsic_dim] += rng.uniform(-1.0, 1.0, size=(n, intrinsic_dim))
+    return sample
+
+
+def _embedded_uniform_mixture_sample(
+    n: int,
+    ambient_dim: int,
+    intrinsic_dim: int,
+    span: float,
+    rng: np.random.Generator,
+) -> np.ndarray:
+    if intrinsic_dim > ambient_dim:
+        raise ValueError("intrinsic_dim cannot exceed ambient_dim")
+    means = _embedded_fixed_span_means(n, ambient_dim, span)
+    component_index = rng.integers(0, n, size=n)
+    sample = means[component_index].copy()
+    sample[:, :intrinsic_dim] += rng.uniform(-1.0, 1.0, size=(n, intrinsic_dim))
+    return sample
 
 
 def _estimate_mean_distance(
@@ -485,78 +526,128 @@ def run_carrier_roughness_research(
                 },
             )
 
-    for epsilon in config.sinkhorn_epsilons:
-        sizes = np.asarray(config.sinkhorn_sample_sizes, dtype=int)
-        iid_means: list[float] = []
-        triangular_means: list[float] = []
-        for n in sizes:
-            H = 1.0
-            span = 0.25
-            zeta = span / n
-            iid_values: list[float] = []
-            triangular_values: list[float] = []
-            for seed in range(config.sinkhorn_seed_count):
-                mixture_rng = np.random.default_rng(
-                    70_000 + int(100 * epsilon) + 10 * n + seed
-                )
-                comparison_rng = np.random.default_rng(
-                    80_000 + int(100 * epsilon) + 10 * n + seed
-                )
-                triangular_rng = np.random.default_rng(
-                    90_000 + int(100 * epsilon) + 10 * n + seed
-                )
-                iid_values.append(
-                    _sqrt_sinkhorn(
-                        _mixture_sample(n, 1, zeta, H, comparison_rng),
-                        _mixture_sample(n, 1, zeta, H, comparison_rng),
-                        epsilon,
+    for ambient_dim, intrinsic_dim in config.sinkhorn_ambient_intrinsic_pairs:
+        for epsilon in config.sinkhorn_epsilons:
+            sizes = np.asarray(config.sinkhorn_sample_sizes, dtype=int)
+            iid_means: list[float] = []
+            triangular_means: list[float] = []
+            for n in sizes:
+                span = 0.25
+                iid_values: list[float] = []
+                triangular_values: list[float] = []
+                for seed in range(config.sinkhorn_seed_count):
+                    mixture_rng = np.random.default_rng(
+                        70_000
+                        + 1_000 * ambient_dim
+                        + 100 * intrinsic_dim
+                        + int(100 * epsilon)
+                        + 10 * n
+                        + seed
                     )
-                )
-                triangular_values.append(
-                    _sqrt_sinkhorn(
-                        _triangular_window_sample(n, 1, zeta, H, triangular_rng),
-                        _mixture_sample(n, 1, zeta, H, mixture_rng),
-                        epsilon,
+                    comparison_rng = np.random.default_rng(
+                        80_000
+                        + 1_000 * ambient_dim
+                        + 100 * intrinsic_dim
+                        + int(100 * epsilon)
+                        + 10 * n
+                        + seed
                     )
-                )
-            iid_means.append(float(np.mean(iid_values)))
-            triangular_means.append(float(np.mean(triangular_values)))
-        iid_slope = estimate_log_slope(sizes, iid_means)
-        triangular_slope = estimate_log_slope(sizes, triangular_means)
-        summary_rows.append(
-            {
-                "experiment": "sinkhorn-fixed-span",
-                "setting": f"Sinkhorn iid mixture eps={epsilon:.2f}",
-                "estimated_slope": round(iid_slope, 4),
-                "carrier_a": round(-iid_slope, 4),
-                "comment": "fixed-span measurement layer",
-            }
-        )
-        summary_rows.append(
-            {
-                "experiment": "sinkhorn-fixed-span",
-                "setting": f"Sinkhorn triangular eps={epsilon:.2f}",
-                "estimated_slope": round(triangular_slope, 4),
-                "carrier_a": round(-triangular_slope, 4),
-                "comment": "fixed-span inheritance check",
-            }
-        )
-        _append_curve_rows(
-            curve_rows,
-            experiment="sinkhorn-fixed-span",
-            setting=f"Sinkhorn iid mixture eps={epsilon:.2f}",
-            sample_sizes=sizes,
-            means=iid_means,
-            metadata={"epsilon": epsilon, "regime": "fixed-span"},
-        )
-        _append_curve_rows(
-            curve_rows,
-            experiment="sinkhorn-fixed-span",
-            setting=f"Sinkhorn triangular eps={epsilon:.2f}",
-            sample_sizes=sizes,
-            means=triangular_means,
-            metadata={"epsilon": epsilon, "regime": "fixed-span"},
-        )
+                    triangular_rng = np.random.default_rng(
+                        90_000
+                        + 1_000 * ambient_dim
+                        + 100 * intrinsic_dim
+                        + int(100 * epsilon)
+                        + 10 * n
+                        + seed
+                    )
+                    iid_values.append(
+                        _sqrt_sinkhorn(
+                            _embedded_uniform_mixture_sample(
+                                n,
+                                ambient_dim,
+                                intrinsic_dim,
+                                span,
+                                comparison_rng,
+                            ),
+                            _embedded_uniform_mixture_sample(
+                                n,
+                                ambient_dim,
+                                intrinsic_dim,
+                                span,
+                                comparison_rng,
+                            ),
+                            epsilon,
+                        )
+                    )
+                    triangular_values.append(
+                        _sqrt_sinkhorn(
+                            _embedded_uniform_window_sample(
+                                n,
+                                ambient_dim,
+                                intrinsic_dim,
+                                span,
+                                triangular_rng,
+                            ),
+                            _embedded_uniform_mixture_sample(
+                                n,
+                                ambient_dim,
+                                intrinsic_dim,
+                                span,
+                                mixture_rng,
+                            ),
+                            epsilon,
+                        )
+                    )
+                iid_means.append(float(np.mean(iid_values)))
+                triangular_means.append(float(np.mean(triangular_values)))
+            iid_slope = estimate_log_slope(sizes, iid_means)
+            triangular_slope = estimate_log_slope(sizes, triangular_means)
+            iid_setting = f"Sinkhorn iid mixture ambient d={ambient_dim}, intrinsic k={intrinsic_dim}, eps={epsilon:.2f}"
+            triangular_setting = f"Sinkhorn triangular ambient d={ambient_dim}, intrinsic k={intrinsic_dim}, eps={epsilon:.2f}"
+            summary_rows.append(
+                {
+                    "experiment": "sinkhorn-fixed-span",
+                    "setting": iid_setting,
+                    "estimated_slope": round(iid_slope, 4),
+                    "carrier_a": round(-iid_slope, 4),
+                    "comment": "fixed-span operational benchmark",
+                }
+            )
+            summary_rows.append(
+                {
+                    "experiment": "sinkhorn-fixed-span",
+                    "setting": triangular_setting,
+                    "estimated_slope": round(triangular_slope, 4),
+                    "carrier_a": round(-triangular_slope, 4),
+                    "comment": "fixed-span operational inheritance check",
+                }
+            )
+            _append_curve_rows(
+                curve_rows,
+                experiment="sinkhorn-fixed-span",
+                setting=iid_setting,
+                sample_sizes=sizes,
+                means=iid_means,
+                metadata={
+                    "epsilon": epsilon,
+                    "ambient_dim": ambient_dim,
+                    "intrinsic_dim": intrinsic_dim,
+                    "regime": "fixed-span",
+                },
+            )
+            _append_curve_rows(
+                curve_rows,
+                experiment="sinkhorn-fixed-span",
+                setting=triangular_setting,
+                sample_sizes=sizes,
+                means=triangular_means,
+                metadata={
+                    "epsilon": epsilon,
+                    "ambient_dim": ambient_dim,
+                    "intrinsic_dim": intrinsic_dim,
+                    "regime": "fixed-span",
+                },
+            )
 
     return CarrierRoughnessResearchResult(
         summary_rows=summary_rows, curve_rows=curve_rows

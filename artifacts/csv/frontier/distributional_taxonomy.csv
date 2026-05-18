@@ -1,0 +1,4 @@
+class,examples,local_W2,local_testing,theorem_status
+regular dominated,"Gaussian location, Gaussian scale",regular metric scaling,quadratic KL / Hellinger,theorem target
+support-changing nonregular,uniform scale,can remain linear,nonquadratic / one-sided KL,separate theory needed
+singular / atomic,two-point scale,can remain linear,singular,exclusion / counterexample class

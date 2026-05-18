@@ -15,7 +15,7 @@ drift-induced misalignment overtakes the remaining variance gain. The paper
 studies that question in distributional geometry and treats the horizon of
 useful memory as the main statistical object.
 
-The central contribution is a carrier-roughness useful-memory horizon law. The
+A carrier-roughness useful-memory horizon law captures this problem. The
 starting point is an abstract decomposition
 \[
   \mathbb E\,d\!\left(\widehat P_t^{(n)},P_t\right)
@@ -30,12 +30,12 @@ useful-memory scale
   n^*(a,H) \asymp (C_K/\zeta)^{1/(a+H)}.
 \]
 The cube-root law is recovered as the special case $a=1/2$, $H=1$, corresponding
-to a root-$n$ carrier and worst-case linear staleness. The paper is therefore
-not about the cube-root law alone. It is about the larger law that explains when
-cube-root scaling appears, when it does not, and why the horizon is path
-dependent.
+to a root-$n$ carrier and worst-case linear staleness. The point of the paper is
+therefore not the cube-root law in isolation, but the larger object that explains
+when cube-root scaling appears, when it does not, and why the useful-memory
+horizon is path dependent.
 
-To make this law concrete, the paper proceeds in three steps.
+To make this law concrete, the paper proceeds in three moves.
 
 First, it identifies a \emph{minimum kernel}: a one-dimensional bounded-support
 fixed-span triangular-array setting in which the carrier can be instantiated
@@ -46,35 +46,52 @@ canonical carrier
   \mathbb E\,W_2\!\left(\widehat P_n^{\mathrm{tri}},\bar P_n\right)
   = O(n^{-1/2}).
 \]
-This supplies a concrete $a=1/2$ regime of the abstract law.
+This supplies a concrete $a=1/2$ regime of the abstract law and closes the
+canonical benchmark.
 
-Second, the paper identifies an \emph{extended regime}: low-dimensional or
-low-intrinsic-dimensional settings in which the triangular-array carrier tracks
-the i.i.d. mixture benchmark with only a constant-level gap. This extends the
-theory beyond the one-dimensional proof regime without pretending to solve the
-full high-dimensional raw-$W_2$ problem.
+Second, it studies an \emph{operational regime}: fixed-$\varepsilon$ Sinkhorn
+geometry as an operational carrier whose finite-sample behavior remains useful
+even where raw Wasserstein geometry is dimensionally fragile. In the embedded
+fixed-span model studied here, this is more than a loose extension: exact
+support-complexity inheritance, the dual-complexity threshold $\alpha>k/2$, and
+calibrated $\varepsilon$-band stability together identify a certified
+operational region for the same horizon law.
 
-Third, it studies an \emph{operational regime}: fixed-$\varepsilon$ Sinkhorn
-geometry as an operational carrier whose finite-sample behavior appears stable
-even where raw Wasserstein geometry is dimensionally fragile. This regime is
-included as an operational extension of the same horizon law, not as a claim of
-full theorem-level generality.
+Third, it formulates the broader noncanonical extension problem in the right
+way: not as a universal attempt to preserve the canonical root-$n$ regime, but
+as a geometry-specific inheritance problem in which different regular families
+or operational geometries support different carrier exponents and therefore
+different members of the same horizon family.
+
+The paper therefore has one central arc: close the canonical regime, identify a
+certified operational frontier beyond it, and state the broader family-specific
+extension target that replaces a false universal one. Memory under drift is
+governed by the interaction between carrier geometry and temporal roughness, not
+by a single universal window prescription.
 
 The theory is complemented by a structural lower bound. On the canonical carrier
 regime $a=1/2$, a Gaussian witness construction shows that the useful-memory
 scale is not merely the optimum of one procedure. The refined witness analysis
 also identifies the exact Gaussian testing frontier and shows that, for $H<1$,
 the usual ramp witness is not the lowest-energy endpoint-saturating H\"older
-shape. Thus the same lower-bound mechanism supplies both the structural exponent
-law and a sharper picture of the constants inside the canonical regime.
+shape: the profile $g_r^{\min}=h^H-(h-r)^H$ minimizes witness energy on that
+class and strictly improves the ramp constant. The same lower-bound mechanism therefore supplies both the structural
+exponent law and a sharper picture of the canonical regime. In the Gaussian
+location benchmark, the same geometry can be pushed one step further to give a
+full minimax rate statement on the deterministic H\"older class itself. Beyond
+that canonical benchmark, the broader theorem target is family-specific rather
+than universal: identify which regular distribution families or operational
+geometries support which carrier exponent $a$, and hence which member of the
+horizon family they realize.
 
-The empirical logic mirrors the theory. The paper first makes the basic
-variance--staleness trade-off visible through a finite-memory U-curve. It then
-shows roughness-dependent horizon scaling across path classes, carrier behavior
-beyond the minimum kernel, and a measurable invalidity gap between temporal
-validity and changepoint evidence. The central conceptual distinction is simple:
-temporal validity is not changepoint evidence. A detector can remain
-statistically silent while retained evidence is already stale for the present.
+The empirical logic mirrors that arc. The paper first makes the basic
+variance--staleness trade-off visible through a finite-memory U-curve, then
+shows roughness-dependent horizon scaling, then maps the certified
+fixed-$\varepsilon$ Sinkhorn frontier, and finally exhibits a measurable
+invalidity gap between temporal validity and changepoint evidence. The central
+conceptual distinction is simple: temporal validity is not changepoint
+evidence. A detector can remain statistically silent while retained evidence is
+already stale for the present.
 
 This framing is adjacent to several literatures---dynamic regret, adaptive
 windowing, locally stationary smoothing, adaptive filtering, and distributional
@@ -87,8 +104,8 @@ estimating the present distribution before age becomes the dominant source of
 error?
 
 The paper proceeds as follows. \Cref{sec:finite_memory_under_drift} develops the
-carrier-roughness useful-memory horizon law, including the minimum-kernel
-result, the structural lower bound, the refined Gaussian witness geometry, and
-the broader extended and operational regimes. \Cref{sec:validation} presents the corresponding finite-sample
+carrier-roughness useful-memory horizon law, closes the canonical regime,
+formulates the operational frontier, and states the broader regular-family
+extension target. \Cref{sec:validation} presents the corresponding finite-sample
 evidence. \Cref{sec:related} discusses related work, and \Cref{sec:open}
 discusses scope, limitations, and open problems.

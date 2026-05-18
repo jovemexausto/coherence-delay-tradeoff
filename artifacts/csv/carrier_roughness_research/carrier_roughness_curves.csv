@@ -251,35 +251,35 @@ triangular-growing-span,"triangular fixed zeta d=2, H=1.0, zeta=0.04",32,0.74533
 triangular-growing-span,"triangular fixed zeta d=2, H=1.0, zeta=0.04",64,0.635832,2,,1.0,,fixed-zeta,0.04,,
 triangular-growing-span,"triangular fixed zeta d=2, H=1.0, zeta=0.04",128,0.55819,2,,1.0,,fixed-zeta,0.04,,
 triangular-growing-span,"triangular fixed zeta d=2, H=1.0, zeta=0.04",256,0.5595,2,,1.0,,fixed-zeta,0.04,,
-sinkhorn-fixed-span,Sinkhorn iid mixture eps=0.50,24,0.410631,,,,,fixed-span,,,0.5
-sinkhorn-fixed-span,Sinkhorn iid mixture eps=0.50,48,0.315844,,,,,fixed-span,,,0.5
-sinkhorn-fixed-span,Sinkhorn iid mixture eps=0.50,96,0.215872,,,,,fixed-span,,,0.5
-sinkhorn-fixed-span,Sinkhorn iid mixture eps=0.50,160,0.152002,,,,,fixed-span,,,0.5
-sinkhorn-fixed-span,Sinkhorn triangular eps=0.50,24,0.45781,,,,,fixed-span,,,0.5
-sinkhorn-fixed-span,Sinkhorn triangular eps=0.50,48,0.270959,,,,,fixed-span,,,0.5
-sinkhorn-fixed-span,Sinkhorn triangular eps=0.50,96,0.219739,,,,,fixed-span,,,0.5
-sinkhorn-fixed-span,Sinkhorn triangular eps=0.50,160,0.160025,,,,,fixed-span,,,0.5
-sinkhorn-fixed-span,Sinkhorn iid mixture eps=0.20,24,0.373774,,,,,fixed-span,,,0.2
-sinkhorn-fixed-span,Sinkhorn iid mixture eps=0.20,48,0.248145,,,,,fixed-span,,,0.2
-sinkhorn-fixed-span,Sinkhorn iid mixture eps=0.20,96,0.187966,,,,,fixed-span,,,0.2
-sinkhorn-fixed-span,Sinkhorn iid mixture eps=0.20,160,0.18106,,,,,fixed-span,,,0.2
-sinkhorn-fixed-span,Sinkhorn triangular eps=0.20,24,0.452673,,,,,fixed-span,,,0.2
-sinkhorn-fixed-span,Sinkhorn triangular eps=0.20,48,0.280213,,,,,fixed-span,,,0.2
-sinkhorn-fixed-span,Sinkhorn triangular eps=0.20,96,0.184486,,,,,fixed-span,,,0.2
-sinkhorn-fixed-span,Sinkhorn triangular eps=0.20,160,0.184053,,,,,fixed-span,,,0.2
-sinkhorn-fixed-span,Sinkhorn iid mixture eps=0.10,24,0.37707,,,,,fixed-span,,,0.1
-sinkhorn-fixed-span,Sinkhorn iid mixture eps=0.10,48,0.344118,,,,,fixed-span,,,0.1
-sinkhorn-fixed-span,Sinkhorn iid mixture eps=0.10,96,0.231206,,,,,fixed-span,,,0.1
-sinkhorn-fixed-span,Sinkhorn iid mixture eps=0.10,160,0.179641,,,,,fixed-span,,,0.1
-sinkhorn-fixed-span,Sinkhorn triangular eps=0.10,24,0.365478,,,,,fixed-span,,,0.1
-sinkhorn-fixed-span,Sinkhorn triangular eps=0.10,48,0.307684,,,,,fixed-span,,,0.1
-sinkhorn-fixed-span,Sinkhorn triangular eps=0.10,96,0.233606,,,,,fixed-span,,,0.1
-sinkhorn-fixed-span,Sinkhorn triangular eps=0.10,160,0.168234,,,,,fixed-span,,,0.1
-sinkhorn-fixed-span,Sinkhorn iid mixture eps=0.05,24,0.428687,,,,,fixed-span,,,0.05
-sinkhorn-fixed-span,Sinkhorn iid mixture eps=0.05,48,0.347277,,,,,fixed-span,,,0.05
-sinkhorn-fixed-span,Sinkhorn iid mixture eps=0.05,96,0.23304,,,,,fixed-span,,,0.05
-sinkhorn-fixed-span,Sinkhorn iid mixture eps=0.05,160,0.169748,,,,,fixed-span,,,0.05
-sinkhorn-fixed-span,Sinkhorn triangular eps=0.05,24,0.358756,,,,,fixed-span,,,0.05
-sinkhorn-fixed-span,Sinkhorn triangular eps=0.05,48,0.308304,,,,,fixed-span,,,0.05
-sinkhorn-fixed-span,Sinkhorn triangular eps=0.05,96,0.222358,,,,,fixed-span,,,0.05
-sinkhorn-fixed-span,Sinkhorn triangular eps=0.05,160,0.166609,,,,,fixed-span,,,0.05
+sinkhorn-fixed-span,"Sinkhorn iid mixture ambient d=8, intrinsic k=1, eps=0.50",24,0.219331,8,1,,,fixed-span,,,0.5
+sinkhorn-fixed-span,"Sinkhorn iid mixture ambient d=8, intrinsic k=1, eps=0.50",48,0.12783,8,1,,,fixed-span,,,0.5
+sinkhorn-fixed-span,"Sinkhorn iid mixture ambient d=8, intrinsic k=1, eps=0.50",96,0.103995,8,1,,,fixed-span,,,0.5
+sinkhorn-fixed-span,"Sinkhorn iid mixture ambient d=8, intrinsic k=1, eps=0.50",160,0.059567,8,1,,,fixed-span,,,0.5
+sinkhorn-fixed-span,"Sinkhorn triangular ambient d=8, intrinsic k=1, eps=0.50",24,0.235861,8,1,,,fixed-span,,,0.5
+sinkhorn-fixed-span,"Sinkhorn triangular ambient d=8, intrinsic k=1, eps=0.50",48,0.140393,8,1,,,fixed-span,,,0.5
+sinkhorn-fixed-span,"Sinkhorn triangular ambient d=8, intrinsic k=1, eps=0.50",96,0.137332,8,1,,,fixed-span,,,0.5
+sinkhorn-fixed-span,"Sinkhorn triangular ambient d=8, intrinsic k=1, eps=0.50",160,0.072439,8,1,,,fixed-span,,,0.5
+sinkhorn-fixed-span,"Sinkhorn iid mixture ambient d=8, intrinsic k=1, eps=0.20",24,0.215996,8,1,,,fixed-span,,,0.2
+sinkhorn-fixed-span,"Sinkhorn iid mixture ambient d=8, intrinsic k=1, eps=0.20",48,0.14149,8,1,,,fixed-span,,,0.2
+sinkhorn-fixed-span,"Sinkhorn iid mixture ambient d=8, intrinsic k=1, eps=0.20",96,0.099688,8,1,,,fixed-span,,,0.2
+sinkhorn-fixed-span,"Sinkhorn iid mixture ambient d=8, intrinsic k=1, eps=0.20",160,0.072048,8,1,,,fixed-span,,,0.2
+sinkhorn-fixed-span,"Sinkhorn triangular ambient d=8, intrinsic k=1, eps=0.20",24,0.251253,8,1,,,fixed-span,,,0.2
+sinkhorn-fixed-span,"Sinkhorn triangular ambient d=8, intrinsic k=1, eps=0.20",48,0.126994,8,1,,,fixed-span,,,0.2
+sinkhorn-fixed-span,"Sinkhorn triangular ambient d=8, intrinsic k=1, eps=0.20",96,0.104083,8,1,,,fixed-span,,,0.2
+sinkhorn-fixed-span,"Sinkhorn triangular ambient d=8, intrinsic k=1, eps=0.20",160,0.063156,8,1,,,fixed-span,,,0.2
+sinkhorn-fixed-span,"Sinkhorn iid mixture ambient d=8, intrinsic k=1, eps=0.10",24,0.199169,8,1,,,fixed-span,,,0.1
+sinkhorn-fixed-span,"Sinkhorn iid mixture ambient d=8, intrinsic k=1, eps=0.10",48,0.171489,8,1,,,fixed-span,,,0.1
+sinkhorn-fixed-span,"Sinkhorn iid mixture ambient d=8, intrinsic k=1, eps=0.10",96,0.081532,8,1,,,fixed-span,,,0.1
+sinkhorn-fixed-span,"Sinkhorn iid mixture ambient d=8, intrinsic k=1, eps=0.10",160,0.083733,8,1,,,fixed-span,,,0.1
+sinkhorn-fixed-span,"Sinkhorn triangular ambient d=8, intrinsic k=1, eps=0.10",24,0.239524,8,1,,,fixed-span,,,0.1
+sinkhorn-fixed-span,"Sinkhorn triangular ambient d=8, intrinsic k=1, eps=0.10",48,0.149105,8,1,,,fixed-span,,,0.1
+sinkhorn-fixed-span,"Sinkhorn triangular ambient d=8, intrinsic k=1, eps=0.10",96,0.134955,8,1,,,fixed-span,,,0.1
+sinkhorn-fixed-span,"Sinkhorn triangular ambient d=8, intrinsic k=1, eps=0.10",160,0.089888,8,1,,,fixed-span,,,0.1
+sinkhorn-fixed-span,"Sinkhorn iid mixture ambient d=8, intrinsic k=1, eps=0.05",24,0.221257,8,1,,,fixed-span,,,0.05
+sinkhorn-fixed-span,"Sinkhorn iid mixture ambient d=8, intrinsic k=1, eps=0.05",48,0.144283,8,1,,,fixed-span,,,0.05
+sinkhorn-fixed-span,"Sinkhorn iid mixture ambient d=8, intrinsic k=1, eps=0.05",96,0.08139,8,1,,,fixed-span,,,0.05
+sinkhorn-fixed-span,"Sinkhorn iid mixture ambient d=8, intrinsic k=1, eps=0.05",160,0.10074,8,1,,,fixed-span,,,0.05
+sinkhorn-fixed-span,"Sinkhorn triangular ambient d=8, intrinsic k=1, eps=0.05",24,0.218352,8,1,,,fixed-span,,,0.05
+sinkhorn-fixed-span,"Sinkhorn triangular ambient d=8, intrinsic k=1, eps=0.05",48,0.163622,8,1,,,fixed-span,,,0.05
+sinkhorn-fixed-span,"Sinkhorn triangular ambient d=8, intrinsic k=1, eps=0.05",96,0.138323,8,1,,,fixed-span,,,0.05
+sinkhorn-fixed-span,"Sinkhorn triangular ambient d=8, intrinsic k=1, eps=0.05",160,0.080768,8,1,,,fixed-span,,,0.05

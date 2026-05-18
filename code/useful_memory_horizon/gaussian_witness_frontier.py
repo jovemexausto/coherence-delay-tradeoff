@@ -40,6 +40,15 @@ def endpoint_minimal_profile(H: float, h: int) -> tuple[float, ...]:
     return tuple(endpoint - (h - r) ** H for r in range(h + 1))
 
 
+def present_envelope_minimal_lag_profile(H: float, h: int) -> tuple[float, ...]:
+    if not (0.0 < H <= 1.0):
+        raise ValueError("H must lie in (0, 1]")
+    if h <= 0:
+        raise ValueError("h must be positive")
+    endpoint = h**H
+    return tuple(endpoint - (j**H) for j in range(h + 1))
+
+
 def profile_energy(profile: tuple[float, ...]) -> float:
     if len(profile) < 2:
         raise ValueError("profile must include at least two points")

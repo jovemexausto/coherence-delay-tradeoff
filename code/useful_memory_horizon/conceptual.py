@@ -305,6 +305,7 @@ def generate_carrier_layers(
             fixed_spans=(),
             span_growth_fractions=(),
             sinkhorn_epsilons=(0.50, 0.20, 0.10, 0.05),
+            sinkhorn_ambient_intrinsic_pairs=((8, 1),),
             sinkhorn_sample_sizes=(24, 48, 96, 160),
             sinkhorn_seed_count=10,
         )
@@ -331,7 +332,7 @@ def generate_carrier_layers(
         carrier_a = float(row["carrier_a"])
         rows.append(
             {
-                "layer": "useful",
+                "layer": "extended",
                 "setting": str(row["setting"]),
                 "parameter": round(span, 2),
                 "carrier_a": round(carrier_a, 4),
@@ -354,7 +355,7 @@ def generate_carrier_layers(
         carrier_a = float(row["carrier_a"])
         rows.append(
             {
-                "layer": "practical",
+                "layer": "operational",
                 "setting": str(row["setting"]),
                 "parameter": round(epsilon, 2),
                 "carrier_a": round(carrier_a, 4),
@@ -382,7 +383,7 @@ def generate_carrier_layers(
         color="#b23a3a",
         linewidth=2.1,
     )
-    ax_useful.set_title("Useful layer")
+    ax_useful.set_title("Extended regime")
     ax_useful.set_xlabel("span")
     ax_useful.set_ylabel(r"estimated carrier $a$")
     ax_useful.set_ylim(0.38, 0.58)
@@ -405,7 +406,7 @@ def generate_carrier_layers(
         color="#b23a3a",
         linewidth=2.1,
     )
-    ax_practical.set_title("Practical layer")
+    ax_practical.set_title("Operational regime")
     ax_practical.set_xlabel(r"Sinkhorn $\epsilon$")
     ax_practical.set_ylabel(r"estimated carrier $a$")
     ax_practical.set_ylim(0.40, 0.56)
@@ -414,7 +415,7 @@ def generate_carrier_layers(
     ax_practical.grid(axis="y", alpha=0.18, linewidth=0.6)
     ax_practical.legend(["triangular", "i.i.d. mixture"], frameon=False, loc="best")
 
-    fig.suptitle("Carrier layers beyond the minimum kernel", y=1.02, fontsize=10)
+    fig.suptitle("Carrier regimes beyond the minimum kernel", y=1.02, fontsize=10)
     fig.tight_layout()
     output_path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(output_path, bbox_inches="tight")
@@ -424,11 +425,11 @@ def generate_carrier_layers(
         r"\begin{table}[!htbp]",
         r"\centering",
         r"\small",
-        r"\caption{Summary rows for the useful and practical carrier layers. The useful slice compares triangular and i.i.d. mixture carriers across span, while the practical slice compares fixed-$\epsilon$ Sinkhorn across $\epsilon$.}",
+        r"\caption{Summary rows for the extended and operational carrier regimes. The extended rows compare triangular and i.i.d. mixture carriers across span, while the operational rows compare fixed-$\epsilon$ Sinkhorn across $\epsilon$ on embedded low-intrinsic-dimensional support.}",
         r"\label{tab:carrier_layers}",
         r"\begin{tabular}{llrr}",
         r"\toprule",
-        r"Layer & Setting & Parameter & Carrier $a$ " + r"\\",
+        r"Regime & Setting & Parameter & Carrier $a$ " + r"\\",
         r"\midrule",
     ]
     for row in rows:

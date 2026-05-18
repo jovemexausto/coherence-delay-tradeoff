@@ -16,22 +16,40 @@ triangular-array carrier theorem in arbitrary dimension.
 
 \paragraph{Extended and operational regimes.}
 The extended setting and the fixed-$\varepsilon$ Sinkhorn setting are supported
-here primarily through finite-sample evidence. The low-intrinsic-dimensional
-results indicate that the triangular-array carrier can track the i.i.d. mixture
-benchmark, and the Sinkhorn experiments indicate a stable carrier signature
-across the tested regularization values. A theorem of the same strength as the
-minimum-kernel result is not established here for either setting.
+here differently. The extended setting remains primarily finite-sample evidence.
+For fixed-$\varepsilon$ Sinkhorn, the paper now isolates a certified
+frontier: exact support-complexity inheritance and the dual threshold
+$\alpha>k/2$ are structural on the embedded fixed-span model, while the
+triangular-vs.-benchmark carrier comparison is still supplied by calibration on
+the tested $\varepsilon$-bands. A theorem of the same strength as the
+minimum-kernel result is therefore still not established here, but the remaining
+gap is narrower and explicit.
+
+\paragraph{Distributional extension class.}
+The paper does not support a blanket extension to every deterministic
+$W_2$-H\"older path class. Continuous regular families and operational geometries
+can support meaningful carrier exponents, but support-changing and singular
+families behave differently. The right noncanonical target is therefore a theorem
+for regular dominated families or operational geometries with comparable local
+testing structure, not a universal statement over arbitrary transport-H\"older
+paths.
 
 \paragraph{Lower-bound scope.}
 The lower bound is subclass based. The Gaussian witness is enough to show that on
-the canonical carrier regime $a=1/2$, the useful-memory scale is structural rather than
-an artifact of a particular estimator. What remains open is class-tightness and
-constant-sharpness for full deterministic Hölder path classes, especially away
-from the canonical regime and beyond the present witness geometry. The current witness
-frontier is already sharper than the original ramp-plus-Pinsker sketch: the
-exact Gaussian testing bound improves the canonical-regime constant, and for $H<1$ the
-endpoint-minimal Hölder witness is stronger than the ramp witness. But those are
-still subclass refinements, not class-tight minimax theorems.
+the canonical carrier regime $a=1/2$, the useful-memory scale is structural
+rather than an artifact of a particular estimator. What remains open is
+class-tightness and constant-sharpness for full deterministic H\"older path
+classes, especially away from the canonical regime and beyond the witness
+geometry developed here. The witness frontier is already sharper than the
+original ramp-plus-Pinsker sketch: the exact Gaussian testing bound improves the
+canonical-regime constant, and for $H<1$ the endpoint-minimal H\"older witness is
+stronger than the ramp witness. But those are still witness-level refinements.
+The paper now includes a full minimax rate statement for the deterministic
+H\"older class in the Gaussian location benchmark, but constant-sharp and fully
+distributional class-tight theorems remain open. The refined proof-gap
+consequence remains at that witness-constant level: it clarifies the residual
+geometry inside the exact Gaussian witness program, not the last word on the
+full distributional H\"older class.
 
 \paragraph{Weights and memory shape.}
 The main text emphasizes uniform windows, with an EWMA corollary showing that the
@@ -39,12 +57,20 @@ same exponent logic survives after effective-lag reparameterization. The paper
 does not investigate whether more general non-uniform weights can improve
 constants or alter exponents across broader path classes.
 
+\paragraph{Online roughness estimation.}
+The law is stated in terms of the roughness parameters $H$ and $\zeta$, but the
+paper does not propose a fully online procedure for estimating them or for
+quantifying the sensitivity of the chosen horizon to misspecification. Turning
+the prescriptive law into a robust adaptive policy remains future work.
+
 \paragraph{Empirical scope.}
 The experiments are synthetic and structurally motivated. Their role is to make
 the theory visible and to calibrate broader carrier settings, not to demonstrate
 competitive performance on a benchmark suite. Real-data validation and direct
 comparison with adaptive horizon-selection rules remain outside the present
-scope.
+scope. The paper also does not include dedicated changepoint-detection baselines
+such as IDD or sRE, nor a benchmark study across alternative window-selection
+heuristics.
 
 \paragraph{Detectability versus validity.}
 Detector-silent staleness is an empirical consequence of the structural theory,
@@ -56,8 +82,12 @@ theorem across detector classes.
 The next technical questions are clear. The first is to establish carrier
 inheritance beyond the minimum kernel under natural low-dimensional conditions.
 The second is to understand when practical geometries, such as fixed-
-$\varepsilon$ Sinkhorn, admit theorem-level carrier bounds. The third is to
-extend the lower bound beyond the canonical $a=1/2$ regime and decide how far the new
+$\varepsilon$ Sinkhorn, admit full triangular-array inheritance theorems that
+remove the present empirical calibration step in genuinely mid- or
+high-dimensional settings. The third is to build the broader family
+theory: determine which regular dominated distribution families support which
+carrier exponents $a$, and then extend the lower bound beyond the canonical
+$a=1/2$ regime accordingly. After that comes the question of how far the new
 Gaussian-witness refinements can be pushed toward class-tight lower theory.
 After that come non-uniform weighting, real-data validation, and stronger
 stochastic-process formulations.

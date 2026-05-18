@@ -39,11 +39,23 @@ distributions, and the age penalty is measured directly in transport geometry.
 \paragraph{Distribution tracking under transport geometry.}
 Wasserstein distance and Sinkhorn-type estimators are natural when drift lives
 on paths of distributions rather than on scalar losses
-\citep{FournierGuillin2015,GenevayEtAl2019,NilesWeedBach2019,GoldfeldEtAl2022,AkyildizEtAl2024}.
+\citep{FournierGuillin2015,GenevayEtAl2019,MenaWeed2019,Stromme2023MID,GroppeHundrieser2024LCA,NilesWeedBach2019,GoldfeldEtAl2022,AkyildizEtAl2024}.
 They supply the geometric language in which staleness becomes a transport error
 between past and present. In this setting, the trade-off is not simply between
 adaptation and variance, but between finite-sample accuracy and temporal
 misalignment measured in distributional geometry.
+
+\paragraph{Entropic and smoothed transport as operational carriers.}
+Regularization changes the statistical geometry as well as the computational one.
+Entropic and other smoothed transport quantities introduce explicit
+bias--variance--regularization trade-offs and can recover more stable statistical
+behavior than raw high-dimensional Wasserstein distances
+\citep{GenevayEtAl2019,GoldfeldEtAl2022,Stromme2023MID,GroppeHundrieser2024LCA,AkyildizEtAl2024}.
+That perspective is exactly why the paper treats fixed-$\varepsilon$ Sinkhorn as
+an operational carrier rather than as a surrogate for the raw $W_2$ theorem. The
+point is not that regularization preserves the canonical geometry unchanged, but
+that it can induce a usable carrier regime on which a finite-memory horizon law
+still makes sense.
 
 \paragraph{Wasserstein nonstationarity and robust optimization.}
 Jiang, Li, and Zhang study online stochastic optimization under a Wasserstein

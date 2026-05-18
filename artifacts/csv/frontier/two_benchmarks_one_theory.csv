@@ -1,0 +1,3 @@
+benchmark,title,geometry,carrier,status,role
+canonical,Canonical Benchmark,W2 / Gaussian location,a = 1/2,closed theorem,clean distributional benchmark
+operational,Operational Benchmark,fixed-epsilon Sinkhorn,a = a_epsilon,certified theorem frontier,usable mid/high-dimensional regime
