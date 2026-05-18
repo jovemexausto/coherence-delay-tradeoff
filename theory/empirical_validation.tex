@@ -2,13 +2,13 @@
 
 The empirical section makes the theoretical picture visible in finite samples.
 Its role is twofold: to show the main signatures of the variance--staleness law,
-and to calibrate the broader useful and practical settings beyond the
+and to calibrate the broader extended and operational regimes beyond the
 minimum-kernel result.
 
 Four signatures matter. First, horizon sweeps should exhibit a finite optimum
 rather than a boundary solution. Second, that optimum should move with temporal
 roughness. Third, carrier inheritance should remain visible beyond the minimum
-kernel in useful and practical regimes. Fourth, temporal validity can fail
+kernel in extended and operational regimes. Fourth, temporal validity can fail
 before changepoint evidence becomes statistically visible.
 
 \subsection{A Visible Finite-Memory Optimum}\label{sec:validation_ucurve}
@@ -52,26 +52,26 @@ carrier-roughness useful-memory horizon family.}
 \label{fig:roughness_family}
 \end{figure}
 
-The point is structural rather than cosmetic. If the cube-root law were the only
-story, the right panel would collapse to a single slope. It does not. The
+This separation is structural. If the cube-root law were the only story, the
+right panel would collapse to a single slope. It does not. The
 empirical optima separate by roughness class, matching the path-dependent horizon
 logic of \cref{cor:optimized_horizon}.
 
-\subsection{Useful and Practical Carrier Regimes}
+\subsection{Extended and Operational Carrier Regimes}
 \label{sec:validation_carrier_layers}
 
-The next figure summarizes two broader carrier settings: a useful setting based
-on low intrinsic dimension, and a practical measurement setting based on fixed-
+The next figure summarizes two broader carrier settings: an extended regime based
+on low intrinsic dimension, and an operational regime based on fixed-
 $\varepsilon$ Sinkhorn geometry.
 
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.92\linewidth]{artifacts/figures/conceptual/fig_carrier_layers}
-\caption{Useful and practical carrier settings. Left: in the useful setting,
+\caption{Extended and operational carrier settings. Left: in the extended regime,
 embedded low-intrinsic-dimensional support preserves a carrier near the
-$a=1/2$ slice, and triangular slopes stay close to the i.i.d. mixture
-benchmark. Right: in the practical setting, fixed-$\varepsilon$ Sinkhorn produces
-a measurement-layer carrier whose triangular and i.i.d. slopes remain
+$a=1/2$ regime, and triangular slopes stay close to the i.i.d. mixture
+benchmark. Right: in the operational regime, fixed-$\varepsilon$ Sinkhorn produces
+a carrier whose triangular and i.i.d. slopes remain
 qualitatively close across the tested $\varepsilon$ values.}
 \label{fig:carrier_layers}
 \end{figure}
@@ -81,7 +81,7 @@ dimension. In that setting, the triangular-array carrier tracks the i.i.d.
 mixture benchmark rather than exhibiting a visibly different exponent.
 
 The right panel concerns fixed-$\varepsilon$ Sinkhorn geometry. It shows that the
-corresponding measurement-layer carrier remains stable across the tested
+corresponding carrier remains stable across the tested
 regularization values and can therefore be read against the same abstract
 horizon law. Appendix~\ref{app:finite_sample_geometry} reports the corresponding
 summary table.
@@ -176,6 +176,6 @@ Taken together, the experiments support four claims that match the theory.
 Finite-memory tracking exhibits a structural U-curve rather than an ever-growing
 memory benefit. The useful-memory scale is roughness dependent, with the
 cube-root law appearing as the $H=1$ member of a broader family. Carrier
-stability remains visible beyond the minimum kernel in both useful and practical
+stability remains visible beyond the minimum kernel in both extended and operational
 settings. Temporal validity can also fail before changepoint evidence appears,
 producing a measurable invalidity gap.

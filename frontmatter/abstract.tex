@@ -7,7 +7,7 @@ temporal-validity problem: how long can retained evidence improve estimation of
 the present before drift-induced misalignment overtakes variance reduction?
 
 We answer this question by separating finite-memory error into the carrier of
-the measurement layer and the roughness-controlled staleness of the drift path.
+the chosen geometry and the roughness-controlled staleness of the drift path.
 This yields a carrier-roughness useful-memory horizon law,
 \[
   \mathbb E\,d\!\left(\widehat P_t^{(n)},P_t\right)
@@ -22,11 +22,13 @@ law.
 We instantiate the law with a rigorous minimum kernel: a one-dimensional
 bounded-support fixed-span triangular array in which a quantile/Bahadur argument
 gives the canonical $a=1/2$ carrier. A Gaussian witness lower bound shows that
-the resulting horizon is structural on this main slice. The same decomposition
-also identifies regimes where useful memory persists beyond the minimum kernel:
-low intrinsic dimension can preserve the raw $W_2$ carrier, while fixed-
-$\varepsilon$ Sinkhorn geometry provides a practical measurement layer with
-stable finite-sample carriers.
+the resulting horizon is structural in this canonical regime, and a refined
+witness analysis gives the exact Gaussian testing frontier and identifies an
+endpoint-minimal H\"older witness that improves the ramp constant for $H<1$. The
+same decomposition also identifies regimes where useful memory persists beyond
+the minimum kernel: low intrinsic dimension can preserve the raw $W_2$ carrier,
+while fixed-$\varepsilon$ Sinkhorn geometry provides an operational carrier with
+stable finite-sample behavior.
 
 The resulting viewpoint is adjacent to dynamic regret and adaptive windowing,
 but the object is different: temporal validity of retained evidence. Useful

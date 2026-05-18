@@ -5,7 +5,7 @@ but it also ages. The resulting trade-off makes useful memory a finite-horizon
 object rather than an unlimited statistical resource.
 
 The paper formalizes that idea through a carrier-roughness useful-memory horizon
-law. The main theorem object is the abstract decomposition
+law. The central theorem is the abstract decomposition
 \[
   \mathbb E\,d\!\left(\widehat P_t^{(n)},P_t\right)
   \le C_K n^{-a} + C_S\zeta n^H,
@@ -19,11 +19,13 @@ $a=1/2$, $H=1$ corresponding to a root-$n$ carrier under worst-case linear
 staleness.
 
 The analysis anchors this law in a rigorous minimum-kernel result and a
-structural lower bound on the same main carrier slice. Together they show that,
-in the bounded-support fixed-span one-dimensional setting, the horizon is
-neither an artifact of a particular estimator nor a purely heuristic balance.
-The broader useful and practical settings show how the same law remains relevant
-beyond that initial result.
+structural lower bound on the same canonical carrier regime. Together they show
+that, in the bounded-support fixed-span one-dimensional setting, the horizon is
+neither an artifact of a particular estimator nor a purely heuristic balance. The
+refined Gaussian witness analysis sharpens that conclusion: exact testing gives a
+clean scalar frontier, and the endpoint-minimal H\"older witness improves the
+ramp constant for $H<1$. The broader extended and operational regimes show how
+the same law remains relevant beyond the initial proof kernel.
 
 The empirical section makes the theory visible. It shows a structural U-curve,
 roughness-dependent horizon scaling, carrier behavior beyond the minimum kernel,
@@ -32,11 +34,11 @@ evidence. The resulting message is both theoretical and operational: useful
 memory has a path-dependent horizon, and retained evidence can become invalid
 before change becomes statistically detectable.
 
-This is the paper's main shift in viewpoint. Memory under drift is not treated
+The resulting shift in viewpoint is that memory under drift is not treated
 primarily as a regret-tuning parameter or an alarm-design parameter, but as a
 temporal-validity object in distributional geometry.
 
 The main open questions concern carrier inheritance beyond the minimum kernel,
-theorem-level measurement-layer results, and broader lower-bound extensions
-beyond the main $a=1/2$ slice. These are natural extensions of the present
+theorem-level operational-geometry results, and broader lower-bound extensions
+beyond the canonical $a=1/2$ regime. These are natural extensions of the present
 theory, not changes to its central object.

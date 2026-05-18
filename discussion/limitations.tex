@@ -1,34 +1,35 @@
 \section{Limitations and Scope}\label{sec:open}
 
 The central results of the paper are the carrier-roughness useful-memory horizon
-law, the minimum-kernel carrier on the canonical $a=1/2$ slice, and the
-structural lower bound on that same slice. Broader extensions are stated more
+law, the minimum-kernel carrier on the canonical $a=1/2$ regime, and the
+structural lower bound on that same regime. The refined Gaussian witness results
+sharpen the constants inside that regime, but broader extensions are stated more
 cautiously.
 
 \paragraph{Carrier scope.}
-The theory is modular in the carrier exponent $a$, but the main rigorous slice
-is the root-$n$ carrier. The minimum kernel establishes that slice in one
+The theory is modular in the carrier exponent $a$, but the main rigorous regime
+is the root-$n$ carrier. The minimum kernel establishes that regime in one
 dimension under bounded support and fixed span. Outside that setting, the same
 balancing logic continues to hold, but the carrier must come from a different
 theorem. In particular, the paper does not claim a general raw-$W_2$
 triangular-array carrier theorem in arbitrary dimension.
 
-\paragraph{Useful and practical regimes.}
-The useful setting and the fixed-$\varepsilon$ Sinkhorn setting are supported here
-primarily through finite-sample evidence. The low-intrinsic-dimensional results
-indicate that the triangular-array carrier can track the i.i.d. mixture
-benchmark, and the Sinkhorn experiments indicate a stable measurement-layer
-signature across the tested regularization values. A theorem of the same strength
-as the minimum-kernel result is not established here for either setting.
+\paragraph{Extended and operational regimes.}
+The extended setting and the fixed-$\varepsilon$ Sinkhorn setting are supported
+here primarily through finite-sample evidence. The low-intrinsic-dimensional
+results indicate that the triangular-array carrier can track the i.i.d. mixture
+benchmark, and the Sinkhorn experiments indicate a stable carrier signature
+across the tested regularization values. A theorem of the same strength as the
+minimum-kernel result is not established here for either setting.
 
 \paragraph{Lower-bound scope.}
 The lower bound is subclass based. The Gaussian witness is enough to show that on
-the main carrier slice $a=1/2$, the useful-memory scale is structural rather than
+the canonical carrier regime $a=1/2$, the useful-memory scale is structural rather than
 an artifact of a particular estimator. What remains open is class-tightness and
 constant-sharpness for full deterministic Hölder path classes, especially away
-from the main slice and beyond the present witness geometry. The current witness
+from the canonical regime and beyond the present witness geometry. The current witness
 frontier is already sharper than the original ramp-plus-Pinsker sketch: the
-exact Gaussian testing bound improves the main-slice constant, and for $H<1$ the
+exact Gaussian testing bound improves the canonical-regime constant, and for $H<1$ the
 endpoint-minimal Hölder witness is stronger than the ramp witness. But those are
 still subclass refinements, not class-tight minimax theorems.
 
@@ -54,9 +55,9 @@ theorem across detector classes.
 \paragraph{Open problems.}
 The next technical questions are clear. The first is to establish carrier
 inheritance beyond the minimum kernel under natural low-dimensional conditions.
-The second is to understand when practical measurement layers, such as fixed-
+The second is to understand when practical geometries, such as fixed-
 $\varepsilon$ Sinkhorn, admit theorem-level carrier bounds. The third is to
-extend the lower bound beyond the main $a=1/2$ slice and decide how far the new
+extend the lower bound beyond the canonical $a=1/2$ regime and decide how far the new
 Gaussian-witness refinements can be pushed toward class-tight lower theory.
 After that come non-uniform weighting, real-data validation, and stronger
 stochastic-process formulations.

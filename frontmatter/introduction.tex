@@ -22,8 +22,8 @@ starting point is an abstract decomposition
   \leq
   C_K n^{-a} + C_S\zeta n^H,
 \]
-where $a>0$ is the finite-sample carrier exponent of the chosen measurement
-layer, $H\in(0,1]$ is the temporal roughness exponent of the drift path, and
+where $a>0$ is the finite-sample carrier exponent of the chosen geometry and
+sample regime, $H\in(0,1]$ is the temporal roughness exponent of the drift path, and
 $\zeta$ is the roughness amplitude. Optimizing this balance yields the
 useful-memory scale
 \[
@@ -46,25 +46,27 @@ canonical carrier
   \mathbb E\,W_2\!\left(\widehat P_n^{\mathrm{tri}},\bar P_n\right)
   = O(n^{-1/2}).
 \]
-This supplies a concrete $a=1/2$ slice of the abstract law.
+This supplies a concrete $a=1/2$ regime of the abstract law.
 
-Second, the paper identifies a \emph{useful layer}: low-dimensional or
-low-intrinsic-dimensional regimes in which the triangular-array carrier tracks
+Second, the paper identifies an \emph{extended regime}: low-dimensional or
+low-intrinsic-dimensional settings in which the triangular-array carrier tracks
 the i.i.d. mixture benchmark with only a constant-level gap. This extends the
 theory beyond the one-dimensional proof regime without pretending to solve the
 full high-dimensional raw-$W_2$ problem.
 
-Third, it studies a \emph{practical layer}: fixed-$\varepsilon$ Sinkhorn geometry
-as a measurement layer whose carrier appears stable in finite samples even where
-raw Wasserstein geometry is dimensionally fragile. The point is not that this
-layer has already been proved in full generality, but that it provides a
-coherent measurement-layer regime for the same horizon law.
+Third, it studies an \emph{operational regime}: fixed-$\varepsilon$ Sinkhorn
+geometry as an operational carrier whose finite-sample behavior appears stable
+even where raw Wasserstein geometry is dimensionally fragile. This regime is
+included as an operational extension of the same horizon law, not as a claim of
+full theorem-level generality.
 
-The theory is complemented by a structural lower bound. On the main carrier slice
-$a=1/2$, a Gaussian witness construction shows that the useful-memory scale is
-not merely the optimum of one procedure. At the Lipschitz endpoint, the same
-cube-root scale appears as a subclass lower bound, making the horizon structural
-rather than estimator specific.
+The theory is complemented by a structural lower bound. On the canonical carrier
+regime $a=1/2$, a Gaussian witness construction shows that the useful-memory
+scale is not merely the optimum of one procedure. The refined witness analysis
+also identifies the exact Gaussian testing frontier and shows that, for $H<1$,
+the usual ramp witness is not the lowest-energy endpoint-saturating H\"older
+shape. Thus the same lower-bound mechanism supplies both the structural exponent
+law and a sharper picture of the constants inside the canonical regime.
 
 The empirical logic mirrors the theory. The paper first makes the basic
 variance--staleness trade-off visible through a finite-memory U-curve. It then
@@ -86,7 +88,7 @@ error?
 
 The paper proceeds as follows. \Cref{sec:finite_memory_under_drift} develops the
 carrier-roughness useful-memory horizon law, including the minimum-kernel
-result, the structural lower bound, and the broader useful and practical
-settings. \Cref{sec:validation} presents the corresponding finite-sample
+result, the structural lower bound, the refined Gaussian witness geometry, and
+the broader extended and operational regimes. \Cref{sec:validation} presents the corresponding finite-sample
 evidence. \Cref{sec:related} discusses related work, and \Cref{sec:open}
 discusses scope, limitations, and open problems.

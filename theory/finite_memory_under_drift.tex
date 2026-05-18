@@ -34,7 +34,7 @@ question rather than a purely algorithmic one.
 
 \subsection{Abstract Upper Law}\label{subsec:abstract_upper_law}
 
-The top-level theorem separates finite-sample carrier behavior from
+The abstract theorem separates finite-sample carrier behavior from
 drift-induced staleness.
 
 \begin{theorem}[Abstract upper law]\label{thm:abstract_upper_law}
@@ -71,8 +71,8 @@ Taking expectations and applying the two assumptions yields the claim.
 \end{proof}
 
 The proof is immediate, but the theorem makes the modular structure explicit:
-the path class supplies the staleness term, while the measurement layer supplies
-the carrier term.
+the path class supplies the staleness term, while the chosen geometry and sample
+regime supply the carrier term.
 
 \begin{corollary}[Optimized useful-memory horizon law]
 \label{cor:optimized_horizon}
@@ -165,20 +165,23 @@ Combining \cref{lem:Hölder_staleness_bound} with
 \[
   n^*(a,H) \asymp (C_K/\zeta)^{1/(a+H)}.
 \]
-On the canonical statistical slice $a=1/2$,
+On the canonical statistical regime $a=1/2$,
 \[
   n^*(1/2,H) \asymp (C_K/\zeta)^{2/(1+2H)}.
 \]
 At $H=1$, this recovers the cube-root horizon; at $H=1/2$, it yields the
 intermediate $n^*\asymp C_K/\zeta$ regime. These are members of the same law,
-not separate theorem stories.
+not separate theorem stories. The finite-$n$ constant in
+\cref{lem:Hölder_staleness_bound} is the constant used throughout the paper for
+uniform windows; the simpler $(2H+1)^{-1/2}$ expression is its large-window
+limit.
 
 \subsection{Minimum Kernel: A Rigorous Carrier Instantiation}
 \label{subsec:minimum_kernel}
 
 The abstract law needs at least one rigorous carrier instantiation. The minimum
 kernel is the bounded-support fixed-span one-dimensional triangular array. It
-provides the first clean carrier feeding the abstract horizon law.
+provides the first rigorous carrier entering the abstract horizon law.
 
 \begin{proposition}[Minimum-kernel carrier]\label{prop:minimum_kernel}
 Let $X_{n,1},\dots,X_{n,n}$ be independent one-dimensional observations with laws
@@ -228,15 +231,15 @@ lower-order. Summing the leading term, the lower-order cross term, and the
 integrated remainder gives $\mathbb E W_2^2=O(n^{-1})$, and Jensen yields the
 displayed $W_2$ rate.
 
-The main point is the exponent. Inside this safe zone, the triangular-array
-carrier remains root-$n$ and differs from the i.i.d. mixture benchmark only
-through a design effect.
+The main conclusion is the exponent. Under this bounded-support fixed-span
+regime, the triangular-array carrier remains root-$n$ and differs from the
+i.i.d. mixture benchmark only through a design effect.
 
 \subsection{A Structural Lower Bound}\label{subsec:lower_bound}
 
-The upper law would be much less interesting if it were only the optimum of one
-estimator. The lower bound shows that, on the main carrier slice $a=1/2$, the
-useful-memory scale is imposed by the drift geometry itself.
+The upper law would be substantially weaker if it were only the optimum of one
+estimator. The lower bound shows that, on the canonical carrier regime $a=1/2$,
+the useful-memory scale is imposed by the drift geometry itself.
 
 \begin{figure}[!htbp]
 \centering
@@ -244,11 +247,12 @@ useful-memory scale is imposed by the drift geometry itself.
 \caption{Gaussian witness for the structural lower bound. The two paths share
 most of the retained history and differ only on a recent segment of width $h$,
 yet remain separated at the present. Optimizing that recent segment already
-produces the same horizon exponent as the upper law on the main carrier slice.}
+produces the same horizon exponent as the upper law on the canonical carrier
+regime.}
 \label{fig:lower_bound_witness}
 \end{figure}
 
-\begin{proposition}[Structural lower bound on the main carrier slice]
+\begin{proposition}[Structural lower bound on the canonical carrier regime]
 \label{prop:structural_lower_bound}
 Fix $H\in(0,1]$ and work on the Gaussian location subclass with known variance
 $\sigma^2$ and witness paths
@@ -264,7 +268,7 @@ this subclass satisfies
   \mathbb E\,W_2\!\left(\widehat P_t,P_t\right)
   \ge c_H\,\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)}.
 \]
-Consequently, on the main carrier slice $a=1/2$, the useful-memory scale
+Consequently, on the canonical carrier regime $a=1/2$, the useful-memory scale
 \[
   h^*(H) \asymp (\sigma/\zeta)^{2/(2H+1)}
 \]
@@ -291,37 +295,153 @@ $h^*(H)\asymp (\sigma/\zeta)^{2/(2H+1)}$ and therefore the displayed lower law.
 
 At $H=1$, this recovers the cube-root horizon and the lower scale
 $\sigma^{2/3}\zeta^{1/3}$. The lower bound is subclass based rather than
-class-tight, but that is enough for the paper's central claim: the horizon is
+class-tight, but that is enough for the central claim: the horizon is
 not just an estimator artifact.
 
-Two refinements sharpen this witness story without changing the theorem object.
-First, using the exact Gaussian two-point testing error improves the witness
-constant relative to the Pinsker-style relaxation while keeping the same
-exponent and horizon scale. Second, for $H<1$ the ramp profile is not the
-lowest-energy endpoint-saturating H\"older witness; a sharper endpoint-minimal
-profile further improves the subclass constant. Those refinements clarify the
-constant-level frontier of the main slice, but the paper's central lower-bound
-claim remains the structural exponent law stated above.
+The proposition above is the lower-bound fact needed for the main horizon law.
+The same witness analysis also exposes a sharper constant-level geometry. We
+record those refinements next because they explain what is intrinsic to the
+canonical $a=1/2$ regime and what was only an artifact of the original ramp proof
+with its testing relaxation.
+
+\subsection{Refined Geometry of the Gaussian Witness}
+\label{subsec:refined_witness_geometry}
+
+Let $\Phi$ and $\varphi$ denote the standard normal distribution function and
+density.
+For the ramp witness in \cref{prop:structural_lower_bound}, exact Gaussian
+testing gives a one-dimensional variational problem rather than a Pinsker-style
+constant.
+
+\begin{proposition}[Exact Gaussian ramp frontier]
+\label{prop:exact_gaussian_ramp_frontier}
+Fix $H\in(0,1]$ and set
+\[
+  p_H \coloneqq \frac{2H}{2H+1}.
+\]
+Let $x_H>0$ be the unique maximizer of $x^{p_H}\Phi(-x)$, equivalently the
+solution of
+\[
+  p_H\Phi(-x_H)=x_H\varphi(x_H).
+\]
+For the Gaussian ramp witness
+\[
+  \mu_{t-j}^{\pm,h}=\pm\beta(h-j)_+^H,
+\]
+the exact two-point lower bound has asymptotic constant
+\[
+  C_H^{\mathrm{ramp}}
+  =
+  (2H+1)^{H/(2H+1)}x_H^{2H/(2H+1)}\Phi(-x_H),
+\]
+with horizon shape
+\[
+  h_H^*\sim
+  (\sqrt{2H+1}\,x_H)^{2/(2H+1)}
+  \left(\frac{\sigma}{\zeta}\right)^{2/(2H+1)}.
+\]
+\end{proposition}
+
+\begin{proof}[Proof sketch]
+For fixed $h$, the likelihood-ratio testing problem between the two Gaussian
+paths depends on
+\[
+  S_h=\sum_{r=1}^h r^{2H}
+\]
+and has exact Bayes error $\Phi(-\beta\sqrt{S_h}/\sigma)$. The endpoint loss is
+of order $\beta h^H$, so the witness objective is
+\[
+  L_h(\beta)=\beta h^H\Phi(-\beta\sqrt{S_h}/\sigma).
+\]
+In the large-ratio regime $\sigma/\zeta\to\infty$, use
+$S_h\sim h^{2H+1}/(2H+1)$ and set
+$x=\zeta\sqrt{S_h}/\sigma$. After normalizing by
+$\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)}$, the objective becomes
+$(2H+1)^{H/(2H+1)}x^{p_H}\Phi(-x)$. Differentiating gives the stated scalar
+equation and constant.
+\end{proof}
+
+The ramp is therefore a valid structural witness, but it is not the best
+endpoint-saturating H\"older shape when $H<1$.
+
+\begin{proposition}[Endpoint-minimal witness]
+\label{prop:endpoint_minimal_witness}
+Fix $H\in(0,1]$ and $h\ge 1$. Among all discrete profiles
+$g=(g_0,\dots,g_h)$ satisfying
+\[
+  g_0=0,
+  \qquad
+  g_h=h^H,
+  \qquad
+  |g_r-g_s|\le |r-s|^H,
+\]
+the profile
+\[
+  g_r^{\min}=h^H-(h-r)^H
+\]
+minimizes the testing energy $\sum_{r=1}^h g_r^2$. Its asymptotic energy constant is
+\[
+  I_H
+  =
+  \int_0^1 \left(1-(1-u)^H\right)^2du
+  =
+  \frac{2H^2}{(H+1)(2H+1)}.
+\]
+Consequently the exact Gaussian endpoint-minimal witness has constant
+\[
+  C_H^{\min}
+  =
+  I_H^{-H/(2H+1)}x_H^{2H/(2H+1)}\Phi(-x_H),
+\]
+where $x_H$ is the root from \cref{prop:exact_gaussian_ramp_frontier}. For
+$H<1$, this strictly improves the ramp constant by the factor
+\[
+  \left(\frac{H+1}{2H^2}\right)^{H/(2H+1)}.
+\]
+\end{proposition}
+
+\begin{proof}
+For any feasible profile, the endpoint constraint and H\"older condition imply
+\[
+  g_r\ge h^H-(h-r)^H.
+\]
+The displayed $g^{\min}$ attains this lower envelope and is feasible because
+$x\mapsto x^H$ is subadditive on $(0,\infty)$ for $H\le 1$. It is therefore
+pointwise dominated by every feasible profile and minimizes
+$\sum_{r=1}^h g_r^2$. The Riemann-sum limit gives
+\[
+  h^{-(2H+1)}\sum_{r=1}^h \left(h^H-(h-r)^H\right)^2\to I_H.
+\]
+Substituting a general energy constant $I$ into the exact Gaussian reduction gives
+$I^{-H/(2H+1)}x_H^{2H/(2H+1)}\Phi(-x_H)$. Taking
+$I=I_H$ yields the endpoint-minimal constant; comparing it with the ramp energy
+constant $(2H+1)^{-1}$ gives the improvement factor. At $H=1$, the two profiles
+coincide.
+\end{proof}
+
+These refinements do not claim a class-tight minimax theorem for all deterministic
+H\"older paths. Their role is more precise: within the Gaussian witness program,
+they replace the earlier conservative testing relaxation and show that the ramp
+shape itself is not extremal for $H<1$.
 
 \subsection{Beyond the Minimum Kernel}
 
 The one-dimensional minimum kernel is the first rigorous carrier instantiation.
 Two broader settings are also important for interpreting the law.
 
-\paragraph{Useful layer.}
+\paragraph{Extended regime.}
 In low-dimensional or low-intrinsic-dimensional settings, the natural question
 is whether the triangular-array carrier inherits the same exponent as the i.i.d.
 mixture benchmark up to a constant-level gap. The clearest evidence comes from
 embedded $k=1$ support inside a larger ambient space, where triangular and
-i.i.d. slopes remain near the $a=1/2$ slice under fixed span.
+i.i.d. slopes remain near the $a=1/2$ regime under fixed span.
 
-\paragraph{Practical layer.}
-For a practical measurement layer such as fixed-$\varepsilon$ debiased Sinkhorn,
-the corresponding question is whether the induced finite-sample carrier is
-stable enough to feed the same horizon law. The experiments reported below are
+\paragraph{Operational regime.}
+For a practical geometry such as fixed-$\varepsilon$ debiased Sinkhorn, the
+corresponding question is whether the induced finite-sample carrier is stable
+enough to feed the same horizon law. The experiments reported below are
 consistent with that interpretation: across the tested regularization values,
-they show a stable measurement-layer signal rather than a qualitative change of
-behavior.
+they show a stable carrier signal rather than a qualitative change of behavior.
 
 Together, these settings show how the abstract law extends beyond the
 one-dimensional minimum kernel while keeping the formal claims within their
@@ -332,6 +452,6 @@ For exponential weights $w_j=\alpha(1-\alpha)^j$, the effective lag is
 $\tau_\alpha=(1-\alpha)/\alpha$ and the effective sample size scales as
 $n_{\mathrm{eff}}\asymp 1/\alpha$. Balancing the same carrier and staleness terms
 therefore yields the same exponent in the effective-memory scale. In
-particular, on the main slice $a=1/2$, $H=1$, the EWMA analogue of the
+particular, on the canonical regime $a=1/2$, $H=1$, the EWMA analogue of the
 cube-root horizon is recovered up to constants.
 \end{corollary}
