@@ -4,24 +4,18 @@ Category: future
 Prev: 10. Paper Next Steps
 Next: -
 
-## Future work
-
-1. Close class-tight lower bounds for deterministic Hölder path classes.
-2. Determine whether the endpoint-minimal witness is optimal in broader witness families.
-3. Extend the lower theory beyond the canonical `a = 1/2` regime.
-4. Prove carrier inheritance in the extended regime under stronger assumptions.
-5. Prove theorem-level carrier guarantees in the operational regime.
-
 ## Open problems
 
-1. Sharp asymptotic staleness constant as a theorem rather than a candidate.
-2. Sharp first-moment carrier constant in the minimum-kernel regime.
-3. Sharp constant theory for the full `(a,H)` family.
-4. Non-uniform memory weights and whether they change more than constants.
-5. Online roughness identification and horizon control.
+1. Class-tight lower bounds for deterministic Holder path classes.
+2. Lower theory beyond the root-`n` finite-sample regime.
+3. Full Gaussian-scale lower theorem.
+4. Regular-family horizon inheritance at theorem level.
+5. Fixed-`epsilon` Sinkhorn horizon inheritance at theorem level.
+6. Non-uniform memory weights beyond constant-level effects.
+7. Online roughness identification and adaptive horizon choice.
 
-## What stays outside the paper for now
+## Outside current paper scope
 
-1. Any controller or policy claim.
-2. Any claim of full family closure.
-3. Any claim of completed operational geometry theory in arbitrary dimension.
+1. controller or policy claims
+2. full family closure claims
+3. theorem-level operational geometry claims in arbitrary dimension

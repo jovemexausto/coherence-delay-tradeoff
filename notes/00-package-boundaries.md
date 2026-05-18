@@ -4,82 +4,52 @@ Category: meta
 Prev: -
 Next: 01. Main Theorem Package
 
-This note separates the project into:
+This note fixes the project boundary between:
 
-- closed paper-level results;
-- sharp refinements that strengthen the canonical `a = 1/2` regime;
-- theorem targets beyond the current core;
-- open frontier questions.
+- the closed paper core;
+- supporting benchmark material;
+- explicit conjectures;
+- repository-only provenance and diagnostics.
 
-Its role is to keep the manuscript honest while still letting the theory grow.
+## Closed paper core
 
-## Closed paper-level results
+- abstract upper law;
+- optimized temporal-validity horizon;
+- exact finite-`n` uniform-window staleness constant;
+- tractable 1D bounded-support fixed-span proof model with root-`n` finite-sample rate;
+- structural Gaussian lower bound at the exponent level;
+- Gaussian location minimax benchmark.
 
-- `Theorem 1`: the abstract upper law in `notes/02-general-law.md`.
-- `Corollary 1`: the optimized useful-memory horizon law in `notes/02-general-law.md`.
-- the exact finite-`n` uniform-window staleness constant recorded in `notes/01-main-theorem-package.md`.
-- `Proposition 3`: the minimum-kernel carrier in `notes/03-minimum-kernel-carrier.md`.
-- the consolidated minimum-kernel proof narrative in `notes/04-minimum-kernel-proof.md`.
-- `Theorem 2` at the structural level for the canonical `a = 1/2` regime in `notes/05-structural-lower-theory.md`.
+These results are enough to support the paper's central scientific claim.
 
-These are enough to support the paper's central scientific claim.
+## Supporting benchmark material
 
-## Sharp refinements of the canonical `a = 1/2` regime
+- compact refined Gaussian lower-bound constants proposition;
+- empirical signatures: U-curve, roughness scaling, validity-detection lag;
+- appendix-level finite-sample diagnostics.
 
-- exact Gaussian ramp-witness frontier in `notes/06-exact-gaussian-witness-frontier.md`;
-- witness-shape extremality in `notes/07-witness-shape-extremality.md`;
+These strengthen interpretation or sharpness without changing the main theorem line.
 
-These strengthen the lower and staleness stories without changing the identity of
-the paper. They are good candidates for remarks, appendix material, or a short
-refinement subsection.
+## Explicit conjectures
 
-## Theorem forms beyond the current core
+- fixed-`epsilon` Sinkhorn horizon inheritance on the embedded fixed-span model;
+- regular-family horizon inheritance.
 
-- extended-regime carrier inheritance under bounded support, fixed span, and low intrinsic dimension in `notes/08-extended-regime.md`;
-- operational-regime carrier inheritance for fixed-`epsilon` Sinkhorn in `notes/09-operational-regime.md`.
+These may appear in the paper only with explicit conjecture status.
 
-These can appear in the paper only if they are kept clearly marked by status.
-They are not secondary in scientific role. They are broader theorem forms of the
-same carrier theory.
+## Repository-only provenance
 
-## Open frontier questions
+- large calibration sweeps;
+- extended diagnostics;
+- exploratory constant audits;
+- implementation-level provenance beyond what is needed for reading the paper.
 
-- class-tight lower bounds for general deterministic Hölder path classes;
-- lower bounds beyond the canonical `a = 1/2` regime;
-- whether the endpoint-minimal witness is already the optimal subclass shape in a broader admissible family;
-- raw `W_2` carrier inheritance beyond the current low-dimensional safe zone;
-- fixed-`epsilon` Sinkhorn theorem-level carrier guarantees;
-- non-uniform memory shapes beyond constant-level tuning.
+## Main-text rule
 
-## What belongs in the principal manuscript
+Something belongs in the main text only if it strengthens at least one of:
 
-- abstract law and optimized horizon;
-- exact finite-`n` uniform-window staleness bound;
-- minimum kernel;
-- structural lower bound for the canonical `a = 1/2` regime;
-- extended and operational regimes, with careful status labeling.
+- the central object;
+- the theorem line;
+- claim-status clarity.
 
-Optional but now justified if space permits:
-
-- a remark on the exact Gaussian ramp frontier;
-- a remark that the ramp witness is not shape-optimal for `H < 1`.
-
-## What belongs in notes or appendix
-
-- Bahadur and Kiefer remainder details;
-- design-effect calculations;
-- span-growth and roughness frontier diagnostics;
-- numerical tables supporting theorem ingredients;
-- exact Gaussian witness frontier calculations;
-- witness-shape extremality calculations;
-- broader sharp-constant audits for the `(a,H)` family when needed.
-
-## Rule for scope decisions
-
-If a statement is needed to justify the paper's central claim that useful memory
-has a roughness-dependent structural horizon, it belongs in the theorem package.
-
-If a statement only sharpens constants, improves a witness on the already-closed
-canonical `a = 1/2` regime, or broadens coverage beyond the current proof kernel, it belongs in a
-refinement note, appendix, or future work unless there is a strong presentational
-reason to elevate it.
+Otherwise it belongs in the appendix or repository provenance layer.

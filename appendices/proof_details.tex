@@ -1,0 +1,166 @@
+\section{Proof Details}\label{app:proof_details}
+
+This appendix records detailed derivations for the main-text results whose role
+is structural but whose full calculations would interrupt the main line.
+
+\subsection{Refined Gaussian lower-bound constants}
+
+Let
+\[
+  S_h\coloneqq \sum_{r=1}^h r^{2H}
+  \qquad\text{and}\qquad
+  G_h\coloneqq \sum_{r=1}^h \bigl(h^H-(h-r)^H\bigr)^2.
+\]
+For the Gaussian two-point model with equal priors and common covariance
+$\sigma^2 I_h$, the Bayes classification error between means $\pm m$ is
+$\Phi(-\|m\|/\sigma)$. Therefore the ramp and endpoint-minimal payoffs are
+exactly
+\[
+  L_h^{\mathrm{ramp}}(\sigma,\zeta)
+  =
+  \zeta h^H\Phi\!\left(-\frac{\zeta}{\sigma}\sqrt{S_h}\right)
+\]
+and
+\[
+  L_h^{\min}(\sigma,\zeta)
+  =
+  \zeta h^H\Phi\!\left(-\frac{\zeta}{\sigma}\sqrt{G_h}\right).
+\]
+
+\begin{proof}[Proof of \cref{prop:refined_gaussian_constants}]
+Fix $H\in(0,1]$ and write $p_H=2H/(2H+1)$.
+
+For the ramp profile,
+\[
+  S_h\sim \frac{h^{2H+1}}{2H+1}.
+\]
+Set
+\[
+  h=A\left(\frac{\sigma}{\zeta}\right)^{2/(2H+1)}
+\]
+with $A>0$ fixed. Then
+\[
+  \frac{\zeta}{\sigma}\sqrt{S_h}
+  \to
+  \frac{A^{H+1/2}}{\sqrt{2H+1}}.
+\]
+At the same time,
+\[
+  \zeta h^H
+  =
+  A^H\,\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)}.
+\]
+Hence
+\[
+  \frac{L_h^{\mathrm{ramp}}(\sigma,\zeta)}{\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)}}
+  \to
+  A^H\Phi\!\left(-\frac{A^{H+1/2}}{\sqrt{2H+1}}\right).
+\]
+Define
+\[
+  x=\frac{A^{H+1/2}}{\sqrt{2H+1}}.
+\]
+Then
+\[
+  A^H=(2H+1)^{H/(2H+1)}x^{p_H},
+\]
+so the normalized limiting payoff becomes
+\[
+  (2H+1)^{H/(2H+1)}x^{p_H}\Phi(-x).
+\]
+Its logarithmic derivative is
+\[
+  \frac{p_H}{x}-\frac{\varphi(x)}{\Phi(-x)}.
+\]
+Since the inverse Mills ratio $\varphi(x)/\Phi(-x)$ is strictly increasing on
+$(0,\infty)$, this objective has a unique maximizer $x_H>0$, characterized by
+\[
+  p_H\Phi(-x_H)=x_H\varphi(x_H).
+\]
+This proves
+\[
+  \sup_{h\ge 1}L_h^{\mathrm{ramp}}(\sigma,\zeta)
+  \sim
+  C_H^{\mathrm{ramp}}\,\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)}
+\]
+with
+\[
+  C_H^{\mathrm{ramp}}
+  =
+  (2H+1)^{H/(2H+1)}x_H^{2H/(2H+1)}\Phi(-x_H).
+\]
+
+For the endpoint-minimal profile, the H\"older constraint and endpoint condition
+imply
+\[
+  g_r\ge g_h-(h-r)^H=h^H-(h-r)^H
+\]
+for every feasible endpoint-saturating profile $g$. Therefore the profile
+\[
+  g_r^{\min}=h^H-(h-r)^H
+\]
+minimizes testing energy pointwise and hence minimizes
+$\sum_{r=1}^h g_r^2$. Its rescaled energy satisfies the Riemann-sum limit
+\[
+  h^{-(2H+1)}G_h
+  \to
+  I_H
+  =
+  \int_0^1 \left(1-(1-u)^H\right)^2du
+  =
+  \frac{2H^2}{(H+1)(2H+1)}.
+\]
+With the same scaling
+\[
+  h=A\left(\frac{\sigma}{\zeta}\right)^{2/(2H+1)},
+\]
+one has
+\[
+  \frac{\zeta}{\sigma}\sqrt{G_h}
+  \to A^{H+1/2}\sqrt{I_H}.
+\]
+Setting $x=A^{H+1/2}\sqrt{I_H}$ gives
+\[
+  A^H=I_H^{-H/(2H+1)}x^{p_H},
+\]
+so the normalized limiting payoff becomes
+\[
+  I_H^{-H/(2H+1)}x^{p_H}\Phi(-x).
+\]
+The same maximizer $x_H$ therefore yields
+\[
+  \sup_{h\ge 1}L_h^{\min}(\sigma,\zeta)
+  \sim
+  C_H^{\min}\,\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)}
+\]
+with
+\[
+  C_H^{\min}
+  =
+  I_H^{-H/(2H+1)}x_H^{2H/(2H+1)}\Phi(-x_H).
+\]
+Finally,
+\[
+  \frac{C_H^{\min}}{C_H^{\mathrm{ramp}}}
+  =
+  \left(\frac{I_H^{-1}}{2H+1}\right)^{H/(2H+1)}
+  =
+  \left(\frac{H+1}{2H^2}\right)^{H/(2H+1)}.
+\]
+This factor is strictly larger than $1$ for $H<1$ and equal to $1$ at $H=1$.
+\end{proof}
+
+\subsection{Two-point lower bound used in \cref{prop:structural_lower_bound}}
+
+The structural lower bound in the main text is the exponent-level consequence of
+the exact Gaussian two-point calculation above. For the ramp pair
+\[
+  \mu_{t-j}^{\pm,h}=\pm\zeta(h-j)_+^H,
+\]
+the present-time separation is $2\zeta h^H$, so any estimator incurs risk at
+least of order $L_h^{\mathrm{ramp}}(\sigma,\zeta)$. Optimizing over $h$ and using
+the asymptotic just proved gives the lower scale
+\[
+  \sigma^{2H/(2H+1)}\zeta^{1/(2H+1)}
+\]
+and therefore the horizon exponent $(2H+1)^{-1}$ for the root-$n$ regime.

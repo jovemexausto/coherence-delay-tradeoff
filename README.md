@@ -7,11 +7,25 @@
 Under drift, retained evidence is both useful and dangerous: more memory reduces
 variance, but it also accumulates temporal misalignment with the present.
 
-The manuscript studies a carrier-roughness useful-memory horizon law, the
-family of useful-memory scales it induces, the worst-case
-Lipschitz cube-root regime as the $H=1$, $a=1/2$ case, a structural Gaussian
-lower-bound witness, and the invalidity gap between temporal validity and
-changepoint evidence.
+The manuscript studies the temporal-validity horizon for finite-memory
+distribution tracking under drift. Its central law balances a finite-sample term
+against a drift-induced staleness term,
+
+\[
+\mathbb E\,d\!\left(\widehat P_t^{(n)},P_t\right)
+\le C_K n^{-a} + C_S\zeta n^H,
+\]
+
+yielding the horizon scale
+
+\[
+n^*(a,H)\asymp (C_K/\zeta)^{1/(a+H)}.
+\]
+
+The paper closes this theory in a tractable one-dimensional proof model,
+establishes a structural Gaussian lower bound and a Gaussian location benchmark,
+and states an explicit conjectural extension for fixed-$\varepsilon$ Sinkhorn
+geometry.
 
 This framing is adjacent to dynamic regret and adaptive windowing, but its
 primary object is different: the temporal validity of retained evidence for
@@ -19,12 +33,18 @@ distribution tracking under drift.
 
 ## Core idea
 
-- useful memory under drift is governed by a carrier-roughness useful-memory horizon law
-- finite-sample carrier behavior and temporal roughness jointly determine the useful-memory scale
-- the cube-root law is the `a=1/2, H=1` case of the carrier-roughness useful-memory horizon law
+- retained evidence under drift is governed by a temporal-validity horizon
+- finite-sample behavior and temporal roughness jointly determine the optimal memory scale
 - the lower bound shows that the finite-memory optimum is structural, not a tuning artifact
-- multiple carrier instantiations feed the same useful-memory horizon law
+- the Gaussian location model provides a full benchmark theorem for the horizon law
+- the fixed-$\varepsilon$ Sinkhorn extension is stated as a conjecture supported by structural results and empirical evidence
 - temporal validity can fail before changepoint evidence becomes statistically visible
+
+## Claim status
+
+- `theorem`: abstract upper law, optimized horizon law, uniform-window staleness bound, one-dimensional root-$n$ proof model, structural Gaussian lower bound at the exponent level, and Gaussian location minimax benchmark
+- `conjecture`: fixed-$\varepsilon$ Sinkhorn horizon inheritance and broader regular-family horizon inheritance
+- `repository provenance`: calibration tables, artifact generation, and extended empirical evidence
 
 ## Repository layout
 

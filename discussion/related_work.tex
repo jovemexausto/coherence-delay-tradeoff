@@ -18,7 +18,7 @@ of the problem. The present question is adjacent but distinct. Temporal validity
 is not changepoint evidence: memory can stop representing the present before the
 available data support a detector alarm. In that sense, the paper is about the
 validity horizon of retained evidence rather than the stopping time of a
-reaction rule. The invalidity gap makes that distinction visible in finite
+reaction rule. The validity-detection lag makes that distinction visible in finite
 samples.
 
 \paragraph{Adaptive filtering and state-space tracking.}
@@ -45,17 +45,16 @@ between past and present. In this setting, the trade-off is not simply between
 adaptation and variance, but between finite-sample accuracy and temporal
 misalignment measured in distributional geometry.
 
-\paragraph{Entropic and smoothed transport as operational carriers.}
+\paragraph{Entropic and smoothed transport as operational geometries.}
 Regularization changes the statistical geometry as well as the computational one.
 Entropic and other smoothed transport quantities introduce explicit
 bias--variance--regularization trade-offs and can recover more stable statistical
 behavior than raw high-dimensional Wasserstein distances
 \citep{GenevayEtAl2019,GoldfeldEtAl2022,Stromme2023MID,GroppeHundrieser2024LCA,AkyildizEtAl2024}.
 That perspective is exactly why the paper treats fixed-$\varepsilon$ Sinkhorn as
-an operational carrier rather than as a surrogate for the raw $W_2$ theorem. The
-point is not that regularization preserves the canonical geometry unchanged, but
-that it can induce a usable carrier regime on which a finite-memory horizon law
-still makes sense.
+an operational geometry rather than as a surrogate for the raw $W_2$ theorem.
+Regularization can induce a usable finite-sample regime on which a
+finite-memory horizon law still makes sense.
 
 \paragraph{Wasserstein nonstationarity and robust optimization.}
 Jiang, Li, and Zhang study online stochastic optimization under a Wasserstein
@@ -64,7 +63,7 @@ nonstationarity measure and obtain distribution-aware regret guarantees
 drift-aware weighting questions in Wasserstein distributionally robust
 optimization \citep{KeehanAndersonWiesemann2025}. Amini and Vinas give a recent
 moment-method route to triangular-array concentration in $W_1$
-\citep{AminiVinas2026}. Those results are adjacent to the carrier-regime issue
+\citep{AminiVinas2026}. Those results are adjacent to the finite-sample-regime issue
 studied here, but they do not by themselves close the present $W_2$
 window-mixture concentration problem. The present focus is narrower and more
 structural: for finite-memory tracking, how long can retained evidence continue
@@ -80,9 +79,9 @@ drift, and temporal roughness determines how quickly that cost accumulates.
 
 Across these neighboring literatures, the closest theme is that nonstationarity
 makes retention scale matter. The distinguishing claim here is more specific:
-finite memory obeys a carrier-roughness useful-memory horizon law, the
-worst-case cube-root law is the $a=1/2$, $H=1$ member of that family, and
-temporal validity can fail before change becomes statistically detectable. The
+finite memory is governed by a temporal-validity horizon that balances
+finite-sample accuracy against drift-induced staleness, and temporal validity
+can fail before change becomes statistically detectable. The
 resulting viewpoint is complementary to regret and detection analyses: it
 characterizes when memory itself ceases to be a statistically valid proxy for
 the present.

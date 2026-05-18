@@ -1,20 +1,18 @@
-\section{The Carrier-Roughness Useful-Memory Horizon Law}
+\section{A Horizon Law for Finite-Memory Tracking under Drift}
 \label{sec:finite_memory_under_drift}
 
-Under drift, memory is both a statistical resource and a temporal liability.
-Retaining more data reduces finite-sample noise, but it also increases the age
-of the evidence used to represent the present. The object of interest is
-therefore not a detector threshold or a particular adaptive rule, but the error
-of finite-memory representation itself.
+This section fixes the finite-memory objects and develops the horizon law,
+structural lower bound, benchmark theorem, and conjectural extensions used in
+the rest of the paper.
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.92\linewidth]{artifacts/figures/conceptual/fig_two_clocks_of_drift.pdf}
 \caption{Two clocks of drift. The finite-sample term falls with horizon, the
-staleness term rises with age, and total error is minimized at the useful-memory
-horizon $n^*$. The shaded region represents detector-silent staleness: retained
-evidence can lose temporal validity before enough changepoint evidence
-accumulates to trigger an alarm.}
+staleness term rises with age, and total error is minimized at the
+temporal-validity horizon $n^*$. The shaded region marks pre-detection validity
+loss: retained evidence can stop representing the present before enough
+changepoint evidence accumulates to trigger an alarm.}
 \label{fig:two_clocks_of_drift}
 \end{figure}
 
@@ -29,25 +27,23 @@ Its corresponding staleness at time $t$ is the weighted transport misalignment
   W_2\!\left(P_{t-j},P_t\right).
 \]
 For a uniform window, $A(w)=(n-1)/2$, so window length and temporal age are the
-same object up to constants. This is why memory length becomes a statistical
-question rather than a purely algorithmic one.
+same object up to constants.
 
 Throughout the paper, $P_t$ denotes the present target law,
 $\bar P_t^{(n)}$ the window target obtained by averaging the last $n$ target
 laws, and $\widehat P_t^{(n)}$ the estimator built from the last $n$
-observations. The carrier term always refers to the estimation error relative to
-$\bar P_t^{(n)}$, while the staleness term refers to the discrepancy between
-$\bar P_t^{(n)}$ and $P_t$.
+observations. The finite-sample term always refers to the estimation error
+relative to $\bar P_t^{(n)}$, while the staleness term refers to the
+discrepancy between $\bar P_t^{(n)}$ and $P_t$.
 
-The theory repeatedly combines three ingredients: a carrier benchmark relative to
+The theory combines three ingredients: a finite-sample bound relative to
 $\bar P_t^{(n)}$, a path-class control on the staleness between $\bar P_t^{(n)}$
 and $P_t$, and, when available, a lower-bound or benchmark theorem showing that
 the resulting horizon is structural on the geometry under study.
 
-\subsection{Abstract Upper Law}\label{subsec:abstract_upper_law}
+\subsection{General Horizon Law}\label{subsec:abstract_upper_law}
 
-The abstract theorem separates finite-sample carrier behavior from
-drift-induced staleness.
+The main theorem separates finite-sample behavior from drift-induced staleness.
 
 \begin{theorem}[Abstract upper law]\label{thm:abstract_upper_law}
 Let $d$ be a probability metric satisfying the triangle inequality. At time $t$,
@@ -82,17 +78,17 @@ By the triangle inequality,
 Taking expectations and applying the two assumptions yields the claim.
 \end{proof}
 
-The proof is immediate, but the theorem makes the modular structure explicit:
+The proof is immediate, but the theorem isolates the structure of the problem:
 the path class supplies the staleness term, while the chosen geometry and sample
-regime supply the carrier term.
+regime supply the finite-sample term.
 
-\begin{corollary}[Optimized useful-memory horizon law]
+\begin{corollary}[Optimized temporal-validity horizon]
 \label{cor:optimized_horizon}
 Under the assumptions of \cref{thm:abstract_upper_law}, the upper envelope
 \[
   \Phi(n) \coloneqq C_K n^{-a} + C_S\zeta n^H
 \]
-is minimized, up to constant factors, at
+is minimized, up to constant factors depending only on $a$, $H$, and $C_S$, at
 \[
   n^*(a,H) \asymp (C_K/\zeta)^{1/(a+H)},
 \]
@@ -103,7 +99,7 @@ and the corresponding optimized error scale is
 \end{corollary}
 
 \begin{proof}
-Balance the decreasing carrier term against the increasing staleness term:
+Balance the decreasing finite-sample term against the increasing staleness term:
 \[
   C_K n^{-a} \asymp C_S\zeta n^H.
 \]
@@ -111,11 +107,11 @@ This gives $n^{a+H}\asymp C_K/\zeta$, hence the displayed horizon law. Substitut
 that scale back into either term gives the optimized error scale.
 \end{proof}
 
-The cube-root law is recovered when $a=1/2$ and $H=1$. More generally, the
-carrier exponent and the roughness exponent jointly determine the useful-memory
-scale. There is no universal horizon independent of those two ingredients.
+The horizon depends jointly on the finite-sample rate exponent and the
+roughness exponent. Different geometries and different drift regularities induce
+different memory scales.
 
-\subsection{Path Classes and the Roughness Index}
+\subsection{Drift Regularity and Staleness Accumulation}
 
 The staleness side of the law is controlled by a deterministic path class. For
 $H\in(0,1]$ and $\zeta>0$, write
@@ -174,29 +170,27 @@ square roots completes the proof.
 \end{proof}
 
 Combining \cref{lem:Hölder_staleness_bound} with
-\cref{cor:optimized_horizon} yields the family
+\cref{cor:optimized_horizon} yields the horizon family
 \[
   n^*(a,H) \asymp (C_K/\zeta)^{1/(a+H)}.
 \]
-On the canonical statistical regime $a=1/2$,
+In the root-$n$ finite-sample regime $a=1/2$,
 \[
   n^*(1/2,H) \asymp (C_K/\zeta)^{2/(1+2H)}.
 \]
-At $H=1$, this recovers the cube-root horizon; at $H=1/2$, it yields the
-intermediate $n^*\asymp C_K/\zeta$ regime. These are members of the same law,
-not separate theorem stories. The finite-$n$ constant in
+The finite-$n$ constant in
 \cref{lem:Hölder_staleness_bound} is the constant used throughout the paper for
 uniform windows; the simpler $(2H+1)^{-1/2}$ expression is its large-window
 limit.
 
-\subsection{Minimum Kernel: A Rigorous Carrier Instantiation}
+\subsection{A Tractable One-Dimensional Proof Model}
 \label{subsec:minimum_kernel}
 
-The abstract law needs at least one rigorous carrier instantiation. The minimum
-kernel is the bounded-support fixed-span one-dimensional triangular array. It
-provides the first rigorous carrier entering the abstract horizon law.
+The abstract law needs at least one rigorous finite-sample instantiation. The
+bounded-support fixed-span one-dimensional triangular array provides a tractable
+proof model for that role.
 
-\begin{proposition}[Minimum-kernel carrier]\label{prop:minimum_kernel}
+\begin{proposition}[Root-$n$ finite-sample bound in the 1D proof model]\label{prop:minimum_kernel}
 Let $X_{n,1},\dots,X_{n,n}$ be independent one-dimensional observations with laws
 $P_{n,1},\dots,P_{n,n}$, and define the window mixture
 \[
@@ -206,10 +200,21 @@ Assume:
 \begin{enumerate}[label=(\roman*)]
   \item all $P_{n,j}$ are supported on a common compact interval $[L,U]$;
   \item the within-window drift span is uniformly bounded in $n$;
-  \item on an interior quantile band $u\in[\varepsilon,1-\varepsilon]$, the mixture
-  density $\bar f_n$ is bounded below and uniformly Hölder;
-  \item the triangular-array empirical quantile process admits a Bahadur
-  representation with integrated remainder $o(n^{-1})$ on that interior band.
+  \item each mixture law $\bar P_n$ has a density $\bar f_n$ on $[L,U]$ that is
+  bounded below by a positive constant and uniformly Hölder;
+  \item writing $q_n$ for the quantile function of $\bar P_n$ and $\widehat q_n$
+  for the empirical quantile function of $\widehat P_n^{\mathrm{tri}}$, one has
+  the Bahadur representation
+  \[
+    \widehat q_n(u)-q_n(u)
+    =
+    \frac{u-\widehat F_n(q_n(u))}{\bar f_n(q_n(u))} + R_n(u),
+    \qquad u\in(0,1),
+  \]
+  with
+  \[
+    \mathbb E\int_0^1 R_n(u)^2\,du=o(n^{-1}).
+  \]
 \end{enumerate}
 Then
 \[
@@ -221,75 +226,112 @@ and therefore
 \]
 \end{proposition}
 
-\paragraph{Proof sketch.}
+\begin{proof}
 In one dimension,
 \[
   W_2^2\!\left(\widehat P_n^{\mathrm{tri}},\bar P_n\right)
   = \int_0^1 \bigl(\widehat q_n(u)-q_n(u)\bigr)^2\,du,
 \]
 so the problem reduces to the integrated $L_2$ error of the empirical quantile
-process. On the interior band, the Bahadur representation gives
+process. By item~(iv),
 \[
   \widehat q_n(u)-q_n(u)
   =
   \frac{u-\widehat F_n(q_n(u))}{\bar f_n(q_n(u))} + R_n(u).
 \]
-The leading term has integrated variance $O(n^{-1})$ because the observations are
-independent and the fixed-span triangular design changes only constants relative
-to the i.i.d. mixture benchmark. The remainder splits into an empirical
-increment term and a Taylor term; the empirical increment term is the dominant
-one, but under the stated interior regularity it still satisfies an integrated
-$o(n^{-1})$ bound. Bounded support makes the boundary-band contribution
-lower-order. Summing the leading term, the lower-order cross term, and the
-integrated remainder gives $\mathbb E W_2^2=O(n^{-1})$, and Jensen yields the
-displayed $W_2$ rate.
+Define
+\[
+  Z_n(u)\coloneqq \frac{u-\widehat F_n(q_n(u))}{\bar f_n(q_n(u))}.
+\]
+Then
+\[
+  \mathbb E\int_0^1 \bigl(\widehat q_n(u)-q_n(u)\bigr)^2du
+  =
+  \mathbb E\int_0^1 \bigl(Z_n(u)+R_n(u)\bigr)^2du.
+\]
+Let $m>0$ be a uniform lower bound for $\bar f_n$. Since
+\[
+  \widehat F_n(x)=\frac1n\sum_{j=1}^n \mathbf 1\{X_{n,j}\le x\},
+\]
+independence across the row gives
+\[
+  \operatorname{Var}(\widehat F_n(q_n(u)))
+  =
+  \frac{1}{n^2}\sum_{j=1}^n p_{n,j}(u)(1-p_{n,j}(u))
+  \le \frac{1}{4n},
+\]
+where $p_{n,j}(u)=P_{n,j}(({-}\infty,q_n(u)])$. Therefore
+\[
+  \mathbb E\int_0^1 Z_n(u)^2du
+  \le
+  m^{-2}\int_0^1 \operatorname{Var}(\widehat F_n(q_n(u)))du
+  \le \frac{1}{4m^2 n}.
+\]
+By item~(iv),
+\[
+  \mathbb E\int_0^1 R_n(u)^2du=o(n^{-1}).
+\]
+The cross term is controlled by Cauchy--Schwarz:
+\[
+  \mathbb E\left|2\int_0^1 Z_n(u)R_n(u)du\right|
+  \le
+  2\Bigl(\mathbb E\int_0^1 Z_n(u)^2du\Bigr)^{1/2}
+   \Bigl(\mathbb E\int_0^1 R_n(u)^2du\Bigr)^{1/2}
+  = o(n^{-1}).
+\]
+Hence
+\[
+  \mathbb E\,W_2^2\!\left(\widehat P_n^{\mathrm{tri}},\bar P_n\right)=O(n^{-1}).
+\]
+Jensen's inequality then gives
+\[
+  \mathbb E\,W_2\!\left(\widehat P_n^{\mathrm{tri}},\bar P_n\right)=O(n^{-1/2}).
+\]
 
 The main conclusion is the exponent. Under this bounded-support fixed-span
-regime, the triangular-array carrier remains root-$n$ and differs from the
-i.i.d. mixture benchmark only through a design effect.
+regime, the triangular-array finite-sample term remains root-$n$.
+\end{proof}
 
-\begin{remark}[A self-contained sufficient package]
-The nonstandard assumption in \cref{prop:minimum_kernel} is item~(iv). A
-practical sufficient package for the regime intended here is the following:
-independence across the row, common bounded support, uniformly bounded
-within-window span, mixture quantiles that stay on an interior band where
-$\bar f_n$ is bounded below and uniformly H\"older, and row-wise perturbations of
-the i.i.d. mixture benchmark that change the empirical-process variance only by a
-fixed-span design effect. In that setting, the usual one-dimensional Bahadur
-expansion for smooth quantile functionals yields an integrated remainder
-$o(n^{-1})$. This covers, for example, bounded-support smooth location
-perturbations of a common base density and bounded smooth monotone transforms of
-such a base law, provided the fixed-span condition is maintained.
+\begin{remark}[Sufficient conditions for the proof model]
+The only nontrivial assumption in \cref{prop:minimum_kernel} is item~(iv). For
+i.i.d. quantile processes, Bahadur representations of this type are classical;
+see \citet{Bahadur1966} and \citet[Chapter~21]{vanDerVaart1998}. The present
+paper uses the triangular-array version as an explicit hypothesis for the
+fixed-span proof model rather than claiming a general theorem that verifies it.
+This covers, for example, bounded-support smooth location perturbations of a
+common base density and bounded smooth monotone transforms of such a base law,
+provided the fixed-span condition is maintained and the stated integrated
+remainder bound holds.
 \end{remark}
 
-\subsection{A Structural Lower Bound}\label{subsec:lower_bound}
+\subsection{Structural Lower Bound}\label{subsec:lower_bound}
 
 The upper law would be substantially weaker if it were only the optimum of one
-estimator. The lower bound shows that, on the canonical carrier regime $a=1/2$,
-the useful-memory scale is imposed by the drift geometry itself.
+estimator. The lower bound shows that, in the root-$n$ finite-sample regime
+$a=1/2$, the horizon is imposed by the drift geometry itself.
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.88\linewidth]{artifacts/figures/conceptual/fig_lower_bound_witness.pdf}
-\caption{Gaussian witness for the structural lower bound. The two paths share
+\caption{Gaussian lower-bound construction. The two paths share
 most of the retained history and differ only on a recent segment of width $h$,
 yet remain separated at the present. Optimizing that recent segment already
-produces the same horizon exponent as the upper law on the canonical carrier
-regime.}
+produces the same horizon exponent as the upper law in the root-$n$ regime.}
 \label{fig:lower_bound_witness}
 \end{figure}
 
-\begin{proposition}[Structural lower bound on the canonical carrier regime]
+\begin{proposition}[Structural lower bound in the root-$n$ regime]
 \label{prop:structural_lower_bound}
 Fix $H\in(0,1]$ and work on the Gaussian location subclass with known variance
-$\sigma^2$ and witness paths
+$\sigma^2$ and path pair
 \[
   \mu_{t-j}^{\pm,h} = \pm \beta (h-j)_+^H,
   \qquad j=0,1,\dots,h,
 \]
 where $\beta\le \zeta$ enforces the roughness budget. Let
-\(\mathcal G_{H,\zeta}^{\mathrm{Gauss}}\) denote the corresponding Gaussian
-location subclass of target paths. Then there exists a
+$\mathcal G_{H,\zeta}^{\mathrm{Gauss}}$ denote the corresponding Gaussian
+location subclass of target paths, and suppose the retained observations are
+independent with laws $N(\mu_{t-j}^{\pm,h},\sigma^2)$. Then there exists a
 constant $c_H>0$ depending only on $H$ such that the endpoint tracking risk over
 this subclass satisfies
 \[
@@ -297,15 +339,15 @@ this subclass satisfies
   \mathbb E\,W_2\!\left(\widehat P_t,P_t\right)
   \ge c_H\,\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)}.
 \]
-Consequently, on the canonical carrier regime $a=1/2$, the useful-memory scale
+Consequently, in the root-$n$ finite-sample regime $a=1/2$, the horizon scale
 \[
   h^*(H) \asymp (\sigma/\zeta)^{2/(2H+1)}
 \]
 is structural even on this restricted subclass.
 \end{proposition}
 
-\paragraph{Proof sketch.}
-Compare two hypotheses generated by the witness paths
+\paragraph{Proof outline.}
+Compare two hypotheses generated by the path pair
 $\mu_{t-j}^{+,h}$ and $\mu_{t-j}^{-,h}$. At the present time, the endpoint
 separation is of order $\beta h^H$. On the Gaussian location subclass, this is
 also the $W_2$ separation. The Kullback--Leibler divergence between the two
@@ -321,94 +363,53 @@ keeps the testing problem in the Le Cam regime while respecting the roughness
 budget. The resulting two-point lower bound is of order $\beta h^H$. Balancing
 the active roughness constraint against the testing constraint gives
 $h^*(H)\asymp (\sigma/\zeta)^{2/(2H+1)}$ and therefore the displayed lower law.
+The exact Gaussian two-point calculation used here is recorded in
+\cref{app:proof_details}.
 
-At $H=1$, this recovers the cube-root horizon and the lower scale
-$\sigma^{2/3}\zeta^{1/3}$. The lower bound is subclass based rather than
-class-tight, but that is enough for the central claim: the horizon is
-not just an estimator artifact.
+The lower bound is subclass based rather than
+class-tight, but that is enough for the central claim: the horizon is a
+structural feature of the problem rather than an estimator artifact.
 
 The proposition above is the lower-bound fact needed for the main horizon law.
-The same witness analysis also exposes a sharper constant-level geometry. We
-record those refinements next because they explain what is intrinsic to the
-canonical $a=1/2$ regime and what was only an artifact of the original ramp proof
-with its testing relaxation.
+The same Gaussian construction also exposes a sharper constant-level geometry.
+The next proposition records the best constant-level refinement presently
+available within that proof scheme.
 
-\subsection{Refined Geometry of the Gaussian Witness}
+\subsection{Refined Gaussian Lower-Bound Geometry}
 \label{subsec:refined_witness_geometry}
 
 Let $\Phi$ and $\varphi$ denote the standard normal distribution function and
 density.
-For the ramp witness in \cref{prop:structural_lower_bound}, exact Gaussian
-testing gives a one-dimensional variational problem rather than a Pinsker-style
-constant.
-
-\begin{proposition}[Exact Gaussian ramp frontier]
-\label{prop:exact_gaussian_ramp_frontier}
-Fix $H\in(0,1]$ and set
-\[
-  p_H \coloneqq \frac{2H}{2H+1}.
-\]
-Let $x_H>0$ be the unique maximizer of $x^{p_H}\Phi(-x)$, equivalently the
-solution of
+\begin{proposition}[Refined Gaussian lower-bound constants]
+\label{prop:refined_gaussian_constants}
+Fix $H\in(0,1]$ and set $p_H \coloneqq 2H/(2H+1)$. Let $x_H>0$ be the unique
+maximizer of $x^{p_H}\Phi(-x)$, equivalently the unique solution of
 \[
   p_H\Phi(-x_H)=x_H\varphi(x_H).
 \]
-For the Gaussian ramp witness
+For the Gaussian ramp profile $\mu_{t-j}^{\pm,h}=\pm\zeta(h-j)_+^H$, let
 \[
-  \mu_{t-j}^{\pm,h}=\pm\beta(h-j)_+^H,
+  L_h^{\mathrm{ramp}}(\sigma,\zeta)
+  \coloneqq
+  \zeta h^H\Phi\!\left(-\frac{\zeta}{\sigma}\sqrt{\sum_{r=1}^h r^{2H}}\right).
 \]
-the exact two-point lower bound has asymptotic constant
+Then, as $\sigma/\zeta\to\infty$,
+\[
+  \sup_{h\ge 1} L_h^{\mathrm{ramp}}(\sigma,\zeta)
+  \sim
+  C_H^{\mathrm{ramp}}\,\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)},
+\]
+with
 \[
   C_H^{\mathrm{ramp}}
   =
-  (2H+1)^{H/(2H+1)}x_H^{2H/(2H+1)}\Phi(-x_H),
+  (2H+1)^{H/(2H+1)}x_H^{2H/(2H+1)}\Phi(-x_H).
 \]
-with horizon shape
-\[
-  h_H^*\sim
-  (\sqrt{2H+1}\,x_H)^{2/(2H+1)}
-  \left(\frac{\sigma}{\zeta}\right)^{2/(2H+1)}.
-\]
-\end{proposition}
-
-\begin{proof}[Proof sketch]
-For fixed $h$, the likelihood-ratio testing problem between the two Gaussian
-paths depends on
-\[
-  S_h=\sum_{r=1}^h r^{2H}
-\]
-and has exact Bayes error $\Phi(-\beta\sqrt{S_h}/\sigma)$. The endpoint loss is
-of order $\beta h^H$, so the witness objective is
-\[
-  L_h(\beta)=\beta h^H\Phi(-\beta\sqrt{S_h}/\sigma).
-\]
-In the large-ratio regime $\sigma/\zeta\to\infty$, use
-$S_h\sim h^{2H+1}/(2H+1)$ and set
-$x=\zeta\sqrt{S_h}/\sigma$. After normalizing by
-$\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)}$, the objective becomes
-$(2H+1)^{H/(2H+1)}x^{p_H}\Phi(-x)$. Differentiating gives the stated scalar
-equation and constant.
-\end{proof}
-
-The ramp is therefore a valid structural witness, but it is not the best
-endpoint-saturating H\"older shape when $H<1$.
-
-\begin{proposition}[Endpoint-minimal witness as the energy minimizer]
-\label{prop:endpoint_minimal_witness}
-Fix $H\in(0,1]$ and $h\ge 1$. Among all discrete profiles
-$g=(g_0,\dots,g_h)$ satisfying
-\[
-  g_0=0,
-  \qquad
-  g_h=h^H,
-  \qquad
-  |g_r-g_s|\le |r-s|^H,
-\]
-the profile
+Among all endpoint-saturating H\"older profiles, the profile
 \[
   g_r^{\min}=h^H-(h-r)^H
 \]
-minimizes the testing energy $\sum_{r=1}^h g_r^2$. Its asymptotic energy constant is
+minimizes the testing energy and has asymptotic energy constant
 \[
   I_H
   =
@@ -416,153 +417,55 @@ minimizes the testing energy $\sum_{r=1}^h g_r^2$. Its asymptotic energy constan
   =
   \frac{2H^2}{(H+1)(2H+1)}.
 \]
-Consequently the exact Gaussian endpoint-minimal witness has constant
+If
+\[
+  L_h^{\min}(\sigma,\zeta)
+  \coloneqq
+  \zeta h^H\Phi\!\left(-\frac{\zeta}{\sigma}\sqrt{\sum_{r=1}^h (g_r^{\min})^2}\right),
+\]
+then, as $\sigma/\zeta\to\infty$,
+\[
+  \sup_{h\ge 1} L_h^{\min}(\sigma,\zeta)
+  \sim
+  C_H^{\min}\,\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)},
+\]
+with
 \[
   C_H^{\min}
   =
-  I_H^{-H/(2H+1)}x_H^{2H/(2H+1)}\Phi(-x_H),
+  I_H^{-H/(2H+1)}x_H^{2H/(2H+1)}\Phi(-x_H).
 \]
-where $x_H$ is the root from \cref{prop:exact_gaussian_ramp_frontier}. For
-$H<1$, this strictly improves the ramp constant by the factor
+For $H<1$, this strictly improves the ramp constant by the factor
 \[
-  \left(\frac{H+1}{2H^2}\right)^{H/(2H+1)}.
+  \frac{C_H^{\min}}{C_H^{\mathrm{ramp}}}
+  =
+  \left(\frac{H+1}{2H^2}\right)^{H/(2H+1)}
+  >1,
 \]
+while at $H=1$ the two profiles coincide.
 \end{proposition}
 
 \begin{proof}
-For any feasible profile, the endpoint constraint and H\"older condition imply
-\[
-  g_r\ge h^H-(h-r)^H.
-\]
-The displayed $g^{\min}$ attains this lower envelope and is feasible because
-$x\mapsto x^H$ is subadditive on $(0,\infty)$ for $H\le 1$. It is therefore
-pointwise dominated by every feasible profile and minimizes
-$\sum_{r=1}^h g_r^2$. The Riemann-sum limit gives
-\[
-  h^{-(2H+1)}\sum_{r=1}^h \left(h^H-(h-r)^H\right)^2\to I_H.
-\]
-Substituting a general energy constant $I$ into the exact Gaussian reduction gives
-$I^{-H/(2H+1)}x_H^{2H/(2H+1)}\Phi(-x_H)$. Taking
-$I=I_H$ yields the endpoint-minimal constant; comparing it with the ramp energy
-constant $(2H+1)^{-1}$ gives the improvement factor. At $H=1$, the two profiles
-coincide.
+The exact Gaussian testing problem reduces the two-point lower bound to the
+displayed quantities $L_h^{\mathrm{ramp}}$ and $L_h^{\min}$. After rescaling by
+$h=A(\sigma/\zeta)^{2/(2H+1)}$, the ramp energy and endpoint-minimal energy have
+limits $(2H+1)^{-1}$ and $I_H$, respectively. The corresponding normalized
+payoff becomes a scalar multiple of $x^{p_H}\Phi(-x)$, whose unique maximizer is
+$x_H$. The endpoint-minimal profile minimizes testing energy among all
+endpoint-saturating H\"older profiles, so it yields the sharper constant. Full
+details are given in \cref{app:proof_details}.
 \end{proof}
 
-These refinements matter for more than witness design. They also change the
-constant-level interpretation of the canonical lower regime. Once the roughness
-side is expressed through the exact uniform-window staleness constant and the
-lower side uses the exact Gaussian witness constants, the remaining proof gap has
-a clean structural form.
+These refinements sharpen the constant-level lower-bound picture, but the main
+theoretical role of this section is narrower: they strengthen the Gaussian
+construction without changing the horizon exponents or the status of the main
+results.
 
-\begin{proposition}[Refined proof-gap consequence on the canonical witness regime]
-\label{prop:refined_proof_gap}
-Fix $H\in(0,1]$ and let
-\[
-  C_S^{\mathrm{asymp}}(H) \coloneqq (2H+1)^{-1/2}.
-\]
-For $a>0$, define
-\[
-  \Sigma(a,H)
-  \coloneqq
-  \left(\frac{a}{a+H}\right)^{-a/(a+H)}
-  +
-  \left(\frac{H}{a+H}\right)^{-H/(a+H)}.
-\]
-For either refined witness constant
-\[
-  C_H^{\mathrm{ref}}\in\{C_H^{\mathrm{ramp}},C_H^{\min}\},
-\]
-consider the associated constant-level proof-gap formula
-\[
-  \Gamma_{\mathrm{ref}}(a,H)
-  =
-  \Sigma(a,H)
-  \left(\frac{C_S^{\mathrm{asymp}}(H)}{C_H^{\mathrm{ref}}}\right)^{a/(a+H)}.
-\]
-Then, for every fixed $H\in(0,1]$,
-\[
-  \inf_{a>0}\Gamma_{\mathrm{ramp}}(a,H)
-  =
-  \inf_{a>0}\Gamma_{\min}(a,H)
-  =2,
-\]
-and the infimum is attained only in the boundary limit $a\downarrow 0$.
-\end{proposition}
-
-\begin{proof}[Proof sketch]
-Write
-\[
-  p=\frac{2H}{2H+1}\in(0,2/3].
-\]
-For the ramp witness, the scalar root equation
-\[
-  p\Phi(-x_H)=x_H\varphi(x_H)
-\]
-together with the Komatsu-style bound
-\[
-  \Phi(-x)
-  \le
-  \frac{2\varphi(x)}{x+\sqrt{x^2+8/\pi}}
-\]
-gives the explicit lower envelope
-\[
-  \frac{C_S^{\mathrm{asymp}}(H)}{C_H^{\mathrm{ramp}}}
-  \ge
-  \sqrt{2\pi}
-  \frac{(1-p)^{(p+1)/2}(p+2/\pi)^{(p+1)/2}}{p^p}.
-\]
-Splitting at $p_0=1-2/\pi$ (equivalently $H_0=\pi/4-1/2$) reduces this lower
-envelope to two elementary log-concave functions whose endpoint values are all
-strictly larger than $1$. Hence
-\[
-  C_S^{\mathrm{asymp}}(H)>C_H^{\mathrm{ramp}}
-  \qquad\text{for all }H\in(0,1].
-\]
-
-For the endpoint-minimal witness, the same tail bound gives
-\[
-  \frac{C_S^{\mathrm{asymp}}(H)}{C_H^{\min}}
-  \ge
-  \sqrt{2\pi}\,\sqrt{1-p}
-  \frac{(p+2/\pi)^{(p+1)/2}}{(2-p)^{p/2}}.
-\]
-The logarithmic derivative of this lower envelope admits an explicit upper bound
-whose numerator is a cubic polynomial in $p$ with negative derivative on
-$p\in(0,2/3]$. The lower envelope is therefore strictly decreasing, so its
-minimum is forced to the endpoint $p=2/3$, where it is still strictly larger
-than $1$. Hence
-\[
-  C_S^{\mathrm{asymp}}(H)>C_H^{\min}
-  \qquad\text{for all }H\in(0,1].
-\]
-
-For either refined constant, set
-\[
-  R_{\mathrm{ref}}(H)=C_S^{\mathrm{asymp}}(H)/C_H^{\mathrm{ref}}>1.
-\]
-Then
-\[
-  \Gamma_{\mathrm{ref}}(a,H)=\Sigma(a,H)R_{\mathrm{ref}}(H)^{a/(a+H)}.
-\]
-Since $\Sigma(a,H)\ge 2$ and $R_{\mathrm{ref}}(H)^{a/(a+H)}\ge 1$, one has
-$\Gamma_{\mathrm{ref}}(a,H)\ge 2$. As $a\downarrow 0$, the exponent
-$a/(a+H)\downarrow 0$ and $\Sigma(a,H)\to 2$, so
-$\Gamma_{\mathrm{ref}}(a,H)\to 2$. This yields the displayed infimum formula.
-\end{proof}
-
-This proposition has the same scope as the refined witness geometry itself. It
-does not claim a class-tight minimax theorem for all deterministic H\"older
-paths. Its role is narrower and cleaner: within the exact
-Gaussian witness program, the conservative constant from the older testing
-relaxation is replaced by witness-level constants for which the residual gap is
-exactly the structural factor-two crossover between additive upper and two-point
-lower mechanisms.
-
-The same refined witness geometry also yields a full class-level benchmark once
+The same refined lower-bound geometry also yields a full class-level benchmark once
 the model is specialized to Gaussian location tracking. In that setting, the
 deterministic H\"older envelope, the finite-memory estimator, and the lower-bound
-witness all live in the same one-dimensional parameterization, so the canonical
-regime admits a direct minimax rate statement.
+construction all live in the same one-dimensional parameterization, so this
+model admits a direct minimax rate statement.
 
 \begin{theorem}[Gaussian location minimax benchmark on the deterministic H\"older class]
 \label{thm:gaussian_location_minimax_holder}
@@ -595,8 +498,7 @@ Then there exist constants $0<c_H\le C_H<\infty$, depending only on $H$, such th
   \le
   C_H\,\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)}.
 \]
-In particular, the deterministic H\"older class has the canonical minimax horizon
-scale
+In particular, the deterministic H\"older class has horizon scale
 \[
   n_H^*\asymp (\sigma/\zeta)^{2/(2H+1)}.
 \]
@@ -618,7 +520,7 @@ and its asymptotic risk constant is
 \]
 \end{theorem}
 
-\begin{proof}[Proof sketch]
+\begin{proof}
 For the upper bound, estimate the present mean by the uniform-window average
 \[
   \widehat\mu_t^{(n)}\coloneqq \frac{1}{n}\sum_{j=0}^{n-1}Y_{t-j}
@@ -659,7 +561,7 @@ Moreover, for fixed endpoint value $\beta h^H$, it minimizes the Gaussian testin
 energy over all symmetric lag profiles allowed by the present-point H\"older
 envelope, since each lag coordinate is independently minimized by
 $\beta(h^H-j^H)_+$. The exact Gaussian two-point calculation from the refined
-witness analysis therefore applies on the full deterministic H\"older class and
+lower-bound analysis in \cref{app:proof_details} therefore applies on the full deterministic H\"older class and
 yields a lower bound of order
 \[
   \sigma^{2H/(2H+1)}\zeta^{1/(2H+1)}.
@@ -668,29 +570,18 @@ Optimizing over $h$ gives the same horizon scale $(\sigma/\zeta)^{2/(2H+1)}$.
 Combining the two sides proves the theorem.
 \end{proof}
 
-\subsection{Beyond the Minimum Kernel}
+\subsection{Benchmark and Operational Regimes}
 
-The one-dimensional minimum kernel is the first rigorous carrier instantiation.
-Two broader settings are also important for interpreting the law.
-
-\paragraph{Extended regime.}
-In low-dimensional or low-intrinsic-dimensional settings, the natural question
-is whether the triangular-array carrier inherits the same exponent as the i.i.d.
-mixture benchmark up to a constant-level gap. The clearest evidence comes from
-embedded $k=1$ support inside a larger ambient space, where triangular and
-i.i.d. slopes remain near the $a=1/2$ regime under fixed span.
+The one-dimensional proof model is the first rigorous finite-sample
+instantiation. Two broader settings matter for scope: a Gaussian benchmark in
+which the law is closed on a full path class, and an operational Sinkhorn regime
+in which some structural ingredients are closed but the full inheritance theorem
+remains conjectural.
 
 \paragraph{Operational regime.}
-For a practical geometry such as fixed-$\varepsilon$ debiased Sinkhorn, the
-corresponding question is whether the induced finite-sample carrier is stable
-enough to enter the same horizon law. The experiments reported below support
-that interpretation: on embedded low-intrinsic-dimensional support, the
-triangular and i.i.d. benchmark carriers remain close across the tested
-regularization values, with $\varepsilon$ affecting constants more than the
-qualitative carrier exponent. The relevant theorem in this regime therefore does
-not take the form of a raw-$W_2$ statement in arbitrary dimension, but of an
-operational carrier theorem of
-the form
+For fixed-$\varepsilon$ debiased Sinkhorn, the question is whether a practical
+geometry can supply a stable finite-sample term on the embedded fixed-span
+model. The intended theorem shape is
 \[
   \mathbb E\,S_{\varepsilon}\!\left(\widehat P_{t,\mathrm{tri}}^{(n)},\bar P_t^{(n)}\right)
   \le C_{\varepsilon} n^{-a_{\varepsilon}}
@@ -698,141 +589,80 @@ the form
 under bounded support, fixed span, and structural low-dimensionality, where
 $S_{\varepsilon}$ denotes a fixed-$\varepsilon$ Sinkhorn-type geometry and the
 exponent $a_{\varepsilon}$ matches the corresponding i.i.d. mixture benchmark.
-For fixed-$\varepsilon$ entropic transport quantities, theorem-level i.i.d.
-results already point in this direction. Stromme proves minimum-intrinsic-
-dimension scaling for Sinkhorn divergence values under bounded Lipschitz costs,
-with the statistical error governed by the smaller covering complexity of the two
-measures \citep[Theorem~3.1]{Stromme2023MID}. Groppe and Hundrieser prove lower-
-complexity adaptation for empirical entropic OT costs and show that the finite-
-iteration Sinkhorn algorithm preserves the same statistical order up to an
-explicit computational tolerance \citep[Theorem~4.10 and
-Remark~4.11]{GroppeHundrieser2024LCA}. On the embedded fixed-span model studied
-here, the remaining structural pieces can also be isolated cleanly: the
-triangular-window and i.i.d.-mixture supports have identical axis-aligned
-covering complexity at operational scale, and with squared-Euclidean cost the
-dual smoothness condition reduces to the LCA threshold $\alpha>k/2$. This makes
-the operational question structurally sharp rather than amorphous: once the
-triangular-vs.-i.i.d. carrier gap is calibrated on a regularization band, the
-horizon law can be stated on that certified region.
+The manuscript does not prove that theorem in full generality. What is closed is
+the structural part of the setup. What remains open is the full triangular-array
+inheritance statement.
 
-\begin{definition}[Certified operational region]
-\label{def:certified_operational_region}
+\begin{definition}[Fixed-$\varepsilon$ operational setting]
+\label{def:operational_setting}
 Fix a bounded embedded fixed-span model, an intrinsic complexity index $k$, a
 dual H\"older smoothness level $\alpha$, and an operational band
-$\mathcal B\subset(0,\infty)$ of regularization values. We call
-$(k,\mathcal B)$ a certified operational region for fixed-$\varepsilon$
-Sinkhorn if:
+$\mathcal B\subset(0,\infty)$ of regularization values. We say that this model
+is in the fixed-$\varepsilon$ operational setting if:
 \begin{enumerate}[label=(\roman*)]
   \item the i.i.d. fixed-$\varepsilon$ benchmark on the same support class
-  admits a carrier bound with exponent $a_{\varepsilon}$ on $\mathcal B$;
+  admits a finite-sample bound with exponent $a_{\varepsilon}$ on $\mathcal B$;
   \item the triangular-window and i.i.d.-mixture supports have identical
   operational covering complexity on $\mathcal B$;
-  \item the dual class lies in the parametric adaptation region $\alpha>k/2$;
-  \item across $\mathcal B$, the calibrated triangular and i.i.d. carrier slopes
-  stay useful and uniformly close.
+  \item the dual class lies in the parametric adaptation region $\alpha>k/2$.
 \end{enumerate}
 \end{definition}
 
-\begin{proposition}[Certified operational frontier]
+\begin{proposition}[Structural ingredients for fixed-$\varepsilon$ Sinkhorn]
 \label{prop:operational_theorem_frontier}
 On the bounded embedded fixed-span model with squared-Euclidean cost, the first
-three items in \cref{def:certified_operational_region} are structural: the
+three items in \cref{def:operational_setting} are structural: the
 support-complexity inheritance is exact, and the dual-complexity condition is
-precisely the LCA threshold $\alpha>k/2$. Consequently, any calibrated band
-$\mathcal B$ satisfying item~(iv) supports the carrier-roughness horizon law on
-a certified operational region. In particular, on bands where the i.i.d.
-benchmark stays in the parametric Sinkhorn regime, the operational carrier takes
-the canonical form
+precisely the LCA threshold $\alpha>k/2$.
+\end{proposition}
+
+\begin{conjecture}[Fixed-$\varepsilon$ Sinkhorn horizon inheritance]
+\label{conj:operational_sinkhorn_horizon}
+Assume the fixed-$\varepsilon$ operational setting from
+\cref{def:operational_setting}. Then, on bands where the i.i.d.
+benchmark stays in the parametric Sinkhorn regime, the triangular-array
+finite-sample term should satisfy
 \[
   \mathbb E\,S_{\varepsilon}\!\left(\widehat P_{t,\mathrm{tri}}^{(n)},\bar P_t^{(n)}\right)
   \le C_{\varepsilon} n^{-1/2},
   \qquad \varepsilon\in\mathcal B,
 \]
-and the corresponding useful-memory scale is
+and the corresponding horizon scale should satisfy
 \[
   n_{\varepsilon}^*(H) \asymp (C_{\varepsilon}/\zeta)^{1/(H+1/2)}.
 \]
 More generally, if the i.i.d. benchmark on $\mathcal B$ has exponent
-$a_{\varepsilon}$, then the operational horizon law on that region is
+$a_{\varepsilon}$, then the operational horizon law should be
 \[
   n_{\varepsilon}^*(a_{\varepsilon},H)
   \asymp (C_{\varepsilon}/\zeta)^{1/(a_{\varepsilon}+H)}.
 \]
-\end{proposition}
+\end{conjecture}
 
-\paragraph{Proof sketch.}
-The i.i.d. side is the benchmark supplied by
-\citet{Stromme2023MID} and \citet{GroppeHundrieser2024LCA}. In the present
-embedded fixed-span model, the triangular-window and i.i.d.-mixture supports
-have identical operational covering bounds, so the support-complexity side of
-the inheritance problem is already closed. The squared-Euclidean chart model is
-smooth enough that the dual-complexity condition reduces to $\alpha>k/2$, which
-is exactly the parametric LCA region. Once the triangular-vs.-i.i.d. carrier gap
-is calibrated to remain uniformly small on $\mathcal B$, the operational carrier
-enters the abstract upper law just like any other carrier exponent. Optimizing
-the resulting upper envelope gives the displayed horizon scale.
+\paragraph{Evidence.}
+The i.i.d. benchmark comes from existing fixed-$\varepsilon$ entropic transport
+results \citep{Stromme2023MID,GroppeHundrieser2024LCA}. In the present embedded
+fixed-span model, support-complexity inheritance is exact and the dual
+smoothness threshold reduces to $\alpha>k/2$. Calibration supplies the only
+remaining ingredient: evidence that the triangular and i.i.d. rate estimates
+stay close across the regularization band. That evidence motivates the
+conjecture, but it does not close it as a theorem.
 
-This proposition isolates the structural part of the operational story and the
-point at which calibration still enters. It does not yet prove a full
-triangular-array Sinkhorn theorem with explicit uniform constants across
-$\mathcal B$; rather, it identifies a certified region in which the abstract
-horizon law is justified by a closed i.i.d. benchmark, an exact complexity
-inheritance statement, and a calibrated triangular-vs.-benchmark comparison.
-
-\begin{corollary}[Certified fixed-$\varepsilon$ operational region]
-\label{cor:certified_operational_region}
-In the synthetic embedded fixed-span calibration used in this paper, with
-$\alpha=2$ and span $0.25$, the maximal certified regularization
-bands are:
-\[
-  \varepsilon_{\max}=0.5 \text{ for } (d,k)\in\{(8,1),(8,2),(12,2)\},
-  \qquad
-  \varepsilon_{\max}=0.2 \text{ for } (d,k)=(12,1).
-\]
-Thus the operational frontier is not a dimension-free blanket statement. It is a
-certified region inside the fixed-span model on which the practical Sinkhorn
-carrier inherits the useful-memory law of the corresponding i.i.d. benchmark.
-\end{corollary}
-
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=0.94\linewidth]{artifacts/figures/frontier/fig_operational_theorem_mechanism.pdf}
-\caption{Certified operational frontier. Left: the dual threshold
-$\alpha>k/2$ that identifies the parametric adaptation regime. Middle: exact
-support-complexity inheritance in the embedded fixed-span model. Right: maximal
-certified $\varepsilon$-bands in the calibrated synthetic setting. Together these
-three ingredients isolate the operational region on which fixed-$\varepsilon$
-Sinkhorn supports the same carrier-roughness horizon law as its i.i.d.
-benchmark.}
-\label{fig:operational_theorem_mechanism}
-\end{figure}
-
-\paragraph{Regular-family extension target.}
-The noncanonical question is broader than preserving the root-$n$ carrier. The
-relevant objective is to identify distribution families and geometries that
-support some member of the carrier-roughness horizon family, with carrier exponent
-$a=a(\mathcal G)$ determined by the geometry rather than fixed a priori. A
-natural candidate class is a locally regular dominated family: a parameterized
-family $\{P_\theta: \theta\in\Theta\}$ with a
-common dominating measure, locally quadratic testing geometry,
-\[
-  \KL(P_\theta,P_{\theta'})\asymp \|\theta-\theta'\|^2,
-\]
-and local comparability between parameter displacement and the chosen metric,
+\paragraph{Regular-family inheritance.}
+The broader extension question is whether regular dominated families inherit the
+same horizon logic with exponents determined by local geometry. The relevant
+setting is a family $\{P_\theta: \theta\in\Theta\}$ with locally quadratic
+testing geometry and metric comparability
 \[
   d(P_\theta,P_{\theta'})\asymp \|\theta-\theta'\|^{\alpha}
 \]
-for some metric exponent $\alpha>0$. In such a family, a deterministic H\"older
-envelope in parameter space transfers to a deterministic staleness law in the
-observation geometry with metric roughness exponent $\alpha H$, while the i.i.d.
-carrier problem remains regular enough for Le Cam-style lower arguments and
-benchmark upper laws to interact on a common local scale.
+for some metric exponent $\alpha>0$.
 
 \begin{conjecture}[Regular-family horizon inheritance]
 \label{conj:regular_family_horizon_inheritance}
 Let $d$ be a probability geometry and let $\{P_\theta: \theta\in\Theta\}$ be a
 locally regular dominated family for which the i.i.d. benchmark satisfies a
-metric carrier law
+ metric finite-sample law
 \[
   \mathbb E\,d\!\left(\widehat P_{\mathrm{iid}}^{(n)},P_\theta\right)
   \le C_K n^{-a}
@@ -854,7 +684,7 @@ with optimized risk of order
 \[
   C_K^{\alpha H/(a+\alpha H)}\zeta^{\alpha a/(a+\alpha H)}.
 \]
-In the locally regular parametric subcase, the natural metric carrier exponent is
+In the locally regular parametric subcase, the natural metric finite-sample exponent is
 $a=\alpha/2$, giving the horizon scale
 \[
   n^*(\alpha/2,\alpha H)
@@ -862,72 +692,14 @@ $a=\alpha/2$, giving the horizon scale
 \]
 \end{conjecture}
 
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=0.92\linewidth]{artifacts/figures/frontier/fig_regular_family_inheritance.pdf}
-\caption{Regular-family inheritance beyond the canonical case. Left: if the
-metric geometry scales as $d(P_\theta,P_{\theta'})\asymp
-\|\theta-\theta'\|^{\alpha}$, then the natural parametric metric carrier is
-$a=\alpha/2$. Right: the resulting horizon exponent becomes
-$1/[\alpha(1/2+H)]$, so the canonical Gaussian-location/Gaussian-scale regime
-appears as the distinguished slice $\alpha=1$ rather than as a universal rule.}
-\label{fig:regular_family_inheritance}
-\end{figure}
-
-This figure makes the noncanonical point concrete. The right extension problem
-is not to preserve the canonical horizon law for every family, but to identify
-which family geometry induces which carrier exponent and therefore which member
-of the horizon family.
-
-The distinction between regular, support-changing, and singular families shows
-why such a regularity package is necessary.
-Continuous one-dimensional scale families such as Gaussian scale and uniform
-scale are broadly compatible with the same horizon exponent, but their local
-testing geometry differs sharply: Gaussian scale is regular, whereas uniform
-scale has support-driven nonregularity and atomic scale families become singular.
-So a full distributional extension should be formulated for regular dominated
-families or operational geometries with comparable local behavior, not for an
-arbitrary bare $W_2$-H\"older path class.
-
-\begin{remark}[Local-geometry taxonomy]
-Gaussian-like regular families
-have locally quadratic testing geometry and are the clearest theorem targets for
-distributional horizon inheritance. Support-changing families can preserve the
-same transport scaling while losing local quadratic regularity, so they require a
-different lower theory. Atomic or singular families are genuine obstruction
-classes: they show that transport-H\"older control alone is too weak to support a
-single universal extension theorem.
-\end{remark}
+Regular dominated families are the natural theorem targets. Support-changing and
+singular families remain genuine obstruction classes, so transport-H\"older
+control alone is too weak to support a single blanket extension theorem.
 
 Together, these settings show how the abstract law extends beyond the
-one-dimensional minimum kernel while keeping the formal claims within their
+one-dimensional proof model while keeping the formal claims within their
 proper scope.
 
-\begin{corollary}[EWMA analogue]\label{cor:ewma_cube_root}
-For exponential weights $w_j=\alpha(1-\alpha)^j$, the effective lag is
-$\tau_\alpha=(1-\alpha)/\alpha$ and the effective sample size scales as
-$n_{\mathrm{eff}}\asymp 1/\alpha$. Balancing the same carrier and staleness terms
-therefore yields the same exponent in the effective-memory scale. In
-particular, on the canonical regime $a=1/2$, $H=1$, the EWMA analogue of the
-cube-root horizon is recovered up to constants.
-\end{corollary}
-
-The section can now be read in the order in which the theory itself develops.
-First comes the abstract horizon law, then its canonical closure, then its
-beyond-kernel extensions, and finally its prescriptive content across carrier
-regimes. Once a carrier regime and a roughness level are specified, the law does
-not merely certify that useful memory is finite; it prescribes how aggressively
-memory should shrink as drift intensifies and how much optimized error remains
-unavoidable on that regime.
-
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=0.92\linewidth]{artifacts/figures/frontier/fig_prescriptive_memory_law.pdf}
-\caption{Prescriptive content of the horizon law. The left panel shows the
-optimal memory scale $n^*$ and the right panel the optimized error scale for the
-$H=1$ slice of the carrier-roughness law, across canonical, degraded
-operational, and rough noncanonical carrier regimes. Rougher drift and weaker
-carriers both push the optimal policy toward shorter memory and higher residual
-error.}
-\label{fig:prescriptive_memory_law}
-\end{figure}
+Once a finite-sample regime and a roughness level are specified, the law yields
+an explicit memory scale and an optimized error scale. Rougher drift and weaker
+finite-sample rates both force shorter memory and larger residual error.

@@ -1,55 +1,53 @@
-\section{Empirical Evidence}\label{sec:validation}
+\section{Empirical Signatures}\label{sec:validation}
 
-The empirical section makes the theoretical picture visible in finite samples.
-Its role is to show the main signatures of the variance--staleness law and to
-calibrate the operational frontier beyond the canonical proof regime.
+The empirical section makes the theory visible in finite samples. Its purpose is
+to exhibit the main observable signatures of the temporal-validity horizon and
+to report evidence relevant to the fixed-$\varepsilon$ Sinkhorn conjecture.
 
 All experiments in this section are synthetic and fully specified by the code in
 the repository. The Gaussian U-curve uses 20 Monte Carlo seeds; the
 roughness-family sweep uses 12 seeds across the stated H\"older envelopes; the
-fixed-$\varepsilon$ operational frontier is calibrated from log--log carrier fits
-over sample sizes $(24,48,96,160)$ on the ambient/intrinsic pairs $(8,1)$,
-$(8,2)$, $(12,1)$, and $(12,2)$ using 24 seeds; and the detector-silent-
-staleness experiment uses a piecewise-ramped drift stream with 12 seeds, a
-fixed operating window, and both ADWIN and Page--Hinkley detectors. In the
-operational map, a cell is marked useful when both fitted carrier exponents stay
-above the usefulness threshold and their gap remains below the calibration
-tolerance. Reported curves are seed-averaged means, while the frontier map
-summarizes log--log slope fits across the listed sample sizes. The goal is not
-benchmark breadth but calibration of the structural signatures singled out by
-the theory.
+fixed-$\varepsilon$ operational map is calibrated from log--log finite-sample
+fits over sample sizes $(24,48,96,160)$ on the ambient/intrinsic pairs $(8,1)$,
+$(8,2)$, $(12,1)$, and $(12,2)$ using 24 seeds; and the validity-detection
+experiment uses a piecewise-ramped drift stream with 12 seeds, a fixed
+operating window, and both ADWIN and Page--Hinkley detectors. In the
+operational map, a cell is marked useful when both fitted finite-sample
+exponents stay above the usefulness threshold and their gap remains below the
+calibration tolerance. Reported curves are seed-averaged means, while the map
+summarizes log--log slope fits across the listed sample sizes.
 
-Four signatures matter. First, horizon sweeps should exhibit a finite optimum
-rather than a boundary solution. Second, that optimum should move with temporal
-roughness. Third, the beyond-kernel operational regime should exhibit a visible
-frontier rather than a vague extension class. Fourth, temporal validity can fail
-before changepoint evidence becomes statistically visible.
+Four signatures matter. First, finite-memory risk should exhibit an interior
+optimum. Second, that optimum should move with temporal roughness. Third, the
+fixed-$\varepsilon$ Sinkhorn conjecture should receive structured empirical
+support rather than a single undifferentiated claim. Fourth, temporal validity
+can fail before changepoint evidence becomes statistically visible.
 
-\subsection{A Visible Finite-Memory Optimum}\label{sec:validation_ucurve}
+\subsection{A Finite-Memory Optimum}\label{sec:validation_ucurve}
 
 The Gaussian horizon sweep isolates the variance--staleness trade-off directly.
 Small windows are variance dominated, large windows are stale, and the minimum
-lies at an interior horizon rather than at either boundary.
+lies at an interior horizon.
 
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.92\linewidth]{artifacts/figures/gaussian/fig_ucurve}
-\caption{Structural U-curve for finite-memory tracking. Tracking error first
-falls with horizon and then rises once staleness overtakes the remaining
-variance gain. The optimum remains finite across drift strengths.}
+\caption{Finite-memory U-curve. Tracking error first falls with horizon and then
+rises once staleness overtakes the remaining variance gain. The optimum remains
+finite across drift strengths.}
 \label{fig:ucurve}
 \end{figure}
 
-This is the most basic finite-memory signature. Under stationarity, more memory
-would continue to help. Under drift, the same horizon that reduces variance also
-ages the evidence.
+This is the basic empirical signature of temporal validity under drift. Under
+stationarity, more memory would continue to help. Under drift, the same horizon
+that reduces variance also ages the evidence.
 
 \subsection{Roughness-Dependent Horizon Scaling}
 \label{sec:validation_roughness}
 
-The next experiment varies the roughness index directly. For each
-Hölder-type regime, the surrogate error obeys the same structural decomposition
-as the theory,
+The next experiment varies the roughness index directly. For each H\"older-type
+regime, the surrogate error obeys the same structural decomposition as the
+theory,
 \[
   \mathcal E(n) \approx \sigma n^{-1/2} + \zeta n^H,
 \]
@@ -59,97 +57,88 @@ $\zeta$ values.
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.96\linewidth]{artifacts/figures/roughness_family/fig_roughness_family}
-\caption{Roughness-dependent horizon scaling. Each path class still exhibits a
-finite optimum, but the location of that optimum changes with $H$. The
-worst-case Lipschitz cube-root law appears as the $H=1$ member of a broader
-carrier-roughness useful-memory horizon family.}
+\caption{Roughness-dependent horizon scaling. Each path class exhibits a finite
+optimum, and the location of that optimum changes with $H$. The horizon is a
+function of drift regularity, not a fixed window rule.}
 \label{fig:roughness_family}
 \end{figure}
 
-This separation is structural. If the cube-root law were the only story, the
-right panel would collapse to a single slope. It does not. The empirical optima
-separate by roughness class, matching the path-dependent horizon logic of
-\cref{cor:optimized_horizon}.
+The empirical optima separate by roughness class, matching the path-dependent
+horizon logic of \cref{cor:optimized_horizon}.
 
-\subsection{Operational Frontier Beyond the Minimum Kernel}
+\subsection{Evidence for the Sinkhorn Conjecture}
 \label{sec:validation_operational_frontier}
 
-The empirical beyond-kernel question that most directly matters for the paper is
-whether a practical geometry exhibits a stable carrier frontier rather than a
-fragile one-off phenomenon. The fixed-$\varepsilon$ Sinkhorn experiments answer
-that question on the calibrated embedded fixed-span model.
+The fixed-$\varepsilon$ Sinkhorn experiments address a different question: when a
+practical geometry is used in place of raw $W_2$, does the finite-sample term
+remain stable enough for the conjectured horizon law to stay informative? The
+calibrated embedded fixed-span model shows a visible regime map.
 
 The figure below concerns fixed-$\varepsilon$ Sinkhorn geometry on embedded
-low-intrinsic-dimensional support. It shows that the corresponding carrier
-remains stable across the tested regularization values and that the triangular
-slope stays close to the i.i.d. benchmark rather than exhibiting a separate
-exponent. Combined with the structural ingredients isolated in
-\cref{prop:operational_theorem_frontier}, this yields an explicit certified
-operational region. In the calibrated fixed-span model with $\alpha=2$ and span
-$0.25$, the maximal certified bands are $\varepsilon_{\max}=0.5$ for
-$(d,k)=(8,1)$, $(8,2)$, and $(12,2)$, and $\varepsilon_{\max}=0.2$ for
-$(12,1)$ (\cref{cor:certified_operational_region,fig:operational_theorem_mechanism}).
-That is the level of granularity the main story needs: a stable core, a mixed
-boundary case, and an operational region with visible shape rather than a flat
-yes-or-no claim.
+low-intrinsic-dimensional support. It shows that the corresponding finite-sample
+term remains stable across the tested regularization values and that the
+triangular slope stays close to the i.i.d. benchmark rather than exhibiting a
+separate exponent. Combined with the structural ingredients isolated in
+\cref{prop:operational_theorem_frontier}, this provides empirical support for
+\cref{conj:operational_sinkhorn_horizon}. In the calibrated fixed-span model
+with $\alpha=2$ and span $0.25$, the maximal observed bands are
+$\varepsilon_{\max}=0.5$ for $(d,k)=(8,1)$, $(8,2)$, and $(12,2)$, and
+$\varepsilon_{\max}=0.2$ for $(12,1)$.
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.9\linewidth]{artifacts/figures/frontier/fig_operational_frontier_map.pdf}
-\caption{Empirical shape of the fixed-$\varepsilon$ operational frontier. Each
-panel reports the minimum of the i.i.d. and triangular carrier exponents over
-the ambient/intrinsic pairs tested at one regularization level. Crossed cells
-mark settings that fail the usefulness criterion. The resulting picture is a
-frontier rather than a blanket statement: $(8,1)$, $(8,2)$, and $(12,2)$ remain
-stable throughout the tested band, while $(12,1)$ is the mixed boundary case.}
+\caption{Empirical shape relevant to the fixed-$\varepsilon$ Sinkhorn conjecture.
+Each panel reports the minimum of the i.i.d. and triangular finite-sample
+exponents over the ambient/intrinsic pairs tested at one regularization level.
+Crossed cells mark settings that fail the usefulness criterion. The resulting
+picture has a stable core and a single mixed boundary case on the tested grid.}
 \label{fig:operational_frontier_map}
 \end{figure}
 
-This map adds the shape information behind the certified-frontier statement. The
-fixed-$\varepsilon$ operational region is not just nonempty; it has a visible
-frontier, with a stable core and a single mixed boundary case on the tested
-grid.
+This map gives the shape of the empirical support behind the conjecture. The
+observed operational region is neither empty nor uniform across settings; the
+calibration details and supporting tables are kept in
+\cref{app:finite_sample_geometry,app:repository_guide}.
 
-\subsection{Detector-Silent Staleness}\label{sec:validation_invalidity_gap}
+\subsection{Validity Loss Before Detector Alarm}\label{sec:validation_invalidity_gap}
 
 Temporal validity and changepoint evidence are different clocks. To make that
 separation explicit, consider a stream whose local drift rate ramps upward over
-time. The useful-memory horizon $n_t^*$ contracts as the ramp steepens, while a
-long operating horizon remains fixed. Define
+time. The horizon $n_t^*$ contracts as the ramp steepens, while a long
+operating horizon remains fixed. Define
 \[
-  \Delta_{\mathrm{inv}} \coloneqq t_{\mathrm{detect}} - t_{\mathrm{valid}},
+  \Delta_{\mathrm{val-det}} \coloneqq t_{\mathrm{detect}} - t_{\mathrm{valid}},
 \]
 where $t_{\mathrm{valid}}$ is the first time the operating horizon persistently
-exceeds the useful-memory scale, and $t_{\mathrm{detect}}$ is the first detector
-alarm that follows.
+exceeds the temporal-validity horizon, and $t_{\mathrm{detect}}$ is the first
+detector alarm that follows.
 
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.94\linewidth]{artifacts/figures/invalidity_gap/fig_invalidity_gap}
-\caption{Detector-silent staleness. As drift intensifies, the useful-memory
-horizon contracts until the operating horizon becomes stale at
+\caption{Validity loss before detector alarm. As drift intensifies, the
+temporal-validity horizon contracts until the operating horizon becomes stale at
 $t_{\mathrm{valid}}$; the detector responds only later at $t_{\mathrm{detect}}$,
-leaving a strictly positive invalidity gap. The lower panel shows excess
-tracking error accumulating before the alarm appears.}
+leaving a strictly positive validity-detection lag. The lower panel shows
+excess tracking error accumulating before the alarm appears.}
 \label{fig:invalidity_gap}
 \end{figure}
 
-Across the reported runs, the measured gap remains positive. This is the
-empirical form of detector-silent staleness: retained evidence can already be
-invalid for the present while detector statistics remain below alarm threshold.
+Across the reported runs, the measured lag remains positive. Retained evidence
+can already be invalid for the present while detector statistics remain below
+alarm threshold.
 
-The positive gap is not a knife-edge feature of one tuning choice. Across the
+The positive lag is not a knife-edge feature of one tuning choice. Across the
 tested ADWIN thresholds, mean detection time remains strictly later than mean
-validity-expiry time, and the same qualitative gap persists under a different
+validity-expiry time, and the same qualitative lag persists under a different
 detector family as well.
 
 \subsection{What the Evidence Shows}\label{sec:validation_summary}
 
 Taken together, the experiments support four claims that match the theory.
 Finite-memory tracking exhibits a structural U-curve rather than an ever-growing
-memory benefit. The useful-memory scale is roughness dependent, with the
-cube-root law appearing as the $H=1$ member of a broader family. Carrier
-stability remains visible beyond the minimum kernel in the fixed-$\varepsilon$
-operational regime, and that evidence isolates a concrete certified region
-rather than a vague extension class. Temporal validity can also fail before
-changepoint evidence appears, producing a measurable invalidity gap.
+memory benefit. The temporal-validity horizon is roughness dependent. The
+fixed-$\varepsilon$ Sinkhorn conjecture receives structured empirical support on
+the tested grid. Temporal validity can fail before changepoint evidence appears,
+producing a measurable validity-detection lag.

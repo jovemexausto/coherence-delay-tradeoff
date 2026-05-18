@@ -1,11 +1,10 @@
 \section{Conclusion}\label{sec:conclusion}
 
 Under drift, memory is never purely beneficial. It reduces finite-sample noise,
-but it also ages. The resulting trade-off makes useful memory a finite-horizon
-object rather than an unlimited statistical resource.
+but it also ages. The resulting trade-off makes finite memory a
+temporal-validity object rather than an unlimited statistical resource.
 
-The paper formalizes that idea through a carrier-roughness useful-memory horizon
-law. The central theorem is the abstract decomposition
+The paper formalizes that idea through the horizon law
 \[
   \mathbb E\,d\!\left(\widehat P_t^{(n)},P_t\right)
   \le C_K n^{-a} + C_S\zeta n^H,
@@ -14,40 +13,27 @@ whose optimized scale is
 \[
   n^*(a,H) \asymp (C_K/\zeta)^{1/(a+H)}.
 \]
-The cube-root horizon is therefore one member of a broader law: the special case
-$a=1/2$, $H=1$ corresponding to a root-$n$ carrier under worst-case linear
-staleness.
+The scientific claim is that finite-memory tracking under drift is governed by
+this balance between finite-sample accuracy and drift-induced staleness.
 
-The analysis anchors this law in a rigorous minimum-kernel result and a
-structural lower bound on the same canonical carrier regime. Together they show
-that, in the bounded-support fixed-span one-dimensional setting, the horizon is
-neither an artifact of a particular estimator nor a purely heuristic balance.
-The refined Gaussian witness analysis sharpens that conclusion: exact testing
-gives a clean scalar frontier, and the endpoint-minimal H\"older witness
-improves the ramp constant for $H<1$. In the Gaussian location benchmark, the
-same canonical geometry also yields a full minimax rate statement on the
-deterministic H\"older class. Beyond that proof kernel, the paper isolates two
-main directions. On the operational side, fixed-$\varepsilon$ Sinkhorn is now
-organized by a certified frontier: exact support-complexity inheritance, the
-dual threshold $\alpha>k/2$, and calibrated band stability together identify the
-region on which the operational carrier inherits the horizon law of its i.i.d.
-benchmark. On the distributional side, the right extension target is no longer a
-false universal root-$n$ theorem, but a family-specific horizon principle in
-which regular families support different carrier exponents and hence different
-members of the horizon family.
+A tractable one-dimensional proof model supplies a rigorous root-$n$
+finite-sample regime, and a structural Gaussian lower-bound construction shows
+that the corresponding horizon is not an artifact of one estimator. The same
+object yields a Gaussian location minimax benchmark on deterministic H\"older
+paths. For fixed-$\varepsilon$ Sinkhorn on an embedded fixed-span model, the
+paper proves the structural ingredients and states the full inheritance law as a
+conjecture supported by the reported evidence. These results do not constitute separate stories. They are
+different manifestations of one temporal-validity problem.
 
-The empirical section mirrors that sequence. It shows a structural U-curve,
-roughness-dependent horizon scaling, a visible operational frontier, and a
-strictly positive invalidity gap between temporal validity and changepoint
-evidence. The resulting message is both theoretical and operational: useful
-memory has a path-dependent horizon, and retained evidence can become invalid
-before change becomes statistically detectable.
+The empirical section makes that object visible through four signatures: a
+finite-memory U-curve, roughness-dependent horizon scaling, structured evidence
+for the Sinkhorn conjecture, and a strictly positive lag between validity loss and detector
+alarm. The resulting message is both theoretical and operational: retained
+evidence has a path-dependent horizon, and statistical detectability need not
+coincide with temporal validity.
 
-The resulting shift in viewpoint is that memory under drift is not treated
-primarily as a regret-tuning parameter or an alarm-design parameter, but as a
-temporal-validity object in distributional geometry.
-
-The main open questions concern carrier inheritance beyond the minimum kernel,
-theorem-level operational-geometry results, and broader lower-bound extensions
-beyond the canonical $a=1/2$ regime. These are natural extensions of the present
-theory, not changes to its central object.
+The main open questions concern sharper finite-sample constants in the proof
+model, lower theory beyond the root-$n$ regime, broader family-level lower
+bounds, and theorem-level operational results for the conjectural Sinkhorn
+extension. Those questions extend the same object. They do not change what the
+paper is about.

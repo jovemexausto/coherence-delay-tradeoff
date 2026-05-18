@@ -1,44 +1,40 @@
 \begin{abstract}
-Memory is not always an asset under drift. Past data reduce sampling noise, but
-as the target distribution moves, retaining more evidence also accumulates
-temporal misalignment with the present.
-Finite-memory distribution tracking is therefore governed by a
-temporal-validity problem: how long can retained evidence improve estimation of
-the present before drift-induced misalignment overtakes variance reduction?
-
-A carrier-roughness useful-memory horizon law separates finite-memory error into
-a carrier term, coming from the chosen geometry and sample regime, and a
-roughness-controlled staleness term, coming from the drift path:
+Under drift, additional memory reduces finite-sample noise but also increases
+the age of the evidence used to estimate the present. Finite-memory
+distribution tracking is therefore governed by a temporal-validity horizon: how
+long does retained evidence remain statistically useful for representing the
+current target distribution? The paper studies that question through a general
+horizon law that separates finite-memory tracking error into a finite-sample
+term, determined by the chosen geometry and estimator, and a drift-induced
+staleness term, determined by the regularity of the target path:
 \[
   \mathbb E\,d\!\left(\widehat P_t^{(n)},P_t\right)
   \leq
   C_K n^{-a} + C_S\zeta n^H.
 \]
-Here $a$ is the carrier exponent and $H\in(0,1]$ is the temporal roughness
-exponent. Optimizing this balance yields the useful-memory scale
-$n^*(a,H)\asymp (C_K/\zeta)^{1/(a+H)}$, with the classical cube-root law
-appearing as the special case $a=1/2$, $H=1$.
+Here $a>0$ is the finite-sample rate exponent and $H\in(0,1]$ is the temporal
+roughness exponent. Optimizing this balance yields the temporal-validity horizon
+$n^*(a,H)\asymp (C_K/\zeta)^{1/(a+H)}$.
 
-We instantiate the law with a rigorous minimum kernel: a one-dimensional
-bounded-support fixed-span triangular array in which a quantile/Bahadur argument
-gives the canonical $a=1/2$ carrier. A Gaussian witness lower bound shows that
-the resulting horizon is structural in this canonical regime. Beyond the minimum
-kernel, the same framework supports a Gaussian location minimax benchmark and a
-certified fixed-$\varepsilon$ Sinkhorn operational frontier, showing that the
-same horizon logic remains meaningful outside the one-dimensional proof regime.
+A tractable one-dimensional bounded-support fixed-span triangular-array model
+provides a rigorous root-$n$ finite-sample regime through quantile/Bahadur
+structure. A Gaussian lower-bound construction shows that the resulting horizon
+is structural rather than an artifact of a particular estimator. The same object
+also admits a Gaussian location minimax benchmark on deterministic H\"older
+paths. For fixed-$\varepsilon$ Sinkhorn geometry, the manuscript isolates the
+closed structural ingredients and states the corresponding horizon inheritance as
+an explicit conjecture on an embedded fixed-span model.
 
-Under drift, memory is governed not by a single universal window law, but by
-the interaction between carrier geometry and temporal roughness. This viewpoint
-is adjacent to dynamic regret and adaptive windowing, but the object is
-different: temporal validity of retained evidence. Useful memory has a
-path-dependent horizon, and retained evidence can become invalid for the
-present before changepoint evidence becomes statistically visible.
+Memory under drift is governed by temporal validity, not by a universal window
+rule. The horizon depends jointly on finite-sample geometry and temporal
+roughness, and retained evidence can become invalid for the present before
+change becomes statistically detectable.
 
 \end{abstract}
 
 \bigskip
 \noindent\textbf{Keywords:}
-tracking under drift; useful memory; temporal validity;
-carrier-roughness useful-memory horizon law; invalidity gap; Wasserstein distance.
+tracking under drift; temporal validity; finite-memory estimation;
+distribution tracking; Wasserstein distance; Sinkhorn divergence.
 
 \noindent\textbf{MSC~2020:} 93D05, 93D30, 68P99.

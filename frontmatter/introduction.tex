@@ -9,89 +9,61 @@ reduces finite-sample noise, and it increases the age of the evidence used to
 estimate the current state.
 
 That tension creates a horizon problem. Short windows are fresh but noisy. Long
-windows are stable but stale. The relevant question is not only whether memory
-helps, but how long retained evidence can remain temporally valid before
-drift-induced misalignment overtakes the remaining variance gain. The paper
-studies that question in distributional geometry and treats the horizon of
-useful memory as the main statistical object.
+windows are stable but stale. The paper studies the temporal-validity horizon of
+finite memory: how long retained evidence remains useful for estimating the
+present before drift-induced misalignment overtakes the remaining variance gain.
 
-A carrier-roughness useful-memory horizon law captures this problem. The
-starting point is an abstract decomposition
+A general horizon law captures this problem. The starting point is an abstract
+decomposition
 \[
   \mathbb E\,d\!\left(\widehat P_t^{(n)},P_t\right)
   \leq
   C_K n^{-a} + C_S\zeta n^H,
 \]
-where $a>0$ is the finite-sample carrier exponent of the chosen geometry and
-sample regime, $H\in(0,1]$ is the temporal roughness exponent of the drift path, and
-$\zeta$ is the roughness amplitude. Optimizing this balance yields the
-useful-memory scale
+where $a>0$ is the finite-sample rate exponent of the chosen geometry and
+estimator, $H\in(0,1]$ is the temporal roughness exponent of the drift path,
+and $\zeta$ is the roughness amplitude. Optimizing this balance yields the
+temporal-validity horizon
 \[
   n^*(a,H) \asymp (C_K/\zeta)^{1/(a+H)}.
 \]
-The cube-root law is recovered as the special case $a=1/2$, $H=1$, corresponding
-to a root-$n$ carrier and worst-case linear staleness. The point of the paper is
-therefore not the cube-root law in isolation, but the larger object that explains
-when cube-root scaling appears, when it does not, and why the useful-memory
-horizon is path dependent.
+The horizon depends jointly on finite-sample geometry and on the temporal
+regularity with which drift accumulates staleness.
 
-To make this law concrete, the paper proceeds in three moves.
+The paper develops this object in four steps.
 
-First, it identifies a \emph{minimum kernel}: a one-dimensional bounded-support
-fixed-span triangular-array setting in which the carrier can be instantiated
-rigorously. In that regime, the quantile representation of $W_2^2$, a
-triangular-array Bahadur expansion, and a design-effect comparison yield the
-canonical carrier
+First, it establishes the law in a tractable one-dimensional bounded-support
+fixed-span triangular-array model. In that regime, the quantile representation
+of $W_2^2$, a triangular-array Bahadur expansion, and a design-effect comparison
+yield the root-$n$ finite-sample rate
 \[
   \mathbb E\,W_2\!\left(\widehat P_n^{\mathrm{tri}},\bar P_n\right)
   = O(n^{-1/2}).
 \]
-This supplies a concrete $a=1/2$ regime of the abstract law and closes the
-canonical benchmark.
+This gives a rigorous first proof model for the general horizon law.
 
-Second, it studies an \emph{operational regime}: fixed-$\varepsilon$ Sinkhorn
-geometry as an operational carrier whose finite-sample behavior remains useful
-even where raw Wasserstein geometry is dimensionally fragile. In the embedded
-fixed-span model studied here, this is more than a loose extension: exact
-support-complexity inheritance, the dual-complexity threshold $\alpha>k/2$, and
-calibrated $\varepsilon$-band stability together identify a certified
-operational region for the same horizon law.
+Second, it proves a structural lower bound showing that the horizon is imposed
+by the drift geometry itself rather than by one particular estimator. A refined
+Gaussian lower-bound construction sharpens the constant-level geometry, and in
+the Gaussian location model the same object yields a full minimax benchmark on
+deterministic H\"older paths.
 
-Third, it formulates the broader noncanonical extension problem in the right
-way: not as a universal attempt to preserve the canonical root-$n$ regime, but
-as a geometry-specific inheritance problem in which different regular families
-or operational geometries support different carrier exponents and therefore
-different members of the same horizon family.
+Third, it isolates the closed structural ingredients for fixed-$\varepsilon$
+Sinkhorn geometry on an embedded fixed-span model and states the corresponding
+triangular-array horizon inheritance as an explicit conjecture.
 
-The paper therefore has one central arc: close the canonical regime, identify a
-certified operational frontier beyond it, and state the broader family-specific
-extension target that replaces a false universal one. Memory under drift is
-governed by the interaction between carrier geometry and temporal roughness, not
-by a single universal window prescription.
+Fourth, it formulates the broader family-level inheritance question: which
+regular distribution families and operational geometries support which
+finite-sample rates, and therefore which members of the horizon family.
+Memory under drift is governed by the interaction between finite-sample geometry
+and temporal roughness, not by a single universal window prescription.
 
-The theory is complemented by a structural lower bound. On the canonical carrier
-regime $a=1/2$, a Gaussian witness construction shows that the useful-memory
-scale is not merely the optimum of one procedure. The refined witness analysis
-also identifies the exact Gaussian testing frontier and shows that, for $H<1$,
-the usual ramp witness is not the lowest-energy endpoint-saturating H\"older
-shape: the profile $g_r^{\min}=h^H-(h-r)^H$ minimizes witness energy on that
-class and strictly improves the ramp constant. The same lower-bound mechanism therefore supplies both the structural
-exponent law and a sharper picture of the canonical regime. In the Gaussian
-location benchmark, the same geometry can be pushed one step further to give a
-full minimax rate statement on the deterministic H\"older class itself. Beyond
-that canonical benchmark, the broader theorem target is family-specific rather
-than universal: identify which regular distribution families or operational
-geometries support which carrier exponent $a$, and hence which member of the
-horizon family they realize.
-
-The empirical logic mirrors that arc. The paper first makes the basic
-variance--staleness trade-off visible through a finite-memory U-curve, then
-shows roughness-dependent horizon scaling, then maps the certified
-fixed-$\varepsilon$ Sinkhorn frontier, and finally exhibits a measurable
-invalidity gap between temporal validity and changepoint evidence. The central
-conceptual distinction is simple: temporal validity is not changepoint
-evidence. A detector can remain statistically silent while retained evidence is
-already stale for the present.
+The empirical section mirrors that structure. It makes the finite-memory U-curve
+visible, shows roughness-dependent horizon scaling, reports evidence relevant to
+the fixed-$\varepsilon$ Sinkhorn conjecture, and exhibits a measurable lag
+between validity loss and the first detector alarm. Temporal validity and
+changepoint evidence are different statistical objects: retained evidence can
+stop representing the present before change becomes detectable.
 
 This framing is adjacent to several literatures---dynamic regret, adaptive
 windowing, locally stationary smoothing, adaptive filtering, and distributional
@@ -104,8 +76,8 @@ estimating the present distribution before age becomes the dominant source of
 error?
 
 The paper proceeds as follows. \Cref{sec:finite_memory_under_drift} develops the
-carrier-roughness useful-memory horizon law, closes the canonical regime,
-formulates the operational frontier, and states the broader regular-family
-extension target. \Cref{sec:validation} presents the corresponding finite-sample
-evidence. \Cref{sec:related} discusses related work, and \Cref{sec:open}
-discusses scope, limitations, and open problems.
+general horizon law, drift-regularity bounds, a tractable proof model, a
+structural lower bound, and the benchmark and operational regimes.
+\Cref{sec:validation} presents the corresponding empirical signatures.
+\Cref{sec:related} discusses related work, and \Cref{sec:open} discusses
+scope, limitations, and open problems.

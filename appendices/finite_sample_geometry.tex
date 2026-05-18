@@ -1,11 +1,10 @@
-\section{Finite-Sample and Carrier-Regime Diagnostics}
+\section{Finite-Sample Diagnostics}
 \label{app:finite_sample_geometry}
 
-This appendix collects the numerical diagnostics that support the carrier side of
-the theory. These checks are not substitutes for the theorem statements. Their
-role is to show that the minimum-kernel, extended-regime, and operational-regime
-interpretations are consistent with the corresponding finite-sample experiment
-families.
+This appendix collects finite-sample diagnostics that support the theorem line
+and the conjectural extensions. These checks are not substitutes for theorem
+statements; they are part of the repository-backed provenance layer summarized in
+\cref{app:repository_guide}.
 
 \subsection{Finite-Sample Geometry Check}
 
@@ -15,36 +14,38 @@ dimension, then fit a log--log slope in $n$. We also probe the non-identically
 distributed fixed-span window directly in one dimension by comparing a
 triangular-array sample, with one draw from each drifted component, against an
 i.i.d. sample from the same window mixture. In that check the within-window span
-$\zeta n^H$ is held fixed, so the experiment targets the minimum-kernel carrier
-interpretation rather than a large-span regime in which heterogeneity itself can
+$\zeta n^H$ is held fixed, so the experiment targets the one-dimensional
+proof-model interpretation rather than a large-span regime in which heterogeneity itself can
 become dominant. Finally, we check the Sinkhorn proxy at a few fixed values of
 $\varepsilon$.
 
 \input{artifacts/tables/gaussian/finite_sample_geometry}
 
-This table supports the carrier interpretation used in the main text. In low
+This table supports the finite-sample interpretation used in the main text. In low
 dimension, the raw i.i.d. Wasserstein term is compatible with a root-$n$
-carrier, whereas higher-dimensional raw Wasserstein slows down. In the
+rate, whereas higher-dimensional raw Wasserstein slows down. In the
 one-dimensional fixed-span triangular-array check, the recovered slopes stay near
 the corresponding i.i.d. mixture baseline, which is consistent with the
-minimum-kernel and design-effect reading used in \cref{prop:minimum_kernel}.
+proof-model and design-effect reading used in \cref{prop:minimum_kernel}.
 
-\subsection{Extended and Operational Carrier Regimes}
+\subsection{Extended and Operational Regimes}
 
-The next table summarizes the broader regimes beyond the minimum kernel. The
-extended rows compare triangular and i.i.d. mixture carriers on embedded
-low-intrinsic-dimensional support across span. The operational rows compare
-fixed-$\varepsilon$ Sinkhorn carriers across regularization values on embedded
-low-intrinsic-dimensional support in ambient dimension eight.
+The next table summarizes broader finite-sample evidence beyond the
+one-dimensional proof model. The extended rows compare triangular and i.i.d.
+mixture rates on embedded low-intrinsic-dimensional support across span. The
+operational rows compare fixed-$\varepsilon$ Sinkhorn rates across
+regularization values on embedded low-intrinsic-dimensional support in ambient
+dimension eight.
 
 \input{artifacts/tables/conceptual/carrier_layers}
 
 These rows provide calibration for the theorem statements in the main text. The
 extended-regime rows support the claim that low intrinsic dimension preserves a
-carrier near the canonical $a=1/2$ regime without a dramatic
-triangular-versus-benchmark gap. The operational-regime rows supply the finite-
-sample calibration entering \cref{def:certified_operational_region}: together
-with exact support-complexity inheritance and the dual threshold $\alpha>k/2$,
-they isolate the certified fixed-$\varepsilon$ theorem frontier reported in
-\cref{cor:certified_operational_region}. What remains open is a full proof of
+rate near the root-$n$ regime without a dramatic
+triangular-versus-benchmark gap. The operational-regime rows supply empirical
+evidence relevant to the fixed-$\varepsilon$ operational setting in
+\cref{def:operational_setting}: together with exact
+support-complexity inheritance and the dual threshold $\alpha>k/2$, they
+support the conjectural inheritance statement discussed in
+\cref{conj:operational_sinkhorn_horizon}. What remains open is a full proof of
 triangular-array inheritance that removes this empirical calibration step.

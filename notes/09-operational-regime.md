@@ -1,100 +1,43 @@
-# 09. Operational Regime
+# 09. Operational Sinkhorn Extension
 Status: active
-Category: regime
+Category: conjecture
 Prev: 08. Extended Regime
 Next: 10. Paper Next Steps
 
-Operational-regime carrier theorem in its intended form, with the current
-empirical support made explicit.
+This note records the operational fixed-`epsilon` Sinkhorn extension in its
+current honest form.
 
-## Goal
+## Closed structural ingredients
 
-Obtain a measurement geometry whose carrier behavior is stable enough to feed
-the general carrier-roughness horizon law in regimes where raw `W_2` is too
-fragile or too dimension-sensitive.
+- iid fixed-`epsilon` benchmark results exist in the literature;
+- support-complexity inheritance is exact on the embedded fixed-span model;
+- the dual smoothness threshold is `alpha > k/2`.
 
-The current target is fixed-`epsilon` debiased Sinkhorn on low-intrinsic-dimensional support.
+These ingredients are theorem-level within the model used by the paper.
 
-## Operational-regime theorem form
+## Conjecture
 
-Let `S_{\epsilon}` denote a fixed-`epsilon` debiased Sinkhorn divergence.
+The full missing step is triangular-array horizon inheritance:
 
-The intended theorem form is:
+- `E S_epsilon(\hat P_{t,tri}^{(n)}, \bar P_t^{(n)}) <= C_epsilon n^{-a_epsilon}`
 
-- under bounded support and fixed span;
-- in a regime where the support has low intrinsic dimension;
-- the triangular-window carrier under `S_{\epsilon}` has the same effective exponent as the i.i.d. mixture benchmark up to a constant-level gap.
+with the same exponent as the iid benchmark on the relevant regularization band.
 
-In symbols, the intended form is
+If that conjecture holds, it feeds the general horizon law exactly as any other
+finite-sample exponent does.
 
-`E S_{\epsilon}(\hat P_{t,tri}^{(n)}, \bar P_t^{(n)}) <= C_{tri,\epsilon} n^{-a_\epsilon}`
+## Current evidence
 
-with the benchmark satisfying
+On the tested embedded fixed-span grids:
 
-`E S_{\epsilon}(\hat P_{t,iid}^{(n)}, \bar P_t^{(n)}) <= C_{iid,\epsilon} n^{-a_\epsilon}`
+- triangular and iid slope estimates remain close;
+- changing `epsilon` mainly changes constants;
+- no qualitative exponent collapse appears on the reported bands.
 
-for the same effective exponent `a_\epsilon` in the regime under study.
+## Paper status
 
-## Why this regime belongs to the paper
+The paper should present:
 
-The operational regime is where the general law becomes usable beyond raw `W_2`
-regimes where dimensional barriers are severe.
-
-The paper does not need this regime to be fully closed in order to have a
-complete central contribution. But it does need a clear theorem form and a clear
-statement of what the present evidence actually supports.
-
-## Current empirical support
-
-On embedded `k = 1` support inside `ambient_dim = 8`, the measured triangular and i.i.d. slopes remain close across `epsilon` values.
-
-Representative signal:
-
-- `epsilon = 0.50`: triangular and i.i.d. slopes are close;
-- `epsilon = 0.20`: same qualitative behavior;
-- `epsilon = 0.10`: same qualitative behavior;
-- `epsilon = 0.05`: same qualitative behavior.
-
-In a larger sweep on `ambient_dim = 8`, `intrinsic_dim = 1`, the same pattern
-appears numerically as:
-
-- `epsilon = 0.50` -> triangular `a \approx 0.460`, i.i.d. `a \approx 0.527`;
-- `epsilon = 0.20` -> triangular `a \approx 0.459`, i.i.d. `a \approx 0.531`;
-- `epsilon = 0.10` -> triangular `a \approx 0.451`, i.i.d. `a \approx 0.534`;
-- `epsilon = 0.05` -> triangular `a \approx 0.449`, i.i.d. `a \approx 0.534`.
-
-Across those sweeps, the main signature is:
-
-- triangular and i.i.d. exponents stay close;
-- changing `epsilon` primarily moves constants;
-- there is no clear qualitative phase change across the tested `epsilon` values.
-
-That is the right operational-regime sign, even though it is not yet a proof.
-
-## Current status
-
-This is the intended full theorem form for the operational regime.
-At present it remains a theorem-shaped regime statement supported by evidence,
-not a closed theorem.
-
-## What should be claimed now
-
-The current paper can honestly claim:
-
-- fixed-`epsilon` Sinkhorn is a plausible operational geometry for the general law;
-- the current sweeps show carrier stability signatures rather than a collapse of exponent;
-- the operational regime is empirically consistent with the useful-memory horizon framework.
-
-## What should not be claimed now
-
-The current paper should not claim:
-
-- that fixed-`epsilon` Sinkhorn is already a closed carrier theorem;
-- that it universally restores the statistical carrier in arbitrary dimension;
-- that `epsilon` has been optimized or characterized sharply.
-
-Those are later operational-regime results, not current theorems.
-
-## Source map
-
-- `code/useful_memory_horizon/carrier_roughness_research.py`: experiment harness for the broader carrier sweeps.
+- the closed structural ingredients as theorem-level statements;
+- the full inheritance claim as a conjecture;
+- the calibration grid as empirical evidence only.
