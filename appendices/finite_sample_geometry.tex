@@ -1,28 +1,24 @@
-\section{Finite-Sample Diagnostics}
-\label{app:finite_sample_geometry}
+\section{Finite-Sample Diagnostics}\label{app:finite_sample_geometry}
 
 This appendix collects finite-sample diagnostics that support the theorem line
 and the conjectural extensions. These checks are not substitutes for theorem
-statements; they are part of the repository-backed provenance layer summarized in
-\cref{app:repository_guide}.
+statements.
 
 \subsection{Finite-Sample Geometry Check}
 
 For the finite-sample term, we estimate empirical $W_2$ between two i.i.d.
 samples from the same distribution using exact assignment in low and moderate
-dimension, then fit a log--log slope in $n$. We also probe the non-identically
-distributed fixed-span window directly in one dimension by comparing a
-triangular-array sample, with one draw from each drifted component, against an
-i.i.d. sample from the same window mixture. In that check the within-window span
-$\zeta n^H$ is held fixed, so the experiment targets the one-dimensional
-proof-model interpretation rather than a large-span regime in which heterogeneity itself can
-become dominant. Finally, we check the Sinkhorn proxy at a few fixed values of
+dimension, then fit a log--log slope in $n$. We also probe the fixed-span
+one-dimensional triangular window directly by comparing a triangular-array
+sample, with one draw from each drifted component, against an i.i.d. sample from
+the same window mixture. In that check the within-window span $\zeta n^H$ is
+held fixed. Finally, we check the Sinkhorn proxy at a few fixed values of
 $\varepsilon$.
 
 \input{artifacts/tables/gaussian/finite_sample_geometry}
 
-This table supports the finite-sample interpretation used in the main text. In low
-dimension, the raw i.i.d. Wasserstein term is compatible with a root-$n$
+This table supports the finite-sample interpretation used in the main text. In
+low dimension, the raw i.i.d. Wasserstein term is compatible with a root-$n$
 rate, whereas higher-dimensional raw Wasserstein slows down. In the
 one-dimensional fixed-span triangular-array check, the recovered slopes stay near
 the corresponding i.i.d. mixture baseline, which is consistent with the
@@ -41,11 +37,10 @@ dimension eight.
 
 These rows provide calibration for the theorem statements in the main text. The
 extended-regime rows support the claim that low intrinsic dimension preserves a
-rate near the root-$n$ regime without a dramatic
-triangular-versus-benchmark gap. The operational-regime rows supply empirical
-evidence relevant to the fixed-$\varepsilon$ operational setting in
-\cref{def:operational_setting}: together with exact
-support-complexity inheritance and the dual threshold $\alpha>k/2$, they
-support the conjectural inheritance statement discussed in
+rate near the root-$n$ regime without a dramatic triangular-versus-benchmark
+gap. The operational-regime rows supply empirical evidence relevant to the
+fixed-$\varepsilon$ operational setting in \cref{def:operational_setting}:
+together with exact support-complexity inheritance and the dual threshold
+$\alpha>k/2$, they support the conjectural inheritance statement discussed in
 \cref{conj:operational_sinkhorn_horizon}. What remains open is a full proof of
 triangular-array inheritance that removes this empirical calibration step.
