@@ -132,9 +132,9 @@ Broader theory:
 Operational extension:
 - Fixed-`epsilon` Sinkhorn is an operational geometry, not a surrogate raw-`W_2` theorem.
 - Closed structural ingredients: iid MID/LCA benchmark structure, exact support-complexity inheritance in the embedded fixed-span model, and dual threshold `alpha > k/2`.
-- A pointwise one-dimensional fixed-`epsilon` inheritance theorem is now written in the manuscript on the proof-model class: compact support + Proposition 2.4 + iid null debiased-Sinkhorn theory + algebraic transfer of Eckstein-Nutz value stability give `E S_epsilon(Phat_tri, Pbar) = O(n^{-1/2})` for each fixed `epsilon>0`.
-- Current synthetic evidence (`alpha=2`, span `0.25`): maximal observed stable bands `0.5` for `(8,1)`, `(8,2)`, `(12,2)` and `0.2` for `(12,1)`; a denser `epsilon` sweep preserves the same band maxima while exposing a small mixed boundary region.
-- The full embedded-model triangular-array Sinkhorn horizon inheritance remains conjectural, not theorem-level; the current faithful diagnostics support only bandwise stability, and the remaining gap is the genuinely operational one: uniform control over nontrivial `epsilon`-bands and higher-dimensional intrinsic classes, not the pointwise fixed-`epsilon` 1D case.
+- Pointwise and bandwise one-dimensional fixed-`epsilon` inheritance theorems are now written in the manuscript on the proof-model class: compact support + Proposition 2.4 + iid null debiased-Sinkhorn theory + algebraic transfer of Eckstein-Nutz value stability give `E S_epsilon(Phat_tri, Pbar) = O(n^{-1/2})` for each fixed `epsilon>0`, and the same constants are uniform on compact `epsilon`-bands.
+- Current synthetic evidence (`alpha=2`, span `0.25`): maximal observed stable bands `0.5` for `(8,1)`, `(8,2)`, `(12,2)` and `0.2` for `(12,1)`; a denser `epsilon` sweep preserves the same band maxima while exposing a small mixed boundary region, and a compact-band fixed-support diagnostic script now reproduces the uniform-band 1D behavior directly.
+- The full embedded-model triangular-array Sinkhorn horizon inheritance remains conjectural, not theorem-level; the remaining gap is the genuinely operational one: uniform control over nontrivial `epsilon`-bands in the embedded/high-dimensional setting.
 
 Empirical layer:
 - The empirical core should stay lean: U-curve, roughness scaling, operational regime map, and validity loss before detector alarm.

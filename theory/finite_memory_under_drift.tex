@@ -687,9 +687,39 @@ by \citet[Thm.~5.1, after fixed-$\varepsilon$ rescaling]{delBarrioEtAl2023}; see
 $O(n^{-1/2})$ rate.
 \end{proof}
 
+\begin{proposition}[Bandwise fixed-$\varepsilon$ inheritance in the 1D proof model]
+\label{prop:bandwise_sinkhorn_1d}
+Let $\mathcal B=[\varepsilon_{\min},\varepsilon_{\max}]\subset(0,\infty)$ be a
+compact regularization band. Under the hypotheses of
+\cref{prop:pointwise_sinkhorn_1d} on a common compact support class, there exists
+$C_{\mathcal B}<\infty$ such that
+\[
+  \sup_{\varepsilon\in\mathcal B}
+  \mathbb E\,S_{\varepsilon}\!\left(\widehat P_n^{\mathrm{tri}},\bar P_n\right)
+  \le C_{\mathcal B} n^{-1/2}.
+\]
+Consequently, the induced horizon scale is uniform on $\mathcal B$:
+\[
+  \sup_{\varepsilon\in\mathcal B} n_{\varepsilon}^*(H)
+  \asymp (C_{\mathcal B}/\zeta)^{1/(H+1/2)}.
+\]
+\end{proposition}
+
+\begin{proof}
+Repeat the proof of \cref{prop:pointwise_sinkhorn_1d}. The stability constant
+$L_{\varepsilon}$ from \citet[Thm.~3.7(ii), Ex.~3.4]{EcksteinNutz2022} is bounded
+on $\mathcal B$ because all measures live in one compact support class and
+$\varepsilon\ge\varepsilon_{\min}>0$. The i.i.d. debiased-Sinkhorn benchmark on
+compact support is also uniform on $\mathcal B$ by the fixed-$\varepsilon$
+asymptotics of \citet{GoldfeldEtAl2022} and the compact-support null bounds of
+\citet[Thm.~5.1, after fixed-$\varepsilon$ rescaling]{delBarrioEtAl2023}. Since
+the triangular-to-i.i.d. $W_2$ comparison is independent of $\varepsilon$, the
+constants in the pointwise proof can be chosen uniformly over $\mathcal B$.
+\end{proof}
+
 \begin{conjecture}[Bandwise fixed-$\varepsilon$ Sinkhorn horizon inheritance]
 \label{conj:operational_sinkhorn_horizon}
-Beyond the one-dimensional fixed-$\varepsilon$ result above, assume the fixed-$\varepsilon$ operational setting from
+Beyond the one-dimensional fixed-$\varepsilon$ band result above, assume the fixed-$\varepsilon$ operational setting from
 \cref{def:operational_setting}. Then, on bands where the i.i.d.
 benchmark stays in the parametric Sinkhorn regime, the triangular-array
 finite-sample term should satisfy

@@ -22,6 +22,7 @@ umh-research-glue-bahadur-residual = "useful_memory_horizon.glue_theorem_bahadur
 umh-research-smooth-fixed-support-bahadur = "useful_memory_horizon.smooth_fixed_support_bahadur:main"
 umh-research-smooth-fixed-support-sinkhorn = "useful_memory_horizon.smooth_fixed_support_sinkhorn:main"
 umh-research-bandwise-sinkhorn-frontier = "useful_memory_horizon.bandwise_sinkhorn_frontier:main"
+umh-research-bandwise-fixed-support-sinkhorn = "useful_memory_horizon.bandwise_fixed_support_sinkhorn:main"
 umh-research-glue-minimal = "useful_memory_horizon.glue_theorem_minimal:main"
 umh-research-holder-lower-bound = "useful_memory_horizon.holder_lower_bound_research:main"
 umh-research-sharp-family = "useful_memory_horizon.sharp_family:main"
