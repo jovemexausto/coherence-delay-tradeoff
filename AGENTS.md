@@ -104,10 +104,7 @@ At the end of every turn, update the persistent project state inside `AGENTS.md`
 Project status:
 - Core object: temporal-validity horizon for finite-memory tracking under drift, with formal law `E d(\widehat P_t^{(n)},P_t) <= C_K n^{-a} + C_S zeta n^H` and optimizer `n^*(a,H) ~ (C_K/zeta)^{1/(a+H)}`; `useful memory` remains a controlled interpretive label for the same horizon-scale object.
 - Closed theory: abstract upper law; exact uniform-window staleness constant; 1D bounded-support fixed-span root-`n` proof model; Gaussian lower-bound exponent law; Gaussian location minimax benchmark; Gaussian ramp/endpoint constants.
-- Operational status: fixed-`epsilon` Sinkhorn is theorem-level in the 1D compact-support class and conjectural in the embedded/high-dimensional bandwise Sinkhorn setting.
 - Open blockers: embedded bandwise Sinkhorn inheritance; a verified bounded-support Bahadur remainder class; broader regular-family inheritance; sharper first-moment constants; lower theory beyond root-`n`.
-- Empirical essentials: interior memory optimum, roughness scaling, moderate-band Sinkhorn stability, validity loss before detector alarm.
-- Manuscript status: abstract now emphasizes object, tradeoff, benchmark evidence, and takeaway; the introduction now presents the formal law more directly.
 <!-- PROJECT_STATE_END -->
 
 The project state must:

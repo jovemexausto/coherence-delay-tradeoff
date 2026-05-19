@@ -1,6 +1,18 @@
 \begin{abstract}
-We study the temporal validity of retained evidence for finite-memory distribution tracking under drift. Expected tracking error is controlled by a tradeoff between finite-sample accuracy and drift-induced staleness, so that longer memory reduces sampling noise while increasing age mismatch with the present distribution. This balance induces a finite temporal-validity horizon and an optimal memory scale $n^*(a,H)\asymp (C_K/\zeta)^{1/(a+H)}$, where the finite-sample rate exponent $a$ and the temporal roughness exponent $H$ determine how quickly the horizon expands or contracts. We establish this horizon in a tractable one-dimensional proof model, and a Gaussian lower bound shows that the phenomenon is structural rather than estimator-specific. The experiments exhibit the predicted interior memory optimum, roughness-dependent scaling, and a measurable lag between validity loss and the first changepoint alarm. Under drift, retained evidence can stop representing the present before change becomes statistically detectable.
-
+We investigate the fundamental limits of tracking an evolving distribution under
+temporal drift. At the core of this problem lies a critical trade-off: longer memory
+reduces finite-sample estimation noise but introduces staleness due to an increasing
+age mismatch with the present state. This balance is formalized by defining a finite
+temporal-validity horizon and demonstrating that the optimal memory scale satisfies
+$n^*(a,H) \asymp (C_K/\zeta)^{1/(a+H)}$, where the finite-sample rate exponent $a$ and
+the temporal roughness exponent $H$ govern the expansion and contraction of this validity
+horizon. These theoretical limits are then established within a tractable one-dimensional framework,
+leveraging a Gaussian lower bound to prove that this boundary is structural rather than
+estimator-specific. Finally, empirical evaluations confirm the predicted interior memory
+optima and roughness-dependent scaling. Notably, our results reveal a measurable lag
+between the loss of temporal validity and the activation of standard changepoint alarms,
+proving that under drift, retained evidence can cease to represent the present long before
+a distribution change becomes statistically detectable.
 \end{abstract}
 
 \bigskip
@@ -8,4 +20,4 @@ We study the temporal validity of retained evidence for finite-memory distributi
 tracking under drift; temporal validity; finite-memory estimation;
 distribution tracking; Wasserstein distance; Sinkhorn divergence.
 
-\noindent\textbf{MSC~2020:} 93D05, 93D30, 68P99.
+\noindent\textbf{MSC 2020:} 93D05, 93D30, 68P99.
