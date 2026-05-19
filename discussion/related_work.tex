@@ -14,7 +14,7 @@ regret analysis; it is the statistical object being characterized.
 Adaptive-window and concept-drift methods ask when accumulated evidence is
 sufficient to react \citep{BifetGavalda2007,Gama2004,GamaSurvey2014}.
 \citet{hinder2023window} emphasize that the relevant window scale is itself part
-of the problem. The present question is adjacent but distinct. Temporal validity
+of the problem. The question studied here is adjacent but distinct. Temporal validity
 is not changepoint evidence: memory can stop representing the present before the
 available data support a detector alarm. In that sense, the object here is the
 validity horizon of retained evidence rather than the stopping time of a
@@ -58,24 +58,24 @@ Stromme2023MID,GroppeHundrieser2024LCA,EcksteinNutz2022,GhosalNutzBernton2022}.
 That perspective is exactly why fixed-$\varepsilon$ Sinkhorn is treated here as
 an operational geometry rather than as a surrogate for the raw $W_2$ theorem.
 Regularization can induce a usable finite-sample regime on which a
-finite-memory horizon law still makes sense. What is closed in this literature
-is the i.i.d. setting: sample-complexity and limit theory for fixed marginals,
+finite-memory horizon law still makes sense. In the i.i.d. setting, this
+literature provides sample-complexity and limit theory for fixed marginals,
 including fixed-$\varepsilon$ differentiability and CLTs for the Sinkhorn
 divergence \citep{GoldfeldEtAl2022}, intrinsic- or lower-complexity adaptation,
 and quantitative stability of regularized transport and Sinkhorn iteration.
 Recent Gaussian entropic-OT analyses also make the regularized geometry more
-explicit in linear-Gaussian settings \citep{AkyildizEtAl2024}. What remains
-open here is a drifted triangular-array theorem that combines sampling,
-staleness, and optimization control in one horizon law. Recent geometry-aware
+explicit in linear-Gaussian settings \citep{AkyildizEtAl2024}. A corresponding
+drifted triangular-array theorem that combines sampling, staleness, and
+optimization control in one horizon law is not yet available. Recent geometry-aware
 calibration work also points toward intrinsic-dimension-based selection of
 regularization scales, which is relevant to identifying operational
-$\varepsilon$-bands in practice \citep{GenansWintenberger2026}. A minimal-
-neighborhood route to the same calibration problem is local intrinsic-dimension
-estimation; TwoNN estimates intrinsic dimension from first- and second-neighbor
-distances and is exact under local uniformity, making it a natural proxy for the
-effective support geometry that governs the operational band
-\citep{FaccoEtAl2017}. The remaining open step is the bandwise triangular-array
-theorem with constants controlled on the operational band of interest.
+$\varepsilon$-bands in practice \citep{GenansWintenberger2026}. A concrete
+minimal-neighborhood route to the same calibration problem is local intrinsic-dimension
+estimation. TwoNN provides a natural proxy for effective local support geometry and,
+in the synthetic frontier studied here, a regime-selection diagnostic for operational bands
+\citep{FaccoEtAl2017}.
+A bandwise triangular-array theorem with constants controlled on the operational
+band of interest would connect that i.i.d. theory to the finite-memory horizon law.
 
 \paragraph{Projection-based and low-dimensional proxy geometries.}
 Sliced, max-sliced, subspace-robust, and projection-robust Wasserstein
@@ -96,8 +96,8 @@ drift-aware weighting questions in Wasserstein distributionally robust
 optimization \citep{KeehanAndersonWiesemann2025}. Amini and Vinas give a recent
 moment-method route to triangular-array concentration in $W_1$
 \citep{AminiVinas2026}. Those results are adjacent to the finite-sample-regime issue
-studied here, but they do not by themselves close the present $W_2$
-window-mixture concentration problem. The present focus is narrower and more
+studied here, but they do not by themselves close the $W_2$
+window-mixture concentration problem studied here. The focus is narrower and more
 structural: for finite-memory tracking, when does retained evidence stop helping
 because temporal age has become a dominant source of error?
 

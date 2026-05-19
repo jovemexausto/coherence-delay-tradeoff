@@ -4,8 +4,8 @@ The empirical section makes the theory visible in finite samples. The aim is
 to exhibit the main observable signatures of the temporal-validity horizon and
 to report evidence relevant to the fixed-$\varepsilon$ Sinkhorn conjecture.
 
-All experiments in this section are synthetic and fully specified by the code in
-the repository. The Gaussian U-curve uses 20 Monte Carlo seeds; the
+All experiments in this section are synthetic and fully specified by the stated
+data-generating designs. The Gaussian U-curve uses 20 Monte Carlo seeds; the
 roughness-family sweep uses 12 seeds across the stated H\"older envelopes; the
 fixed-$\varepsilon$ operational map is calibrated from log--log finite-sample
 fits over sample sizes $(24,48,96,160)$ on the ambient/intrinsic pairs $(8,1)$,
@@ -74,9 +74,9 @@ horizon logic of \cref{cor:optimized_horizon}.
 The fixed-$\varepsilon$ Sinkhorn experiments address the bandwise question: when
 a practical geometry is used in place of raw $W_2$, does the finite-sample term
 remain stable enough for the conjectured horizon law to stay informative? The
-pointwise one-dimensional fixed-support statement appears in
-Proposition~\ref{prop:pointwise_sinkhorn_1d}; the calibrated embedded fixed-span
-model shows the regime map.
+pointwise and bandwise one-dimensional fixed-support statements appear in
+\cref{prop:pointwise_sinkhorn_1d,prop:bandwise_sinkhorn_1d}; the calibrated embedded fixed-span model shows
+the regime map for the broader conjectural setting.
 
 The figure below concerns fixed-$\varepsilon$ Sinkhorn geometry on embedded
 low-intrinsic-dimensional support. It shows that the corresponding finite-sample
@@ -88,6 +88,16 @@ the bandwise conjecture in \cref{conj:operational_sinkhorn_horizon}. In the
 calibrated fixed-span model with $\alpha=2$ and span $0.25$, the maximal
 observed stable bands are $\varepsilon_{\max}=0.5$ for $(d,k)=(8,1)$,
 $(8,2)$, and $(12,2)$, and $\varepsilon_{\max}=0.2$ for $(12,1)$.
+
+The same synthetic family also separates two mechanisms. Raw $W_2$ comparison
+between the triangular and i.i.d. empirical measures slows once intrinsic
+dimension increases, so the embedded fixed-$\varepsilon$ statement does not
+follow from the available $W_2$ transfer route. Direct Jacobian probes of the
+centered Sinkhorn scaling map instead isolate a moderate-band regime: on
+$\varepsilon\in[0.2,0.8]$, the cross-coupling block stays contractive, while
+the self-coupling blocks are the main source of instability but appear
+numerically to plateau with sample size rather than deteriorate. This is
+evidence about mechanism, not a theorem.
 
 \begin{figure}[!htbp]
 \centering
@@ -102,20 +112,21 @@ region on the tested grid.}
 \end{figure}
 
 This map gives the shape of the empirical support behind the bandwise conjecture.
-The observed operational region is neither empty nor uniform across settings; the
-calibration details and supporting tables are kept in
+The observed operational region is neither empty nor uniform across settings;
+the calibration details and supporting tables are kept in
 \cref{app:finite_sample_geometry}. The tested grid exhibits a stable operational
-core, and the bandwise inheritance law is conjectural outside the calibrated
-fixed-span settings shown here.
+core, with the strongest support on moderate bands bounded away from zero, and
+the bandwise inheritance law is conjectural outside the calibrated fixed-span
+settings shown here.
 
 To probe whether the frontier is controlled more by local intrinsic geometry than
-by the ambient coordinate count, the repository also computes a TwoNN-based
-estimate of the effective intrinsic dimension on the same synthetic frontier
-family. On the tested grid, that estimate predicts the stable-band cutoff
-better than ambient dimension and improves the binary cut at \(\varepsilon=0.2\),
-while the rowwise stability pattern remains mixed; the point is therefore
-regime selection by estimated local geometry, not a universal replacement for
-the theorem-level band analysis \citep{FaccoEtAl2017}.
+by the ambient coordinate count, we estimate the effective intrinsic dimension
+with TwoNN on the same synthetic frontier family. On the nine-pair,
+six-$\varepsilon$ grid studied here, the resulting \(\hat{k}\) predicts the stable-band
+cutoff better than ambient dimension and improves the binary cut at
+\(\varepsilon=0.2\). The rowwise stability pattern remains mixed, so TwoNN enters
+here as a regime-selection diagnostic driven by estimated local geometry rather
+than as a replacement for the theorem-level band analysis.
 
 \subsection{Validity Loss Before Detector Alarm}\label{sec:validation_invalidity_gap}
 
@@ -158,5 +169,6 @@ Taken together, the experiments support four claims that match the theory.
 Finite-memory tracking exhibits a structural U-curve rather than an ever-growing
 memory benefit. The temporal-validity horizon is roughness dependent. The
 fixed-$\varepsilon$ Sinkhorn conjecture receives structured empirical support on
-the tested grid. Temporal validity can fail before changepoint evidence appears,
-producing a measurable validity-detection lag.
+the tested grid, with the strongest evidence concentrated on moderate
+bands bounded away from zero. Temporal validity can fail before changepoint
+evidence appears, producing a measurable validity-detection lag.

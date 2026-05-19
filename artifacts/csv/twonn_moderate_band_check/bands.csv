@@ -1,0 +1,9 @@
+ambient_dim,estimated_k,coupling,max_inverse_norm_over_band,mean_inverse_norm_over_band,epsilon_count
+8,1,triangular,4.5320922,2.60240026,6
+8,1,iid,4.4474313,2.56263133,6
+8,2,triangular,4.81499392,2.72869986,6
+8,2,iid,4.82515728,2.72963324,6
+12,1,triangular,4.48510768,2.58021897,6
+12,1,iid,4.43598086,2.55685315,6
+12,2,triangular,4.81617602,2.73182323,6
+12,2,iid,4.78259718,2.71316651,6

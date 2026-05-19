@@ -576,10 +576,9 @@ Combining the two sides proves the theorem.
 \subsection{Benchmark and Operational Regimes}
 
 The one-dimensional proof model is the first rigorous finite-sample
-instantiation. Two broader settings matter for scope: a Gaussian benchmark in
-which the law is closed on a full path class, and an operational Sinkhorn regime
-in which some structural ingredients are closed but the full inheritance theorem
-remains conjectural.
+instantiation. Two broader settings matter for scope: a Gaussian benchmark on a
+full path class, and an operational Sinkhorn regime in which structural
+ingredients are proved but the full inheritance theorem is conjectural.
 
 \paragraph{Operational regime.}
 For fixed-$\varepsilon$ debiased Sinkhorn, the question is whether a practical
@@ -592,9 +591,8 @@ model. The intended theorem shape is
 under bounded support, fixed span, and structural low-dimensionality, where
 $S_{\varepsilon}$ denotes a fixed-$\varepsilon$ Sinkhorn-type geometry and the
 exponent $a_{\varepsilon}$ matches the corresponding i.i.d. mixture benchmark.
-The manuscript does not prove that theorem in full generality. What is closed is
-the structural part of the setup. What remains open is the full triangular-array
-inheritance statement.
+The structural part of this setup is proved, but the full triangular-array
+inheritance statement is not.
 
 \begin{definition}[Fixed-$\varepsilon$ operational setting]
 \label{def:operational_setting}
@@ -752,10 +750,12 @@ regularization band. That evidence motivates the broader conjecture, but it does
 not close the bandwise embedded-model statement as a theorem. Additional
 one-dimensional smooth fixed-support diagnostics show that triangular and i.i.d.
 fitted exponents can agree closely on some fixed-$\varepsilon$ bands, but the
-agreement is not uniform across the tested roughness levels. What remains open
-beyond \cref{prop:pointwise_sinkhorn_1d} is the genuinely operational step:
-uniform control across a nontrivial $\varepsilon$-band and higher-dimensional
-embedded classes.
+agreement is not uniform across the tested roughness levels. The unresolved
+operational step beyond \cref{prop:pointwise_sinkhorn_1d} is uniform control
+across a nontrivial $\varepsilon$-band and higher-dimensional embedded classes.
+Direct Jacobian diagnostics concentrate that difficulty on moderate compact
+bands bounded away from zero, where the cross-coupling block stays stable and
+the self-coupling derivative blocks dominate the instability.
 
 \paragraph{Regular-family inheritance.}
 The broader extension question is whether regular dominated families inherit the
@@ -801,7 +801,7 @@ $a=\alpha/2$, giving the horizon scale
 \]
 \end{conjecture}
 
-Regular dominated families are the natural theorem targets. Support-changing and
+Regular dominated families are the natural extension class. Support-changing and
 singular families remain genuine obstruction classes, so transport-H\"older
 control alone is too weak to support a single blanket extension theorem.
 

@@ -42,5 +42,17 @@ gap. The operational-regime rows supply empirical evidence relevant to the
 fixed-$\varepsilon$ operational setting in \cref{def:operational_setting}:
 together with exact support-complexity inheritance and the dual threshold
 $\alpha>k/2$, they support the conjectural inheritance statement discussed in
-\cref{conj:operational_sinkhorn_horizon}. What remains open is a full proof of
-triangular-array inheritance that removes this empirical calibration step.
+\cref{conj:operational_sinkhorn_horizon}. A full proof of triangular-array
+inheritance would remove this empirical calibration step.
+
+Two complementary diagnostics sharpen the same boundary. First, direct probes of
+the centered Sinkhorn scaling Jacobian on the embedded fixed-span model show
+that bands approaching zero are the numerically unstable region, whereas on a
+moderate band such as $[0.2,0.8]$ the cross-coupling block remains contractive
+and the self-coupling inverse norms appear to plateau with sample size. Second,
+on the supported synthetic frontier grid, TwoNN-based intrinsic-dimension
+estimates predict the observed stable-band cutoff better than ambient dimension.
+These diagnostics identify a useful regime proxy and isolate the band where the
+remaining instability is concentrated.
+they do not upgrade the embedded fixed-$\varepsilon$ statement from conjecture
+to theorem.

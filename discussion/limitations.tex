@@ -1,7 +1,7 @@
 \section{Limitations and Scope}\label{sec:open}
 
 The central object is the temporal-validity horizon for finite-memory
-tracking under drift. The main closed results are the general horizon law, the
+tracking under drift. The main theorem-level results are the general horizon law, the
 uniform-window staleness bound, the one-dimensional root-$n$ proof model, the
 structural Gaussian lower bound at the exponent level, and the Gaussian
 location minimax benchmark. Other parts of the text are intentionally
@@ -19,8 +19,11 @@ general raw-$W_2$ triangular-array theorem in arbitrary dimension.
 For fixed-$\varepsilon$ Sinkhorn, the structural ingredients of the embedded
 fixed-span model are proved, and the full triangular-array inheritance law is
 stated as a conjecture. Exact support-complexity inheritance and the dual
-threshold $\alpha>k/2$ are closed; the remaining step is the full theorem
+threshold $\alpha>k/2$ are proved; the unresolved statement is the full theorem
 connecting the triangular-array finite-sample term to the i.i.d. benchmark.
+The numerical evidence is strongest on moderate compact bands bounded away from
+zero, where direct Jacobian probes remain stable; that evidence does not close
+the theorem.
 
 \paragraph{Family-level scope.}
 No blanket extension is claimed here to every deterministic
@@ -33,9 +36,10 @@ with comparable local testing structure.
 \paragraph{Lower-bound scope.}
 The structural lower bound is subclass based. The Gaussian construction is
 enough to show that, in the root-$n$ regime, the horizon is structural rather
-than an artifact of a particular estimator. What remains open is class-tightness
-and constant-sharpness for broader deterministic H\"older path classes and for
-finite-sample regimes beyond $a=1/2$. The refined Gaussian geometry sharpens the
+than an artifact of a particular estimator. Class-tightness
+and constant-sharpness are still unresolved for broader deterministic
+H\"older path classes and for finite-sample regimes beyond $a=1/2$. The
+refined Gaussian geometry sharpens the
 constants available within that lower-bound program, but it does not close the
 full distributional lower theory.
 
@@ -65,7 +69,10 @@ theorem across detector classes.
 
 \paragraph{Open problems.}
 Each open question below asks for a theorem or construction that would enlarge
-the theory in a scientifically meaningful direction.
+the theory in a scientifically meaningful direction. The one-dimensional
+compact-band fixed-$\varepsilon$ problem does not appear in this list because
+\cref{prop:bandwise_sinkhorn_1d} already settles it; the open operational issue
+is the embedded bandwise theorem.
 
 \paragraph{Problem 1: sharp finite-sample constants in the proof model.}
 The one-dimensional proof model identifies the correct exponent, but not the
@@ -75,7 +82,7 @@ term, rather than only an $O(n^{-1/2})$ rate. Solving this would sharpen the
 predicted memory scale inside the first fully proved regime.
 
 \paragraph{Problem 2: lower theory beyond the root-$n$ regime.}
-The current structural lower bound is matched to the root-$n$ finite-sample
+The structural lower bound proved above is matched to the root-$n$ finite-sample
 regime. The open question is to identify least-favorable constructions for other
 finite-sample exponents $a$, especially in geometries where empirical transport
 has slower dimension-dependent behavior. This is the main unresolved step if the
@@ -87,7 +94,7 @@ A regular-family inheritance principle is stated, but not yet proved
 it for a broad dominated class. The open problem is to characterize conditions
 under which local testing geometry and metric geometry together imply a horizon
 law with finite-sample exponent $a=\alpha/2$ and staleness exponent $\alpha H$.
-This would turn the present heuristic extension principle into a genuine family-
+This would turn the extension principle above into a genuine family-
 level theorem.
 
 \paragraph{Problem 4: class-tight distributional lower bounds.}
@@ -95,7 +102,7 @@ The Gaussian construction shows that the horizon is structural, but it does not
 yet deliver class-tight lower bounds for broad deterministic path classes. The
 open problem is to determine whether the Gaussian benchmark already captures the
 correct lower rate for larger regular classes, or whether broader constructions
-are needed. This question is central to understanding how universal the present
+are needed. This question is central to understanding how universal the
 exponent law really is.
 
 \paragraph{Problem 5: a full Gaussian-scale lower theorem.}
@@ -111,12 +118,13 @@ The one-dimensional fixed-$\varepsilon$ theory on compact support yields a
 uniform band law on compact $\varepsilon$-intervals. The open problem is the
 embedded-model theorem: uniform control of the debiased Sinkhorn rate across a
 nontrivial $\varepsilon\in\mathcal B$ band, with drift, sampling, and
-optimization error all controlled simultaneously. Extending the argument to a
-nontrivial operational band and higher-dimensional intrinsic classes is the
-cleanest route to a theorem-level extension.
+optimization error all controlled simultaneously. The numerical evidence is
+strongest on moderate bands such as $\mathcal B\subset[0.2,0.8]$, where the
+main unresolved step is uniform control
+of the self-coupling derivative blocks rather than the cross-coupling block.
 
 \paragraph{Problem 7: optimal weighting beyond uniform windows.}
-The current theory is built around uniform windows, with only brief discussion of
+The analysis is built around uniform windows, with only brief discussion of
 other weighting schemes. The open question is whether non-uniform weights can do
 more than change constants: can they improve the horizon law itself on some path
 classes, or is the exponent stable under broad classes of memory shapes? A good

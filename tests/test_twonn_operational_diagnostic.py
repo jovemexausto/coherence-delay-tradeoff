@@ -9,6 +9,20 @@ from useful_memory_horizon.twonn_operational_diagnostic import (
 
 
 class TwoNNOperationalDiagnosticTest(unittest.TestCase):
+    def test_default_operational_diagnostic_prefers_twonn(self) -> None:
+        result = compare_twonn_to_ambient_on_operational_frontier()
+        lookup = {row["feature"]: row for row in result.comparison_rows}
+        ambient = lookup["ambient_dim"]
+        twonn = lookup["twonn_k_hat"]
+        self.assertLessEqual(
+            float(twonn["loo_mae_epsilon_max"]),
+            float(ambient["loo_mae_epsilon_max"]),
+        )
+        self.assertGreaterEqual(
+            float(twonn["stability_cut_accuracy"]),
+            float(ambient["stability_cut_accuracy"]),
+        )
+
     def test_twonn_beats_ambient_on_epsilon_max_and_stability_cut(self) -> None:
         config = TwoNNOperationalDiagnosticConfig(
             pairs=(
