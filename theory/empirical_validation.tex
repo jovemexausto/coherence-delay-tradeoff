@@ -71,10 +71,11 @@ horizon logic of \cref{cor:optimized_horizon}.
 \subsection{Evidence for the Sinkhorn Conjecture}
 \label{sec:validation_operational_frontier}
 
-The fixed-$\varepsilon$ Sinkhorn experiments address a different question: when a
-practical geometry is used in place of raw $W_2$, does the finite-sample term
-remain stable enough for the conjectured horizon law to stay informative? The
-calibrated embedded fixed-span model shows a visible regime map.
+The fixed-$\varepsilon$ Sinkhorn experiments address the remaining bandwise
+question: when a practical geometry is used in place of raw $W_2$, does the
+finite-sample term remain stable enough for the conjectured horizon law to stay
+informative? The pointwise one-dimensional fixed-support result is already
+closed; the calibrated embedded fixed-span model shows the remaining regime map.
 
 The figure below concerns fixed-$\varepsilon$ Sinkhorn geometry on embedded
 low-intrinsic-dimensional support. It shows that the corresponding finite-sample
@@ -82,28 +83,30 @@ term remains stable across the tested regularization values and that the
 triangular slope stays close to the i.i.d. benchmark rather than exhibiting a
 separate exponent. Combined with the structural ingredients isolated in
 \cref{prop:operational_theorem_frontier}, this provides empirical support for
-\cref{conj:operational_sinkhorn_horizon}. In the calibrated fixed-span model
-with $\alpha=2$ and span $0.25$, the maximal observed bands are
-$\varepsilon_{\max}=0.5$ for $(d,k)=(8,1)$, $(8,2)$, and $(12,2)$, and
-$\varepsilon_{\max}=0.2$ for $(12,1)$.
+the bandwise conjecture in \cref{conj:operational_sinkhorn_horizon}. In the
+calibrated fixed-span model with $\alpha=2$ and span $0.25$, the maximal
+observed stable bands are $\varepsilon_{\max}=0.5$ for $(d,k)=(8,1)$,
+$(8,2)$, and $(12,2)$, and $\varepsilon_{\max}=0.2$ for $(12,1)$.
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.86\linewidth]{artifacts/figures/frontier/fig_operational_frontier_map.pdf}
-\caption{Empirical shape relevant to the fixed-$\varepsilon$ Sinkhorn conjecture.
-Each panel reports the minimum of the i.i.d. and triangular finite-sample
-exponents over the ambient/intrinsic pairs tested at one regularization level.
-Crossed cells mark settings that fail the usefulness criterion. The resulting
-picture has a stable core and a single mixed boundary case on the tested grid.}
+\caption{Empirical shape relevant to the bandwise fixed-$\varepsilon$ Sinkhorn
+conjecture. Each panel reports the minimum of the i.i.d. and triangular
+finite-sample exponents over the ambient/intrinsic pairs tested at one
+regularization level. Crossed cells mark settings that fail the usefulness
+criterion. The resulting picture has a stable core and a small mixed boundary
+region on the tested grid; the pointwise one-dimensional fixed-support result is
+closed separately in \cref{prop:pointwise_sinkhorn_1d}.}
 \label{fig:operational_frontier_map}
 \end{figure}
 
-This map gives the shape of the empirical support behind the conjecture. The
-observed operational region is neither empty nor uniform across settings; the
+This map gives the shape of the empirical support behind the bandwise conjecture.
+The observed operational region is neither empty nor uniform across settings; the
 calibration details and supporting tables are kept in
-\cref{app:finite_sample_geometry}. The claim is therefore deliberately narrow:
-the tested grid exhibits a stable operational core, but the full inheritance law
-remains conjectural outside the calibrated fixed-span settings shown here.
+\cref{app:finite_sample_geometry}. The claim is narrow: the tested grid exhibits
+a stable operational core, but the full bandwise inheritance law remains
+conjectural outside the calibrated fixed-span settings shown here.
 
 \subsection{Validity Loss Before Detector Alarm}\label{sec:validation_invalidity_gap}
 

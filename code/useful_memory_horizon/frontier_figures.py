@@ -21,7 +21,7 @@ from .regular_family_frontier import (
 
 
 PAIR_ORDER = ((8, 1), (8, 2), (12, 1), (12, 2))
-EPSILONS = (0.5, 0.2, 0.1, 0.05)
+EPSILONS = (0.8, 0.5, 0.3, 0.2)
 
 
 def frontier_style() -> None:
@@ -56,7 +56,7 @@ def generate_two_benchmarks_one_theory(output_path: Path, csv_path: Path) -> Non
             "title": "Operational Benchmark",
             "geometry": "fixed-epsilon Sinkhorn",
             "carrier": "a = a_epsilon",
-            "status": "certified theorem frontier",
+            "status": "operational frontier",
             "role": "usable mid/high-dimensional regime",
         },
     ]
@@ -120,7 +120,7 @@ def generate_two_benchmarks_one_theory(output_path: Path, csv_path: Path) -> Non
     ax.text(
         0.82,
         0.56,
-        "Operational Benchmark\n\nGeometry: fixed-epsilon Sinkhorn\nStatus: certified frontier\nCarrier: a = a_epsilon\nRole: modern AI relevance",
+        "Operational Benchmark\n\nGeometry: fixed-epsilon Sinkhorn\nStatus: operational frontier\nCarrier: a = a_epsilon\nRole: mid/high-dimensional regime",
         ha="center",
         va="center",
         fontsize=10.2,

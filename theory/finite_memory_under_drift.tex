@@ -299,7 +299,10 @@ This covers, for example, bounded-support smooth location perturbations of a
 common base density and bounded smooth monotone transforms of such a base law,
 provided the fixed-span condition is maintained and the stated integrated
 remainder bound holds. A broad verification theorem for independent
-non-identically distributed rows is left open.
+non-identically distributed rows is left open. Separate diagnostics on a smooth
+fixed-support deformation model show integrated residual decay faster than
+$n^{-1}$ across the tested span and roughness values, which supports the
+plausibility of item~(iv) on that class but is not used as proof.
 \end{remark}
 
 \subsection{Structural Lower Bound}\label{subsec:lower_bound}
@@ -616,9 +619,77 @@ support-complexity inheritance is exact, and the dual-complexity condition is
 precisely the LCA threshold $\alpha>k/2$.
 \end{proposition}
 
-\begin{conjecture}[Fixed-$\varepsilon$ Sinkhorn horizon inheritance]
+\begin{proposition}[Pointwise fixed-$\varepsilon$ inheritance in the 1D proof model]
+\label{prop:pointwise_sinkhorn_1d}
+Assume the hypotheses of \cref{prop:minimum_kernel}, let
+$\widehat P_n^{\mathrm{iid}}$ be the empirical measure of $n$ i.i.d. samples from
+$\bar P_n$, and fix $\varepsilon>0$. For the debiased Sinkhorn divergence
+$S_{\varepsilon}$ with squared-Euclidean cost on the common compact support,
+one has
+\[
+  \mathbb E\,S_{\varepsilon}\!\left(\widehat P_n^{\mathrm{tri}},\bar P_n\right)
+  = O(n^{-1/2}).
+\]
+\end{proposition}
+
+\begin{proof}
+Write $V_{\varepsilon}(\mu,\nu)$ for the regularized OT value so that
+\[
+  S_{\varepsilon}(\mu,\nu)
+  = V_{\varepsilon}(\mu,\nu)
+  - \tfrac12 V_{\varepsilon}(\mu,\mu)
+  - \tfrac12 V_{\varepsilon}(\nu,\nu).
+\]
+Because all measures are supported on one compact interval, they lie in a
+common bounded quadratic-moment class. By \citet[Thm.~3.7(ii), Ex.~3.4]{EcksteinNutz2022},
+for fixed $\varepsilon$ there exists $L_{\varepsilon}<\infty$ depending only on
+that class and on the cost such that
+\[
+  |V_{\varepsilon}(\mu,\nu)-V_{\varepsilon}(\mu',\nu')|
+  \le L_{\varepsilon}\bigl(W_2(\mu,\mu')+W_2(\nu,\nu')\bigr).
+\]
+Applying this bound to the cross term and both self terms gives
+\[
+  |S_{\varepsilon}(\mu,\nu)-S_{\varepsilon}(\mu',\nu')|
+  \le 2L_{\varepsilon}\bigl(W_2(\mu,\mu')+W_2(\nu,\nu')\bigr).
+\]
+With $\nu=\nu'=\bar P_n$,
+\[
+  S_{\varepsilon}\!\left(\widehat P_n^{\mathrm{tri}},\bar P_n\right)
+  \le
+  S_{\varepsilon}\!\left(\widehat P_n^{\mathrm{iid}},\bar P_n\right)
+  + 2L_{\varepsilon}
+    W_2\!\left(\widehat P_n^{\mathrm{tri}},\widehat P_n^{\mathrm{iid}}\right).
+\]
+Taking expectations and using the triangle inequality gives
+\[
+  \mathbb E\,W_2\!\left(\widehat P_n^{\mathrm{tri}},\widehat P_n^{\mathrm{iid}}\right)
+  \le
+  \mathbb E\,W_2\!\left(\widehat P_n^{\mathrm{tri}},\bar P_n\right)
+  + \mathbb E\,W_2\!\left(\widehat P_n^{\mathrm{iid}},\bar P_n\right).
+\]
+The first term is $O(n^{-1/2})$ by \cref{prop:minimum_kernel}. The second is
+the classical i.i.d. one-dimensional quantile-process rate on the same compact
+support class \citep{Bahadur1966,vanDerVaart1998}, so it is also
+$O(n^{-1/2})$. Hence
+\[
+  \mathbb E\,W_2\!\left(\widehat P_n^{\mathrm{tri}},\widehat P_n^{\mathrm{iid}}\right)
+  = O(n^{-1/2}).
+\]
+Finally, under the null comparison with fixed $\varepsilon$ and compact support,
+the i.i.d. debiased Sinkhorn term satisfies
+\[
+  \mathbb E\,S_{\varepsilon}\!\left(\widehat P_n^{\mathrm{iid}},\bar P_n\right)
+  = O(n^{-1})
+\]
+by \citet[Thm.~5.1, after fixed-$\varepsilon$ rescaling]{delBarrioEtAl2023}; see also the null-limit law in
+\citet{GoldfeldEtAl2022}. Combining the bounds yields the displayed
+$O(n^{-1/2})$ rate.
+\end{proof}
+
+\begin{conjecture}[Bandwise fixed-$\varepsilon$ Sinkhorn horizon inheritance]
 \label{conj:operational_sinkhorn_horizon}
-Assume the fixed-$\varepsilon$ operational setting from
+Beyond the one-dimensional fixed-$\varepsilon$ result above, assume the fixed-$\varepsilon$ operational setting from
 \cref{def:operational_setting}. Then, on bands where the i.i.d.
 benchmark stays in the parametric Sinkhorn regime, the triangular-array
 finite-sample term should satisfy
@@ -647,8 +718,14 @@ GroppeHundrieser2024LCA}. In the present embedded fixed-span model,
 support-complexity inheritance is exact and the dual smoothness threshold
 reduces to $\alpha>k/2$. Calibration supplies the only remaining ingredient:
 evidence that the triangular and i.i.d. rate estimates stay close across the
-regularization band. That evidence motivates the conjecture, but it does not
-close it as a theorem.
+regularization band. That evidence motivates the broader conjecture, but it does
+not close the bandwise embedded-model statement as a theorem. Additional
+one-dimensional smooth fixed-support diagnostics show that triangular and i.i.d.
+fitted exponents can agree closely on some fixed-$\varepsilon$ bands, but the
+agreement is not uniform across the tested roughness levels. What remains open
+beyond \cref{prop:pointwise_sinkhorn_1d} is the genuinely operational step:
+uniform control across a nontrivial $\varepsilon$-band and higher-dimensional
+embedded classes.
 
 \paragraph{Regular-family inheritance.}
 The broader extension question is whether regular dominated families inherit the
