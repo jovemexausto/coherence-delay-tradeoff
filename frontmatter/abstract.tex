@@ -1,22 +1,5 @@
 \begin{abstract}
-Finite-memory distribution tracking under drift is governed by a temporal-validity horizon for retained evidence. Expected tracking error satisfies
-\[
-  \mathbb E\,d\!\left(\widehat P_t^{(n)},P_t\right)
-  \leq
-  C_K n^{-a} + C_S\zeta n^H,
-\]
-where $a>0$ is the finite-sample rate exponent and $H\in(0,1]$ is the temporal roughness exponent. Balancing these terms yields the memory scale
-\[
-  n^*(a,H)\asymp (C_K/\zeta)^{1/(a+H)}.
-\]
-\newline
-The present work identifies this horizon as the scale at which
-retained evidence remains statistically current. A tractable one-dimensional
-proof model establishes the root-$n$ regime, and a Gaussian lower bound shows
-that the horizon is structural rather than estimator-specific. Memory under
-drift is therefore governed by temporal validity, and
-retained evidence can become invalid for the present before change becomes
-statistically detectable.
+We study the temporal validity of retained evidence for finite-memory distribution tracking under drift. Expected tracking error is controlled by a tradeoff between finite-sample accuracy and drift-induced staleness, so that longer memory reduces sampling noise while increasing age mismatch with the present distribution. This balance induces a finite temporal-validity horizon and an optimal memory scale $n^*(a,H)\asymp (C_K/\zeta)^{1/(a+H)}$, where the finite-sample rate exponent $a$ and the temporal roughness exponent $H$ determine how quickly the horizon expands or contracts. We establish this horizon in a tractable one-dimensional proof model, and a Gaussian lower bound shows that the phenomenon is structural rather than estimator-specific. The experiments exhibit the predicted interior memory optimum, roughness-dependent scaling, and a measurable lag between validity loss and the first changepoint alarm. Under drift, retained evidence can stop representing the present before change becomes statistically detectable.
 
 \end{abstract}
 
