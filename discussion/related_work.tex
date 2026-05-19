@@ -69,9 +69,13 @@ open here is a drifted triangular-array theorem that combines sampling,
 staleness, and optimization control in one horizon law. Recent geometry-aware
 calibration work also points toward intrinsic-dimension-based selection of
 regularization scales, which is relevant to identifying operational
-$\varepsilon$-bands in practice \citep{GenansWintenberger2026}. The remaining
-open step is the bandwise triangular-array theorem with constants controlled on
-the operational band of interest.
+$\varepsilon$-bands in practice \citep{GenansWintenberger2026}. A minimal-
+neighborhood route to the same calibration problem is local intrinsic-dimension
+estimation; TwoNN estimates intrinsic dimension from first- and second-neighbor
+distances and is exact under local uniformity, making it a natural proxy for the
+effective support geometry that governs the operational band
+\citep{FaccoEtAl2017}. The remaining open step is the bandwise triangular-array
+theorem with constants controlled on the operational band of interest.
 
 \paragraph{Projection-based and low-dimensional proxy geometries.}
 Sliced, max-sliced, subspace-robust, and projection-robust Wasserstein

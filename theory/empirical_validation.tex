@@ -71,10 +71,10 @@ horizon logic of \cref{cor:optimized_horizon}.
 \subsection{Evidence for the Sinkhorn Conjecture}
 \label{sec:validation_operational_frontier}
 
-The fixed-$\varepsilon$ Sinkhorn experiments address the remaining bandwise
-question: when a practical geometry is used in place of raw $W_2$, does the
-finite-sample term remain stable enough for the conjectured horizon law to stay
-informative? The pointwise one-dimensional fixed-support result is closed in
+The fixed-$\varepsilon$ Sinkhorn experiments address the bandwise question: when
+a practical geometry is used in place of raw $W_2$, does the finite-sample term
+remain stable enough for the conjectured horizon law to stay informative? The
+pointwise one-dimensional fixed-support statement appears in
 Proposition~\ref{prop:pointwise_sinkhorn_1d}; the calibrated embedded fixed-span
 model shows the regime map.
 
@@ -105,8 +105,17 @@ This map gives the shape of the empirical support behind the bandwise conjecture
 The observed operational region is neither empty nor uniform across settings; the
 calibration details and supporting tables are kept in
 \cref{app:finite_sample_geometry}. The tested grid exhibits a stable operational
-core, and the full bandwise inheritance law remains conjectural outside the
-calibrated fixed-span settings shown here.
+core, and the bandwise inheritance law is conjectural outside the calibrated
+fixed-span settings shown here.
+
+To probe whether the frontier is controlled more by local intrinsic geometry than
+by the ambient coordinate count, the repository also computes a TwoNN-based
+estimate of the effective intrinsic dimension on the same synthetic frontier
+family. On the tested grid, that estimate predicts the stable-band cutoff
+better than ambient dimension and improves the binary cut at \(\varepsilon=0.2\),
+while the rowwise stability pattern remains mixed; the point is therefore
+regime selection by estimated local geometry, not a universal replacement for
+the theorem-level band analysis \citep{FaccoEtAl2017}.
 
 \subsection{Validity Loss Before Detector Alarm}\label{sec:validation_invalidity_gap}
 

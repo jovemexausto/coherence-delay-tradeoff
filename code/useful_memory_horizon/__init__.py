@@ -110,6 +110,12 @@ from .online_horizon_adaptation import (
     plugin_window_from_roughness,
     run_online_horizon_adaptation_experiment,
 )
+from .twonn_dimension import twonn_dimension_estimate
+from .twonn_operational_diagnostic import (
+    TwoNNOperationalDiagnosticConfig,
+    TwoNNOperationalDiagnosticResult,
+    compare_twonn_to_ambient_on_operational_frontier,
+)
 
 __all__ = [
     "CarrierRoughnessResearchConfig",
@@ -191,6 +197,10 @@ __all__ = [
     "run_Hölder_lower_bound_research",
     "run_gaussian_witness_frontier",
     "run_online_horizon_adaptation_experiment",
+    "TwoNNOperationalDiagnosticConfig",
+    "TwoNNOperationalDiagnosticResult",
+    "compare_twonn_to_ambient_on_operational_frontier",
+    "twonn_dimension_estimate",
     "run_invalidity_gap_experiment",
     "uniform_mixture_cdf",
     "uniform_mixture_quantiles",
