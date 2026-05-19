@@ -104,7 +104,9 @@ Project status:
 - Core identity is settled: the paper is a theory of temporal validity of retained evidence under drift. The central object is the temporal-validity horizon for finite-memory distribution tracking, governed by `E d(\widehat P_t^{(n)},P_t) <= C_K n^{-a} + C_S zeta n^H` and `n^*(a,H) ~ (C_K/zeta)^{1/(a+H)}`.
 - Main-line structure is stable: law -> drift/staleness control -> tractable proof model -> structural lower bound -> benchmark result -> operational extension or conjecture -> empirical signatures.
 - Related-work anchors are settled enough for writing: empirical-Wasserstein finite-sample claims should cite `Fournier-Guillin`, `Weed-Bach`, and `Boissard-Le Gouic`; fixed-`epsilon` entropic geometry should cite `Genevay`, `Mena-Niles-Weed`, `del Barrio`, `Rigollet-Stromme`, `Stromme`, `Groppe-Hundrieser`, `Eckstein-Nutz`, `Ghosal-Nutz-Bernton`, and `Genans-Wintenberger`.
-- Closed results: abstract upper law and optimized horizon law; exact uniform-window staleness constant; 1D bounded-support fixed-span root-`n` proof model; Gaussian lower-bound construction at exponent level; Gaussian location minimax benchmark; refined Gaussian ramp/endpoint constants.
+- Closed results: abstract upper law and optimal horizon law; exact uniform-window staleness constant; 1D bounded-support fixed-span root-`n` proof model; Gaussian lower-bound construction at exponent level; Gaussian location minimax benchmark; refined Gaussian ramp/endpoint constants.
+- Manuscript and auxiliary text now avoid `optimized`; the remaining terminology uses `optimal` or neutral object-level phrasing, including the `cor:optimal_horizon` label.
+- The scientific manuscript now avoids structural metatext such as section-roadmap prose; the exposition states object-level claims directly.
 - Operational extension status: fixed-`epsilon` Sinkhorn is theorem-level in the 1D compact-support class and remains conjectural in the embedded/high-dimensional fixed-span class.
 - Numerical evidence now points to a moderate-band target `epsilon \in [0.2,0.8]`: `W_2(\widehat P_{tri},\widehat P_{iid})` slows in higher intrinsic dimension, while direct Sinkhorn band slopes stay near the parametric regime and Jacobian probes show the main obstruction lies in `xx/yy` self-couplings, not `xy`. TwoNN recovers the intrinsic class well after simple calibration and supports using estimated rather than imposed `k` in the synthetic frontier.
 - The current proof target is a uniform derivative/equicontinuity theorem for the Sinkhorn derivative class on embedded fixed-span supports over a moderate compact band, preferably with moderate `epsilon_min` bounded away from zero.
@@ -112,7 +114,7 @@ Project status:
 - The worktree still contains a separate uncommitted two-column typography/layout experiment; it compiles cleanly, but it is not part of the settled manuscript state.
 
 Closed results:
-- Abstract upper law and optimized horizon law are closed.
+- Abstract upper law and optimal horizon law are closed.
 - Uniform-window staleness is closed with exact finite-`n` constant `C_{H,n}` and asymptotic constant `(2H+1)^{-1/2}`.
 - The tractable 1D bounded-support fixed-span triangular-array proof model yields the root-`n` finite-sample regime via quantile/Bahadur structure, and the conditional `W_2` derivation is now written out explicitly in the manuscript.
 - Structural Gaussian lower-bound construction is closed at the exponent level for the root-`n` regime.

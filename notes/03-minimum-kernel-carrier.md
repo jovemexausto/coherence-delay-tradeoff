@@ -4,8 +4,8 @@ Category: proof-model
 Prev: 02. General Law
 Next: 04. One-Dimensional Proof Details
 
-This note records the tractable 1D bounded-support fixed-span triangular-array
-model used to close the first rigorous finite-sample regime in the paper.
+Tractable 1D bounded-support fixed-span triangular-array model closing the
+first rigorous finite-sample regime.
 
 ## Setting
 
@@ -33,10 +33,9 @@ one has
 
 ## Status
 
-The manuscript now contains the conditional derivation explicitly. The only
-nontrivial hypothesis is the integrated triangular-array Bahadur remainder.
+The conditional derivation is explicit. The only nontrivial hypothesis is the
+integrated triangular-array Bahadur remainder.
 
 ## Interpretation
 
-This note is not a search for a new exponent. It is the proof-model anchor for
-the root-`n` finite-sample regime.
+This is the proof-model anchor for the root-`n` finite-sample regime.

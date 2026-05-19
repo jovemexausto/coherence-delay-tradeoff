@@ -4,7 +4,7 @@ Category: law
 Prev: 01. Main Theorem Package
 Next: 03. One-Dimensional Proof Model
 
-This note records the paper's top-level law in proof-ready form.
+Top-level law in proof-ready form.
 
 ## Setup
 

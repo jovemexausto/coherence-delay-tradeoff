@@ -5,16 +5,15 @@ Dynamic-regret and variation-budget results show that under drift, window size
 or forgetting scale must depend on how quickly the target moves
 \citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,YuanLamperski2020,
 MazzettoUpfal2023,WangXieChenLuiZhou2024}. Those works are close in spirit, but
-their primary object is regret under a moving comparator, whereas the angle
-here is evidence age under drift. The horizon is not a tuning parameter attached
-to regret analysis; it is the statistical object being characterized.
+their primary object is regret under a moving comparator. The horizon is the
+statistical object being characterized here.
 
 \paragraph{Adaptive windowing and drift detection.}
 Adaptive-window and concept-drift methods ask when accumulated evidence is
 sufficient to react \citep{BifetGavalda2007,Gama2004,GamaSurvey2014}.
 \citet{hinder2023window} emphasize that the relevant window scale is itself part
-of the problem. Their angle is when accumulated evidence crosses a reaction
-threshold; the angle here is when memory itself stops representing the present.
+of the problem. Their object is when accumulated evidence crosses a reaction
+threshold; the object here is when memory itself stops representing the present.
 Temporal validity is not changepoint evidence: memory can fail before the data
 support a detector alarm. The validity-detection lag makes that distinction
 visible in finite samples.
@@ -39,16 +38,15 @@ Classical adaptive filtering and state-space tracking also balance smoothing
 against responsiveness by tuning forgetting factors, gain schedules, or process
 noise models \citep{Kalman1960,Jazwinski1970}. Those analyses usually work under
 stochastic state-space assumptions and ask for Bayes-optimal tracking of a
-latent process. Their angle is latent-state estimation; the angle here is
+latent process. Their object is latent-state estimation; the object here is
 deterministic drift envelopes and a worst-case temporal-validity horizon.
 
 \paragraph{Locally stationary smoothing.}
 Locally stationary time-series analysis likewise studies how window or bandwidth
 choice must adapt to time variation \citep{Dahlhaus1997}. That literature is
 close in its bias--variance logic, but the moving object there is typically a
-local spectrum or regression function. The angle here is different: the moving
-object is a path of distributions, and the age penalty is measured directly in
-transport geometry.
+local spectrum or regression function. Here the moving object is a path of
+distributions, and the age penalty is measured directly in transport geometry.
 
 \paragraph{Distribution tracking under transport geometry.}
 Wasserstein distance and Sinkhorn-type estimators are natural when drift lives
@@ -59,7 +57,7 @@ standard ambient-dimension upper bounds, \citet{BoissardLeGouic2014} give an
 earlier covering-based low-complexity bridge, and \citet{NilesWeedBach2019}
 identify sharp finite-sample behavior in terms of Wasserstein dimension. These
 results show that the finite-sample exponent is geometry dependent even before
-drift enters; that is the angle relevant here.
+drift enters.
 
 \paragraph{Entropic and smoothed transport as operational geometries.}
 Regularization changes the statistical geometry as well as the computational one.
@@ -69,10 +67,9 @@ behavior than raw high-dimensional Wasserstein distances
 \citep{GenevayEtAl2019,MenaWeed2019,delBarrioEtAl2023,RigolletStromme2025,
 Stromme2023MID,GroppeHundrieser2024LCA,EcksteinNutz2022,GhosalNutzBernton2022}.
 That perspective is exactly why fixed-$\varepsilon$ Sinkhorn is treated here as
-an operational geometry rather than as a surrogate for the raw $W_2$ theorem:
-regularization changes the regime, not just the computation. In the i.i.d.
-setting, this literature provides sample-complexity and limit theory for fixed
-marginals, including fixed-$\varepsilon$ differentiability and asymptotic CLTs
+an operational geometry. Regularization changes the regime, not just the
+computation. In the i.i.d. setting, this literature provides sample-complexity
+and limit theory for fixed marginals, including fixed-$\varepsilon$ differentiability and asymptotic CLTs
 for the Sinkhorn divergence \citep{GoldfeldEtAl2022}, intrinsic- or
 lower-complexity adaptation, and quantitative stability of regularized transport
 and Sinkhorn iteration. These fixed-$\varepsilon$ asymptotics are the i.i.d.
@@ -81,7 +78,7 @@ Recent Gaussian entropic-OT analyses also make the regularized geometry more
 explicit in linear-Gaussian settings \citep{AkyildizEtAl2024}. The Kalman/Riccati
 structure in that setting suggests a narrower intermediate theorem for streaming
 Sinkhorn under drift: an explicitly recursive, constructive operational regime.
-Here the angle is algorithmic recursion under a regularized geometry, between the
+This is algorithmic recursion under a regularized geometry, between the
 i.i.d. fixed-$\varepsilon$ results and the fully general triangular-array horizon
 law. A drifted triangular-array theorem that combines sampling, staleness, and
 optimization control in one horizon law is not yet available.
@@ -100,9 +97,8 @@ one-dimensional or low-dimensional proxies
 \citep{KolouriRohdeHoffmann2018,DeshpandeEtAl2019,PatyCuturi2019,
 LinEtAl2020,NadjahiEtAl2020,NietertEtAl2022}. These works show that changing the
 comparison geometry or estimator can materially improve finite-sample behavior
-for the proxy metric itself. The angle here is that geometry choice can change
-the exponent itself, not merely the constant, so they are relevant as examples of
-alternative finite-sample geometries.
+for the proxy metric itself. Geometry choice can change the exponent itself, so
+they are relevant as examples of alternative finite-sample geometries.
 
 \paragraph{Wasserstein nonstationarity and robust optimization.}
 Jiang, Li, and Zhang study online stochastic optimization under a Wasserstein
@@ -112,9 +108,9 @@ drift-aware weighting questions in Wasserstein distributionally robust
 optimization \citep{KeehanAndersonWiesemann2025}. Amini and Vinas give a recent
 moment-method route to triangular-array concentration in $W_1$
 \citep{AminiVinas2026}. Those results are adjacent to the finite-sample-regime issue
-studied here. Their angle is optimization or concentration under nonstationarity;
-the angle here is when temporal age itself becomes the dominant source of error
-for retained evidence.
+studied here. Their object is optimization or concentration under
+nonstationarity; the object here is when temporal age itself becomes the
+dominant source of error for retained evidence.
 
 \paragraph{Freshness and Age of Information.}
 The Age-of-Information literature treats age as a resource constraint and asks
@@ -125,9 +121,9 @@ induces geometric error under drift, and temporal roughness determines how
 quickly that cost accumulates.
 
 Across these neighboring literatures, the closest theme is that nonstationarity
-makes retention scale matter. The distinguishing claim here is more specific:
-finite memory is governed by a temporal-validity horizon that balances
-finite-sample accuracy against drift-induced staleness, and temporal validity
+makes retention scale matter. The distinguishing claim is more specific: finite
+memory is governed by a temporal-validity horizon that balances finite-sample
+accuracy against drift-induced staleness, and temporal validity
 can fail before change becomes statistically detectable. The
 resulting viewpoint is complementary to regret and detection analyses: it
 characterizes when memory itself ceases to be a statistically valid proxy for

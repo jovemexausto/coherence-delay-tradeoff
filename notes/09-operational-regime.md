@@ -4,8 +4,7 @@ Category: conjecture
 Prev: 08. Extended Regime
 Next: 10. Paper Next Steps
 
-This note records the operational fixed-`epsilon` Sinkhorn extension in its
-current honest form.
+Operational fixed-`epsilon` Sinkhorn extension in current form.
 
 ## Closed structural ingredients
 
@@ -36,8 +35,6 @@ On the tested embedded fixed-span grids:
 
 ## Paper status
 
-The paper should present:
-
-- the closed structural ingredients as theorem-level statements;
+- closed structural ingredients as theorem-level statements;
 - the full inheritance claim as a conjecture;
 - the calibration grid as empirical evidence only.

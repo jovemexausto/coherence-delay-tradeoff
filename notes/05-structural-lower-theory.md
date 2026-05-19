@@ -4,7 +4,7 @@ Category: lower
 Prev: 04. One-Dimensional Proof Details
 Next: 06. Exact Gaussian Witness Frontier
 
-This note records the exponent-level lower theory that supports the main paper.
+Exponent-level lower theory supporting the main manuscript.
 
 ## Goal
 
@@ -32,7 +32,7 @@ Balancing the roughness budget with the testing budget yields
 
 ## Status
 
-This is a structural subclass lower bound. It is enough for the paper's central
+This is a structural subclass lower bound. It is enough for the central
 claim that the horizon is not an estimator artifact. It is not a class-tight
 distributional lower theorem.
 

@@ -4,7 +4,7 @@ Category: proof-model
 Prev: 03. One-Dimensional Proof Model
 Next: 05. Structural Lower Theory
 
-This note records the proof structure for the 1D bounded-support fixed-span
+Proof structure for the 1D bounded-support fixed-span
 model.
 
 ## Main steps

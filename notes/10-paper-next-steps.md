@@ -13,6 +13,6 @@ Next: 11. Future Work and Open Problems
 
 ## Do not re-open
 
-1. the paper's identity
+1. the identity
 2. the theorem/conjecture split
 3. historical terminology or regime scaffolding

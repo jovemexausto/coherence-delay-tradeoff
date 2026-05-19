@@ -22,14 +22,13 @@ yielding the horizon scale
 n^*(a,H)\asymp (C_K/\zeta)^{1/(a+H)}.
 \]
 
-The paper closes this theory in a tractable one-dimensional proof model,
-establishes a structural Gaussian lower bound and a Gaussian location benchmark,
-and states an explicit conjectural extension for fixed-$\varepsilon$ Sinkhorn
-geometry.
+The theory closes in a tractable one-dimensional proof model, a structural
+Gaussian lower bound, and a Gaussian location benchmark. A fixed-$\varepsilon$
+Sinkhorn extension remains conjectural.
 
-This framing is adjacent to dynamic regret and adaptive windowing, but its
-primary object is different: the temporal validity of retained evidence for
-distribution tracking under drift.
+Dynamic regret and adaptive windowing are neighboring problems. The object here
+is the temporal validity of retained evidence for distribution tracking under
+drift.
 
 ## Core idea
 
@@ -42,7 +41,7 @@ distribution tracking under drift.
 
 ## Claim status
 
-- `theorem`: abstract upper law, optimized horizon law, uniform-window staleness bound, one-dimensional root-$n$ proof model, structural Gaussian lower bound at the exponent level, and Gaussian location minimax benchmark
+- `theorem`: abstract upper law, optimal horizon law, uniform-window staleness bound, one-dimensional root-$n$ proof model, structural Gaussian lower bound at the exponent level, and Gaussian location minimax benchmark
 - `conjecture`: fixed-$\varepsilon$ Sinkhorn horizon inheritance and broader regular-family horizon inheritance
 - `repository provenance`: calibration tables, artifact generation, and extended empirical evidence
 

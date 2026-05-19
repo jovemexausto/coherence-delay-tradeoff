@@ -4,12 +4,11 @@ Category: map
 Prev: -
 Next: 02. General Law
 
-Current map of the paper's claim structure.
+Claim structure.
 
 ## Central object
 
-The paper studies the temporal-validity horizon for finite-memory distribution
-tracking under drift.
+Temporal-validity horizon for finite-memory distribution tracking under drift.
 
 The main law is
 
@@ -27,10 +26,10 @@ The induced horizon scale is
 - staleness term relative to the present target;
 - triangle-inequality decomposition.
 
-### Corollary: optimized temporal-validity horizon
+### Corollary: optimal temporal-validity horizon
 
 - `n^*(a,H) ~ (C_K/zeta)^{1/(a+H)}`;
-- optimized risk scale `~ C_K^{H/(a+H)} zeta^{a/(a+H)}`.
+- optimal risk scale `~ C_K^{H/(a+H)} zeta^{a/(a+H)}`.
 
 ### Lemma: exact finite-`n` uniform-window staleness constant
 

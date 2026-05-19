@@ -9,7 +9,7 @@ Ordered list of theorem work that is still scientifically worth doing.
 ## Already closed
 
 - abstract upper law;
-- optimized temporal-validity horizon;
+- optimal temporal-validity horizon;
 - exact finite-`n` uniform-window staleness constant;
 - tractable 1D proof model with root-`n` finite-sample rate;
 - structural Gaussian lower bound;
@@ -40,7 +40,7 @@ Develop structural lower arguments matched to finite-sample exponents other than
 
 ## What should stop consuming time
 
-- re-opening the paper's identity;
+- re-opening the identity;
 - treating supporting constants as a second theorem line;
 - blurring conjectures into theorem-shaped prose;
 - putting repository-scale provenance back into the main text.

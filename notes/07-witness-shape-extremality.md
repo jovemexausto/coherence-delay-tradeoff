@@ -4,7 +4,7 @@ Category: refinement
 Prev: 06. Exact Gaussian Ramp Frontier
 Next: 08. Extended Regime
 
-This note records the endpoint-minimal profile that sharpens the Gaussian lower
+Endpoint-minimal profile sharpening the Gaussian lower
 constants for `H < 1`.
 
 ## Extremal profile

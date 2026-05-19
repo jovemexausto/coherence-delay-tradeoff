@@ -429,7 +429,7 @@ def generate_prescriptive_memory_law(output_path: Path, csv_path: Path) -> None:
         axes[0].plot(zeta_values, n_star, label=label, color=color, linewidth=2.3)
         axes[1].plot(zeta_values, risk_star, label=label, color=color, linewidth=2.3)
     for ax, ylabel in zip(
-        axes, (r"optimal memory $n^*$", r"optimized error scale"), strict=True
+        axes, (r"optimal memory $n^*$", r"optimal error scale"), strict=True
     ):
         ax.set_xscale("log")
         ax.set_yscale("log")

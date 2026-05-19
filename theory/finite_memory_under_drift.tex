@@ -1,9 +1,6 @@
 \section{A Horizon Law for Finite-Memory Tracking under Drift}
 \label{sec:finite_memory_under_drift}
 
-This section fixes the finite-memory objects and develops the horizon law,
-structural lower bound, benchmark theorem, and conjectural extensions.
-
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.92\linewidth]{artifacts/figures/conceptual/fig_two_clocks_of_drift.pdf}
@@ -77,12 +74,12 @@ By the triangle inequality,
 Taking expectations and applying the two assumptions yields the claim.
 \end{proof}
 
-The proof is immediate, but the theorem isolates the structure of the problem:
+The theorem isolates the structure of the problem:
 the path class supplies the staleness term, while the chosen geometry and sample
 regime supply the finite-sample term.
 
 \begin{corollary}[Optimized temporal-validity horizon]
-\label{cor:optimized_horizon}
+\label{cor:optimal_horizon}
 Under the assumptions of \cref{thm:abstract_upper_law}, the upper envelope
 \[
   \Phi(n) \coloneqq C_K n^{-a} + C_S\zeta n^H
@@ -91,7 +88,7 @@ is minimized, up to constant factors depending only on $a$, $H$, and $C_S$, at
 \[
   n^*(a,H) \asymp (C_K/\zeta)^{1/(a+H)},
 \]
-and the corresponding optimized error scale is
+and the corresponding optimal error scale is
 \[
   \Phi(n^*) \asymp C_K^{H/(a+H)}\zeta^{a/(a+H)}.
 \]
@@ -103,7 +100,7 @@ Balance the decreasing finite-sample term against the increasing staleness term:
   C_K n^{-a} \asymp C_S\zeta n^H.
 \]
 This gives $n^{a+H}\asymp C_K/\zeta$, hence the displayed horizon law. Substituting
-that scale back into either term gives the optimized error scale.
+that scale back into either term gives the optimal error scale.
 \end{proof}
 
 The horizon depends jointly on the finite-sample rate exponent and the
@@ -169,7 +166,7 @@ square roots completes the proof.
 \end{proof}
 
 Combining \cref{lem:Hölder_staleness_bound} with
-\cref{cor:optimized_horizon} yields the horizon family
+\cref{cor:optimal_horizon} yields the horizon family
 \[
   n^*(a,H) \asymp (C_K/\zeta)^{1/(a+H)}.
 \]
@@ -292,13 +289,12 @@ regime, the triangular-array finite-sample term remains root-$n$.
 \begin{remark}[Sufficient conditions for the proof model]
 The only nontrivial assumption in \cref{prop:minimum_kernel} is item~(iv). For
 i.i.d. quantile processes, Bahadur representations of this type are classical;
-see \citet{Bahadur1966} and \citet[Chapter~21]{vanDerVaart1998}. The present
-paper uses the triangular-array version as an explicit hypothesis for the
-fixed-span proof model rather than claiming a general theorem that verifies it.
-One concrete sufficient package is: a common compact support $[L,U]$; rowwise
-densities $f_{n,j}$ uniformly bounded above and below by positive constants; a
-uniform smoothness bound on $f_{n,j}$ across rows; and a rowwise quantile
-process whose integrated Bahadur remainder satisfies
+see \citet{Bahadur1966} and \citet[Chapter~21]{vanDerVaart1998}. The
+triangular-array version is taken as an explicit hypothesis of the fixed-span
+proof model. One concrete sufficient package is a common compact support
+$[L,U]$; rowwise densities $f_{n,j}$ uniformly bounded above and below by
+positive constants; a uniform smoothness bound on $f_{n,j}$ across rows; and a
+rowwise quantile process whose integrated Bahadur remainder satisfies
 $\mathbb E\int_0^1 R_n(u)^2\,du=o(n^{-1})$. This is compatible with bounded smooth
 monotone deformations of a common base law with uniformly bounded derivatives,
 and with fixed-support location perturbations when the support constraint is
@@ -371,9 +367,9 @@ $h^*(H)\asymp (\sigma/\zeta)^{2/(2H+1)}$ and therefore the displayed lower law.
 The exact Gaussian two-point calculation used here is recorded in
 \cref{app:proof_details}.
 
-The lower bound is subclass based rather than
-class-tight, but that is enough for the central claim: the horizon is a
-structural feature of the problem rather than an estimator artifact.
+The lower bound is subclass based rather than class-tight, but it is enough to
+show that the horizon is a structural feature of the problem, not an estimator
+artifact.
 
 The proposition above is the lower-bound fact needed for the main horizon law.
 The same Gaussian construction also exposes a sharper constant-level geometry.
@@ -461,10 +457,8 @@ endpoint-saturating H\"older profiles, so it yields the sharper constant. Full
 details are given in \cref{app:proof_details}.
 \end{proof}
 
-These refinements sharpen the constant-level lower-bound picture, but the main
-theoretical role of this section is narrower: they strengthen the Gaussian
-construction without changing the horizon exponents or the status of the main
-results.
+These refinements sharpen the constant-level lower-bound picture without
+changing the horizon exponents or the status of the main results.
 
 The same refined lower-bound geometry also yields a full class-level benchmark once
 the model is specialized to Gaussian location tracking. In that setting, the
@@ -486,7 +480,7 @@ Suppose the observations are independent with
   \qquad j=0,1,\dots,n-1,
 \]
 and let the target law at time $t$ be $P_t=N(\mu_t,\sigma^2)$. Define the
-optimized finite-memory minimax risk
+optimal finite-memory minimax risk
 \[
   \mathcal R_H^*(\sigma,\zeta)
   \coloneqq
@@ -797,7 +791,7 @@ so the corresponding tracking problem should satisfy the horizon-family member
 \[
   n^*(a,\alpha H)\asymp (C_K/\zeta^{\alpha})^{1/(a+\alpha H)},
 \]
-with optimized risk of order
+with optimal risk of order
 \[
   C_K^{\alpha H/(a+\alpha H)}\zeta^{\alpha a/(a+\alpha H)}.
 \]
@@ -818,5 +812,5 @@ one-dimensional proof model while keeping the formal claims within their
 proper scope.
 
 Once a finite-sample regime and a roughness level are specified, the law yields
-an explicit memory scale and an optimized error scale. Rougher drift and weaker
+an explicit memory scale and an optimal error scale. Rougher drift and weaker
 finite-sample rates both force shorter memory and larger residual error.

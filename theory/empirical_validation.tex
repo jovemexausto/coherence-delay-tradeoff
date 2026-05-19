@@ -1,10 +1,10 @@
 \section{Empirical Signatures}\label{sec:validation}
 
-The empirical section makes the theory visible in finite samples. The aim is
-to exhibit the main observable signatures of the temporal-validity horizon and
-to report evidence relevant to the fixed-$\varepsilon$ Sinkhorn conjecture.
+These synthetic experiments expose the finite-sample signatures of the
+temporal-validity horizon and report evidence relevant to the fixed-$\varepsilon$
+Sinkhorn conjecture.
 
-All experiments in this section are synthetic and fully specified by the stated
+All experiments are synthetic and fully specified by the stated
 data-generating designs. The Gaussian U-curve uses 20 Monte Carlo seeds, the
 roughness-family sweep uses 12, the fixed-$\varepsilon$ Sinkhorn fits log--log
 slopes over sample sizes $(24,48,96,160)$ on the pairs $(8,1)$, $(8,2)$,
@@ -15,11 +15,10 @@ means. The empirical goal is qualitative and structural: persistence of shape,
 ordering, and sign across repeated runs, not precise constant estimation for
 every curve.
 
-Four signatures matter. First, finite-memory risk should exhibit an interior
-optimum. Second, that optimum should move with temporal roughness. Third, the
-fixed-$\varepsilon$ Sinkhorn conjecture should receive structured empirical
-support rather than a single undifferentiated claim. Fourth, temporal validity
-can fail before changepoint evidence becomes statistically visible.
+The empirical signatures are fourfold. Finite-memory risk exhibits an interior
+optimum. That optimum moves with temporal roughness. The fixed-$\varepsilon$
+Sinkhorn conjecture receives structured empirical support. Temporal validity can
+fail before changepoint evidence becomes statistically visible.
 
 \subsection{A Finite-Memory Optimum}\label{sec:validation_ucurve}
 
@@ -62,7 +61,7 @@ function of drift regularity, not a fixed window rule.}
 \end{figure}
 
 The empirical optima separate by roughness class, matching the path-dependent
-horizon logic of \cref{cor:optimized_horizon}.
+horizon logic of \cref{cor:optimal_horizon}.
 
 \subsection{Evidence for the Sinkhorn Conjecture}
 \label{sec:validation_operational_frontier}

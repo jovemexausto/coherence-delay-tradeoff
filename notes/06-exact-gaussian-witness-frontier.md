@@ -4,7 +4,7 @@ Category: refinement
 Prev: 05. Structural Lower Theory
 Next: 07. Endpoint-Minimal Profile
 
-This note records the exact Gaussian two-point calculation for the ramp profile.
+Exact Gaussian two-point calculation for the ramp profile.
 
 ## Setup
 

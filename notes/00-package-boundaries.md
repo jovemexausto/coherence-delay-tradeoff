@@ -14,13 +14,13 @@ This note fixes the project boundary between:
 ## Closed paper core
 
 - abstract upper law;
-- optimized temporal-validity horizon;
+- optimal temporal-validity horizon;
 - exact finite-`n` uniform-window staleness constant;
 - tractable 1D bounded-support fixed-span proof model with root-`n` finite-sample rate;
 - structural Gaussian lower bound at the exponent level;
 - Gaussian location minimax benchmark.
 
-These results are enough to support the paper's central scientific claim.
+These results are enough to support the central scientific claim.
 
 ## Supporting benchmark material
 

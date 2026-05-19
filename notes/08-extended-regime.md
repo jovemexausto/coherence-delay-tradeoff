@@ -4,7 +4,7 @@ Category: conjecture
 Prev: 07. Endpoint-Minimal Profile
 Next: 09. Operational Sinkhorn Extension
 
-This note records the broader low-intrinsic-dimensional extension target for raw
+Broader low-intrinsic-dimensional extension target for raw
 `W_2`.
 
 ## Intended statement
@@ -22,5 +22,5 @@ with the same exponent and only a constant-level gap.
 
 ## Current status
 
-This is not part of the present paper's theorem line. It remains a broader
+This is not part of the present theorem line. It remains a broader
 extension target supported by numerical evidence in the repository.
