@@ -6,7 +6,7 @@ Working title:
 `Useful Memory Has a Horizon`
 
 Preferred subtitle:
-`Temporal Validity, Roughness, and Structural Limits for Finite-Memory Tracking under Drift`
+`Temporal Validity of Retained Evidence under Drift`
 
 Alternative subtitles:
 - `Structural Limits and Horizon Laws for Finite-Memory Tracking under Drift`

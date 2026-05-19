@@ -1,4 +1,4 @@
-# Useful Memory Has a Horizon
+# Useful Memory Has a Horizon: Temporal Validity of Retained Evidence under Drift
 
 [![ORCID](https://img.shields.io/badge/ORCID-0009--0005--0201--9308-a6ce39.svg?logo=orcid&logoColor=white)](https://orcid.org/0009-0005-0201-9308)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20041349-blue.svg)](https://doi.org/10.5281/zenodo.20041349)
@@ -72,7 +72,7 @@ If you cite the repository artifact, please use:
 
 ```bibtex
 @software{parreira2026useful_memory_horizon,
-  title = {Useful Memory Has a Horizon},
+  title = {Useful Memory Has a Horizon: Temporal Validity of Retained Evidence under Drift},
   author = {Parreira, Vinicius},
   month = may,
   year = {2026},
