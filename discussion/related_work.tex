@@ -60,22 +60,25 @@ an operational geometry rather than as a surrogate for the raw $W_2$ theorem.
 Regularization can induce a usable finite-sample regime on which a
 finite-memory horizon law still makes sense. In the i.i.d. setting, this
 literature provides sample-complexity and limit theory for fixed marginals,
-including fixed-$\varepsilon$ differentiability and CLTs for the Sinkhorn
-divergence \citep{GoldfeldEtAl2022}, intrinsic- or lower-complexity adaptation,
-and quantitative stability of regularized transport and Sinkhorn iteration.
+including fixed-$\varepsilon$ differentiability and asymptotic CLTs for the
+Sinkhorn divergence \citep{GoldfeldEtAl2022}, intrinsic- or lower-complexity
+adaptation, and quantitative stability of regularized transport and Sinkhorn
+iteration. These fixed-$\varepsilon$ asymptotics are the natural i.i.d. anchor
+for the operational conjecture.
 Recent Gaussian entropic-OT analyses also make the regularized geometry more
-explicit in linear-Gaussian settings \citep{AkyildizEtAl2024}. A corresponding
-drifted triangular-array theorem that combines sampling, staleness, and
-optimization control in one horizon law is not yet available. Recent geometry-aware
-calibration work also points toward intrinsic-dimension-based selection of
-regularization scales, which is relevant to identifying operational
+explicit in linear-Gaussian settings \citep{AkyildizEtAl2024}. The Kalman/Riccati
+structure in that setting suggests a narrower intermediate theorem for streaming
+Sinkhorn under drift: an explicitly recursive, constructive operational regime
+between the i.i.d. fixed-$\varepsilon$ results and the fully general triangular-array
+horizon law. A drifted triangular-array theorem that combines sampling,
+staleness, and optimization control in one horizon law is not yet available.
+Recent geometry-aware calibration work also points toward intrinsic-dimension-based
+selection of regularization scales, which is relevant to identifying operational
 $\varepsilon$-bands in practice \citep{GenansWintenberger2026}. A concrete
 minimal-neighborhood route to the same calibration problem is local intrinsic-dimension
 estimation. TwoNN provides a natural proxy for effective local support geometry and,
 in the synthetic frontier studied here, a regime-selection diagnostic for operational bands
 \citep{FaccoEtAl2017}.
-A bandwise triangular-array theorem with constants controlled on the operational
-band of interest would connect that i.i.d. theory to the finite-memory horizon law.
 
 \paragraph{Projection-based and low-dimensional proxy geometries.}
 Sliced, max-sliced, subspace-robust, and projection-robust Wasserstein

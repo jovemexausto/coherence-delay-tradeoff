@@ -30,10 +30,9 @@ temporal-validity horizon
 The horizon depends jointly on finite-sample geometry and on the temporal
 regularity with which drift accumulates staleness.
 
-The development proceeds in four steps.
-
-First, it establishes the law in a tractable one-dimensional bounded-support
-fixed-span triangular-array model. In that regime, the quantile representation
+The paper develops this object in four steps. First, it establishes the law in
+a tractable one-dimensional bounded-support fixed-span triangular-array model.
+In that regime, the quantile representation
 of $W_2^2$, a triangular-array Bahadur expansion, and a design-effect comparison
 yield the root-$n$ finite-sample rate
 \[
@@ -57,26 +56,26 @@ embedded triangular-array band inheritance as an explicit conjecture.
 
 Fourth, it formulates the broader family-level inheritance question: which
 regular distribution families and operational geometries support which
-finite-sample rates, and therefore which members of the horizon family.
-Memory under drift is governed by the interaction between finite-sample geometry
-and temporal roughness, not by a single universal window prescription.
+finite-sample rates, and therefore which members of the horizon family. Memory
+under drift is governed by the interaction between finite-sample geometry and
+temporal roughness, not by a single universal window prescription.
 
-Claim status is explicit throughout. The general horizon law, the
-uniform-window staleness control, the one-dimensional proof-model upper bound,
-the Gaussian structural lower bound, and the Gaussian location benchmark are
-theorem-level results. The fixed-$\varepsilon$ Sinkhorn section proves structural
-ingredients together with pointwise and bandwise one-dimensional fixed-$\varepsilon$
-inheritance results, and states the broader embedded triangular-array band law
-as a conjecture. The numerical evidence concentrates on moderate compact bands
-bounded away from zero. Broader family-level inheritance remains open.
+The general horizon law, the uniform-window staleness control, the
+one-dimensional proof-model upper bound, the Gaussian structural lower bound,
+and the Gaussian location benchmark are theorem-level results. The
+fixed-$\varepsilon$ Sinkhorn section proves structural ingredients together with
+pointwise and bandwise one-dimensional fixed-$\varepsilon$ inheritance results,
+and states the broader embedded triangular-array band law as a conjecture. The
+numerical evidence concentrates on moderate compact bands bounded away from
+zero. Broader family-level inheritance remains open.
 
-The empirical section mirrors that structure. It makes the finite-memory U-curve
-visible, shows roughness-dependent horizon scaling, reports evidence relevant to
-the fixed-$\varepsilon$ Sinkhorn conjecture, and exhibits a measurable lag
-between validity loss and the first detector alarm. Temporal validity and
-changepoint evidence are different statistical objects: retained evidence can
-stop representing the present before change becomes detectable. The experiments
-are synthetic and structurally targeted: they are meant to reveal the predicted
+The empirical section makes the finite-memory U-curve visible, shows
+roughness-dependent horizon scaling, reports evidence relevant to the
+fixed-$\varepsilon$ Sinkhorn conjecture, and exhibits a measurable lag between
+validity loss and the first detector alarm. Temporal validity and changepoint
+evidence are different statistical objects: retained evidence can stop
+representing the present before change becomes detectable. The experiments are
+synthetic and structurally targeted; their role is to reveal the predicted
 signatures, not to settle a benchmark comparison against adaptive tracking
 baselines.
 
@@ -85,10 +84,9 @@ windowing, locally stationary smoothing, adaptive filtering, and distributional
 tracking under transport geometry---but the question here is different.
 Dynamic-regret analysis asks how well one tracks a moving comparator, and
 adaptive-window or drift-detection methods ask when the accumulated evidence is
-sufficient to react. The question here is different: for finite-memory tracking
-under drift, how long does retained evidence remain temporally valid for
-estimating the present distribution before age becomes the dominant source of
-error?
+sufficient to react. Here the question is: for finite-memory tracking under
+drift, how long does retained evidence remain temporally valid for estimating
+the present distribution before age becomes the dominant source of error?
 
 \Cref{sec:finite_memory_under_drift} develops the
 general horizon law, drift-regularity bounds, a tractable proof model, a
