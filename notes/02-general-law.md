@@ -35,7 +35,7 @@ Then
 
 Proof: triangle inequality, then expectation.
 
-## Optimized horizon
+## Temporal-validity horizon
 
 Let
 

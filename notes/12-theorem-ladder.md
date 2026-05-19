@@ -14,7 +14,7 @@ Ordered list of theorem work that is still scientifically worth doing.
 - tractable 1D proof model with root-`n` finite-sample rate;
 - structural Gaussian lower bound;
 - Gaussian location minimax benchmark;
-- compact refined Gaussian constants proposition.
+- compact Gaussian constants proposition.
 
 These are not the current bottleneck.
 

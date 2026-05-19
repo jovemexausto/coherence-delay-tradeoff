@@ -29,7 +29,7 @@ dump.
 ### Theorem
 
 - Abstract upper law
-- Optimized temporal-validity horizon
+- Temporal-validity horizon
 - Uniform-window staleness bound with exact finite-`n` constant `C_{H,n}`
 - Tractable 1D bounded-support fixed-span triangular-array proof model with root-`n` finite-sample rate
 - Structural Gaussian lower bound at the exponent level for the root-`n` regime
@@ -37,7 +37,7 @@ dump.
 ### Benchmark result
 
 - Gaussian location minimax benchmark on deterministic Holder paths
-- Compact refined Gaussian lower-bound constants proposition
+- Compact Gaussian lower-bound constants proposition
 
 ### Conjecture
 

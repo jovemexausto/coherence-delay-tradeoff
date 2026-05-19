@@ -78,8 +78,8 @@ The theorem isolates the structure of the problem:
 the path class supplies the staleness term, while the chosen geometry and sample
 regime supply the finite-sample term.
 
-\begin{corollary}[Optimized temporal-validity horizon]
-\label{cor:optimal_horizon}
+\begin{corollary}[Temporal-validity horizon]
+\label{cor:temporal_validity_horizon}
 Under the assumptions of \cref{thm:abstract_upper_law}, the upper envelope
 \[
   \Phi(n) \coloneqq C_K n^{-a} + C_S\zeta n^H
@@ -88,7 +88,7 @@ is minimized, up to constant factors depending only on $a$, $H$, and $C_S$, at
 \[
   n^*(a,H) \asymp (C_K/\zeta)^{1/(a+H)},
 \]
-and the corresponding optimal error scale is
+and the corresponding error scale is
 \[
   \Phi(n^*) \asymp C_K^{H/(a+H)}\zeta^{a/(a+H)}.
 \]
@@ -166,7 +166,7 @@ square roots completes the proof.
 \end{proof}
 
 Combining \cref{lem:Hölder_staleness_bound} with
-\cref{cor:optimal_horizon} yields the horizon family
+\cref{cor:temporal_validity_horizon} yields the horizon family
 \[
   n^*(a,H) \asymp (C_K/\zeta)^{1/(a+H)}.
 \]
@@ -307,8 +307,8 @@ on that class but is not used as proof.
 
 \subsection{Structural Lower Bound}\label{subsec:lower_bound}
 
-The upper law would be substantially weaker if it were only the optimum of one
-estimator. The lower bound shows that, in the root-$n$ finite-sample regime
+The upper law would be substantially weaker if it were only an estimator-specific
+statement. The lower bound shows that, in the root-$n$ finite-sample regime
 $a=1/2$, the horizon is imposed by the drift geometry itself.
 
 \begin{figure}[!htbp]
@@ -316,8 +316,8 @@ $a=1/2$, the horizon is imposed by the drift geometry itself.
 \includegraphics[width=0.88\linewidth]{artifacts/figures/conceptual/fig_lower_bound_witness.pdf}
 \caption{Gaussian lower-bound construction. The two paths share
 most of the retained history and differ only on a recent segment of width $h$,
-yet remain separated at the present. Optimizing that recent segment already
-produces the same horizon exponent as the upper law in the root-$n$ regime.}
+yet remain separated at the present. That recent segment already produces the
+same horizon exponent as the upper law in the root-$n$ regime.}
 \label{fig:lower_bound_witness}
 \end{figure}
 
@@ -367,22 +367,22 @@ $h^*(H)\asymp (\sigma/\zeta)^{2/(2H+1)}$ and therefore the displayed lower law.
 The exact Gaussian two-point calculation used here is recorded in
 \cref{app:proof_details}.
 
-The lower bound is subclass based rather than class-tight, but it is enough to
-show that the horizon is a structural feature of the problem, not an estimator
+The lower bound is subclass based and not class-tight, but it is enough to show
+that the horizon is a structural feature of the problem and not an estimator
 artifact.
 
 The proposition above is the lower-bound fact needed for the main horizon law.
-The same Gaussian construction also exposes a sharper constant-level geometry.
-The next proposition records the best constant-level refinement presently
-available within that proof scheme.
+The same Gaussian construction also exposes the constant-level geometry.
+The next proposition records the sharp Gaussian constants available within that
+proof scheme.
 
-\subsection{Refined Gaussian Lower-Bound Geometry}
-\label{subsec:refined_witness_geometry}
+\subsection{Gaussian Lower-Bound Geometry}
+\label{subsec:gaussian_lower_bound_geometry}
 
 Let $\Phi$ and $\varphi$ denote the standard normal distribution function and
 density.
-\begin{proposition}[Refined Gaussian lower-bound constants]
-\label{prop:refined_gaussian_constants}
+\begin{proposition}[Gaussian lower-bound constants]
+\label{prop:gaussian_lower_bound_constants}
 Fix $H\in(0,1]$ and set $p_H \coloneqq 2H/(2H+1)$. Let $x_H>0$ be the unique
 maximizer of $x^{p_H}\Phi(-x)$, equivalently the unique solution of
 \[
@@ -457,10 +457,10 @@ endpoint-saturating H\"older profiles, so it yields the sharper constant. Full
 details are given in \cref{app:proof_details}.
 \end{proof}
 
-These refinements sharpen the constant-level lower-bound picture without
-changing the horizon exponents or the status of the main results.
+These constants sharpen the lower-bound picture without changing the horizon
+exponents or the status of the main results.
 
-The same refined lower-bound geometry also yields a full class-level benchmark once
+The same lower-bound geometry also yields a full class-level benchmark once
 the model is specialized to Gaussian location tracking. In that setting, the
 deterministic H\"older envelope, the finite-memory estimator, and the lower-bound
 construction all live in the same one-dimensional parameterization, so this
@@ -561,13 +561,13 @@ with $\beta\le \zeta$. This family lies in $\mathfrak M_H(\zeta)$ because
 Moreover, for fixed endpoint value $\beta h^H$, it minimizes the Gaussian testing
 energy over all symmetric lag profiles allowed by the present-point H\"older
 envelope, since each lag coordinate is independently minimized by
-$\beta(h^H-j^H)_+$. The exact Gaussian two-point calculation from the refined
-lower-bound analysis in \cref{app:proof_details} therefore applies on the full deterministic H\"older class and
+$\beta(h^H-j^H)_+$. The exact Gaussian two-point calculation from the lower-bound
+analysis in \cref{app:proof_details} therefore applies on the full deterministic H\"older class and
 yields a lower bound of order
 \[
   \sigma^{2H/(2H+1)}\zeta^{1/(2H+1)}.
 \]
-Optimizing over $h$ gives the same horizon scale $(\sigma/\zeta)^{2/(2H+1)}$.
+Minimizing over $h$ gives the same horizon scale $(\sigma/\zeta)^{2/(2H+1)}$.
 Combining the two sides proves the theorem.
 \end{proof}
 

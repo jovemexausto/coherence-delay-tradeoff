@@ -61,7 +61,7 @@ function of drift regularity, not a fixed window rule.}
 \end{figure}
 
 The empirical optima separate by roughness class, matching the path-dependent
-horizon logic of \cref{cor:optimal_horizon}.
+horizon logic of \cref{cor:temporal_validity_horizon}.
 
 \subsection{Evidence for the Sinkhorn Conjecture}
 \label{sec:validation_operational_frontier}
@@ -76,7 +76,7 @@ embedded fixed-span model supplies the broader conjectural setting.
 The fixed-$\varepsilon$ Sinkhorn geometry on embedded low-intrinsic-dimensional
 support shows that the corresponding finite-sample term remains stable across
 the tested regularization values and that the triangular slope stays close to
-the i.i.d. benchmark rather than exhibiting a separate exponent. Combined with
+  the i.i.d. benchmark, with no separate exponent emerging. Combined with
 the structural ingredients isolated in \cref{prop:operational_theorem_frontier},
 this provides empirical support for the bandwise conjecture in
 \cref{conj:operational_sinkhorn_horizon}. In the calibrated fixed-span model
@@ -91,7 +91,7 @@ follow from the available $W_2$ transfer route. Direct Jacobian probes of the
 centered Sinkhorn scaling map instead isolate a moderate-band regime: on
 $\varepsilon\in[0.2,0.8]$, the cross-coupling block stays contractive, while
 the self-coupling blocks are the main source of instability but appear
-numerically to plateau with sample size rather than deteriorate. This is
+  numerically to plateau with sample size. This is
 evidence about mechanism, not a theorem.
 
 The calibrated fixed-span model shows that the tested grid has a stable core and
@@ -108,8 +108,7 @@ cutoff better than ambient dimension and improves the binary cut at
 \(\varepsilon=0.2\). This is consistent with geometry-aware calibration: the
 relevant control variable is the estimated local geometry, not the ambient
 coordinate count. The rowwise stability pattern remains mixed, so TwoNN enters
-here as a regime-selection diagnostic rather than as a replacement for the
-theorem-level band analysis.
+  here as a regime-selection diagnostic for the theorem-level band analysis.
 
 \subsection{Validity Loss Before Detector Alarm}\label{sec:validation_invalidity_gap}
 
@@ -149,8 +148,8 @@ detector-uniform delay law.
 \subsection{What the Evidence Shows}\label{sec:validation_summary}
 
 Taken together, the experiments support four claims that match the theory.
-Finite-memory tracking exhibits a structural U-curve rather than an ever-growing
-memory benefit. The temporal-validity horizon is roughness dependent. The
+  Finite-memory tracking exhibits a structural U-curve. The temporal-validity
+  horizon is roughness dependent. The
 fixed-$\varepsilon$ Sinkhorn conjecture receives structured empirical support on
 the tested grid, with the strongest evidence concentrated on moderate
 bands bounded away from zero. Temporal validity can fail before changepoint

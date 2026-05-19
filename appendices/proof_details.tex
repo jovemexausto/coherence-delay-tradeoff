@@ -3,7 +3,7 @@
 This appendix records detailed derivations for structural results whose full
 calculations would interrupt the main line.
 
-\subsection{Refined Gaussian lower-bound constants}
+\subsection{Gaussian lower-bound constants}
 
 Let
 \[
@@ -27,7 +27,7 @@ and
   \zeta h^H\Phi\!\left(-\frac{\zeta}{\sigma}\sqrt{G_h}\right).
 \]
 
-\begin{proof}[Proof of \cref{prop:refined_gaussian_constants}]
+\begin{proof}[Proof of \cref{prop:gaussian_lower_bound_constants}]
 Fix $H\in(0,1]$ and write $p_H=2H/(2H+1)$.
 
 For the ramp profile,
@@ -157,7 +157,7 @@ Gaussian two-point calculation. For the ramp pair
   \mu_{t-j}^{\pm,h}=\pm\zeta(h-j)_+^H,
 \]
 the present-time separation is $2\zeta h^H$, so any estimator incurs risk at
-least of order $L_h^{\mathrm{ramp}}(\sigma,\zeta)$. Optimizing over $h$ and using
+least of order $L_h^{\mathrm{ramp}}(\sigma,\zeta)$. Minimizing over $h$ and using
 the asymptotic just proved gives the lower scale
 \[
   \sigma^{2H/(2H+1)}\zeta^{1/(2H+1)}

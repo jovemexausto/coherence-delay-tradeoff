@@ -4,9 +4,9 @@
 Dynamic-regret and variation-budget results show that under drift, window size
 or forgetting scale must depend on how quickly the target moves
 \citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,YuanLamperski2020,
-MazzettoUpfal2023,WangXieChenLuiZhou2024}. Those works are close in spirit, but
-their primary object is regret under a moving comparator. The horizon is the
-statistical object being characterized here.
+MazzettoUpfal2023,WangXieChenLuiZhou2024}. Their primary object is regret under
+a moving comparator; the horizon is the statistical object being characterized
+here.
 
 \paragraph{Adaptive windowing and drift detection.}
 Adaptive-window and concept-drift methods ask when accumulated evidence is
@@ -19,15 +19,15 @@ support a detector alarm. The validity-detection lag makes that distinction
 visible in finite samples.
 
 Resource-aware update scheduling under drift is a neighboring control problem,
-but its objective is policy feasibility rather than evidence validity.
+with policy feasibility as the objective.
 RCCDA uses a Lyapunov drift-plus-penalty rule to decide when to retrain under a
 strict resource budget \citep{PiasecznyEtAl2025RCCDA}; the relevant trade-off is
 update cost against accumulated loss, so the age variable enters through control
 expense, not through the fidelity of a retained distributional summary.
 Streaming OT-based detectors, including the bootstrap-based OT change-point line
-of \citet{ShvetsovEtAl2020OTChangePoint}, move drift into a stopping problem:
-their scale is the delay and power of an alarm, with windowing serving detection
-rather than memory validity. Efficient MMD-based detectors such as MMDEW
+of \citet{ShvetsovEtAl2020OTChangePoint}, target alarm delay and test power.
+Windowing serves detection and memory accounting. Efficient MMD-based detectors
+such as MMDEW
 \citep{KalinkeEtAl2025MMDEW} make the same distinction in a different geometry,
 trading memory and runtime for faster tests. The contrast is objective-level:
 update cost, alarm delay, and test power on one side; staleness of retained
@@ -44,13 +44,13 @@ deterministic drift envelopes and a worst-case temporal-validity horizon.
 \paragraph{Locally stationary smoothing.}
 Locally stationary time-series analysis likewise studies how window or bandwidth
 choice must adapt to time variation \citep{Dahlhaus1997}. That literature is
-close in its bias--variance logic, but the moving object there is typically a
-local spectrum or regression function. Here the moving object is a path of
-distributions, and the age penalty is measured directly in transport geometry.
+studies bias--variance adaptation for a local spectrum or regression function.
+Here the moving object is a path of distributions, and the age penalty is
+measured directly in transport geometry.
 
 \paragraph{Distribution tracking under transport geometry.}
 Wasserstein distance and Sinkhorn-type estimators are natural when drift lives
-on paths of distributions rather than on scalar losses
+on paths of distributions
 \citep{FournierGuillin2015,BoissardLeGouic2014,NilesWeedBach2019}.
 For raw empirical Wasserstein distances, \citet{FournierGuillin2015} give the
 standard ambient-dimension upper bounds, \citet{BoissardLeGouic2014} give an
@@ -66,8 +66,8 @@ bias--variance--regularization trade-offs and can recover more stable statistica
 behavior than raw high-dimensional Wasserstein distances
 \citep{GenevayEtAl2019,MenaWeed2019,delBarrioEtAl2023,RigolletStromme2025,
 Stromme2023MID,GroppeHundrieser2024LCA,EcksteinNutz2022,GhosalNutzBernton2022}.
-That perspective is exactly why fixed-$\varepsilon$ Sinkhorn is treated here as
-an operational geometry. Regularization changes the regime, not just the
+That perspective is why fixed-$\varepsilon$ Sinkhorn is treated here as an
+operational geometry. Regularization changes the statistical regime and the
 computation. In the i.i.d. setting, this literature provides sample-complexity
 and limit theory for fixed marginals, including fixed-$\varepsilon$ differentiability and asymptotic CLTs
 for the Sinkhorn divergence \citep{GoldfeldEtAl2022}, intrinsic- or
@@ -96,7 +96,7 @@ constructions replace the ambient high-dimensional comparison geometry by
 one-dimensional or low-dimensional proxies
 \citep{KolouriRohdeHoffmann2018,DeshpandeEtAl2019,PatyCuturi2019,
 LinEtAl2020,NadjahiEtAl2020,NietertEtAl2022}. These works show that changing the
-comparison geometry or estimator can materially improve finite-sample behavior
+comparison geometry or estimator can materially change finite-sample behavior
 for the proxy metric itself. Geometry choice can change the exponent itself, so
 they are relevant as examples of alternative finite-sample geometries.
 
@@ -107,10 +107,9 @@ nonstationarity measure and obtain distribution-aware regret guarantees
 drift-aware weighting questions in Wasserstein distributionally robust
 optimization \citep{KeehanAndersonWiesemann2025}. Amini and Vinas give a recent
 moment-method route to triangular-array concentration in $W_1$
-\citep{AminiVinas2026}. Those results are adjacent to the finite-sample-regime issue
-studied here. Their object is optimization or concentration under
-nonstationarity; the object here is when temporal age itself becomes the
-dominant source of error for retained evidence.
+\citep{AminiVinas2026}. Those results target optimization or concentration under
+nonstationarity. The object here is temporal age as a dominant source of error
+for retained evidence.
 
 \paragraph{Freshness and Age of Information.}
 The Age-of-Information literature treats age as a resource constraint and asks

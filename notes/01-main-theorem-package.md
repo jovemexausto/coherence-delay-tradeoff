@@ -55,7 +55,7 @@ The induced horizon scale is
 
 ## Supporting benchmark result
 
-### Proposition: refined Gaussian lower-bound constants
+### Proposition: Gaussian lower-bound constants
 
 - exact ramp constant;
 - endpoint-minimal profile;

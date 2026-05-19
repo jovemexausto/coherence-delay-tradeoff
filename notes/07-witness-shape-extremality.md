@@ -31,5 +31,5 @@ For `H < 1`, the improvement factor over the ramp constant is
 
 ## Status
 
-This refinement is now incorporated into the paper through the compact refined
+This lower-bound geometry is now incorporated into the paper through the compact
 Gaussian constants proposition and the appendix proof details.

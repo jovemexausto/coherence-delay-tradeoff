@@ -24,7 +24,7 @@ These results are enough to support the central scientific claim.
 
 ## Supporting benchmark material
 
-- compact refined Gaussian lower-bound constants proposition;
+- compact Gaussian lower-bound constants proposition;
 - empirical signatures: U-curve, roughness scaling, validity-detection lag;
 - appendix-level finite-sample diagnostics.
 
