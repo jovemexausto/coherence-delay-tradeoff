@@ -20,7 +20,7 @@ optimum. That optimum moves with temporal roughness. The fixed-$\varepsilon$
 Sinkhorn conjecture receives structured empirical support. Temporal validity can
 fail before changepoint evidence becomes statistically visible.
 
-\subsection{A Finite-Memory Optimum}\label{sec:validation_ucurve}
+\subsection{A Finite-Memory Optimum}\label{sec:validation_memory_optimum}
 
 The Gaussian horizon sweep isolates the variance--staleness trade-off directly.
 Small windows are variance dominated, large windows are stale, and the minimum
@@ -29,10 +29,10 @@ lies at an interior horizon.
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.88\linewidth]{artifacts/figures/gaussian/fig_ucurve}
-\caption{Finite-memory U-curve. Tracking error first falls with horizon and then
-rises once staleness overtakes the remaining variance gain. The optimum remains
-finite across drift strengths.}
-\label{fig:ucurve}
+\caption{Interior risk optimum over memory length. Tracking error first falls
+with horizon and then rises once staleness overtakes the remaining variance
+gain. The optimum remains finite across drift strengths.}
+\label{fig:memory_optimum}
 \end{figure}
 
 This is the basic empirical signature of temporal validity under drift. Under
@@ -40,7 +40,7 @@ stationarity, more memory would continue to help. Under drift, the same horizon
 that reduces variance also ages the evidence.
 
 \subsection{Roughness-Dependent Horizon Scaling}
-\label{sec:validation_roughness}
+\label{sec:validation_roughness_scaling}
 
 The next experiment varies the roughness index directly. For each H\"older-type
 regime, the surrogate error obeys the same structural decomposition as the
@@ -64,7 +64,7 @@ The empirical optima separate by roughness class, matching the path-dependent
 horizon logic of \cref{cor:temporal_validity_horizon}.
 
 \subsection{Evidence for the Sinkhorn Conjecture}
-\label{sec:validation_operational_frontier}
+\label{sec:validation_sinkhorn_evidence}
 
 The fixed-$\varepsilon$ Sinkhorn experiments address the bandwise question: when
 a practical geometry replaces raw $W_2$, does the finite-sample term remain
@@ -77,9 +77,9 @@ The fixed-$\varepsilon$ Sinkhorn geometry on embedded low-intrinsic-dimensional
 support shows that the corresponding finite-sample term remains stable across
 the tested regularization values and that the triangular slope stays close to
   the i.i.d. benchmark, with no separate exponent emerging. Combined with
-the structural ingredients isolated in \cref{prop:operational_theorem_frontier},
+the structural ingredients isolated in \cref{prop:operational_sinkhorn_ingredients},
 this provides empirical support for the bandwise conjecture in
-\cref{conj:operational_sinkhorn_horizon}. In the calibrated fixed-span model
+\cref{conj:embedded_sinkhorn_horizon}. In the calibrated fixed-span model
 with $\alpha=2$ and span $0.25$, the maximal observed stable bands are
 $\varepsilon_{\max}=0.5$ for $(d,k)=(8,1)$, $(8,2)$, and $(12,2)$, and
 $\varepsilon_{\max}=0.2$ for $(12,1)$.
@@ -110,7 +110,7 @@ relevant control variable is the estimated local geometry, not the ambient
 coordinate count. The rowwise stability pattern remains mixed, so TwoNN enters
   here as a regime-selection diagnostic for the theorem-level band analysis.
 
-\subsection{Validity Loss Before Detector Alarm}\label{sec:validation_invalidity_gap}
+\subsection{Validity Loss Before Detector Alarm}\label{sec:validation_validity_lag}
 
 Temporal validity and changepoint evidence are different clocks. To make that
 separation explicit, consider a stream whose local drift rate ramps upward over
@@ -131,7 +131,7 @@ temporal-validity horizon contracts until the operating horizon becomes stale at
 $t_{\mathrm{valid}}$; the detector responds only later at $t_{\mathrm{detect}}$,
 leaving a strictly positive validity-detection lag. The lower panel shows
 excess tracking error accumulating before the alarm appears.}
-\label{fig:invalidity_gap}
+\label{fig:validity_lag}
 \end{figure}
 
 Across the reported runs, the measured lag remains positive. Retained evidence
@@ -145,7 +145,7 @@ detector family as well. The empirical claim is robustness of the sign of
 $\Delta_{\mathrm{val-det}}$ on the tested detector/tuning family, not a
 detector-uniform delay law.
 
-\subsection{What the Evidence Shows}\label{sec:validation_summary}
+\subsection{Summary of Evidence}\label{sec:validation_summary}
 
 Taken together, the experiments support four claims that match the theory.
   Finite-memory tracking exhibits a structural U-curve. The temporal-validity

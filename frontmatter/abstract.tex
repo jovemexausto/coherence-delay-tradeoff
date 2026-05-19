@@ -1,10 +1,10 @@
 \begin{abstract}
 Additional memory reduces finite-sample noise but also increases the age of the
-evidence used to estimate the present. Finite-memory
-distribution tracking is therefore governed by a temporal-validity horizon. A
-general horizon law separates finite-memory tracking error into a finite-sample
-term, determined by the chosen geometry and estimator, and a drift-induced
-staleness term, determined by the regularity of the target path:
+evidence used to estimate the present. Finite-memory distribution tracking is
+therefore governed by a temporal-validity horizon. A general horizon law
+separates finite-memory tracking error into a finite-sample term, determined by
+the chosen geometry and estimator, and a drift-induced staleness term,
+determined by the regularity of the target path:
 \[
   \mathbb E\,d\!\left(\widehat P_t^{(n)},P_t\right)
   \leq
@@ -14,12 +14,17 @@ Here $a>0$ is the finite-sample rate exponent and $H\in(0,1]$ is the temporal
 roughness exponent. Balancing these terms yields the temporal-validity horizon
 $n^*(a,H)\asymp (C_K/\zeta)^{1/(a+H)}$.
 
-A tractable one-dimensional bounded-support fixed-span model closes the
-root-$n$ regime. A Gaussian lower bound shows that the horizon is structural,
-and Gaussian location yields a minimax benchmark on deterministic H\"older
-paths. For fixed-$\varepsilon$ Sinkhorn geometry, the one-dimensional theory
-closes pointwise and on compact $\varepsilon$-bands, while the broader embedded
-bandwise inheritance law remains conjectural.
+We call a memory length useful when retained evidence remains temporally valid,
+so that the balance above still governs the tracking error. The corresponding
+useful-memory scale is $n^*(a,H)$.
+
+A tractable one-dimensional bounded-support fixed-span model establishes the
+root-$n$ regime, and a Gaussian lower bound shows that the resulting horizon is
+structural rather than estimator-specific. In the Gaussian location class this
+yields a minimax benchmark on deterministic H\"older paths, while in
+fixed-$\varepsilon$ Sinkhorn geometry the same balance is theorem-level on
+compact one-dimensional support and remains conjectural for broader embedded
+bandwise inheritance.
 
 Memory under drift is governed by temporal validity, not by a universal window
 rule. The horizon depends jointly on finite-sample geometry and temporal

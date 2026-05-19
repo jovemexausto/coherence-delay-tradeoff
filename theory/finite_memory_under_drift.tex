@@ -4,12 +4,12 @@
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.92\linewidth]{artifacts/figures/conceptual/fig_two_clocks_of_drift.pdf}
-\caption{Two clocks of drift. The finite-sample term falls with horizon, the
-staleness term rises with age, and total error is minimized at the
-temporal-validity horizon $n^*$. The shaded region marks pre-detection validity
-loss: retained evidence can stop representing the present before enough
-changepoint evidence accumulates to trigger an alarm.}
-\label{fig:two_clocks_of_drift}
+\caption{Finite-sample--staleness trade-off under drift. The finite-sample term
+falls with horizon, the staleness term rises with age, and total error is
+minimized at the temporal-validity horizon $n^*$. The shaded region marks
+pre-detection validity loss: retained evidence can stop representing the present
+before enough changepoint evidence accumulates to trigger an alarm.}
+\label{fig:finite_sample_staleness_tradeoff}
 \end{figure}
 
 For a finite-memory estimator with lag weights $w_0,\dots,w_{n-1}$, the natural
@@ -180,7 +180,7 @@ uniform windows; the simpler $(2H+1)^{-1/2}$ expression is its large-window
 limit.
 
 \subsection{A Tractable One-Dimensional Proof Model}
-\label{subsec:minimum_kernel}
+\label{subsec:one_dimensional_proof_model}
 
 The abstract law needs at least one rigorous finite-sample instantiation. The
 bounded-support fixed-span one-dimensional triangular array provides a tractable
@@ -188,7 +188,7 @@ proof model for that role. Its scope is intentionally narrow: common compact
 support, uniformly regular window mixtures, and an explicit integrated Bahadur
 remainder hypothesis.
 
-\begin{proposition}[Root-$n$ finite-sample bound in the 1D proof model]\label{prop:minimum_kernel}
+\begin{proposition}[Root-$n$ finite-sample bound in the 1D proof model]\label{prop:one_dimensional_root_n_bound}
 Let $X_{n,1},\dots,X_{n,n}$ be independent one-dimensional observations with laws
 $P_{n,1},\dots,P_{n,n}$, and define the window mixture
 \[
@@ -287,7 +287,7 @@ regime, the triangular-array finite-sample term remains root-$n$.
 \end{proof}
 
 \begin{remark}[Sufficient conditions for the proof model]
-The only nontrivial assumption in \cref{prop:minimum_kernel} is item~(iv). For
+The only nontrivial assumption in \cref{prop:one_dimensional_root_n_bound} is item~(iv). For
 i.i.d. quantile processes, Bahadur representations of this type are classical;
 see \citet{Bahadur1966} and \citet[Chapter~21]{vanDerVaart1998}. The
 triangular-array version is taken as an explicit hypothesis of the fixed-span
@@ -318,7 +318,7 @@ $a=1/2$, the horizon is imposed by the drift geometry itself.
 most of the retained history and differ only on a recent segment of width $h$,
 yet remain separated at the present. That recent segment already produces the
 same horizon exponent as the upper law in the root-$n$ regime.}
-\label{fig:lower_bound_witness}
+\label{fig:lower_bound_construction}
 \end{figure}
 
 \begin{proposition}[Structural lower bound in the root-$n$ regime]
@@ -571,18 +571,18 @@ Minimizing over $h$ gives the same horizon scale $(\sigma/\zeta)^{2/(2H+1)}$.
 Combining the two sides proves the theorem.
 \end{proof}
 
-\subsection{Benchmark and Operational Regimes}
+\subsection{Benchmark Theorems and Operational Extensions}
 
 The one-dimensional proof model is the first rigorous finite-sample
 instantiation. Two broader settings matter for scope: a Gaussian benchmark on a
-full path class, and an operational Sinkhorn regime in which structural
+full path class, and an embedded Sinkhorn extension in which structural
 ingredients are proved but the full inheritance theorem is conjectural.
 The linear-Gaussian entropic-OT setting is narrower still: its Kalman/Riccati
-structure suggests a constructive intermediate operational regime with an
-explicit recursion, sitting between the i.i.d. fixed-$\varepsilon$ theory and
-the embedded triangular-array conjecture \citep{Kalman1960,Jazwinski1970,AkyildizEtAl2024}.
+ structure suggests a constructive intermediate fixed-$\varepsilon$ Sinkhorn setting with an
+ explicit recursion, sitting between the i.i.d. fixed-$\varepsilon$ theory and
+ the embedded triangular-array conjecture \citep{Kalman1960,Jazwinski1970,AkyildizEtAl2024}.
 
-\paragraph{Operational regime.}
+\paragraph{Fixed-$\varepsilon$ Sinkhorn setting.}
 For fixed-$\varepsilon$ debiased Sinkhorn, the question is whether a practical
 geometry can supply a stable finite-sample term on the embedded fixed-span
 model. The intended theorem shape is
@@ -596,12 +596,12 @@ exponent $a_{\varepsilon}$ matches the corresponding i.i.d. mixture benchmark.
 The structural part of this setup is proved, but the full triangular-array
 inheritance statement is not.
 
-\begin{definition}[Fixed-$\varepsilon$ operational setting]
-\label{def:operational_setting}
+\begin{definition}[Fixed-$\varepsilon$ Sinkhorn setting]
+\label{def:fixed_epsilon_sinkhorn_setting}
 Fix a bounded embedded fixed-span model, an intrinsic complexity index $k$, a
 dual H\"older smoothness level $\alpha$, and an operational band
 $\mathcal B\subset(0,\infty)$ of regularization values. We say that this model
-is in the fixed-$\varepsilon$ operational setting if:
+is in the fixed-$\varepsilon$ Sinkhorn setting if:
 \begin{enumerate}[label=(\roman*)]
   \item the i.i.d. fixed-$\varepsilon$ benchmark on the same support class
   admits a finite-sample bound with exponent $a_{\varepsilon}$ on $\mathcal B$;
@@ -612,16 +612,16 @@ is in the fixed-$\varepsilon$ operational setting if:
 \end{definition}
 
 \begin{proposition}[Structural ingredients for fixed-$\varepsilon$ Sinkhorn]
-\label{prop:operational_theorem_frontier}
+\label{prop:operational_sinkhorn_ingredients}
 On the bounded embedded fixed-span model with squared-Euclidean cost, the first
-three items in \cref{def:operational_setting} are structural: the
+three items in \cref{def:fixed_epsilon_sinkhorn_setting} are structural: the
 support-complexity inheritance is exact, and the dual-complexity condition is
 precisely the LCA threshold $\alpha>k/2$.
 \end{proposition}
 
 \begin{proposition}[Pointwise fixed-$\varepsilon$ inheritance in the 1D proof model]
 \label{prop:pointwise_sinkhorn_1d}
-Assume the hypotheses of \cref{prop:minimum_kernel}, let
+Assume the hypotheses of \cref{prop:one_dimensional_root_n_bound}, let
 $\widehat P_n^{\mathrm{iid}}$ be the empirical measure of $n$ i.i.d. samples from
 $\bar P_n$, and fix $\varepsilon>0$. For the debiased Sinkhorn divergence
 $S_{\varepsilon}$ with squared-Euclidean cost on the common compact support,
@@ -668,7 +668,7 @@ Taking expectations and using the triangle inequality gives
   \mathbb E\,W_2\!\left(\widehat P_n^{\mathrm{tri}},\bar P_n\right)
   + \mathbb E\,W_2\!\left(\widehat P_n^{\mathrm{iid}},\bar P_n\right).
 \]
-The first term is $O(n^{-1/2})$ by \cref{prop:minimum_kernel}. The second is
+The first term is $O(n^{-1/2})$ by \cref{prop:one_dimensional_root_n_bound}. The second is
 the classical i.i.d. one-dimensional quantile-process rate on the same compact
 support class \citep{Bahadur1966,vanDerVaart1998}, so it is also
 $O(n^{-1/2})$. Hence
@@ -718,9 +718,9 @@ constants in the pointwise proof can be chosen uniformly over $\mathcal B$.
 \end{proof}
 
 \begin{conjecture}[Bandwise fixed-$\varepsilon$ Sinkhorn horizon inheritance]
-\label{conj:operational_sinkhorn_horizon}
-Beyond the one-dimensional fixed-$\varepsilon$ band result above, assume the fixed-$\varepsilon$ operational setting from
-\cref{def:operational_setting}. Then, on bands where the i.i.d.
+\label{conj:embedded_sinkhorn_horizon}
+Beyond the one-dimensional fixed-$\varepsilon$ band result above, assume the fixed-$\varepsilon$ Sinkhorn setting from
+\cref{def:fixed_epsilon_sinkhorn_setting}. Then, on bands where the i.i.d.
 benchmark stays in the parametric Sinkhorn regime, the triangular-array
 finite-sample term should satisfy
 \[
@@ -759,7 +759,7 @@ Direct Jacobian diagnostics concentrate that difficulty on moderate compact
 bands bounded away from zero, where the cross-coupling block stays stable and
 the self-coupling derivative blocks dominate the instability.
 
-\paragraph{Regular-family inheritance.}
+\paragraph{Regular-family horizon law.}
 The broader extension question is whether regular dominated families inherit the
 same horizon logic with exponents determined by local geometry. The relevant
 setting is a family $\{P_\theta: \theta\in\Theta\}$ with locally quadratic
@@ -769,8 +769,8 @@ testing geometry and metric comparability
 \]
 for some metric exponent $\alpha>0$.
 
-\begin{conjecture}[Regular-family horizon inheritance]
-\label{conj:regular_family_horizon_inheritance}
+\begin{conjecture}[Regular-family horizon law]
+\label{conj:regular_family_horizon_law}
 Let $d$ be a probability geometry and let $\{P_\theta: \theta\in\Theta\}$ be a
 locally regular dominated family for which the i.i.d. benchmark satisfies a
  metric finite-sample law
