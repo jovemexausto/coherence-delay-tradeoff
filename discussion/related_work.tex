@@ -16,7 +16,7 @@ sufficient to react \citep{BifetGavalda2007,Gama2004,GamaSurvey2014}.
 \citet{hinder2023window} emphasize that the relevant window scale is itself part
 of the problem. The present question is adjacent but distinct. Temporal validity
 is not changepoint evidence: memory can stop representing the present before the
-available data support a detector alarm. In that sense, the paper is about the
+available data support a detector alarm. In that sense, the object here is the
 validity horizon of retained evidence rather than the stopping time of a
 reaction rule. The validity-detection lag makes that distinction visible in finite
 samples.
@@ -26,7 +26,7 @@ Classical adaptive filtering and state-space tracking also balance smoothing
 against responsiveness by tuning forgetting factors, gain schedules, or process
 noise models \citep{Kalman1960,Jazwinski1970}. Those analyses usually work under
 stochastic state-space assumptions and ask for Bayes-optimal tracking of a
-latent process. The present paper instead studies deterministic Wasserstein
+latent process. The analysis here instead studies deterministic Wasserstein
 drift envelopes and characterizes a worst-case temporal-validity horizon.
 
 \paragraph{Locally stationary smoothing.}
@@ -39,22 +39,45 @@ distributions, and the age penalty is measured directly in transport geometry.
 \paragraph{Distribution tracking under transport geometry.}
 Wasserstein distance and Sinkhorn-type estimators are natural when drift lives
 on paths of distributions rather than on scalar losses
-\citep{FournierGuillin2015,GenevayEtAl2019,MenaWeed2019,Stromme2023MID,GroppeHundrieser2024LCA,NilesWeedBach2019,GoldfeldEtAl2022,AkyildizEtAl2024}.
-They supply the geometric language in which staleness becomes a transport error
-between past and present. In this setting, the trade-off is not simply between
-adaptation and variance, but between finite-sample accuracy and temporal
-misalignment measured in distributional geometry.
+\citep{FournierGuillin2015,BoissardLeGouic2014,NilesWeedBach2019}.
+For raw empirical Wasserstein distances, \citet{FournierGuillin2015} give the
+standard ambient-dimension upper bounds, \citet{BoissardLeGouic2014} give an
+earlier covering-based low-complexity bridge, and \citet{NilesWeedBach2019}
+identify sharp finite-sample behavior in terms of Wasserstein dimension. These
+results are the closest finite-sample precursors to the present law: they show
+that the exponent in the finite-sample term is geometry dependent even before
+drift enters.
 
 \paragraph{Entropic and smoothed transport as operational geometries.}
 Regularization changes the statistical geometry as well as the computational one.
 Entropic and other smoothed transport quantities introduce explicit
 bias--variance--regularization trade-offs and can recover more stable statistical
 behavior than raw high-dimensional Wasserstein distances
-\citep{GenevayEtAl2019,GoldfeldEtAl2022,Stromme2023MID,GroppeHundrieser2024LCA,AkyildizEtAl2024}.
-That perspective is exactly why the paper treats fixed-$\varepsilon$ Sinkhorn as
+\citep{GenevayEtAl2019,MenaWeed2019,delBarrioEtAl2023,RigolletStromme2025,
+Stromme2023MID,GroppeHundrieser2024LCA,EcksteinNutz2022,GhosalNutzBernton2022}.
+That perspective is exactly why fixed-$\varepsilon$ Sinkhorn is treated here as
 an operational geometry rather than as a surrogate for the raw $W_2$ theorem.
 Regularization can induce a usable finite-sample regime on which a
-finite-memory horizon law still makes sense.
+finite-memory horizon law still makes sense. What is closed in this literature
+is the i.i.d. setting: sample-complexity and limit theory for fixed marginals,
+including fixed-$\varepsilon$ differentiability and CLTs for the Sinkhorn
+divergence \citep{GoldfeldEtAl2022}, intrinsic- or lower-complexity adaptation,
+and quantitative stability of regularized transport and Sinkhorn iteration.
+Recent Gaussian entropic-OT analyses also make the regularized geometry more
+explicit in linear-Gaussian settings \citep{AkyildizEtAl2024}. What remains
+open here is a drifted triangular-array theorem that combines sampling,
+staleness, and optimization control in one horizon law.
+
+\paragraph{Projection-based and low-dimensional proxy geometries.}
+Sliced, max-sliced, subspace-robust, and projection-robust Wasserstein
+constructions replace the ambient high-dimensional comparison geometry by
+one-dimensional or low-dimensional proxies
+\citep{KolouriRohdeHoffmann2018,DeshpandeEtAl2019,PatyCuturi2019,
+LinEtAl2020,NadjahiEtAl2020,NietertEtAl2022}. These works show that changing the
+comparison geometry or estimator can materially improve finite-sample behavior
+for the proxy metric itself. They are therefore relevant here as examples of
+alternative finite-sample geometries with different exponents, not as automatic
+improvements for raw $W_2$.
 
 \paragraph{Wasserstein nonstationarity and robust optimization.}
 Jiang, Li, and Zhang study online stochastic optimization under a Wasserstein
@@ -66,14 +89,13 @@ moment-method route to triangular-array concentration in $W_1$
 \citep{AminiVinas2026}. Those results are adjacent to the finite-sample-regime issue
 studied here, but they do not by themselves close the present $W_2$
 window-mixture concentration problem. The present focus is narrower and more
-structural: for finite-memory tracking, how long can retained evidence continue
-to improve estimation of the current distribution before age becomes a dominant
-error source?
+structural: for finite-memory tracking, when does retained evidence stop helping
+because temporal age has become a dominant source of error?
 
 \paragraph{Freshness and Age of Information.}
 The Age-of-Information literature treats age as a resource constraint and asks
 how update policies balance communication cost against stale information
-\citep{KaulYatesGruteser2012,YatesEtAl2021AoI}. The present paper gives a
+\citep{KaulYatesGruteser2012,YatesEtAl2021AoI}. This horizon law gives a
 distributional analogue. Age is costly because it induces geometric error under
 drift, and temporal roughness determines how quickly that cost accumulates.
 

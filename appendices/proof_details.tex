@@ -1,7 +1,7 @@
 \section{Proof Details}\label{app:proof_details}
 
-This appendix records detailed derivations for the main-text results whose role
-is structural but whose full calculations would interrupt the main line.
+This appendix records detailed derivations for structural results whose full
+calculations would interrupt the main line.
 
 \subsection{Refined Gaussian lower-bound constants}
 
@@ -101,14 +101,14 @@ for every feasible endpoint-saturating profile $g$. Therefore the profile
 \]
 minimizes testing energy pointwise and hence minimizes
 $\sum_{r=1}^h g_r^2$. Its rescaled energy satisfies the Riemann-sum limit
+Thus
 \[
-  h^{-(2H+1)}G_h
-  \to
-  I_H
-  =
-  \int_0^1 \left(1-(1-u)^H\right)^2du
-  =
-  \frac{2H^2}{(H+1)(2H+1)}.
+  h^{-(2H+1)}G_h \to I_H,
+\]
+where
+\[
+  I_H = \int_0^1 \left(1-(1-u)^H\right)^2du
+  = \frac{2H^2}{(H+1)(2H+1)}.
 \]
 With the same scaling
 \[
@@ -152,8 +152,8 @@ This factor is strictly larger than $1$ for $H<1$ and equal to $1$ at $H=1$.
 
 \subsection{Two-point lower bound used in \cref{prop:structural_lower_bound}}
 
-The structural lower bound in the main text is the exponent-level consequence of
-the exact Gaussian two-point calculation above. For the ramp pair
+The structural lower bound above is the exponent-level consequence of the exact
+Gaussian two-point calculation. For the ramp pair
 \[
   \mu_{t-j}^{\pm,h}=\pm\zeta(h-j)_+^H,
 \]

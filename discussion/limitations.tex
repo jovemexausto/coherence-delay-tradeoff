@@ -1,10 +1,10 @@
 \section{Limitations and Scope}\label{sec:open}
 
-The paper's central object is the temporal-validity horizon for finite-memory
+The central object is the temporal-validity horizon for finite-memory
 tracking under drift. The main closed results are the general horizon law, the
 uniform-window staleness bound, the one-dimensional root-$n$ proof model, the
 structural Gaussian lower bound at the exponent level, and the Gaussian
-location minimax benchmark. Other parts of the manuscript are intentionally
+location minimax benchmark. Other parts of the text are intentionally
 stated with narrower status.
 
 \paragraph{Finite-sample scope.}
@@ -12,18 +12,18 @@ The theory is modular in the finite-sample exponent $a$, but the main rigorous
 instantiation is the root-$n$ regime. The tractable proof model establishes that
 regime in one dimension under bounded support and fixed span. Outside that
 setting, the same balancing logic continues to hold, but the finite-sample term
-must come from a different theorem. In particular, the paper does not claim a
+must come from a different theorem. In particular, no claim is made here for a
 general raw-$W_2$ triangular-array theorem in arbitrary dimension.
 
 \paragraph{Operational scope.}
-For fixed-$\varepsilon$ Sinkhorn, the manuscript proves the structural
-ingredients of the embedded fixed-span model and states the full triangular-array
-inheritance law as a conjecture. Exact support-complexity inheritance and the
-dual threshold $\alpha>k/2$ are closed; the remaining step is the full theorem
+For fixed-$\varepsilon$ Sinkhorn, the structural ingredients of the embedded
+fixed-span model are proved, and the full triangular-array inheritance law is
+stated as a conjecture. Exact support-complexity inheritance and the dual
+threshold $\alpha>k/2$ are closed; the remaining step is the full theorem
 connecting the triangular-array finite-sample term to the i.i.d. benchmark.
 
 \paragraph{Family-level scope.}
-The manuscript does not claim a blanket extension to every deterministic
+No blanket extension is claimed here to every deterministic
 $W_2$-H\"older path class. Continuous regular families and operational
 geometries can support meaningful finite-sample exponents, but support-changing
 and singular families behave differently. The natural extension target is
@@ -40,13 +40,13 @@ constants available within that lower-bound program, but it does not close the
 full distributional lower theory.
 
 \paragraph{Weights and memory shape.}
-The main text emphasizes uniform windows. The paper does not investigate
+Uniform windows are the main case. Nothing here investigates
 whether broader non-uniform weights can improve constants or alter exponents
 across richer path classes.
 
 \paragraph{Online roughness estimation.}
-The law is stated in terms of the roughness parameters $H$ and $\zeta$, but the
-paper does not propose a fully online procedure for estimating them or for
+The law is stated in terms of the roughness parameters $H$ and $\zeta$, but no
+fully online procedure is proposed here for estimating them or for
 quantifying sensitivity to misspecification. Turning the horizon law into a
 robust adaptive policy remains future work.
 
@@ -59,17 +59,79 @@ scope.
 
 \paragraph{Detectability versus validity.}
 Validity loss before detector alarm is an empirical consequence of the theory,
-not the primary theorem object. The paper shows that temporal validity can fail
+not the primary theorem object. Temporal validity can fail
 before detector alarms appear, but it does not prove a universal detection-delay
 theorem across detector classes.
 
 \paragraph{Open problems.}
-The next technical questions are clear. The first is to sharpen the
-finite-sample constant in the one-dimensional proof model. The second is to
-understand when practical geometries, such as fixed-$\varepsilon$ Sinkhorn,
-admit full triangular-array inheritance theorems in genuinely mid- or
-high-dimensional settings. The third is to determine which regular dominated
-distribution families support which finite-sample exponents and to extend the
-lower theory accordingly. Beyond that come class-tight lower bounds,
-non-uniform weighting, real-data validation, and stronger stochastic-process
-formulations.
+Each open question below asks for a theorem or construction that would enlarge
+the theory in a scientifically meaningful direction.
+
+\paragraph{Problem 1: sharp finite-sample constants in the proof model.}
+The one-dimensional proof model identifies the correct exponent, but not the
+best first-moment constant $C_K$. The open question is to derive a sharp or at
+least interpretable constant-level bound for the triangular-array finite-sample
+term, rather than only an $O(n^{-1/2})$ rate. Solving this would sharpen the
+predicted memory scale inside the first fully proved regime.
+
+\paragraph{Problem 2: lower theory beyond the root-$n$ regime.}
+The current structural lower bound is matched to the root-$n$ finite-sample
+regime. The open question is to identify least-favorable constructions for other
+finite-sample exponents $a$, especially in geometries where empirical transport
+has slower dimension-dependent behavior. This is the main unresolved step if the
+theory is to become a full horizon theory rather than a root-$n$ benchmark plus
+extensions.
+
+\paragraph{Problem 3: theorem-level regular-family inheritance.}
+A regular-family inheritance principle is stated, but not yet proved
+it for a broad dominated class. The open problem is to characterize conditions
+under which local testing geometry and metric geometry together imply a horizon
+law with finite-sample exponent $a=\alpha/2$ and staleness exponent $\alpha H$.
+This would turn the present heuristic extension principle into a genuine family-
+level theorem.
+
+\paragraph{Problem 4: class-tight distributional lower bounds.}
+The Gaussian construction shows that the horizon is structural, but it does not
+yet deliver class-tight lower bounds for broad deterministic path classes. The
+open problem is to determine whether the Gaussian benchmark already captures the
+correct lower rate for larger regular classes, or whether broader constructions
+are needed. This question is central to understanding how universal the present
+exponent law really is.
+
+\paragraph{Problem 5: a full Gaussian-scale lower theorem.}
+Gaussian scale is a natural benchmark because it changes geometry without leaving
+the regular parametric world. The open problem is to prove a theorem-level lower
+bound, and ideally a matching benchmark theorem, for Gaussian scale drift paths.
+This would clarify how much of the horizon theory depends specifically on
+location geometry and how much survives under other regular parametric
+deformations.
+
+\paragraph{Problem 6: triangular-array Sinkhorn inheritance.}
+For fixed-$\varepsilon$ Sinkhorn, the structural pieces are isolated and
+the full inheritance law is stated as a conjecture. The open problem is to prove a
+triangular-array theorem that matches the i.i.d. finite-sample exponent on a
+nontrivial regularization band while controlling the interaction of drift,
+sampling, and optimization error. This is the cleanest route from the present
+operational conjecture to a theorem-level extension.
+
+\paragraph{Problem 7: optimal weighting beyond uniform windows.}
+The current theory is built around uniform windows, with only brief discussion of
+other weighting schemes. The open question is whether non-uniform weights can do
+more than change constants: can they improve the horizon law itself on some path
+classes, or is the exponent stable under broad classes of memory shapes? A good
+answer would connect the horizon theory to practical forgetting schemes without
+collapsing back into heuristic tuning.
+
+\paragraph{Problem 8: online roughness identification and adaptive memory.}
+The law depends on the roughness parameters $H$ and $\zeta$, but no online
+procedure is given here that estimates them and tracks near-optimal
+memory in real time. The open problem is to design an adaptive scheme with a
+provable excess-risk guarantee relative to the oracle horizon. This is the most
+direct route from the horizon law to an online methodology.
+
+\paragraph{Problem 9: validity and detectability as coupled but distinct objects.}
+The experiments show a positive validity-detection lag, but there is no theorem
+yet relating temporal validity loss to detector delay. The open problem is to
+prove detector-specific lower or upper laws that quantify when validity must fail
+before statistical detection. This would connect the central object to a
+second, practically important timescale without conflating the two.

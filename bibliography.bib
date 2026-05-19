@@ -317,10 +317,11 @@
   note         = {Preprint}
 }
 @article{MenaWeed2019,
-  author    = {Mena, Gonzalo and Weed, Jonathan},
+  author    = {Mena, Gonzalo and Niles-Weed, Jonathan},
   title     = {Statistical Bounds for Entropic Optimal Transport: Sample Complexity and the Central Limit Theorem},
   journal   = {Advances in Neural Information Processing Systems},
   volume    = {32},
+  pages     = {4543--4553},
   year      = {2019}
 }
 @article{Stromme2023MID,
@@ -336,12 +337,12 @@
 @article{GroppeHundrieser2024LCA,
   author      = {Groppe, Michel and Hundrieser, Shayan},
   title       = {Lower Complexity Adaptation for Empirical Entropic Optimal Transport},
-  journal     = {CoRR},
-  volume      = {abs/2306.13580},
+  journal     = {Journal of Machine Learning Research},
+  volume      = {25},
+  number      = {344},
+  pages       = {1--55},
   year        = {2024},
-  eprint      = {2306.13580},
-  eprinttype  = {arXiv},
-  doi         = {10.48550/arXiv.2306.13580}
+  url         = {https://jmlr.org/papers/v25/23-0671.html}
 }
 @article{MironchenkoP2020,
   author    = {Mironchenko, Andrii and Prieur, Christophe},
@@ -362,14 +363,112 @@
   doi       = {10.1109/BigData55660.2022.10020525}
 }
 @article{NilesWeedBach2019,
-  author  = {Niles-Weed, Jonathan and Bach, Francis},
+  author  = {Weed, Jonathan and Bach, Francis},
   title   = {Sharp Asymptotic and Finite-Sample Rates of Convergence of Empirical Measures in {W}asserstein Distance},
   journal = {Bernoulli},
   volume  = {25},
   number  = {4A},
   pages   = {2620--2648},
   year    = {2019},
-  doi     = {10.3150/18-BEJ1077}
+  doi     = {10.3150/18-BEJ1065}
+}
+@article{BoissardLeGouic2014,
+  author  = {Boissard, Emmanuel and Le Gouic, Thibaut},
+  title   = {On the Mean Speed of Convergence of Empirical and Occupation Measures in Wasserstein Distance},
+  journal = {Annales de l'Institut Henri Poincare, Probabilites et Statistiques},
+  volume  = {50},
+  number  = {2},
+  pages   = {539--563},
+  year    = {2014},
+  doi     = {10.1214/12-AIHP517}
+}
+@article{delBarrioEtAl2023,
+  author  = {del Barrio, Eustasio and Gonzalez-Sanz, Alberto and Loubes, Jean-Michel and Niles-Weed, Jonathan},
+  title   = {An Improved Central Limit Theorem and Fast Convergence Rates for Entropic Transportation Costs},
+  journal = {SIAM Journal on Mathematics of Data Science},
+  volume  = {5},
+  number  = {3},
+  pages   = {639--669},
+  year    = {2023},
+  doi     = {10.1137/22M149260X}
+}
+@article{RigolletStromme2025,
+  author  = {Rigollet, Philippe and Stromme, Austin J.},
+  title   = {On the Sample Complexity of Entropic Optimal Transport},
+  journal = {The Annals of Statistics},
+  volume  = {53},
+  number  = {1},
+  year    = {2025},
+  doi     = {10.1214/24-AOS2455}
+}
+@article{EcksteinNutz2022,
+  author  = {Eckstein, Stephan and Nutz, Marcel},
+  title   = {Quantitative Stability of Regularized Optimal Transport and Convergence of Sinkhorn's Algorithm},
+  journal = {SIAM Journal on Mathematical Analysis},
+  volume  = {54},
+  number  = {6},
+  pages   = {5922--5948},
+  year    = {2022},
+  doi     = {10.1137/21M145505X}
+}
+@article{GhosalNutzBernton2022,
+  author  = {Ghosal, Promit and Nutz, Marcel and Bernton, Espen},
+  title   = {Stability of Entropic Optimal Transport and Schrodinger Bridges},
+  journal = {Journal of Functional Analysis},
+  volume  = {283},
+  number  = {9},
+  pages   = {109622},
+  year    = {2022},
+  doi     = {10.1016/j.jfa.2022.109622}
+}
+@inproceedings{KolouriRohdeHoffmann2018,
+  author    = {Kolouri, Soheil and Rohde, Gustavo K. and Hoffmann, Heiko},
+  title     = {Sliced Wasserstein Distance for Learning Gaussian Mixture Models},
+  booktitle = {2018 IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages     = {3427--3436},
+  year      = {2018},
+  doi       = {10.1109/CVPR.2018.00361}
+}
+@inproceedings{DeshpandeEtAl2019,
+  author    = {Deshpande, Ishan and Hu, Yuan-Ting and Sun, Ruoyu and Pyrros, Ayis and Siddiqui, Nasir and Koyejo, Sanmi and Zhao, Zhizhen and Forsyth, David and Schwing, Alexander G.},
+  title     = {Max-Sliced Wasserstein Distance and Its Use for {GAN}s},
+  booktitle = {2019 IEEE/CVF Conference on Computer Vision and Pattern Recognition},
+  pages     = {10648--10656},
+  year      = {2019},
+  doi       = {10.1109/CVPR.2019.01090}
+}
+@inproceedings{PatyCuturi2019,
+  author    = {Paty, Fran{{c}}ois-Pierre and Cuturi, Marco},
+  title     = {Subspace Robust Wasserstein Distances},
+  booktitle = {Proceedings of the 36th International Conference on Machine Learning},
+  series    = {Proceedings of Machine Learning Research},
+  volume    = {97},
+  pages     = {5072--5081},
+  year      = {2019}
+}
+@article{LinEtAl2020,
+  author  = {Lin, Tianyi and Fan, Chenyou and Ho, Nhat and Cuturi, Marco and Jordan, Michael I.},
+  title   = {Projection Robust Wasserstein Distance and Riemannian Optimization},
+  journal = {Advances in Neural Information Processing Systems},
+  volume  = {33},
+  pages   = {9383--9397},
+  year    = {2020}
+}
+@article{NadjahiEtAl2020,
+  author  = {Nadjahi, Kimia and Durmus, Alain and Chizat, Lenaic and Kolouri, Soheil and Shahrampour, Shahin and Simsekli, Umut},
+  title   = {Statistical and Topological Properties of Sliced Probability Divergences},
+  journal = {Advances in Neural Information Processing Systems},
+  volume  = {33},
+  pages   = {2085--2095},
+  year    = {2020}
+}
+@article{NietertEtAl2022,
+  author  = {Nietert, Sloan and Goldfeld, Ziv and Sadhu, Ritwik and Kato, Kengo},
+  title   = {Statistical, Robustness, and Computational Guarantees for Sliced Wasserstein Distances},
+  journal = {Advances in Neural Information Processing Systems},
+  volume  = {35},
+  pages   = {28179--28193},
+  year    = {2022}
 }
 @misc{RajputSchramSammuliLin2025,
   author       = {Rajput, Kishansingh and Schram, Malachi and Sammuli, Brian and Lin, Sen},

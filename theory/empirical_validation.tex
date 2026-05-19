@@ -1,6 +1,6 @@
 \section{Empirical Signatures}\label{sec:validation}
 
-The empirical section makes the theory visible in finite samples. Its purpose is
+The empirical section makes the theory visible in finite samples. The aim is
 to exhibit the main observable signatures of the temporal-validity horizon and
 to report evidence relevant to the fixed-$\varepsilon$ Sinkhorn conjecture.
 
@@ -15,7 +15,9 @@ operating window, and both ADWIN and Page--Hinkley detectors. In the
 operational map, a cell is marked useful when both fitted finite-sample
 exponents stay above the usefulness threshold and their gap remains below the
 calibration tolerance. Reported curves are seed-averaged means, while the map
-summarizes log--log slope fits across the listed sample sizes.
+summarizes log--log slope fits across the listed sample sizes. The empirical
+goal is qualitative and structural: persistence of shape, ordering, and sign
+across repeated runs, not precise constant estimation for every curve.
 
 Four signatures matter. First, finite-memory risk should exhibit an interior
 optimum. Second, that optimum should move with temporal roughness. Third, the
@@ -31,7 +33,7 @@ lies at an interior horizon.
 
 \begin{figure}[!htbp]
 \centering
-\safeincludegraphics[width=0.92\linewidth]{artifacts/figures/gaussian/fig_ucurve}
+\safeincludegraphics[width=0.88\linewidth]{artifacts/figures/gaussian/fig_ucurve}
 \caption{Finite-memory U-curve. Tracking error first falls with horizon and then
 rises once staleness overtakes the remaining variance gain. The optimum remains
 finite across drift strengths.}
@@ -56,7 +58,7 @@ $\zeta$ values.
 
 \begin{figure}[!htbp]
 \centering
-\safeincludegraphics[width=0.96\linewidth]{artifacts/figures/roughness_family/fig_roughness_family}
+\safeincludegraphics[width=0.9\linewidth]{artifacts/figures/roughness_family/fig_roughness_family}
 \caption{Roughness-dependent horizon scaling. Each path class exhibits a finite
 optimum, and the location of that optimum changes with $H$. The horizon is a
 function of drift regularity, not a fixed window rule.}
@@ -87,7 +89,7 @@ $\varepsilon_{\max}=0.2$ for $(12,1)$.
 
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.9\linewidth]{artifacts/figures/frontier/fig_operational_frontier_map.pdf}
+\includegraphics[width=0.86\linewidth]{artifacts/figures/frontier/fig_operational_frontier_map.pdf}
 \caption{Empirical shape relevant to the fixed-$\varepsilon$ Sinkhorn conjecture.
 Each panel reports the minimum of the i.i.d. and triangular finite-sample
 exponents over the ambient/intrinsic pairs tested at one regularization level.
@@ -99,7 +101,9 @@ picture has a stable core and a single mixed boundary case on the tested grid.}
 This map gives the shape of the empirical support behind the conjecture. The
 observed operational region is neither empty nor uniform across settings; the
 calibration details and supporting tables are kept in
-\cref{app:finite_sample_geometry}.
+\cref{app:finite_sample_geometry}. The claim is therefore deliberately narrow:
+the tested grid exhibits a stable operational core, but the full inheritance law
+remains conjectural outside the calibrated fixed-span settings shown here.
 
 \subsection{Validity Loss Before Detector Alarm}\label{sec:validation_invalidity_gap}
 
@@ -116,7 +120,7 @@ detector alarm that follows.
 
 \begin{figure}[!htbp]
 \centering
-\safeincludegraphics[width=0.94\linewidth]{artifacts/figures/invalidity_gap/fig_invalidity_gap}
+\safeincludegraphics[width=0.9\linewidth]{artifacts/figures/invalidity_gap/fig_invalidity_gap}
 \caption{Validity loss before detector alarm. As drift intensifies, the
 temporal-validity horizon contracts until the operating horizon becomes stale at
 $t_{\mathrm{valid}}$; the detector responds only later at $t_{\mathrm{detect}}$,
@@ -132,7 +136,9 @@ alarm threshold.
 The positive lag is not a knife-edge feature of one tuning choice. Across the
 tested ADWIN thresholds, mean detection time remains strictly later than mean
 validity-expiry time, and the same qualitative lag persists under a different
-detector family as well.
+detector family as well. The empirical claim is robustness of the sign of
+$\Delta_{\mathrm{val-det}}$ on the tested detector/tuning family, not a
+detector-uniform delay law.
 
 \subsection{What the Evidence Shows}\label{sec:validation_summary}
 

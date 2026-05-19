@@ -2,8 +2,7 @@
 \label{sec:finite_memory_under_drift}
 
 This section fixes the finite-memory objects and develops the horizon law,
-structural lower bound, benchmark theorem, and conjectural extensions used in
-the rest of the paper.
+structural lower bound, benchmark theorem, and conjectural extensions.
 
 \begin{figure}[!htbp]
 \centering
@@ -29,7 +28,7 @@ Its corresponding staleness at time $t$ is the weighted transport misalignment
 For a uniform window, $A(w)=(n-1)/2$, so window length and temporal age are the
 same object up to constants.
 
-Throughout the paper, $P_t$ denotes the present target law,
+Throughout, $P_t$ denotes the present target law,
 $\bar P_t^{(n)}$ the window target obtained by averaging the last $n$ target
 laws, and $\widehat P_t^{(n)}$ the estimator built from the last $n$
 observations. The finite-sample term always refers to the estimation error
@@ -159,11 +158,11 @@ Their average
 \]
 couples $\bar P_t^{(n)}$ with $P_t$, so
 \[
+  \begin{aligned}
   W_2^2\!\left(\bar P_t^{(n)},P_t\right)
-  \le
-  \int \|x-y\|^2\,d\bar\pi(x,y)
-  =
-  \frac{1}{n}\sum_{j=0}^{n-1} W_2^2\!\left(P_{t-j},P_t\right).
+  &\le \int \|x-y\|^2\,d\bar\pi(x,y) \\
+  &= \frac{1}{n}\sum_{j=0}^{n-1} W_2^2\!\left(P_{t-j},P_t\right).
+  \end{aligned}
 \]
 Applying the Hölder envelope gives the displayed finite-$n$ constant, and taking
 square roots completes the proof.
@@ -179,7 +178,7 @@ In the root-$n$ finite-sample regime $a=1/2$,
   n^*(1/2,H) \asymp (C_K/\zeta)^{2/(1+2H)}.
 \]
 The finite-$n$ constant in
-\cref{lem:Hölder_staleness_bound} is the constant used throughout the paper for
+\cref{lem:Hölder_staleness_bound} is the constant used here for
 uniform windows; the simpler $(2H+1)^{-1/2}$ expression is its large-window
 limit.
 
@@ -188,7 +187,9 @@ limit.
 
 The abstract law needs at least one rigorous finite-sample instantiation. The
 bounded-support fixed-span one-dimensional triangular array provides a tractable
-proof model for that role.
+proof model for that role. Its scope is intentionally narrow: common compact
+support, uniformly regular window mixtures, and an explicit integrated Bahadur
+remainder hypothesis.
 
 \begin{proposition}[Root-$n$ finite-sample bound in the 1D proof model]\label{prop:minimum_kernel}
 Let $X_{n,1},\dots,X_{n,n}$ be independent one-dimensional observations with laws
@@ -206,10 +207,11 @@ Assume:
   for the empirical quantile function of $\widehat P_n^{\mathrm{tri}}$, one has
   the Bahadur representation
   \[
+    \begin{aligned}
     \widehat q_n(u)-q_n(u)
-    =
-    \frac{u-\widehat F_n(q_n(u))}{\bar f_n(q_n(u))} + R_n(u),
-    \qquad u\in(0,1),
+    &= \frac{u-\widehat F_n(q_n(u))}{\bar f_n(q_n(u))} + R_n(u), \\
+    &\hspace{2.2cm} u\in(0,1),
+    \end{aligned}
   \]
   with
   \[
@@ -271,22 +273,17 @@ By item~(iv),
 \[
   \mathbb E\int_0^1 R_n(u)^2du=o(n^{-1}).
 \]
-The cross term is controlled by Cauchy--Schwarz:
-\[
-  \mathbb E\left|2\int_0^1 Z_n(u)R_n(u)du\right|
-  \le
-  2\Bigl(\mathbb E\int_0^1 Z_n(u)^2du\Bigr)^{1/2}
-   \Bigl(\mathbb E\int_0^1 R_n(u)^2du\Bigr)^{1/2}
-  = o(n^{-1}).
-\]
-Hence
-\[
-  \mathbb E\,W_2^2\!\left(\widehat P_n^{\mathrm{tri}},\bar P_n\right)=O(n^{-1}).
-\]
-Jensen's inequality then gives
-\[
-  \mathbb E\,W_2\!\left(\widehat P_n^{\mathrm{tri}},\bar P_n\right)=O(n^{-1/2}).
-\]
+The cross term is then $o(n^{-1})$ by Cauchy--Schwarz, since
+\(
+  \mathbb E\int_0^1 Z_n(u)^2du=O(n^{-1})
+\)
+and
+\(
+  \mathbb E\int_0^1 R_n(u)^2du=o(n^{-1})
+\).
+Hence the expected squared Wasserstein error is $O(n^{-1})$, and Jensen's
+inequality gives the root-$n$ rate for
+$\mathbb E\,W_2\!\left(\widehat P_n^{\mathrm{tri}},\bar P_n\right)$.
 
 The main conclusion is the exponent. Under this bounded-support fixed-span
 regime, the triangular-array finite-sample term remains root-$n$.
@@ -301,7 +298,8 @@ fixed-span proof model rather than claiming a general theorem that verifies it.
 This covers, for example, bounded-support smooth location perturbations of a
 common base density and bounded smooth monotone transforms of such a base law,
 provided the fixed-span condition is maintained and the stated integrated
-remainder bound holds.
+remainder bound holds. A broad verification theorem for independent
+non-identically distributed rows is left open.
 \end{remark}
 
 \subsection{Structural Lower Bound}\label{subsec:lower_bound}
@@ -490,13 +488,14 @@ optimized finite-memory minimax risk
   \sup_{\mu\in\mathfrak M_H(\zeta)}
   \mathbb E\,W_2\!\left(\widehat P_t^{(n)},P_t\right).
 \]
-Then there exist constants $0<c_H\le C_H<\infty$, depending only on $H$, such that
+Then there exist constants $0<c_H\le C_H<\infty$, depending only on $H$, such
+that
 \[
+  \begin{aligned}
   c_H\,\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)}
-  \le
-  \mathcal R_H^*(\sigma,\zeta)
-  \le
-  C_H\,\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)}.
+  &\le \mathcal R_H^*(\sigma,\zeta) \\
+  &\le C_H\,\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)}.
+  \end{aligned}
 \]
 In particular, the deterministic H\"older class has horizon scale
 \[
@@ -513,10 +512,11 @@ then its asymptotic horizon shape is
 \]
 and its asymptotic risk constant is
 \[
+  \begin{aligned}
   U_H^{\mathrm{mean}}
-  =
-  ((H+1)y_H)^{-1/(2H+1)}
-  \Bigl(2\varphi(y_H)+y_H\bigl(2\Phi(y_H)-1\bigr)\Bigr).
+  &= ((H+1)y_H)^{-1/(2H+1)} \\
+  &\quad \times \Bigl(2\varphi(y_H)+y_H\bigl(2\Phi(y_H)-1\bigr)\Bigr).
+  \end{aligned}
 \]
 \end{theorem}
 
@@ -641,12 +641,14 @@ $a_{\varepsilon}$, then the operational horizon law should be
 
 \paragraph{Evidence.}
 The i.i.d. benchmark comes from existing fixed-$\varepsilon$ entropic transport
-results \citep{Stromme2023MID,GroppeHundrieser2024LCA}. In the present embedded
-fixed-span model, support-complexity inheritance is exact and the dual
-smoothness threshold reduces to $\alpha>k/2$. Calibration supplies the only
-remaining ingredient: evidence that the triangular and i.i.d. rate estimates
-stay close across the regularization band. That evidence motivates the
-conjecture, but it does not close it as a theorem.
+results, including fixed-marginal limit theory for the Sinkhorn divergence and
+intrinsic-complexity adaptation \citep{GoldfeldEtAl2022,Stromme2023MID,
+GroppeHundrieser2024LCA}. In the present embedded fixed-span model,
+support-complexity inheritance is exact and the dual smoothness threshold
+reduces to $\alpha>k/2$. Calibration supplies the only remaining ingredient:
+evidence that the triangular and i.i.d. rate estimates stay close across the
+regularization band. That evidence motivates the conjecture, but it does not
+close it as a theorem.
 
 \paragraph{Regular-family inheritance.}
 The broader extension question is whether regular dominated families inherit the
