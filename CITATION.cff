@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-title: "Useful Memory Horizon: Temporal Validity of Retained Evidence under Drift"
+title: "Temporal-Validity Horizons for Finite-Memory Distribution Tracking under Drift"
 version: "v2"
 message: "If you use this repository, please cite the title recorded below."
 type: software
@@ -10,7 +10,7 @@ authors:
     orcid: "https://orcid.org/0009-0005-0201-9308"
 repository-code: "https://github.com/jovemexausto/useful-memory-horizon"
 license: "CC-BY-4.0"
-abstract: "LaTeX source, generated artifacts, and reproduction scripts for the paper 'Useful Memory Horizon: Temporal Validity of Retained Evidence under Drift'."
+abstract: "LaTeX source, generated artifacts, and reproduction scripts for the paper 'Temporal-Validity Horizons for Finite-Memory Distribution Tracking under Drift'."
 doi: "10.5281/zenodo.20041349"
 date-released: "2026-05-09"
 keywords:
@@ -22,7 +22,7 @@ keywords:
   - invalidity gap
 preferred-citation:
   type: software
-  title: "Useful Memory Horizon: Temporal Validity of Retained Evidence under Drift"
+  title: "Temporal-Validity Horizons for Finite-Memory Distribution Tracking under Drift"
   authors:
     - family-names: "Parreira"
       given-names: "Vinicius"

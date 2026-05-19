@@ -1,4 +1,4 @@
-\section{Empirical Signatures}\label{sec:validation}
+\section{Empirical Evidence}\label{sec:validation}
 
 These synthetic experiments expose the finite-sample signatures of the
 temporal-validity horizon and report evidence relevant to the fixed-$\varepsilon$
@@ -110,7 +110,7 @@ relevant control variable is the estimated local geometry, not the ambient
 coordinate count. The rowwise stability pattern remains mixed, so TwoNN enters
   here as a regime-selection diagnostic for the theorem-level band analysis.
 
-\subsection{Validity Loss Before Detector Alarm}\label{sec:validation_validity_lag}
+\subsection{Temporal Validity Can Fail Before Detector Alarm}\label{sec:validation_validity_lag}
 
 Temporal validity and changepoint evidence are different clocks. To make that
 separation explicit, consider a stream whose local drift rate ramps upward over
@@ -125,8 +125,8 @@ detector alarm that follows.
 
 \begin{figure}[!htbp]
 \centering
-\safeincludegraphics[width=0.9\linewidth]{artifacts/figures/invalidity_gap/fig_invalidity_gap}
-\caption{Validity loss before detector alarm. As drift intensifies, the
+\safeincludegraphics[width=0.9\linewidth]{artifacts/figures/validity_lag/fig_validity_lag}
+\caption{Temporal validity can fail before detector alarm. As drift intensifies, the
 temporal-validity horizon contracts until the operating horizon becomes stale at
 $t_{\mathrm{valid}}$; the detector responds only later at $t_{\mathrm{detect}}$,
 leaving a strictly positive validity-detection lag. The lower panel shows
