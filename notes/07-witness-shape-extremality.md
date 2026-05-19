@@ -23,7 +23,7 @@ Its asymptotic energy constant is
 
 Substituting this into the exact Gaussian two-point reduction yields
 
-- `C_H^{min} = I_H^{-H/(2H+1)} x_H^{2H/(2H+1)} Phi(-x_H)`.
+- `C_H^{\min} = I_H^{-H/(2H+1)} x_H^{2H/(2H+1)} Phi(-x_H)`.
 
 For `H < 1`, the improvement factor over the ramp constant is
 

@@ -35,7 +35,7 @@ The maximizer `x_H` solves
 
 This yields the asymptotic constant
 
-- `C_H^{ramp} = (2H+1)^{H/(2H+1)} x_H^{2H/(2H+1)} Phi(-x_H)`.
+- `C_H^{\mathrm{ramp}} = (2H+1)^{H/(2H+1)} x_H^{2H/(2H+1)} Phi(-x_H)`.
 
 ## Status
 

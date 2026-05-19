@@ -6,16 +6,14 @@ to report evidence relevant to the fixed-$\varepsilon$ Sinkhorn conjecture.
 
 All experiments in this section are synthetic and fully specified by the stated
 data-generating designs. The Gaussian U-curve uses 20 Monte Carlo seeds, the
-roughness-family sweep uses 12, the fixed-$\varepsilon$ operational map fits
-log--log slopes over sample sizes $(24,48,96,160)$ on the pairs $(8,1)$,
-$(8,2)$, $(12,1)$, and $(12,2)$ using 24 seeds, and the validity-detection
-experiment uses a piecewise-ramped drift stream with 12 seeds, a fixed
-operating window, and both ADWIN and Page--Hinkley detectors. Reported curves
-are seed-averaged means, while the operational map summarizes fitted
-finite-sample slopes and marks a cell useful when both exponents exceed the
-usefulness threshold and their gap stays below the calibration tolerance. The
-empirical goal is qualitative and structural: persistence of shape, ordering,
-and sign across repeated runs, not precise constant estimation for every curve.
+roughness-family sweep uses 12, the fixed-$\varepsilon$ Sinkhorn fits log--log
+slopes over sample sizes $(24,48,96,160)$ on the pairs $(8,1)$, $(8,2)$,
+$(12,1)$, and $(12,2)$ using 24 seeds, and the validity-detection experiment
+uses a piecewise-ramped drift stream with 12 seeds, a fixed operating window,
+and both ADWIN and Page--Hinkley detectors. Reported curves are seed-averaged
+means. The empirical goal is qualitative and structural: persistence of shape,
+ordering, and sign across repeated runs, not precise constant estimation for
+every curve.
 
 Four signatures matter. First, finite-memory risk should exhibit an interior
 optimum. Second, that optimum should move with temporal roughness. Third, the
@@ -74,19 +72,18 @@ a practical geometry replaces raw $W_2$, does the finite-sample term remain
 stable enough for the conjectured horizon law to stay informative? The
 pointwise and bandwise one-dimensional fixed-support statements appear in
 \cref{prop:pointwise_sinkhorn_1d,prop:bandwise_sinkhorn_1d}; the calibrated
-embedded fixed-span model shows the regime map for the broader conjectural
-setting.
+embedded fixed-span model supplies the broader conjectural setting.
 
-The figure below concerns fixed-$\varepsilon$ Sinkhorn geometry on embedded
-low-intrinsic-dimensional support. It shows that the corresponding finite-sample
-term remains stable across the tested regularization values and that the
-triangular slope stays close to the i.i.d. benchmark rather than exhibiting a
-separate exponent. Combined with the structural ingredients isolated in
-\cref{prop:operational_theorem_frontier}, this provides empirical support for
-the bandwise conjecture in \cref{conj:operational_sinkhorn_horizon}. In the
-calibrated fixed-span model with $\alpha=2$ and span $0.25$, the maximal
-observed stable bands are $\varepsilon_{\max}=0.5$ for $(d,k)=(8,1)$,
-$(8,2)$, and $(12,2)$, and $\varepsilon_{\max}=0.2$ for $(12,1)$.
+The fixed-$\varepsilon$ Sinkhorn geometry on embedded low-intrinsic-dimensional
+support shows that the corresponding finite-sample term remains stable across
+the tested regularization values and that the triangular slope stays close to
+the i.i.d. benchmark rather than exhibiting a separate exponent. Combined with
+the structural ingredients isolated in \cref{prop:operational_theorem_frontier},
+this provides empirical support for the bandwise conjecture in
+\cref{conj:operational_sinkhorn_horizon}. In the calibrated fixed-span model
+with $\alpha=2$ and span $0.25$, the maximal observed stable bands are
+$\varepsilon_{\max}=0.5$ for $(d,k)=(8,1)$, $(8,2)$, and $(12,2)$, and
+$\varepsilon_{\max}=0.2$ for $(12,1)$.
 
 The same synthetic family also separates two mechanisms. Raw $W_2$ comparison
 between the triangular and i.i.d. empirical measures slows once intrinsic
@@ -98,25 +95,11 @@ the self-coupling blocks are the main source of instability but appear
 numerically to plateau with sample size rather than deteriorate. This is
 evidence about mechanism, not a theorem.
 
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=0.86\linewidth]{artifacts/figures/frontier/fig_operational_frontier_map.pdf}
-\caption{Empirical shape relevant to the bandwise fixed-$\varepsilon$ Sinkhorn
-conjecture. Each panel reports the minimum of the i.i.d. and triangular
-finite-sample exponents over the ambient/intrinsic pairs tested at one
-regularization level. Crossed cells mark settings that fail the usefulness
-criterion. The resulting picture has a stable core and a small mixed boundary
-region on the tested grid.}
-\label{fig:operational_frontier_map}
-\end{figure}
-
-This map gives the shape of the empirical support behind the bandwise
-conjecture. The observed operational region is neither empty nor uniform across
-settings; calibration details and supporting tables are kept in
-\cref{app:finite_sample_geometry}. The tested grid exhibits a stable
-operational core, with the strongest support on moderate bands bounded away
-from zero, and the bandwise inheritance law remains conjectural outside the
-calibrated fixed-span settings shown here.
+The calibrated fixed-span model shows that the tested grid has a stable core and
+a small mixed boundary region. Calibration details and supporting tables are
+kept in \cref{app:finite_sample_geometry}. The strongest support appears on
+moderate bands bounded away from zero, and the bandwise inheritance law remains
+conjectural outside the calibrated fixed-span settings shown here.
 
 To probe whether the frontier is controlled more by local intrinsic geometry than
 by the ambient coordinate count, we estimate the effective intrinsic dimension

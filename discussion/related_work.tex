@@ -5,36 +5,50 @@ Dynamic-regret and variation-budget results show that under drift, window size
 or forgetting scale must depend on how quickly the target moves
 \citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,YuanLamperski2020,
 MazzettoUpfal2023,WangXieChenLuiZhou2024}. Those works are close in spirit, but
-their primary object is regret under a moving comparator. Here the primary
-object is different: the temporal validity of retained evidence in a
-distribution-tracking problem. The horizon is not a tuning parameter attached to
-regret analysis; it is the statistical object being characterized.
+their primary object is regret under a moving comparator, whereas the angle
+here is evidence age under drift. The horizon is not a tuning parameter attached
+to regret analysis; it is the statistical object being characterized.
 
 \paragraph{Adaptive windowing and drift detection.}
 Adaptive-window and concept-drift methods ask when accumulated evidence is
 sufficient to react \citep{BifetGavalda2007,Gama2004,GamaSurvey2014}.
 \citet{hinder2023window} emphasize that the relevant window scale is itself part
-of the problem. The question studied here is adjacent but distinct. Temporal validity
-is not changepoint evidence: memory can stop representing the present before the
-available data support a detector alarm. In that sense, the object here is the
-validity horizon of retained evidence rather than the stopping time of a
-reaction rule. The validity-detection lag makes that distinction visible in finite
-samples.
+of the problem. Their angle is when accumulated evidence crosses a reaction
+threshold; the angle here is when memory itself stops representing the present.
+Temporal validity is not changepoint evidence: memory can fail before the data
+support a detector alarm. The validity-detection lag makes that distinction
+visible in finite samples.
+
+Resource-aware update scheduling under drift is a neighboring control problem,
+but its objective is policy feasibility rather than evidence validity.
+RCCDA uses a Lyapunov drift-plus-penalty rule to decide when to retrain under a
+strict resource budget \citep{PiasecznyEtAl2025RCCDA}; the relevant trade-off is
+update cost against accumulated loss, so the age variable enters through control
+expense, not through the fidelity of a retained distributional summary.
+Streaming OT-based detectors, including the bootstrap-based OT change-point line
+of \citet{ShvetsovEtAl2020OTChangePoint}, move drift into a stopping problem:
+their scale is the delay and power of an alarm, with windowing serving detection
+rather than memory validity. Efficient MMD-based detectors such as MMDEW
+\citep{KalinkeEtAl2025MMDEW} make the same distinction in a different geometry,
+trading memory and runtime for faster tests. The contrast is objective-level:
+update cost, alarm delay, and test power on one side; staleness of retained
+evidence on the other.
 
 \paragraph{Adaptive filtering and state-space tracking.}
 Classical adaptive filtering and state-space tracking also balance smoothing
 against responsiveness by tuning forgetting factors, gain schedules, or process
 noise models \citep{Kalman1960,Jazwinski1970}. Those analyses usually work under
 stochastic state-space assumptions and ask for Bayes-optimal tracking of a
-latent process. The analysis here instead studies deterministic Wasserstein
-drift envelopes and characterizes a worst-case temporal-validity horizon.
+latent process. Their angle is latent-state estimation; the angle here is
+deterministic drift envelopes and a worst-case temporal-validity horizon.
 
 \paragraph{Locally stationary smoothing.}
 Locally stationary time-series analysis likewise studies how window or bandwidth
 choice must adapt to time variation \citep{Dahlhaus1997}. That literature is
 close in its bias--variance logic, but the moving object there is typically a
-local spectrum or regression function. Here the moving object is a path of
-distributions, and the age penalty is measured directly in transport geometry.
+local spectrum or regression function. The angle here is different: the moving
+object is a path of distributions, and the age penalty is measured directly in
+transport geometry.
 
 \paragraph{Distribution tracking under transport geometry.}
 Wasserstein distance and Sinkhorn-type estimators are natural when drift lives
@@ -44,9 +58,8 @@ For raw empirical Wasserstein distances, \citet{FournierGuillin2015} give the
 standard ambient-dimension upper bounds, \citet{BoissardLeGouic2014} give an
 earlier covering-based low-complexity bridge, and \citet{NilesWeedBach2019}
 identify sharp finite-sample behavior in terms of Wasserstein dimension. These
-results are the closest finite-sample precursors to the present law: they show
-that the exponent in the finite-sample term is geometry dependent even before
-drift enters.
+results show that the finite-sample exponent is geometry dependent even before
+drift enters; that is the angle relevant here.
 
 \paragraph{Entropic and smoothed transport as operational geometries.}
 Regularization changes the statistical geometry as well as the computational one.
@@ -56,22 +69,22 @@ behavior than raw high-dimensional Wasserstein distances
 \citep{GenevayEtAl2019,MenaWeed2019,delBarrioEtAl2023,RigolletStromme2025,
 Stromme2023MID,GroppeHundrieser2024LCA,EcksteinNutz2022,GhosalNutzBernton2022}.
 That perspective is exactly why fixed-$\varepsilon$ Sinkhorn is treated here as
-an operational geometry rather than as a surrogate for the raw $W_2$ theorem.
-Regularization can induce a usable finite-sample regime on which a
-finite-memory horizon law still makes sense. In the i.i.d. setting, this
-literature provides sample-complexity and limit theory for fixed marginals,
-including fixed-$\varepsilon$ differentiability and asymptotic CLTs for the
-Sinkhorn divergence \citep{GoldfeldEtAl2022}, intrinsic- or lower-complexity
-adaptation, and quantitative stability of regularized transport and Sinkhorn
-iteration. These fixed-$\varepsilon$ asymptotics are the natural i.i.d. anchor
-for the operational conjecture.
+an operational geometry rather than as a surrogate for the raw $W_2$ theorem:
+regularization changes the regime, not just the computation. In the i.i.d.
+setting, this literature provides sample-complexity and limit theory for fixed
+marginals, including fixed-$\varepsilon$ differentiability and asymptotic CLTs
+for the Sinkhorn divergence \citep{GoldfeldEtAl2022}, intrinsic- or
+lower-complexity adaptation, and quantitative stability of regularized transport
+and Sinkhorn iteration. These fixed-$\varepsilon$ asymptotics are the i.i.d.
+anchor for the operational conjecture.
 Recent Gaussian entropic-OT analyses also make the regularized geometry more
 explicit in linear-Gaussian settings \citep{AkyildizEtAl2024}. The Kalman/Riccati
 structure in that setting suggests a narrower intermediate theorem for streaming
-Sinkhorn under drift: an explicitly recursive, constructive operational regime
-between the i.i.d. fixed-$\varepsilon$ results and the fully general triangular-array
-horizon law. A drifted triangular-array theorem that combines sampling,
-staleness, and optimization control in one horizon law is not yet available.
+Sinkhorn under drift: an explicitly recursive, constructive operational regime.
+Here the angle is algorithmic recursion under a regularized geometry, between the
+i.i.d. fixed-$\varepsilon$ results and the fully general triangular-array horizon
+law. A drifted triangular-array theorem that combines sampling, staleness, and
+optimization control in one horizon law is not yet available.
 Recent geometry-aware calibration work also points toward intrinsic-dimension-based
 selection of regularization scales, which is relevant to identifying operational
 $\varepsilon$-bands in practice \citep{GenansWintenberger2026}. A concrete
@@ -87,9 +100,9 @@ one-dimensional or low-dimensional proxies
 \citep{KolouriRohdeHoffmann2018,DeshpandeEtAl2019,PatyCuturi2019,
 LinEtAl2020,NadjahiEtAl2020,NietertEtAl2022}. These works show that changing the
 comparison geometry or estimator can materially improve finite-sample behavior
-for the proxy metric itself. They are therefore relevant here as examples of
-alternative finite-sample geometries with different exponents, not as automatic
-improvements for raw $W_2$.
+for the proxy metric itself. The angle here is that geometry choice can change
+the exponent itself, not merely the constant, so they are relevant as examples of
+alternative finite-sample geometries.
 
 \paragraph{Wasserstein nonstationarity and robust optimization.}
 Jiang, Li, and Zhang study online stochastic optimization under a Wasserstein
@@ -99,17 +112,17 @@ drift-aware weighting questions in Wasserstein distributionally robust
 optimization \citep{KeehanAndersonWiesemann2025}. Amini and Vinas give a recent
 moment-method route to triangular-array concentration in $W_1$
 \citep{AminiVinas2026}. Those results are adjacent to the finite-sample-regime issue
-studied here, but they do not by themselves close the $W_2$
-window-mixture concentration problem studied here. The focus is narrower and more
-structural: for finite-memory tracking, when does retained evidence stop helping
-because temporal age has become a dominant source of error?
+studied here. Their angle is optimization or concentration under nonstationarity;
+the angle here is when temporal age itself becomes the dominant source of error
+for retained evidence.
 
 \paragraph{Freshness and Age of Information.}
 The Age-of-Information literature treats age as a resource constraint and asks
 how update policies balance communication cost against stale information
 \citep{KaulYatesGruteser2012,YatesEtAl2021AoI}. This horizon law gives a
-distributional analogue. Age is costly because it induces geometric error under
-drift, and temporal roughness determines how quickly that cost accumulates.
+distributional analogue in a different objective: age is costly because it
+induces geometric error under drift, and temporal roughness determines how
+quickly that cost accumulates.
 
 Across these neighboring literatures, the closest theme is that nonstationarity
 makes retention scale matter. The distinguishing claim here is more specific:

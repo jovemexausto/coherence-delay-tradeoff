@@ -10,7 +10,7 @@ model.
 ## Main steps
 
 1. In one dimension,
-   `W_2^2(\hat P_n^{tri}, \bar P_n) = int_0^1 (\hat q_n(u)-q_n(u))^2 du`.
+   `W_2^2(\hat P_n^{tri}, \bar P_n) = \int_0^1 (\hat q_n(u)-q_n(u))^2 \, du`.
 
 2. Use the Bahadur decomposition
    `\hat q_n(u)-q_n(u) = Z_n(u) + R_n(u)`
@@ -21,15 +21,15 @@ model.
    `Var(\hat F_n(q_n(u))) <= 1/(4n)`.
 
 4. A uniform positive lower bound on `\bar f_n` gives
-   `E int_0^1 Z_n(u)^2 du = O(n^{-1})`.
+   `\mathbb E\int_0^1 Z_n(u)^2 \, du = O(n^{-1})`.
 
 5. By assumption,
-   `E int_0^1 R_n(u)^2 du = o(n^{-1})`.
+   `\mathbb E\int_0^1 R_n(u)^2 \, du = o(n^{-1})`.
 
 6. The cross term is `o(n^{-1})` by Cauchy--Schwarz.
 
 7. Therefore
-   `E W_2^2(\hat P_n^{tri}, \bar P_n) = O(n^{-1})`,
+   `\mathbb E W_2^2(\hat P_n^{tri}, \bar P_n) = O(n^{-1})`,
    and Jensen yields the root-`n` rate.
 
 ## Status

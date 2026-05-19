@@ -135,7 +135,7 @@ If the target path belongs to $\mathfrak P_H(\zeta)$, then
   \le
   \frac{\zeta^2}{n}\sum_{j=0}^{n-1} j^{2H},
 \]
-and therefore
+and therefore, by Jensen's inequality,
 \[
   W_2\!\left(\bar P_t^{(n)},P_t\right)
   \le \zeta\left(\frac{1}{n}\sum_{j=0}^{n-1} j^{2H}\right)^{1/2}
@@ -222,7 +222,7 @@ Then
 \[
   \mathbb E\,W_2^2\!\left(\widehat P_n^{\mathrm{tri}},\bar P_n\right)=O(n^{-1}),
 \]
-and therefore
+and therefore, by Jensen's inequality,
 \[
   \mathbb E\,W_2\!\left(\widehat P_n^{\mathrm{tri}},\bar P_n\right)=O(n^{-1/2}).
 \]
@@ -295,14 +295,18 @@ i.i.d. quantile processes, Bahadur representations of this type are classical;
 see \citet{Bahadur1966} and \citet[Chapter~21]{vanDerVaart1998}. The present
 paper uses the triangular-array version as an explicit hypothesis for the
 fixed-span proof model rather than claiming a general theorem that verifies it.
-This covers, for example, bounded-support smooth location perturbations of a
-common base density and bounded smooth monotone transforms of such a base law,
-provided the fixed-span condition is maintained and the stated integrated
-remainder bound holds. A broad verification theorem for independent
-non-identically distributed rows is left open. Separate diagnostics on a smooth
-fixed-support deformation model show integrated residual decay faster than
-$n^{-1}$ across the tested span and roughness values, which supports the
-plausibility of item~(iv) on that class but is not used as proof.
+One concrete sufficient package is: a common compact support $[L,U]$; rowwise
+densities $f_{n,j}$ uniformly bounded above and below by positive constants; a
+uniform smoothness bound on $f_{n,j}$ across rows; and a rowwise quantile
+process whose integrated Bahadur remainder satisfies
+$\mathbb E\int_0^1 R_n(u)^2\,du=o(n^{-1})$. This is compatible with bounded smooth
+monotone deformations of a common base law with uniformly bounded derivatives,
+and with fixed-support location perturbations when the support constraint is
+preserved. A broad verification theorem for independent non-identically
+distributed rows is left open. Separate diagnostics on a smooth fixed-support
+deformation model show integrated residual decay faster than $n^{-1}$ across the
+tested span and roughness values, which supports the plausibility of item~(iv)
+on that class but is not used as proof.
 \end{remark}
 
 \subsection{Structural Lower Bound}\label{subsec:lower_bound}

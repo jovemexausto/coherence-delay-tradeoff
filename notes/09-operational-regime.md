@@ -19,7 +19,7 @@ These ingredients are theorem-level within the model used by the paper.
 
 The full missing step is triangular-array horizon inheritance:
 
-- `E S_epsilon(\hat P_{t,tri}^{(n)}, \bar P_t^{(n)}) <= C_epsilon n^{-a_epsilon}`
+- `\mathbb E S_{\varepsilon}(\hat P_{t,\mathrm{tri}}^{(n)}, \bar P_t^{(n)}) \le C_{\varepsilon} n^{-a_{\varepsilon}}`
 
 with the same exponent as the iid benchmark on the relevant regularization band.
 
