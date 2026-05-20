@@ -211,6 +211,7 @@ def build_table(rows: list[dict[str, str | float]]) -> str:
         r"\small",
         r"\caption{Empirical scaling check for the finite-sample term. The bounded-support i.i.d. $W_2$ experiment is close to the expected $n^{-1/2}$ rate in low dimension, the corresponding triangular-array check compares one sample from each drifted component against an i.i.d. sample from the window mixture, and the Sinkhorn proxy is reported at fixed $\varepsilon$. These rows are numerical support for the carrier-regime discussion rather than theorem statements.}",
         r"\label{tab:finite_sample_geometry}",
+        r"\resizebox{\linewidth}{!}{%",
         r"\begin{tabular}{lrr}",
         r"\toprule",
         r"Setting & Estimated slope & Comment " + ROW_END,
@@ -220,7 +221,7 @@ def build_table(rows: list[dict[str, str | float]]) -> str:
         lines.append(
             f"{row['setting']} & {row['estimated_slope']} & {row['comment']} " + ROW_END
         )
-    lines.extend([r"\bottomrule", r"\end{tabular}", r"\end{table}", ""])
+    lines.extend([r"\bottomrule", r"\end{tabular}%", r"}", r"\end{table}", ""])
     return "\n".join(lines)
 
 

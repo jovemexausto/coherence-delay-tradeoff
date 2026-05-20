@@ -1,64 +1,57 @@
 \section{Limitations and Open Problems}\label{sec:limitations_open_problems}
 
-The central object is the temporal-validity horizon for finite-memory tracking
-under drift. The theorem-level results are the general horizon law, the
-uniform-window staleness bound, the one-dimensional root-$n$ proof model, the
-structural Gaussian lower bound at the exponent level, and the Gaussian
-location minimax benchmark. The remaining claims are narrower.
+The central structural object is the temporal-validity horizon for finite-memory
+tracking under drift, and the closed operational corollary is the induced
+useful-memory region. The theorem-level results are the general horizon law, the
+useful-memory region proposition, the uniform-window staleness bound, the
+one-dimensional root-$n$ proof model, the structural Gaussian lower bound at the
+exponent level, and the Gaussian location minimax benchmark. The remaining
+claims are narrower.
 
 \paragraph{Finite-sample scope.}
-The theory is modular in the finite-sample exponent $a$, but the main rigorous
-instantiation is the root-$n$ regime. The tractable proof model establishes that
-regime in one dimension under bounded support and fixed span. Outside that
-setting, the same balancing logic continues to hold, but the finite-sample term
-must come from a different theorem. In particular, no claim is made here for a
-general raw-$W_2$ triangular-array theorem in arbitrary dimension.
+The theory is modular in the finite-sample exponent $a$, but the fully proved
+finite-sample instantiation established here is the one-dimensional root-$n$
+regime under bounded support and fixed span. The same balancing logic extends to
+other geometries only once an appropriate finite-sample theorem is supplied.
 
 \paragraph{Operational scope.}
 For fixed-$\varepsilon$ Sinkhorn, the structural ingredients of the embedded
-fixed-span model are proved, and the full triangular-array inheritance law is
-stated as a conjecture. Exact support-complexity inheritance and the dual
-threshold $\alpha>k/2$ are proved; the unresolved statement is the full theorem
-connecting the triangular-array finite-sample term to the i.i.d. benchmark.
-The numerical evidence is strongest on moderate compact bands bounded away from
-zero, where direct Jacobian probes remain stable; that evidence does not close
-the theorem.
-
-\paragraph{Family-level scope.}
-No blanket extension is claimed here to every deterministic
-$W_2$-H\"older path class. Continuous regular families and operational
-geometries can support meaningful finite-sample exponents, but support-changing
-and singular families behave differently. The natural extension target is
-therefore a theorem for regular dominated families or operational geometries
-with comparable local testing structure.
+fixed-span model are proved, and the compact-support one-dimensional pointwise
+and bandwise inheritance theorems are explicit. The remaining operational step
+is the embedded low-dimensional theorem that connects the triangular-array
+finite-sample term to the i.i.d. benchmark uniformly across a nontrivial
+regularization band. The numerical evidence is strongest on moderate compact
+bands bounded away from zero, where direct Jacobian probes remain stable.
 
 \paragraph{Lower-bound scope.}
 The structural lower bound is subclass based. The Gaussian construction is
 enough to show that, in the root-$n$ regime, the horizon is structural rather
-than an artifact of a particular estimator. Class-tightness
-and constant-sharpness are still unresolved for broader deterministic
-H\"older path classes and for finite-sample regimes beyond $a=1/2$. The
-Gaussian lower-bound geometry sharpens the constants available within that
-lower-bound program, but it does not close the
-full distributional lower theory.
+than an artifact of a particular estimator. Class-tightness and constant-
+sharpness for broader deterministic H\"older path classes remain outside the
+present closure.
+
+\paragraph{Family-level scope.}
+Regular dominated families are the natural extension class. The horizon logic is
+expected to carry over when local testing geometry and metric geometry remain
+comparable, but no theorem-level family law is proved here. Support-changing and
+singular families remain obstruction classes.
 
 \paragraph{Weights and memory shape.}
-Uniform windows are the main case. Nothing here investigates
-whether broader non-uniform weights can improve constants or alter exponents
-across richer path classes.
+Uniform windows are the main case. The open question is whether broader
+non-uniform weights can enlarge the useful-memory region or improve constants
+without changing the exponent across richer path classes.
 
 \paragraph{Online roughness estimation.}
 The law is stated in terms of the roughness parameters $H$ and $\zeta$, but no
-fully online procedure is proposed here for estimating them or for
-quantifying sensitivity to misspecification. Turning the horizon law into a
-robust adaptive policy remains open.
+fully online procedure is proposed here for estimating them or for keeping the
+memory inside the useful region under misspecification.
 
 \paragraph{Empirical scope.}
-The experiments are synthetic and structurally motivated. Their role is to make
-the theory visible and to provide evidence for the operational conjecture, not to demonstrate
-competitive performance on a benchmark suite. Real-data validation and broader
-comparisons with adaptive horizon-selection rules remain outside the present
-scope.
+The experiments are structurally motivated. Synthetic designs make the horizon
+law, useful-memory region, and validity-detection lag visible under controlled
+drift, while the ELEC2 diagnostic checks that the same retention signature
+appears on a real stream. Their role is to expose the object, not to demonstrate
+competitive performance on a benchmark suite.
 
 \paragraph{Detectability versus validity.}
 Validity loss before detector alarm is an empirical consequence of the theory,
@@ -67,77 +60,24 @@ before detector alarms appear, but it does not prove a universal detection-delay
 theorem across detector classes.
 
 \paragraph{Open problems.}
-Each open question below asks for a theorem or construction that would enlarge
-the theory in a scientifically meaningful direction. The one-dimensional
-compact-band fixed-$\varepsilon$ problem does not appear because
-\cref{prop:bandwise_sinkhorn_1d} already settles it; the open operational issue
-is the embedded bandwise theorem.
+Three directions enlarge the useful-memory theory directly: memory design,
+online adaptation, and validity-detection theory.
 
-\paragraph{Problem 1: sharp finite-sample constants in the proof model.}
-The one-dimensional proof model identifies the correct exponent, but not the
-best first-moment constant $C_K$. The open question is to derive a sharp or at
-least interpretable constant-level bound for the triangular-array finite-sample
-term, with more than an $O(n^{-1/2})$ rate. Solving this would sharpen the
-predicted memory scale inside the first fully proved regime.
-
-\paragraph{Problem 2: lower theory beyond the root-$n$ regime.}
-The structural lower bound proved above is matched to the root-$n$ finite-sample
-regime. The open question is to identify least-favorable constructions for
-other finite-sample exponents $a$, especially in geometries where empirical
-transport has slower dimension-dependent behavior.
-
-\paragraph{Problem 3: theorem-level regular-family inheritance.}
-A regular-family inheritance principle is stated, but not yet proved for a broad
-dominated class. The open problem is to characterize conditions
-under which local testing geometry and metric geometry together imply a horizon
-law with finite-sample exponent $a=\alpha/2$ and staleness exponent $\alpha H$.
-This would turn the extension principle above into a family-level theorem.
-
-\paragraph{Problem 4: class-tight distributional lower bounds.}
-The Gaussian construction shows that the horizon is structural, but it does not
-yet deliver class-tight lower bounds for broad deterministic path classes. The
-open problem is to determine whether the Gaussian benchmark already captures the
-correct lower rate for larger regular classes, or whether broader constructions
-are needed. This question is central to understanding how universal the
-exponent law really is.
-
-\paragraph{Problem 5: a full Gaussian-scale lower theorem.}
-Gaussian scale is a natural benchmark because it changes geometry without leaving
-the regular parametric world. The open problem is to prove a theorem-level lower
-bound, and ideally a matching benchmark theorem, for Gaussian scale drift paths.
-This would clarify how much of the horizon theory depends specifically on
-location geometry and how much survives under other regular parametric
-deformations.
-
-\paragraph{Problem 6: bandwise Sinkhorn inheritance.}
-The one-dimensional fixed-$\varepsilon$ theory on compact support yields a
-uniform band law on compact $\varepsilon$-intervals. The open problem is the
-embedded-model theorem: uniform control of the debiased Sinkhorn rate across a
-nontrivial $\varepsilon\in\mathcal B$ band, with drift, sampling, and
-optimization error all controlled simultaneously. The numerical evidence is
-strongest on moderate bands such as $\mathcal B\subset[0.2,0.8]$, where the
-main unresolved step is uniform control
-  of the self-coupling derivative blocks, with the cross-coupling block already
-  controlled.
-
-\paragraph{Problem 7: optimal weighting beyond uniform windows.}
+\paragraph{Problem 1: useful-memory design beyond uniform windows.}
 The analysis is built around uniform windows, with only brief discussion of
-other weighting schemes. The open question is whether non-uniform weights can do
-more than change constants: can they improve the horizon law itself on some path
-classes, or is the exponent stable under broad classes of memory shapes? A good
-answer would connect the horizon theory to practical forgetting schemes without
-collapsing back into heuristic tuning.
+other weighting schemes. The open question is whether non-uniform weights can
+enlarge the useful-memory region or improve constants without changing the
+exponent across broad path classes. A good answer would connect the horizon law
+to practical forgetting schemes without collapsing back into heuristic tuning.
 
-\paragraph{Problem 8: online roughness identification and adaptive memory.}
+\paragraph{Problem 2: online useful-memory adaptation.}
 The law depends on the roughness parameters $H$ and $\zeta$, but no online
-procedure is given here that estimates them and tracks near-optimal
-memory in real time. The open problem is to design an adaptive scheme with a
-provable excess-risk guarantee relative to the oracle horizon. This is the most
-direct route from the horizon law to an online methodology.
+procedure is given here that estimates them and keeps memory inside the
+useful-memory region in real time. The open problem is to design an adaptive
+scheme with a provable excess-risk guarantee relative to the oracle region.
 
-\paragraph{Problem 9: validity and detectability as coupled but distinct objects.}
+\paragraph{Problem 3: validity and detectability as coupled but distinct objects.}
 The experiments show a positive validity-detection lag, but there is no theorem
-yet relating temporal validity loss to detector delay. The open problem is to
-prove detector-specific lower or upper laws that quantify when validity must fail
-before statistical detection. This would connect the central object to a
-second, practically important timescale without conflating the two.
+yet relating exit from the useful-memory region to detector delay. The open
+problem is to prove detector-specific lower or upper laws that quantify when
+validity must fail before statistical detection.

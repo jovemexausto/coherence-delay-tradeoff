@@ -15,6 +15,7 @@ This note fixes the project boundary between:
 
 - abstract upper law;
 - optimal temporal-validity horizon;
+- useful-memory region induced by the horizon law;
 - exact finite-`n` uniform-window staleness constant;
 - tractable 1D bounded-support fixed-span proof model with root-`n` finite-sample rate;
 - structural Gaussian lower bound at the exponent level;
@@ -25,7 +26,7 @@ These results are enough to support the central scientific claim.
 ## Supporting benchmark material
 
 - compact Gaussian lower-bound constants proposition;
-- empirical signatures: U-curve, roughness scaling, validity-detection lag;
+- empirical signatures: U-curve, roughness scaling, useful-memory region, validity-detection lag;
 - appendix-level finite-sample diagnostics.
 
 These strengthen interpretation or sharpness without changing the main theorem line.

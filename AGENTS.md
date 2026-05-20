@@ -102,9 +102,11 @@ At the end of every turn, update the persistent project state inside `AGENTS.md`
 
 <!-- PROJECT_STATE_BEGIN -->
 Project status:
-- Core object: temporal-validity horizon for finite-memory distribution tracking under drift, with formal law `E d(\widehat P_t^{(n)},P_t) <= C_K n^{-a} + C_S zeta n^H` and optimizer `n^*(a,H) ~ (C_K/zeta)^{1/(a+H)}`; `useful memory` is now only a controlled interpretive label.
-- Closed theory: abstract upper law; exact uniform-window staleness constant; one-dimensional root-`n` proof model; Gaussian lower-bound exponent law; Gaussian location minimax benchmark; Gaussian ramp/endpoint constants; manuscript terminology now centers `temporal-validity horizons`, `Empirical Evidence`, and `Limitations and Open Problems`.
-- Open blockers: embedded bandwise Sinkhorn inheritance; verified bounded-support Bahadur remainder class; broader regular-family inheritance; sharper first-moment constants; lower theory beyond root-`n`; any remaining internal naming in repo-only figure/artifact paths.
+- Core objects: temporal-validity horizon for finite-memory distribution tracking under drift, with law `E d(\widehat P_t^{(n)},P_t) <= C_K n^{-a} + C_S zeta n^H`, asymptotic scale `n^*(a,H) ~ (C_K/zeta)^{1/(a+H)}`, exact continuous optimizer `n_star=((a C_K)/(H C_S zeta))^{1/(a+H)}`, and induced useful-memory region `U_delta={n:Phi(n)<= (1+delta)Phi(n_star)}`.
+- Closed theory: abstract upper law; useful-memory region proposition with normalized profile `Psi(x)=(H x^{-a}+a x^H)/(a+H)` and linear scaling `U_delta=n_star I_delta(a,H)`; exact uniform-window staleness constant; one-dimensional root-`n` proof model under explicit Bahadur remainder assumptions; Gaussian lower-bound exponent law; Gaussian location minimax benchmark; compact-support one-dimensional pointwise and bandwise fixed-`epsilon` Sinkhorn inheritance; Gaussian ramp/endpoint constants.
+- Empirical layer: synthetic signatures for U-curve, roughness scaling, and validity-detection lag; real-stream ELEC2 diagnostic on the `nswprice` marginal showing an interior retention optimum and useful-memory band; operational Sinkhorn evidence concentrated on moderate compact regularization bands.
+- Current manuscript identity: object-first theory of temporal validity under drift, with an online implications section and related-work framing rewritten around mutual contribution rather than topic contrast.
+- Open blockers: embedded bandwise Sinkhorn inheritance beyond the compact-support one-dimensional closure; verified bounded-support Bahadur remainder classes; useful-memory design beyond uniform weights; online useful-memory adaptation with guarantees; validity-detection theory.
 <!-- PROJECT_STATE_END -->
 
 The project state must:

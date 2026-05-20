@@ -1,14 +1,15 @@
-\section{A Horizon Law for Finite-Memory Distribution Tracking under Drift}
-\label{sec:finite_memory_under_drift}
+\section{Useful Memory and Temporal-Validity Horizons}
+\label{sec:useful_memory_under_drift}
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.92\linewidth]{artifacts/figures/conceptual/fig_two_clocks_of_drift.pdf}
 \caption{Finite-sample--staleness trade-off under drift. The finite-sample term
 falls with horizon, the staleness term rises with age, and total error is
-minimized at the temporal-validity horizon $n^*$. The shaded region marks
-pre-detection validity loss: retained evidence can stop representing the present
-before enough changepoint evidence accumulates to trigger an alarm.}
+minimized at the temporal-validity horizon $n^*$. The green band marks a
+near-optimal useful-memory region, and the red band marks pre-detection
+validity loss: retained evidence can stop representing the present before
+enough changepoint evidence accumulates to trigger an alarm.}
 \label{fig:finite_sample_staleness_tradeoff}
 \end{figure}
 
@@ -35,7 +36,9 @@ discrepancy between $\bar P_t^{(n)}$ and $P_t$.
 The theory combines three ingredients: a finite-sample bound relative to
 $\bar P_t^{(n)}$, a path-class control on the staleness between $\bar P_t^{(n)}$
 and $P_t$, and, when available, a lower-bound or benchmark theorem showing that
-the resulting horizon is structural on the geometry under study.
+the resulting horizon is structural on the geometry under study. The horizon
+scale then induces a useful-memory region: the range of memory lengths whose
+tracking error remains near optimal.
 
 \subsection{General Horizon Law}\label{subsec:abstract_upper_law}
 
@@ -102,6 +105,66 @@ Balance the decreasing finite-sample term against the increasing staleness term:
 This gives $n^{a+H}\asymp C_K/\zeta$, hence the displayed horizon law. Substituting
 that scale back into either term gives the optimal error scale.
 \end{proof}
+
+Write the continuous optimizer of $\Phi$ as
+\[
+  n_\star \coloneqq \left(\frac{aC_K}{H C_S\zeta}\right)^{1/(a+H)}.
+\]
+This optimizer differs from the scale $n^*(a,H)$ only by constants depending on
+$a$, $H$, and $C_S$, so the asymptotic horizon law remains unchanged.
+
+\subsection{Useful-Memory Region}
+
+The horizon scale induces a near-optimal region of memory lengths. For any
+$\delta>0$, define the useful-memory region by
+\[
+  \mathcal U_\delta \coloneqq \{n>0: \Phi(n) \le (1+\delta)\Phi(n_\star)\}.
+\]
+This object records not only where the envelope is minimized, but also how much
+memory remains acceptable up to a fixed tolerance.
+
+\begin{proposition}[Useful-memory region at tolerance $\delta$]
+\label{prop:useful_memory_region}
+Let $\Phi(n)=C_K n^{-a}+C_S\zeta n^H$ with $a,H>0$, and let $n_\star$ be its
+continuous optimizer. Then the normalized profile
+\[
+  \Psi(x) \coloneqq \frac{\Phi(n_\star x)}{\Phi(n_\star)}
+  = \frac{H x^{-a} + a x^H}{a+H}
+\]
+is strictly decreasing on $(0,1]$ and strictly increasing on $[1,\infty)$.
+Consequently,
+\[
+  \mathcal U_\delta = [n_-,n_+] = n_\star[x_-(\delta;a,H),x_+(\delta;a,H)],
+\]
+where $x_-(\delta;a,H)\le 1 \le x_+(\delta;a,H)$ are the two solutions of
+$\Psi(x)=1+\delta$. In particular, the useful-memory region scales linearly with
+the horizon scale $n_\star$, and its relative shape depends only on $a$, $H$,
+and $\delta$.
+\end{proposition}
+
+\begin{proof}
+Since $n_\star$ minimizes $\Phi$, differentiation gives
+\[
+  a C_K n_\star^{-a} = H C_S\zeta n_\star^H.
+\]
+Substituting $n=n_\star x$ into $\Phi$ and dividing by $\Phi(n_\star)$ yields
+the displayed identity for $\Psi$. Differentiation then gives
+\[
+  \Psi'(x)=\frac{aH}{a+H}\bigl(x^{H-1}-x^{-a-1}\bigr),
+\]
+which is negative for $x<1$ and positive for $x>1$. Since $\Psi(1)=1$ and
+$\Psi(x)\to\infty$ as $x\to 0$ or $x\to\infty$, the sublevel set
+$\{x>0:\Psi(x)\le 1+\delta\}$ is a compact interval containing $1$, which
+proves the representation of $\mathcal U_\delta$.
+\end{proof}
+
+For small tolerance, the useful-memory region has the local expansion
+\[
+  x_\pm(\delta;a,H) = 1 \pm \sqrt{\frac{2\delta}{aH}} + o(\sqrt{\delta}),
+  \qquad \delta \downarrow 0,
+\]
+because $\Psi''(1)=aH$. The local curvature therefore controls how quickly the
+near-optimal region contracts around the horizon.
 
 The horizon depends jointly on the finite-sample rate exponent and the
 roughness exponent. Different geometries and different drift regularities induce
@@ -182,11 +245,10 @@ limit.
 \subsection{One-Dimensional Proof Model for the Root-$n$ Regime}
 \label{subsec:one_dimensional_proof_model}
 
-The abstract law needs at least one rigorous finite-sample instantiation. The
-bounded-support fixed-span one-dimensional triangular array provides a tractable
-proof model for that role. Its scope is intentionally narrow: common compact
-support, uniformly regular window mixtures, and an explicit integrated Bahadur
-remainder hypothesis.
+The bounded-support fixed-span one-dimensional triangular array provides a
+tractable rigorous finite-sample instantiation of the abstract law. The model is
+built on common compact support, uniformly regular window mixtures, and an
+integrated Bahadur remainder hypothesis.
 
 \begin{proposition}[Root-$n$ finite-sample bound in the 1D proof model]\label{prop:one_dimensional_root_n_bound}
 Let $X_{n,1},\dots,X_{n,n}$ be independent one-dimensional observations with laws
@@ -287,22 +349,21 @@ regime, the triangular-array finite-sample term remains root-$n$.
 \end{proof}
 
 \begin{remark}[Sufficient conditions for the proof model]
-The only nontrivial assumption in \cref{prop:one_dimensional_root_n_bound} is item~(iv). For
-i.i.d. quantile processes, Bahadur representations of this type are classical;
-see \citet{Bahadur1966} and \citet[Chapter~21]{vanDerVaart1998}. The
-triangular-array version is taken as an explicit hypothesis of the fixed-span
-proof model. One concrete sufficient package is a common compact support
-$[L,U]$; rowwise densities $f_{n,j}$ uniformly bounded above and below by
-positive constants; a uniform smoothness bound on $f_{n,j}$ across rows; and a
-rowwise quantile process whose integrated Bahadur remainder satisfies
-$\mathbb E\int_0^1 R_n(u)^2\,du=o(n^{-1})$. This is compatible with bounded smooth
-monotone deformations of a common base law with uniformly bounded derivatives,
-and with fixed-support location perturbations when the support constraint is
-preserved. A broad verification theorem for independent non-identically
-distributed rows is left open. Separate diagnostics on a smooth fixed-support
+The substantive assumption in \cref{prop:one_dimensional_root_n_bound} is
+item~(iv). For i.i.d. quantile processes, Bahadur representations of this type
+are classical; see \citet{Bahadur1966} and
+\citet[Chapter~21]{vanDerVaart1998}. In the fixed-span triangular-array model,
+a concrete sufficient package is a common compact support $[L,U]$; rowwise
+densities $f_{n,j}$ uniformly bounded above and below by positive constants; a
+uniform smoothness bound on $f_{n,j}$ across rows; and a rowwise quantile
+process whose integrated Bahadur remainder satisfies
+$\mathbb E\int_0^1 R_n(u)^2\,du=o(n^{-1})$. This package is compatible with
+bounded smooth monotone deformations of a common base law with uniformly bounded
+derivatives, and with fixed-support location perturbations when the support
+constraint is preserved. Separate diagnostics on a smooth fixed-support
 deformation model show integrated residual decay faster than $n^{-1}$ across the
-tested span and roughness values, which supports the plausibility of item~(iv)
-on that class but is not used as proof.
+tested span and roughness values, which is consistent with item~(iv) on that
+class.
 \end{remark}
 
 \subsection{Structural Lower Bound in the Root-$n$ Regime}\label{subsec:lower_bound}
@@ -573,19 +634,18 @@ Combining the two sides proves the theorem.
 
 \subsection{Benchmark Theorems and Operational Extensions}
 
-The one-dimensional proof model is the first rigorous finite-sample
-instantiation. Two broader settings matter for scope: a Gaussian benchmark on a
-full path class, and an embedded Sinkhorn extension in which structural
-ingredients are proved but the full inheritance theorem is conjectural.
-The linear-Gaussian entropic-OT setting is narrower still: its Kalman/Riccati
- structure suggests a constructive intermediate fixed-$\varepsilon$ Sinkhorn setting with an
- explicit recursion, sitting between the i.i.d. fixed-$\varepsilon$ theory and
- the embedded triangular-array conjecture \citep{Kalman1960,Jazwinski1970,AkyildizEtAl2024}.
+The Gaussian benchmark and the fixed-$\varepsilon$ Sinkhorn extension place the
+horizon law in two broader settings: a full path-class benchmark with theorem-
+level closure, and an operational transport geometry in which the one-
+dimensional compact-support inheritance theory is already explicit. The
+linear-Gaussian entropic-OT setting suggests an intermediate recursive regime
+between the i.i.d. fixed-$\varepsilon$ theory and the embedded low-dimensional
+extension \citep{Kalman1960,Jazwinski1970,AkyildizEtAl2024}.
 
 \paragraph{Fixed-$\varepsilon$ Sinkhorn setting.}
-For fixed-$\varepsilon$ debiased Sinkhorn, the question is whether a practical
-geometry can supply a stable finite-sample term on the embedded fixed-span
-model. The intended theorem shape is
+For fixed-$\varepsilon$ debiased Sinkhorn, the central question is whether a
+practical geometry can supply a stable finite-sample term on the embedded
+fixed-span model. The target law is
 \[
   \mathbb E\,S_{\varepsilon}\!\left(\widehat P_{t,\mathrm{tri}}^{(n)},\bar P_t^{(n)}\right)
   \le C_{\varepsilon} n^{-a_{\varepsilon}}
@@ -593,8 +653,6 @@ model. The intended theorem shape is
 under bounded support, fixed span, and structural low-dimensionality, where
 $S_{\varepsilon}$ denotes a fixed-$\varepsilon$ Sinkhorn-type geometry and the
 exponent $a_{\varepsilon}$ matches the corresponding i.i.d. mixture benchmark.
-The structural part of this setup is proved, but the full triangular-array
-inheritance statement is not.
 
 \begin{definition}[Fixed-$\varepsilon$ Sinkhorn setting]
 \label{def:fixed_epsilon_sinkhorn_setting}
@@ -746,70 +804,18 @@ results, including fixed-marginal limit theory for the Sinkhorn divergence and
 intrinsic-complexity adaptation \citep{GoldfeldEtAl2022,Stromme2023MID,
 GroppeHundrieser2024LCA}. In the present embedded fixed-span model,
 support-complexity inheritance is exact and the dual smoothness threshold
-reduces to $\alpha>k/2$. Calibration supplies the only remaining ingredient:
-evidence that the triangular and i.i.d. rate estimates stay close across the
-regularization band. That evidence motivates the broader conjecture, but it does
-not close the bandwise embedded-model statement as a theorem. Additional
+reduces to $\alpha>k/2$. Calibration then asks whether triangular and i.i.d.
+rate estimates remain close across the regularization band. Additional
 one-dimensional smooth fixed-support diagnostics show that triangular and i.i.d.
-fitted exponents can agree closely on some fixed-$\varepsilon$ bands, but the
-agreement is not uniform across the tested roughness levels. The unresolved
-operational step beyond \cref{prop:pointwise_sinkhorn_1d} is uniform control
-across a nontrivial $\varepsilon$-band and higher-dimensional embedded classes.
-Direct Jacobian diagnostics concentrate that difficulty on moderate compact
-bands bounded away from zero, where the cross-coupling block stays stable and
-the self-coupling derivative blocks dominate the instability.
+fitted exponents can agree closely on moderate fixed-$\varepsilon$ bands, while
+direct Jacobian diagnostics concentrate the remaining difficulty on uniform
+control of the self-coupling derivative blocks across nontrivial bands and
+higher-dimensional embedded classes.
 
-\paragraph{Regular-family horizon law.}
-The broader extension question is whether regular dominated families inherit the
-same horizon logic with exponents determined by local geometry. The relevant
-setting is a family $\{P_\theta: \theta\in\Theta\}$ with locally quadratic
-testing geometry and metric comparability
-\[
-  d(P_\theta,P_{\theta'})\asymp \|\theta-\theta'\|^{\alpha}
-\]
-for some metric exponent $\alpha>0$.
-
-\begin{conjecture}[Regular-family horizon law]
-\label{conj:regular_family_horizon_law}
-Let $d$ be a probability geometry and let $\{P_\theta: \theta\in\Theta\}$ be a
-locally regular dominated family for which the i.i.d. benchmark satisfies a
- metric finite-sample law
-\[
-  \mathbb E\,d\!\left(\widehat P_{\mathrm{iid}}^{(n)},P_\theta\right)
-  \le C_K n^{-a}
-\]
-uniformly on the parameter region of interest. Suppose the path obeys a
-deterministic H\"older envelope in parameter space,
-\[
-  \|\theta_{t-j}-\theta_t\|\le \zeta j^H.
-\]
-Then the induced metric staleness should scale as
-\[
-  d(P_{\theta_{t-j}},P_{\theta_t})\lesssim \zeta^{\alpha}j^{\alpha H},
-\]
-so the corresponding tracking problem should satisfy the horizon-family member
-\[
-  n^*(a,\alpha H)\asymp (C_K/\zeta^{\alpha})^{1/(a+\alpha H)},
-\]
-with optimal risk of order
-\[
-  C_K^{\alpha H/(a+\alpha H)}\zeta^{\alpha a/(a+\alpha H)}.
-\]
-In the locally regular parametric subcase, the natural metric finite-sample exponent is
-$a=\alpha/2$, giving the horizon scale
-\[
-  n^*(\alpha/2,\alpha H)
-  \asymp (C_K/\zeta^{\alpha})^{1/(\alpha(1/2+H))}.
-\]
-\end{conjecture}
-
-Regular dominated families are the natural extension class. Support-changing and
-singular families remain genuine obstruction classes, so transport-H\"older
-control alone is too weak to support a single blanket extension theorem.
-
-Together, these settings show how the abstract law extends beyond the
-one-dimensional proof model while keeping the formal claims within their
-proper scope.
+Regular dominated families remain the natural family-level extension class.
+Local testing geometry and metric comparability suggest the same horizon logic
+with a modified finite-sample exponent, whereas support-changing and singular
+families fall outside that regime.
 
 Once a finite-sample regime and a roughness level are specified, the law yields
 an explicit memory scale and an optimal error scale. Rougher drift and weaker

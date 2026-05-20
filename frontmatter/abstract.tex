@@ -1,18 +1,17 @@
 \begin{abstract}
 We investigate the fundamental limits of tracking an evolving distribution under
-temporal drift. At the core of this problem lies a critical trade-off: longer memory
-reduces finite-sample estimation noise but introduces staleness due to an increasing
-age mismatch with the present state. This balance is formalized by defining a finite
-temporal-validity horizon and demonstrating that the optimal memory scale satisfies
-$n^*(a,H) \asymp (C_K/\zeta)^{1/(a+H)}$, where the finite-sample rate exponent $a$ and
-the temporal roughness exponent $H$ govern the expansion and contraction of this validity
-horizon. These theoretical limits are then established within a tractable one-dimensional framework,
-leveraging a Gaussian lower bound to prove that this boundary is structural rather than
-estimator-specific. Finally, empirical evidence confirms the predicted interior memory
-optima and roughness-dependent scaling. Notably, our results reveal a measurable lag
-between the loss of temporal validity and the activation of standard changepoint alarms,
-showing that under drift, retained evidence can cease to represent the present long before
-a distribution change becomes statistically detectable.
+temporal drift. Longer memory reduces finite-sample estimation noise but also
+introduces staleness through age mismatch with the present state. This balance is
+formalized by a finite temporal-validity horizon, which induces a near-optimal
+useful-memory region around the scale $n^*(a,H) \asymp (C_K/\zeta)^{1/(a+H)}$;
+the finite-sample rate exponent $a$ and the temporal roughness exponent $H$
+govern the expansion and contraction of that region. These theoretical limits are
+established within a tractable one-dimensional framework, with a Gaussian lower
+bound showing that the boundary is structural rather than estimator-specific.
+Finally, empirical evidence confirms the predicted interior memory optima,
+roughness-dependent scaling, the same retention signature on a real stream, and
+a measurable lag between the loss of temporal validity and the activation of
+standard changepoint alarms.
 \end{abstract}
 
 \bigskip

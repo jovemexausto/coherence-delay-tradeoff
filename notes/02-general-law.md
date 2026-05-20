@@ -48,6 +48,26 @@ Balancing the two terms yields
 
 up to constants depending only on `a`, `H`, and `C_S`.
 
+The exact continuous optimizer is
+
+- `n_star = ((a C_K)/(H C_S zeta))^{1/(a+H)}`.
+
+## Useful-memory region
+
+For tolerance `delta > 0`, define
+
+- `U_delta = {n > 0 : \Phi(n) <= (1+delta) \Phi(n_star)}`.
+
+Writing `n = n_star x` gives the universal normalized profile
+
+- `Psi(x) = \Phi(n_star x) / \Phi(n_star) = (H x^{-a} + a x^H)/(a+H)`.
+
+Hence
+
+- `U_delta = n_star I_delta(a,H)`
+
+where `I_delta(a,H)` is the interval on which `Psi(x) <= 1+delta`.
+
 ## Interpretation
 
 This theorem does not depend on a particular geometry, estimator, or lower-bound

@@ -1,24 +1,24 @@
 \section{Empirical Evidence}\label{sec:validation}
 
-These synthetic experiments expose the finite-sample signatures of the
-temporal-validity horizon and report evidence relevant to the fixed-$\varepsilon$
-Sinkhorn conjecture.
+These experiments expose the finite-sample signatures of the temporal-validity
+horizon, the useful-memory region induced by that horizon, and evidence
+relevant to the fixed-$\varepsilon$ Sinkhorn frontier.
 
-All experiments are synthetic and fully specified by the stated
-data-generating designs. The Gaussian U-curve uses 20 Monte Carlo seeds, the
-roughness-family sweep uses 12, the fixed-$\varepsilon$ Sinkhorn fits log--log
-slopes over sample sizes $(24,48,96,160)$ on the pairs $(8,1)$, $(8,2)$,
-$(12,1)$, and $(12,2)$ using 24 seeds, and the validity-detection experiment
-uses a piecewise-ramped drift stream with 12 seeds, a fixed operating window,
-and both ADWIN and Page--Hinkley detectors. Reported curves are seed-averaged
-means. The empirical goal is qualitative and structural: persistence of shape,
-ordering, and sign across repeated runs, not precise constant estimation for
-every curve.
+The Gaussian U-curve uses 20 Monte Carlo seeds, the roughness-family sweep uses
+12, the fixed-$\varepsilon$ Sinkhorn fits log--log slopes over sample sizes
+$(24,48,96,160)$ on the pairs $(8,1)$, $(8,2)$, $(12,1)$, and $(12,2)$ using
+24 seeds, and the validity-detection experiment uses a piecewise-ramped drift
+stream with 12 seeds, a fixed operating window, and both ADWIN and
+Page--Hinkley detectors. The real-stream diagnostic uses the ELEC2 stream and a
+short anchor block on the marginal distribution of \texttt{nswprice}. The empirical
+goal is qualitative and structural: persistence of shape, ordering, and sign
+across repeated runs, not precise constant estimation for every curve.
 
-The empirical signatures are fourfold. Finite-memory risk exhibits an interior
-optimum. That optimum moves with temporal roughness. The fixed-$\varepsilon$
-Sinkhorn conjecture receives structured empirical support. Temporal validity can
-fail before changepoint evidence becomes statistically visible.
+The empirical signatures are fivefold. Finite-memory risk exhibits an interior
+optimum together with a near-optimal useful-memory band. That optimum moves with
+temporal roughness. The same shape appears on a real stream. The fixed-
+$\varepsilon$ Sinkhorn frontier receives structured empirical support. Temporal
+validity can fail before changepoint evidence becomes statistically visible.
 
 \subsection{A Finite-Memory Optimum}\label{sec:validation_memory_optimum}
 
@@ -37,7 +37,9 @@ gain. The optimum remains finite across drift strengths.}
 
 This is the basic empirical signature of temporal validity under drift. Under
 stationarity, more memory would continue to help. Under drift, the same horizon
-that reduces variance also ages the evidence.
+that reduces variance also ages the evidence. Around the minimizing horizon, the
+curve displays a flat near-optimal region, which is the empirical analogue of
+the useful-memory region defined from the envelope $\Phi$.
 
 \subsection{Roughness-Dependent Horizon Scaling}
 \label{sec:validation_roughness_scaling}
@@ -63,23 +65,47 @@ function of drift regularity, not a fixed window rule.}
 The empirical optima separate by roughness class, matching the path-dependent
 horizon logic of \cref{cor:temporal_validity_horizon}.
 
-\subsection{Evidence for the Sinkhorn Conjecture}
+\subsection{A Real-Stream Diagnostic}
+
+The same qualitative signature appears on a real nonstationary stream. Using
+ELEC2, consider the one-dimensional marginal law of \texttt{nswprice}. At each time,
+approximate the present target by a short anchor block of 48 observations and
+compare it, in $W_1$, with the empirical law induced by the preceding memory
+window. Averaging this diagnostic across the stream yields a real-data analogue
+of the finite-memory U-curve.
+
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=0.88\linewidth]{artifacts/figures/elec2/fig_elec2_ucurve}
+\caption{ELEC2 real-stream diagnostic on the \texttt{nswprice} marginal. The mean
+anchor-block $W_1$ error exhibits a finite interior optimum and a near-optimal
+useful-memory band. The figure is diagnostic rather than competitive: it asks
+whether the temporal-validity signature appears on a real stream.}
+\label{fig:elec2_ucurve}
+\end{figure}
+
+On ELEC2, the diagnostic optimum occurs at a finite memory scale, with a short
+near-optimal band around it. The real stream therefore exhibits the same basic
+retention pattern as the synthetic horizon experiments: very short windows are
+too noisy, while very long windows become stale relative to the present block.
+
+\subsection{Operational Sinkhorn Evidence}
 \label{sec:validation_sinkhorn_evidence}
 
 The fixed-$\varepsilon$ Sinkhorn experiments address the bandwise question: when
 a practical geometry replaces raw $W_2$, does the finite-sample term remain
-stable enough for the conjectured horizon law to stay informative? The
-pointwise and bandwise one-dimensional fixed-support statements appear in
-\cref{prop:pointwise_sinkhorn_1d,prop:bandwise_sinkhorn_1d}; the calibrated
-embedded fixed-span model supplies the broader conjectural setting.
+stable enough for the horizon law to stay informative in an embedded operational
+regime? The pointwise and bandwise one-dimensional fixed-support statements
+appear in \cref{prop:pointwise_sinkhorn_1d,prop:bandwise_sinkhorn_1d}; the
+calibrated embedded fixed-span model extends the same question to a broader
+low-dimensional setting.
 
 The fixed-$\varepsilon$ Sinkhorn geometry on embedded low-intrinsic-dimensional
 support shows that the corresponding finite-sample term remains stable across
 the tested regularization values and that the triangular slope stays close to
-  the i.i.d. benchmark, with no separate exponent emerging. Combined with
+the i.i.d. benchmark, with no separate exponent emerging. Combined with
 the structural ingredients isolated in \cref{prop:operational_sinkhorn_ingredients},
-this provides empirical support for the bandwise conjecture in
-\cref{conj:embedded_sinkhorn_horizon}. In the calibrated fixed-span model
+this identifies a stable embedded operating regime. In the calibrated fixed-span model
 with $\alpha=2$ and span $0.25$, the maximal observed stable bands are
 $\varepsilon_{\max}=0.5$ for $(d,k)=(8,1)$, $(8,2)$, and $(12,2)$, and
 $\varepsilon_{\max}=0.2$ for $(12,1)$.
@@ -91,14 +117,12 @@ follow from the available $W_2$ transfer route. Direct Jacobian probes of the
 centered Sinkhorn scaling map instead isolate a moderate-band regime: on
 $\varepsilon\in[0.2,0.8]$, the cross-coupling block stays contractive, while
 the self-coupling blocks are the main source of instability but appear
-  numerically to plateau with sample size. This is
-evidence about mechanism, not a theorem.
+numerically to plateau with sample size.
 
 The calibrated fixed-span model shows that the tested grid has a stable core and
 a small mixed boundary region. Calibration details and supporting tables are
 kept in \cref{app:finite_sample_geometry}. The strongest support appears on
-moderate bands bounded away from zero, and the bandwise inheritance law remains
-conjectural outside the calibrated fixed-span settings shown here.
+moderate bands bounded away from zero.
 
 To probe whether the frontier is controlled more by local intrinsic geometry than
 by the ambient coordinate count, we estimate the effective intrinsic dimension
@@ -107,8 +131,8 @@ six-$\varepsilon$ grid studied here, the resulting \(\hat{k}\) predicts the stab
 cutoff better than ambient dimension and improves the binary cut at
 \(\varepsilon=0.2\). This is consistent with geometry-aware calibration: the
 relevant control variable is the estimated local geometry, not the ambient
-coordinate count. The rowwise stability pattern remains mixed, so TwoNN enters
-  here as a regime-selection diagnostic for the theorem-level band analysis.
+coordinate count. TwoNN therefore enters here as a regime-selection diagnostic
+for the band analysis.
 
 \subsection{Temporal Validity Can Fail Before Detector Alarm}\label{sec:validation_validity_lag}
 
@@ -147,10 +171,11 @@ detector-uniform delay law.
 
 \subsection{Summary of Evidence}\label{sec:validation_summary}
 
-Taken together, the experiments support four claims that match the theory.
-  Finite-memory tracking exhibits a structural U-curve. The temporal-validity
-  horizon is roughness dependent. The
-fixed-$\varepsilon$ Sinkhorn conjecture receives structured empirical support on
-the tested grid, with the strongest evidence concentrated on moderate
-bands bounded away from zero. Temporal validity can fail before changepoint
-evidence appears, producing a measurable validity-detection lag.
+Taken together, the experiments support five claims that match the theory.
+Finite-memory tracking exhibits a structural U-curve with a near-optimal
+useful-memory region. The temporal-validity horizon is roughness dependent. The
+same retention pattern appears on the ELEC2 stream. The fixed-$\varepsilon$
+Sinkhorn frontier receives structured empirical support on the tested grid, with
+the strongest evidence concentrated on moderate bands bounded away from zero.
+Temporal validity can fail before changepoint evidence appears, producing a
+measurable validity-detection lag.

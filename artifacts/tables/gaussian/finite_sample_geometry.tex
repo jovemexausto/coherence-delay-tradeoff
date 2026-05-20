@@ -1,10 +1,9 @@
 \begin{table}[!htbp]
 \centering
-\scriptsize
-\setlength{\tabcolsep}{4pt}
-\caption{Empirical scaling check for the finite-sample term. The i.i.d. low-dimensional $W_2$ rows stay close to the expected root-$n$ regime, the one-dimensional triangular-array rows compare against the window-mixture benchmark at fixed span, and the Sinkhorn rows illustrate how the proxy changes with $\varepsilon$.}
+\small
+\caption{Empirical scaling check for the finite-sample term. The bounded-support i.i.d. $W_2$ experiment is close to the expected $n^{-1/2}$ rate in low dimension, the corresponding triangular-array check compares one sample from each drifted component against an i.i.d. sample from the window mixture, and the Sinkhorn proxy is reported at fixed $\varepsilon$. These rows are numerical support for the carrier-regime discussion rather than theorem statements.}
 \label{tab:finite_sample_geometry}
-\resizebox{\columnwidth}{!}{%
+\resizebox{\linewidth}{!}{%
 \begin{tabular}{lrr}
 \toprule
 Setting & Estimated slope & Comment \\
@@ -21,6 +20,6 @@ Sinkhorn $\varepsilon=0.50$ & -0.21 & proxy constant changes \\
 Sinkhorn $\varepsilon=0.10$ & -0.53 & proxy constant changes \\
 Sinkhorn $\varepsilon=0.05$ & -0.67 & proxy constant changes \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
 }
 \end{table}

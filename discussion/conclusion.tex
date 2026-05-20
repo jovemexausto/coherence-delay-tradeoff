@@ -2,7 +2,7 @@
 
 Under drift, memory is never purely beneficial. It reduces finite-sample noise,
 but it also ages. The resulting trade-off makes finite memory a
-  temporal-validity object with a finite horizon.
+temporal-validity object with a finite horizon.
 
 That idea is formalized through the horizon law
 \[
@@ -14,26 +14,26 @@ whose optimal scale is
   n^*(a,H) \asymp (C_K/\zeta)^{1/(a+H)}.
 \]
 Finite-memory tracking under drift is governed by this balance between
-finite-sample accuracy and drift-induced staleness.
+finite-sample accuracy and drift-induced staleness, and the same balance induces
+a useful-memory region around the optimal scale.
 
 A tractable one-dimensional proof model supplies a rigorous root-$n$
 finite-sample regime, and a structural Gaussian lower-bound construction shows
 that the corresponding horizon is not an artifact of one estimator. The same
 object yields a Gaussian location minimax benchmark on deterministic H\"older
-paths. For fixed-$\varepsilon$ Sinkhorn on an embedded fixed-span model, the
-structural ingredients are proved and the full inheritance law is stated as a
-conjecture, with numerical evidence concentrated on moderate regularization
-bands bounded away from zero.
+paths. In fixed-$\varepsilon$ Sinkhorn geometry, the compact-support
+one-dimensional pointwise and bandwise inheritance theorems show that the same
+horizon logic remains visible in an operational transport geometry.
 
-The finite-memory U-curve, roughness-dependent horizon scaling, structured
-evidence for the Sinkhorn conjecture, and a strictly positive lag between
-validity loss and detector
-alarm. The resulting message is both theoretical and operational: retained
-evidence has a path-dependent horizon, and statistical detectability need not
-coincide with temporal validity.
+The finite-memory U-curve, roughness-dependent horizon scaling, a useful-memory
+region around the optimal scale, and a strictly positive lag between validity
+loss and detector alarm all fit the same horizon law. The resulting message is
+both theoretical and operational: retained evidence has a path-dependent horizon,
+useful memory occupies a finite near-optimal region, and statistical
+detectability need not coincide with temporal validity.
 
-The main open questions concern sharper finite-sample constants in the proof
-model, lower theory beyond the root-$n$ regime, broader family-level lower
-bounds, and theorem-level operational results for the conjectural Sinkhorn
-extension. In the Sinkhorn direction, the missing ingredient is uniform
-derivative or equicontinuity control on a moderate compact band.
+Temporal validity of retained evidence is therefore a first-class statistical
+object under drift. The horizon law identifies its governing scale, the
+useful-memory region records its operational range, and the detectability lag
+shows that validity can fail before alarms appear. Those three statements define
+the contribution of the paper.

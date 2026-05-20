@@ -3,7 +3,8 @@
 ## Paper contract
 
 This project is a short scientific paper about the temporal-validity horizon for
-finite-memory distribution tracking under drift.
+finite-memory distribution tracking under drift and the useful-memory region
+induced by that horizon.
 
 The main text must do only five things:
 
@@ -30,6 +31,7 @@ dump.
 
 - Abstract upper law
 - Temporal-validity horizon
+- Useful-memory region induced by the horizon law
 - Uniform-window staleness bound with exact finite-`n` constant `C_{H,n}`
 - Tractable 1D bounded-support fixed-span triangular-array proof model with root-`n` finite-sample rate
 - Structural Gaussian lower bound at the exponent level for the root-`n` regime
@@ -46,17 +48,15 @@ dump.
 
 ### Open problem
 
-- Sharp first-moment constant `C_K` in the 1D proof model
-- Lower theory beyond the root-`n` regime
-- Full Gaussian-scale lower theorem
-- Class-tight distributional lower bounds
-- Online adaptation to unknown roughness
+- Useful-memory design beyond uniform weights
+- Online useful-memory adaptation
+- Validity-detection theory
 
 ## Paper / appendix / repo split
 
 ### Main text
 
-- object, law, proof model, structural lower bound, Gaussian benchmark
+- object, law, useful-memory region, proof model, structural lower bound, Gaussian benchmark
 - explicit conjectures with clear status labels
 - empirical signatures directly tied to the object or to a named conjecture
 - limitations and open problems

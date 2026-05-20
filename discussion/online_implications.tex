@@ -1,0 +1,38 @@
+\section{Online Implications}\label{sec:online_implications}
+
+The horizon law identifies the quantities that any adaptive memory rule must
+track. A policy that updates memory online needs a finite-sample regime,
+represented by the exponent $a$ or by an operational exponent
+$a_{\varepsilon}$, together with a local roughness description of the recent
+path through the pair $(H,\zeta)$. Once these objects are available, the
+structural scale $n_\star$ and the useful-memory region $\mathcal U_\delta$
+follow directly from the horizon law.
+
+In operational geometries, local support structure enters before roughness
+estimation. The embedded fixed-$\varepsilon$ theory already shows that intrinsic
+complexity controls which finite-sample regime is available through the
+threshold $\alpha>k/2$. A local proxy such as TwoNN therefore serves as a
+regime-selection statistic: it does not estimate the horizon by itself, but it
+selects the finite-sample law to which the horizon formula should be attached.
+
+The roughness side is a separate statistical task. In deterministic H\"older
+paths, $H$ and $\zeta$ belong to an envelope governing how quickly staleness can
+accumulate with lag. A direct log--log fit to one short empirical sequence of
+transport discrepancies is generally unstable, because single-path local motion,
+finite-sample noise, and short-lag discreteness all distort the envelope. The
+relevant online object is therefore not a raw local slope, but a stabilized
+estimate built from block averages, activity proxies, or other aggregated recent
+discrepancies.
+
+This separation gives the minimal architecture of a horizon-informed adaptive
+policy. First estimate the local regime that determines the finite-sample term.
+Then estimate a recent roughness envelope for the staleness term. Finally map
+these estimates to $n_\star$ or to a tolerance band $\mathcal U_\delta$, and use
+that region as the admissible memory range. Hysteresis, band projection, or
+validation scoring can stabilize the resulting controller, but those mechanisms
+operate downstream of the horizon law itself.
+
+The online problem is therefore structurally well posed. The horizon law
+supplies the target for adaptation; the remaining task is to estimate its
+ingredients with guarantees strong enough to keep a data-driven memory rule
+inside the useful-memory region.

@@ -8,7 +8,8 @@ Claim structure.
 
 ## Central object
 
-Temporal-validity horizon for finite-memory distribution tracking under drift.
+Temporal-validity horizon for finite-memory distribution tracking under drift,
+and the useful-memory region induced by that horizon.
 
 The main law is
 
@@ -30,6 +31,12 @@ The induced horizon scale is
 
 - `n^*(a,H) ~ (C_K/zeta)^{1/(a+H)}`;
 - optimal risk scale `~ C_K^{H/(a+H)} zeta^{a/(a+H)}`.
+
+### Proposition: useful-memory region
+
+- continuous optimizer `n_star = ((a C_K)/(H C_S zeta))^{1/(a+H)}`;
+- normalized profile `Psi(x) = (H x^{-a} + a x^H)/(a+H)`;
+- near-optimal region scales as `U_delta = n_star I_delta(a,H)`.
 
 ### Lemma: exact finite-`n` uniform-window staleness constant
 
@@ -70,7 +77,6 @@ This is a supporting benchmark result, not a second theorem line.
 
 ## Open problems
 
-- sharp first-moment constant `C_K` in the 1D proof model;
-- lower theory beyond the root-`n` regime;
-- full Gaussian-scale lower theorem;
-- class-tight distributional lower bounds.
+- useful-memory design beyond uniform weights;
+- online useful-memory adaptation;
+- validity-detection theory.

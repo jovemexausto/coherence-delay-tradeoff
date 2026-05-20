@@ -11,6 +11,8 @@ import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 import numpy as np
 
+from .useful_memory_region import useful_memory_interval
+
 
 def write_csv(path: Path, rows: Sequence[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -47,6 +49,7 @@ def generate_two_clocks(output_path: Path, csv_path: Path) -> None:
     x_star = 1.0
     x_cross = 2.0 ** (2.0 / 3.0)
     y_star = 1.0
+    useful_lower, useful_upper = useful_memory_interval(0.5, 1.0, 0.18)
 
     rows = [
         {
@@ -61,6 +64,14 @@ def generate_two_clocks(output_path: Path, csv_path: Path) -> None:
 
     fig, ax = plt.subplots(figsize=(7.4, 3.8))
     ax.axvspan(x_star, 2.2, color="#f6ddd2", alpha=0.75, linewidth=0, zorder=0)
+    ax.axvspan(
+        useful_lower,
+        useful_upper,
+        color="#e7f2df",
+        alpha=0.95,
+        linewidth=0,
+        zorder=0,
+    )
     ax.plot(x, variance, color="#315caf", linewidth=2.3)
     ax.plot(x, staleness, color="#b23a3a", linewidth=2.3)
     ax.plot(x, total, color="black", linewidth=2.6)
@@ -138,6 +149,19 @@ def generate_two_clocks(output_path: Path, csv_path: Path) -> None:
             "facecolor": "white",
             "edgecolor": "none",
             "alpha": 0.9,
+        },
+    )
+    ax.text(
+        1.0,
+        0.22,
+        "useful memory region",
+        ha="center",
+        fontsize=8,
+        bbox={
+            "boxstyle": "round,pad=0.16",
+            "facecolor": "white",
+            "edgecolor": "none",
+            "alpha": 0.95,
         },
     )
 
