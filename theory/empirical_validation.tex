@@ -44,7 +44,7 @@ the useful-memory region defined from the envelope $\Phi$.
 \subsection{Roughness-Dependent Horizon Scaling}
 \label{sec:validation_roughness_scaling}
 
-The next experiment varies the roughness index directly. For each H\"older-type
+The roughness-family experiment varies the roughness index directly. For each H\"older-type
 regime, the surrogate error obeys the same structural decomposition as the
 theory,
 \[
@@ -126,13 +126,13 @@ moderate bands bounded away from zero.
 
 To probe whether the frontier is controlled more by local intrinsic geometry than
 by the ambient coordinate count, we estimate the effective intrinsic dimension
-with TwoNN on the same synthetic frontier family. On the nine-pair,
-six-$\varepsilon$ grid studied here, the resulting \(\hat{k}\) predicts the stable-band
-cutoff better than ambient dimension and improves the binary cut at
-\(\varepsilon=0.2\). This is consistent with geometry-aware calibration: the
-relevant control variable is the estimated local geometry, not the ambient
-coordinate count. TwoNN therefore enters here as a regime-selection diagnostic
-for the band analysis.
+with TwoNN on the same synthetic frontier family. On
+the nine-pair, six-$\varepsilon$ grid studied here, the resulting \(\hat{k}\)
+predicts the stable-band cutoff better than ambient dimension and improves the
+binary cut at \(\varepsilon=0.2\). This is consistent with geometry-aware
+calibration: the relevant control variable is the estimated local geometry, not
+the ambient coordinate count. The estimator therefore enters here as a
+regime-selection diagnostic for the band analysis.
 
 \subsection{Temporal Validity Can Fail Before Detector Alarm}\label{sec:validation_validity_lag}
 
@@ -169,13 +169,8 @@ detector family as well. The empirical claim is robustness of the sign of
 $\Delta_{\mathrm{val-det}}$ on the tested detector/tuning family, not a
 detector-uniform delay law.
 
-\subsection{Summary of Evidence}\label{sec:validation_summary}
-
-Taken together, the experiments support five claims that match the theory.
-Finite-memory tracking exhibits a structural U-curve with a near-optimal
-useful-memory region. The temporal-validity horizon is roughness dependent. The
-same retention pattern appears on the ELEC2 stream. The fixed-$\varepsilon$
-Sinkhorn frontier receives structured empirical support on the tested grid, with
-the strongest evidence concentrated on moderate bands bounded away from zero.
-Temporal validity can fail before changepoint evidence appears, producing a
-measurable validity-detection lag.
+\subsection{Empirical Signatures}\label{sec:validation_summary}
+The experiments support a structural U-curve with a near-optimal useful-memory
+region, roughness-dependent horizon scaling, the same retention pattern on the
+ELEC2 stream, structured support for the fixed-$\varepsilon$ Sinkhorn frontier,
+and a measurable lag between validity loss and detector alarm.

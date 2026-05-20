@@ -22,9 +22,11 @@ class OnlineAdaptationConfig:
     roughness_block_size: int = 12
     lag_multipliers: tuple[int, ...] = (1, 2, 4, 6)
     direct_radius_log2: float = 1.0
+    structural_radius_log2: float = 1.5
     warmup: int = 96
     carrier_exponent: float = 0.5
     validation_tail: int = 160
+    aggregated_history: int = 160
     activity_psi_exponent: float = 0.5
     activity_smoothing: float = 0.9
     activity_grow_index_step: int = 1
@@ -52,18 +54,25 @@ class OnlineAdaptationResult:
     oracle_window: np.ndarray
     plugin_window: np.ndarray
     adaptive_window: np.ndarray
+    structural_window: np.ndarray
     activity_window: np.ndarray
+    plugin_estimate: np.ndarray
     oracle_estimate: np.ndarray
     adaptive_estimate: np.ndarray
+    structural_estimate: np.ndarray
     activity_estimate: np.ndarray
     best_static_window: int
     best_static_estimate: np.ndarray
     oracle_error: np.ndarray
+    plugin_error: np.ndarray
     adaptive_error: np.ndarray
+    structural_error: np.ndarray
     activity_error: np.ndarray
     best_static_error: np.ndarray
     mean_oracle_error: float
+    mean_plugin_error: float
     mean_adaptive_error: float
+    mean_structural_error: float
     mean_activity_error: float
     mean_best_static_error: float
 
@@ -133,6 +142,48 @@ def estimate_local_roughness(
     holder = float(np.clip(slope, config.holder_clip[0], config.holder_clip[1]))
     roughness = float(
         np.clip(math.exp(intercept), config.roughness_floor, config.roughness_cap)
+    )
+    plugin = plugin_window_from_roughness(holder, roughness, config)
+    return RoughnessEstimate(
+        holder_exponent=holder, roughness_scale=roughness, plugin_window=plugin
+    )
+
+
+def estimate_aggregated_roughness(
+    observations: np.ndarray,
+    time_index: int,
+    config: OnlineAdaptationConfig,
+) -> RoughnessEstimate:
+    block_size = config.roughness_block_size
+    if time_index < block_size * (max(config.lag_multipliers) + 1):
+        raise ValueError("time_index is too small for aggregated roughness estimation")
+    noise_floor = _noise_floor(observations, time_index, block_size)
+    log_lags: list[float] = []
+    log_summaries: list[float] = []
+    summaries: list[float] = []
+    lags: list[float] = []
+    history = max(config.aggregated_history, block_size)
+    for multiplier in config.lag_multipliers:
+        lag = multiplier * block_size
+        start = max(block_size - 1 + lag, time_index - history + 1)
+        discrepancies: list[float] = []
+        for index in range(start, time_index + 1):
+            recent_mean = _block_mean(observations, index, block_size)
+            past_mean = _block_mean(observations, index - lag, block_size)
+            discrepancies.append(max(abs(recent_mean - past_mean) - noise_floor, 1e-8))
+        summary = float(np.mean(discrepancies))
+        summaries.append(summary)
+        lags.append(float(lag))
+        log_lags.append(math.log(float(lag)))
+        log_summaries.append(math.log(summary))
+    slope, _ = np.polyfit(np.asarray(log_lags), np.asarray(log_summaries), 1)
+    holder = float(np.clip(slope, config.holder_clip[0], config.holder_clip[1]))
+    roughness = float(
+        np.clip(
+            np.median(np.asarray(summaries) / (np.asarray(lags) ** holder)),
+            config.roughness_floor,
+            config.roughness_cap,
+        )
     )
     plugin = plugin_window_from_roughness(holder, roughness, config)
     return RoughnessEstimate(
@@ -254,6 +305,21 @@ def activity_window_from_proxy(
     )
 
 
+def horizon_window_from_activity(
+    holder_exponent: float,
+    activity_proxy: float,
+    config: OnlineAdaptationConfig,
+) -> int:
+    carrier_constant = config.observation_scale * math.sqrt(2.0 / math.pi)
+    return min(
+        config.candidate_windows,
+        key=lambda window: (
+            carrier_constant / math.sqrt(window)
+            + activity_proxy * (window**holder_exponent)
+        ),
+    )
+
+
 def _project_window_to_grid(
     window: int, config: OnlineAdaptationConfig, end_index: int
 ) -> int:
@@ -289,6 +355,64 @@ def _activity_window(
         step = min(config.activity_grow_index_step, target_index - previous_index)
         chosen_window = config.candidate_windows[previous_index + step]
     return activity_proxy, chosen_window
+
+
+def _structural_window(
+    values: np.ndarray,
+    end_index: int,
+    config: OnlineAdaptationConfig,
+    previous_proxy: float,
+    previous_window: int,
+) -> tuple[RoughnessEstimate, float]:
+    roughness = estimate_aggregated_roughness(values, end_index, config)
+    current_proxy = estimate_local_activity(values, end_index, config)
+    activity_proxy = (
+        config.activity_smoothing * previous_proxy
+        + (1.0 - config.activity_smoothing) * current_proxy
+    )
+    center_window = _project_window_to_grid(
+        horizon_window_from_activity(
+            roughness.holder_exponent, roughness.roughness_scale, config
+        ),
+        config,
+        end_index,
+    )
+    lower = center_window / (2.0**config.structural_radius_log2)
+    upper = center_window * (2.0**config.structural_radius_log2)
+    candidate_windows = tuple(
+        window
+        for window in config.candidate_windows
+        if lower <= window <= upper and window >= config.roughness_block_size
+    )
+    feasible_windows = tuple(
+        window for window in candidate_windows if window <= end_index + 1
+    )
+    if not feasible_windows:
+        feasible_windows = tuple(
+            window for window in config.candidate_windows if window <= end_index + 1
+        )
+    scores = {
+        window: _validation_score(values, end_index, window, config.validation_tail)
+        for window in feasible_windows
+    }
+    best_window = min(scores, key=scores.get)
+    if config.max_window_index_jump is not None:
+        previous_index = config.candidate_windows.index(previous_window)
+        best_index = config.candidate_windows.index(best_window)
+        step = max(
+            -config.max_window_index_jump,
+            min(config.max_window_index_jump, best_index - previous_index),
+        )
+        best_window = config.candidate_windows[previous_index + step]
+    best_window = _project_window_to_grid(best_window, config, end_index)
+    return (
+        RoughnessEstimate(
+            holder_exponent=roughness.holder_exponent,
+            roughness_scale=roughness.roughness_scale,
+            plugin_window=best_window,
+        ),
+        activity_proxy,
+    )
 
 
 def _adaptive_window(
@@ -335,12 +459,16 @@ def run_online_horizon_adaptation_experiment(
     oracle_window = np.full(latent_mean.size, min(cfg.candidate_windows), dtype=int)
     plugin_window = np.full(latent_mean.size, min(cfg.candidate_windows), dtype=int)
     adaptive_window = np.full(latent_mean.size, min(cfg.candidate_windows), dtype=int)
+    structural_window = np.full(latent_mean.size, min(cfg.candidate_windows), dtype=int)
     activity_window = np.full(latent_mean.size, min(cfg.candidate_windows), dtype=int)
     oracle_estimate = np.full(latent_mean.size, np.nan, dtype=float)
-    adaptive_estimate = np.full(latent_mean.size, np.nan, dtype=float)
     plugin_estimate = np.full(latent_mean.size, np.nan, dtype=float)
+    adaptive_estimate = np.full(latent_mean.size, np.nan, dtype=float)
+    structural_estimate = np.full(latent_mean.size, np.nan, dtype=float)
     activity_estimate = np.full(latent_mean.size, np.nan, dtype=float)
     previous_adaptive_window = min(cfg.candidate_windows)
+    previous_structural_proxy = 0.0
+    previous_structural_window = min(cfg.candidate_windows)
     previous_activity_proxy = 0.0
     previous_activity_window = min(cfg.candidate_windows)
     for t in range(cfg.warmup, latent_mean.size):
@@ -350,6 +478,15 @@ def run_online_horizon_adaptation_experiment(
         adaptive = _adaptive_window(observations, t, cfg, previous_adaptive_window)
         adaptive_window[t] = adaptive.plugin_window
         previous_adaptive_window = adaptive.plugin_window
+        structural, previous_structural_proxy = _structural_window(
+            observations,
+            t,
+            cfg,
+            previous_structural_proxy,
+            previous_structural_window,
+        )
+        structural_window[t] = structural.plugin_window
+        previous_structural_window = structural.plugin_window
         previous_activity_proxy, activity_window[t] = _activity_window(
             observations,
             t,
@@ -361,6 +498,7 @@ def run_online_horizon_adaptation_experiment(
         oracle_estimate[t] = _moving_average(observations, t, oracle_window[t])
         plugin_estimate[t] = _moving_average(observations, t, plugin_window[t])
         adaptive_estimate[t] = _moving_average(observations, t, adaptive_window[t])
+        structural_estimate[t] = _moving_average(observations, t, structural_window[t])
         activity_estimate[t] = _moving_average(observations, t, activity_window[t])
     valid = np.arange(cfg.warmup, latent_mean.size)
     static_errors: dict[int, float] = {}
@@ -378,7 +516,9 @@ def run_online_horizon_adaptation_experiment(
             best_static_window = window
             static_estimates = estimates
     oracle_error = np.abs(latent_mean[valid] - oracle_estimate[valid])
+    plugin_error = np.abs(latent_mean[valid] - plugin_estimate[valid])
     adaptive_error = np.abs(latent_mean[valid] - adaptive_estimate[valid])
+    structural_error = np.abs(latent_mean[valid] - structural_estimate[valid])
     activity_error = np.abs(latent_mean[valid] - activity_estimate[valid])
     best_static_error_trace = np.abs(latent_mean[valid] - static_estimates[valid])
     return OnlineAdaptationResult(
@@ -389,18 +529,25 @@ def run_online_horizon_adaptation_experiment(
         oracle_window=oracle_window[valid],
         plugin_window=plugin_window[valid],
         adaptive_window=adaptive_window[valid],
+        structural_window=structural_window[valid],
         activity_window=activity_window[valid],
+        plugin_estimate=plugin_estimate[valid],
         oracle_estimate=oracle_estimate[valid],
         adaptive_estimate=adaptive_estimate[valid],
+        structural_estimate=structural_estimate[valid],
         activity_estimate=activity_estimate[valid],
         best_static_window=best_static_window,
         best_static_estimate=static_estimates[valid],
         oracle_error=oracle_error,
+        plugin_error=plugin_error,
         adaptive_error=adaptive_error,
+        structural_error=structural_error,
         activity_error=activity_error,
         best_static_error=best_static_error_trace,
         mean_oracle_error=float(np.mean(oracle_error)),
+        mean_plugin_error=float(np.mean(plugin_error)),
         mean_adaptive_error=float(np.mean(adaptive_error)),
+        mean_structural_error=float(np.mean(structural_error)),
         mean_activity_error=float(np.mean(activity_error)),
         mean_best_static_error=float(np.mean(best_static_error_trace)),
     )

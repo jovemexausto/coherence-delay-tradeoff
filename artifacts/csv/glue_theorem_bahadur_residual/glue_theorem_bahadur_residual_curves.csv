@@ -1,0 +1,11 @@
+experiment,setting,n,value
+bahadur-residual-fixed-span,triangular,25,0.00967349
+bahadur-residual-fixed-span,iid-mixture,25,0.01158317
+bahadur-residual-fixed-span,triangular,50,0.00363285
+bahadur-residual-fixed-span,iid-mixture,50,0.00416484
+bahadur-residual-fixed-span,triangular,100,0.00143604
+bahadur-residual-fixed-span,iid-mixture,100,0.0013601
+bahadur-residual-fixed-span,triangular,200,0.00050353
+bahadur-residual-fixed-span,iid-mixture,200,0.00051089
+bahadur-residual-fixed-span,triangular,400,0.00018128
+bahadur-residual-fixed-span,iid-mixture,400,0.00018862

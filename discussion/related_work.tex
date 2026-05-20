@@ -5,7 +5,7 @@ Dynamic-regret and variation-budget analyses show that under drift, forgetting
 scales and window lengths must adapt to how quickly the target moves
 \citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,YuanLamperski2020,
 MazzettoUpfal2023,WangXieChenLuiZhou2024}. That literature isolates the control
-importance of retention scale. The present work supplies the corresponding
+importance of retention scale. The horizon law gives the corresponding
 statistical law for distribution tracking: finite memory has a temporal-validity
 horizon determined jointly by a finite-sample exponent and a drift roughness
 exponent.
@@ -41,7 +41,7 @@ geometries that enter the horizon law. For empirical Wasserstein distances,
 complexity even before drift enters. The horizon law takes that finite-sample
 exponent as one input and composes it with a staleness exponent induced by the
 drift path. In this sense, the transport literature provides the sampling side
-of the law, while the present work supplies its temporal counterpart.
+of the law, while the horizon law provides its temporal counterpart.
 
 \paragraph{Entropic and smoothed transport as operational geometries.}
 Regularized transport changes both statistical stability and computational
@@ -61,9 +61,9 @@ Geometry-aware calibration of regularization scales points toward intrinsic
 dimension as the relevant complexity variable in regularized transport
 \citep{GenansWintenberger2026}. Local intrinsic-dimension diagnostics such as
 TwoNN provide a direct proxy for effective support geometry
-\citep{FaccoEtAl2017}. In the present work, that perspective enters through the
-operational Sinkhorn frontier: intrinsic geometry helps identify which
-finite-sample regime is available, and therefore which horizon law is relevant.
+\citep{FaccoEtAl2017}. That perspective enters through the operational Sinkhorn
+frontier: intrinsic geometry helps identify which finite-sample regime is
+available, and therefore which horizon law is relevant.
 
 \paragraph{Low-dimensional proxy geometries.}
 Sliced, max-sliced, subspace-robust, and projection-robust Wasserstein

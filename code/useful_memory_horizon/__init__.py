@@ -125,11 +125,23 @@ from .online_horizon_adaptation import (
     plugin_window_from_roughness,
     run_online_horizon_adaptation_experiment,
 )
+from .weight_sensitivity import (
+    WeightSensitivityResult,
+    WeightSensitivityRow,
+    lag_weight_w1,
+    run_weight_sensitivity_experiment,
+)
 from .twonn_dimension import twonn_dimension_estimate
 from .twonn_operational_diagnostic import (
     TwoNNOperationalDiagnosticConfig,
     TwoNNOperationalDiagnosticResult,
     compare_twonn_to_ambient_on_operational_frontier,
+)
+from .twonn_geometry import (
+    TwonnGeometryConfig,
+    TwonnGeometryResult,
+    build_twonn_geometry_rows,
+    run_twonn_geometry_experiment,
 )
 
 __all__ = [
@@ -164,6 +176,8 @@ __all__ = [
     "OnlineAdaptationConfig",
     "OnlineAdaptationResult",
     "RoughnessEstimate",
+    "WeightSensitivityResult",
+    "WeightSensitivityRow",
     "activity_window_from_proxy",
     "asymptotic_shape_root",
     "build_elec2_rows",
@@ -184,9 +198,11 @@ __all__ = [
     "exact_profile_asymptotic_constant",
     "exact_profile_witness_bound",
     "exact_gaussian_witness_bound",
+    "estimate_aggregated_roughness",
     "estimate_local_activity",
     "estimate_local_roughness",
     "fixed_h_beta_root",
+    "horizon_window_from_activity",
     "horizon_envelope",
     "minimal_endpoint_energy_constant",
     "profile_energy",
@@ -220,11 +236,17 @@ __all__ = [
     "run_Hölder_lower_bound_research",
     "run_gaussian_witness_frontier",
     "run_online_horizon_adaptation_experiment",
+    "run_weight_sensitivity_experiment",
     "TwoNNOperationalDiagnosticConfig",
     "TwoNNOperationalDiagnosticResult",
+    "TwonnGeometryConfig",
+    "TwonnGeometryResult",
     "compare_twonn_to_ambient_on_operational_frontier",
+    "build_twonn_geometry_rows",
+    "run_twonn_geometry_experiment",
     "twonn_dimension_estimate",
     "run_invalidity_gap_experiment",
+    "lag_weight_w1",
     "uniform_mixture_cdf",
     "uniform_mixture_quantiles",
     "run_roughness_scaling_experiment",

@@ -7,6 +7,7 @@ import numpy as np
 from useful_memory_horizon.online_horizon_adaptation import (
     OnlineAdaptationConfig,
     activity_window_from_proxy,
+    estimate_aggregated_roughness,
     estimate_local_activity,
     estimate_local_roughness,
     phase_profile,
@@ -69,6 +70,27 @@ class OnlineHorizonAdaptationTest(unittest.TestCase):
         self.assertLess(result.mean_adaptive_error, result.mean_best_static_error)
         self.assertGreater(np.std(result.adaptive_window.astype(float)), 10.0)
         self.assertLess(result.mean_activity_error, result.mean_best_static_error)
+
+    def test_structural_policy_improves_on_plugin_and_activity_baselines(self) -> None:
+        config = OnlineAdaptationConfig(seed=7)
+        result = run_online_horizon_adaptation_experiment(config)
+        self.assertLess(result.mean_structural_error, result.mean_plugin_error)
+        self.assertLess(result.mean_structural_error, result.mean_activity_error)
+        self.assertLess(result.mean_structural_error, result.mean_best_static_error)
+
+    def test_aggregated_roughness_estimator_stays_bounded_on_noisy_stream(self) -> None:
+        config = OnlineAdaptationConfig(seed=7)
+        latent_mean, _, _ = phase_profile(config)
+        rng = np.random.default_rng(config.seed)
+        observations = latent_mean + rng.normal(
+            scale=config.observation_scale, size=latent_mean.size
+        )
+        estimate = estimate_aggregated_roughness(
+            observations, latent_mean.size - 1, config
+        )
+        self.assertGreaterEqual(estimate.holder_exponent, config.holder_clip[0])
+        self.assertLessEqual(estimate.holder_exponent, config.holder_clip[1])
+        self.assertGreaterEqual(estimate.roughness_scale, config.roughness_floor)
 
     def test_hysteresis_limit_caps_window_index_jumps(self) -> None:
         config = OnlineAdaptationConfig(seed=7, max_window_index_jump=1)

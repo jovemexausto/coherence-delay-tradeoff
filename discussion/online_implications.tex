@@ -16,21 +16,47 @@ regime-selection statistic: it does not estimate the horizon by itself, but it
 selects the finite-sample law to which the horizon formula should be attached.
 
 The roughness side is a separate statistical task. In deterministic H\"older
-paths, $H$ and $\zeta$ belong to an envelope governing how quickly staleness can
-accumulate with lag. A direct log--log fit to one short empirical sequence of
-transport discrepancies is generally unstable, because single-path local motion,
-finite-sample noise, and short-lag discreteness all distort the envelope. The
-relevant online object is therefore not a raw local slope, but a stabilized
-estimate built from block averages, activity proxies, or other aggregated recent
-discrepancies.
+paths, $H$ and $\zeta$ govern how quickly staleness can accumulate with lag. A
+direct log--log fit to one short empirical sequence of transport discrepancies is
+too unstable to play that role reliably: single-path local motion, finite-sample
+noise, and short-lag discreteness all distort the envelope. The practical online
+object is therefore a stabilized roughness estimate built from aggregated recent
+lags, together with an activity-style proxy for band selection.
 
-This separation gives the minimal architecture of a horizon-informed adaptive
-policy. First estimate the local regime that determines the finite-sample term.
-Then estimate a recent roughness envelope for the staleness term. Finally map
-these estimates to $n_\star$ or to a tolerance band $\mathcal U_\delta$, and use
-that region as the admissible memory range. Hysteresis, band projection, or
-validation scoring can stabilize the resulting controller, but those mechanisms
-operate downstream of the horizon law itself.
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=0.94\linewidth]{artifacts/figures/online/fig_online_implications}
+\caption{Embedded geometry and online control. Left: TwoNN recovers the
+intrinsic regime and aggregated lag statistics estimate $H$ far more accurately
+than endpoint slopes. Middle: the structural controller improves decisively on
+the naive plug-in rule and beats the activity and static baselines, although the
+broader validation-based adaptive hybrid remains stronger. Right: the structural
+controller tracks the contraction and expansion of the oracle window on the
+default phase profile.}
+\label{fig:online_implications}
+\end{figure}
+
+That comparison also distinguishes two controller architectures. A direct plug-
+in rule based on a local slope and intercept is too unstable to be a useful
+online prescription. A more viable rule is structural: estimate the local regime
+with intrinsic geometry, estimate $H$ from aggregated lag discrepancies, use an
+activity proxy for the current scale of motion, and then map those quantities to
+an admissible useful-memory band. In the current synthetic study, that
+structural controller improves substantially on the naive plug-in rule and on a
+pure activity baseline, even though a wider validation-based hybrid remains more
+accurate.
+
+On any compact parameter range with $H$ bounded away from zero and $\zeta$
+bounded above and below, the map
+\[
+  (H,\zeta) \mapsto n_\star(H,\zeta)
+  = \left(\frac{aC_K}{H C_S\zeta}\right)^{1/(a+H)}
+\]
+is Lipschitz in $(H,\log \zeta)$ after taking logarithms. Small estimation error
+in the roughness class therefore produces only a controlled multiplicative error
+in the plug-in horizon. The remaining difficulty is the scale variable: a local
+activity proxy is good enough to produce a useful controller, but not yet stable
+enough to match the stronger validation-based hybrid.
 
 The online problem is therefore structurally well posed. The horizon law
 supplies the target for adaptation; the remaining task is to estimate its

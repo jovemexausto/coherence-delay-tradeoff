@@ -1,0 +1,3 @@
+holder_exponent,median_k_hat,naive_holder_mae,aggregated_holder_mae,median_naive_holder,median_aggregated_holder
+0.5,0.970369,0.631377,0.076036,0.735671,0.455168
+0.75,0.970369,0.210235,0.078597,0.790034,0.662068

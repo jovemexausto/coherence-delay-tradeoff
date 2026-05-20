@@ -1,7 +1,7 @@
 \section{Finite-Sample Diagnostics}\label{app:finite_sample_geometry}
 
-This appendix collects finite-sample diagnostics that support the theorem line
-and the conjectural extensions. These checks are not substitutes for theorem
+This appendix gives finite-sample diagnostics for the theorem line and the
+remaining operational frontier. These checks are not substitutes for theorem
 statements.
 
 \subsection{Finite-Sample Geometry Check}
@@ -17,41 +17,55 @@ $\varepsilon$.
 
 \input{artifacts/tables/gaussian/finite_sample_geometry}
 
-This table supports the finite-sample interpretation used above. In
-low dimension, the raw i.i.d. Wasserstein term is compatible with a root-$n$
+In low dimension, the raw i.i.d. Wasserstein term is compatible with a root-$n$
 rate, whereas higher-dimensional raw Wasserstein slows down. In the
 one-dimensional fixed-span triangular-array check, the recovered slopes stay near
 the corresponding i.i.d. mixture baseline, which is consistent with the
 proof-model and design-effect reading used in the 1D proof-model proposition.
 
+\subsection{Bahadur Remainder Diagnostics}
+
+Two deformation families make the proof-model remainder assumption concrete. The
+first is a smooth fixed-support monotone warp class
+$g_\delta(x)=x+\delta x(1-x)$ with $|\delta|\le \Delta<1$. On the tested spans
+$0.2$ and $0.4$, the integrated remainder decays at rates between $1.40$ and
+$1.54$, and the scaled quantity $n\int_0^1 R_n(u)^2du$ still decays at rates
+between $0.40$ and $0.54$. The second is the fixed-span triangular-array
+uniform-kernel model used in the proof line. There the integrated residual rate
+is about $1.43$ for the triangular sample and $1.49$ for the i.i.d. mixture
+benchmark, while the residual-to-MSE ratio drops from about $0.38$ at $n=25$ to
+about $0.11$ at $n=400$.
+
+These diagnostics locate the role of drift span explicitly. Within the tested
+fixed-span range, the remainder stays lower-order and the empirical rate remains
+well above the $n^{-1}$ threshold needed for item~(iv). Rougher kernels and
+growing-span experiments remain less regular, which is why the manuscript keeps
+the general triangular-array verification problem open.
+
 \subsection{Extended and Operational Regimes}
 
-The next table summarizes broader finite-sample evidence beyond the
-one-dimensional proof model. The extended rows compare triangular and i.i.d.
-mixture rates on embedded low-intrinsic-dimensional support across span. The
-operational rows compare fixed-$\varepsilon$ Sinkhorn rates across
-regularization values on embedded low-intrinsic-dimensional support in ambient
-dimension eight.
+The extended rows compare triangular and i.i.d. mixture rates on embedded
+low-intrinsic-dimensional support across span. The operational rows compare
+fixed-$\varepsilon$ Sinkhorn rates across regularization values on embedded
+low-intrinsic-dimensional support in ambient dimension eight.
 
 \input{artifacts/tables/conceptual/finite_sample_regimes}
 
-These rows provide calibration for the theorem statements above. The
-extended-regime rows support the claim that low intrinsic dimension preserves a
-rate near the root-$n$ regime without a dramatic triangular-versus-benchmark
- gap. The operational-regime rows supply empirical evidence relevant to the
- fixed-$\varepsilon$ Sinkhorn setting in \cref{def:fixed_epsilon_sinkhorn_setting}:
+The extended-regime rows indicate that low intrinsic dimension preserves a rate
+near the root-$n$ regime without a dramatic triangular-versus-benchmark gap. The
+operational-regime rows record empirical evidence relevant to the fixed-
+$\varepsilon$ Sinkhorn setting in \cref{def:fixed_epsilon_sinkhorn_setting}:
 together with exact support-complexity inheritance and the dual threshold
-$\alpha>k/2$, they support the conjectural inheritance statement discussed in
-\cref{conj:embedded_sinkhorn_horizon}. A full proof of triangular-array
-inheritance would remove this empirical calibration step.
+$\alpha>k/2$, they align with the embedded bandwise statement. A full proof of
+triangular-array inheritance would close this loop.
 
 Two complementary diagnostics sharpen the same boundary. First, direct probes of
 the centered Sinkhorn scaling Jacobian on the embedded fixed-span model show
 that bands approaching zero are the numerically unstable region, whereas on a
 moderate band such as $[0.2,0.8]$ the cross-coupling block remains contractive
 and the self-coupling inverse norms appear to plateau with sample size. Second,
-on the supported synthetic frontier grid, TwoNN-based intrinsic-dimension
-estimates predict the observed stable-band cutoff better than ambient dimension.
+on the supported synthetic frontier grid, intrinsic-dimension estimates
+predict the observed stable-band cutoff better than ambient dimension.
 These diagnostics identify a useful regime proxy and isolate the band where the
 remaining instability is concentrated. They do not upgrade the embedded fixed-
 $\varepsilon$ statement from conjecture to theorem.

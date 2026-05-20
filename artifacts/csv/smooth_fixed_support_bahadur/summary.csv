@@ -1,0 +1,5 @@
+experiment,span,H,residual_rate,scaled_n_residual_rate,last_mean_integrated_residual,last_scaled_n_residual
+smooth-fixed-support-bahadur,0.2,0.5,1.53871,0.53871,1.18943e-05,0.0095154576
+smooth-fixed-support-bahadur,0.2,1.0,1.399189,0.399189,1.50567e-05,0.0120453976
+smooth-fixed-support-bahadur,0.4,0.5,1.523494,0.523494,1.21935e-05,0.0097548273
+smooth-fixed-support-bahadur,0.4,1.0,1.396143,0.396143,1.5439e-05,0.01235116

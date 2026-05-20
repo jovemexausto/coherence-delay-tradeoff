@@ -59,16 +59,10 @@ low-dimensional extension isolates the remaining operational frontier.
 Broader regular distribution families and operational geometries support
 different finite-sample rates, and therefore different members of the horizon
 family. Memory under drift is governed by the interaction between finite-sample
-geometry and temporal roughness.
-
-The general horizon law, the useful-memory region, the uniform-window
-staleness control, the one-dimensional proof-model upper bound, the Gaussian
-structural lower bound, and the Gaussian location benchmark are theorem-level
-results. The fixed-$\varepsilon$ Sinkhorn result set includes the structural
-ingredients together with the pointwise and bandwise one-dimensional
-fixed-$\varepsilon$ inheritance theorems. The numerical evidence concentrates on
-moderate compact bands bounded away from zero, where the same horizon logic
-appears operationally stable.
+geometry and temporal roughness. The compact-support one-dimensional proof
+model, the structural Gaussian lower bound, and the Gaussian location benchmark
+close the core law, while fixed-$\varepsilon$ Sinkhorn supplies an operational
+geometry in which the same horizon logic remains visible.
 
 Useful memory is the near-optimal finite-memory region induced by the
 temporal-validity horizon. It is the set of memory lengths whose total tracking
@@ -76,18 +70,10 @@ error remains within a fixed multiplicative tolerance of the optimum.
 
 The finite-memory U-curve, roughness-dependent horizon scaling, the
 fixed-$\varepsilon$ Sinkhorn evidence, and the measurable lag between validity
-loss and the first detector alarm are visible in the experiments.
-Temporal validity and changepoint evidence are different statistical objects:
+loss and the first detector alarm are visible in the experiments. Temporal
+validity and changepoint evidence are different statistical objects:
 retained evidence can stop representing the present before change becomes
-detectable. The experiments are synthetic and structurally targeted; they
-reveal the predicted signatures without attempting a benchmark comparison
-against adaptive tracking baselines.
-
-Adjacent literatures include dynamic regret, adaptive windowing, locally
-stationary smoothing, adaptive filtering, and distributional tracking under
-transport geometry. Dynamic-regret analysis asks how well one tracks a moving
-comparator, and adaptive-window or drift-detection methods ask when the
-accumulated evidence is sufficient to react. For finite-memory tracking under
-drift, the central object is the time scale on which retained evidence remains
-temporally valid for estimating the present distribution before age becomes the
-dominant source of error.
+detectable. The neighboring literatures on regret, window adaptation, smoothing,
+filtering, and transport geometry isolate separate pieces of that story; the
+present work identifies the time scale on which retained evidence remains
+temporally valid before age becomes the dominant source of error.
