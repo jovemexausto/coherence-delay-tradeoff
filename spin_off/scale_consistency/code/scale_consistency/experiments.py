@@ -15,7 +15,9 @@ from .model import misspecified_scale_profile
 from .theory_diagnostics import (
     chi_square_null_mean,
     chi_square_null_variance,
+    information_scale,
     kappa_boundary,
+    lag_energy,
     scaled_rmse_constant,
 )
 
@@ -83,6 +85,9 @@ class BoundaryPowerRow:
     n: int
     c: float
     kappa: float
+    lag_energy: float
+    information_scale: float
+    local_noncentrality: float
     empirical_power: float
 
 
@@ -101,6 +106,7 @@ class RateConstantConfig:
 class RateConstantRow:
     n: int
     rmse_h: float
+    information_scale: float
     scaled_constant: float
     oracle_scaled_constant: float
 
@@ -257,7 +263,9 @@ def run_boundary_power_experiment(
     lags = _lags(config.L)
     for n in config.n_values:
         for c in config.c_values:
-            kappa = c * kappa_boundary(n, config.L)
+            energy = lag_energy(lags, config.H)
+            info = information_scale(n, lags, config.H)
+            kappa = kappa_boundary(n, lags, config.H, c)
             rejections = 0
             for _ in range(config.repetitions):
                 obs = simulate_observed_discrepancies(
@@ -282,6 +290,9 @@ def run_boundary_power_experiment(
                     n=n,
                     c=c,
                     kappa=kappa,
+                    lag_energy=energy,
+                    information_scale=info,
+                    local_noncentrality=(kappa**2) * info,
                     empirical_power=float(rejections) / float(config.repetitions),
                 )
             )
@@ -317,6 +328,7 @@ def run_rate_constant_experiment(
             RateConstantRow(
                 n=n,
                 rmse_h=rmse_h,
+                information_scale=information_scale(n, lags, config.H),
                 scaled_constant=scaled_rmse_constant(rmse_h, n, config.L, config.H),
                 oracle_scaled_constant=scaled_rmse_constant(
                     rmse_oracle, n, config.L, config.H

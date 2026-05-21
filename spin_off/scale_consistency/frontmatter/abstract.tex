@@ -3,12 +3,18 @@ We study structural inference for lagged transport discrepancies that admit a
 power-law geometry $D_j = \zeta j^H$.  The observation problem is coupled:
 each estimated discrepancy $\Dhj$ carries finite-sample noise, and the
 leading variance of $\log \Dhj$ depends on the same scale law that is being
-inferred.  In this heteroscedastic log-domain model, we prove a central limit
-theorem for the two-step feasible weighted least-squares estimator of $H$,
-show that the oracle residual statistic has an exact $\chi^2(L-2)$ null law,
-and derive a minimax separation rate $(nL)^{-1/2}$ for distinguishing the
-power-law family from scale-inconsistent alternatives.  The resulting
-procedure is adaptive in $H$ and retains the optimal rate without prior
-knowledge of the exponent.  Simulations confirm exact size calibration,
-FWLS-oracle agreement, and power consistent with the boundary.
+inferred.  In this heteroscedastic log-domain model, the central quantity is
+the weighted lag-energy $\sum_{j \leq L} j^{2H}$, or equivalently the oracle
+information matrix $\mathbf X^\top \mathbf W^* \mathbf X$.  We prove a
+central limit theorem for the two-step feasible weighted least-squares
+estimator of $H$, show that the oracle residual statistic has an exact
+$\chi^2(L-2)$ null law while the feasible statistic is asymptotically valid,
+and derive a minimax separation boundary of order
+$\bigl(n\sum_{j \leq L} j^{2H}\bigr)^{-1/2}$ for distinguishing the power-law
+family from scale-inconsistent alternatives.  This yields the fixed-$L$ rate
+$n^{-1/2}$ and the growing-$L$ rate $(nL^{2H+1})^{-1/2}$ as two regimes of
+the same information law.  The resulting procedure is adaptive in $H$ and
+retains the optimal rate without prior knowledge of the exponent.  Simulations
+confirm null calibration, FWLS-oracle agreement, and power curves aligned
+under the predicted information scaling.
 \end{abstract}

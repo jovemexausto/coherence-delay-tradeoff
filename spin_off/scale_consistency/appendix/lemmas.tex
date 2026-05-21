@@ -1,7 +1,7 @@
 \section{Auxiliary Lemmas}
 \label{app:lemmas}
 
-\begin{lemma}[KL divergence between scaled Gaussians]
+\begin{lemma}[KL divergence for Gaussian variance perturbations]
 \label{lem:kl-gaussian}
 For $\kappa^2 \leq v$,
 \begin{align*}
@@ -16,7 +16,7 @@ Standard formula; the upper bound is the second-order Taylor remainder of
 $-\log(1+x)$ at $x = \kappa^2/v$.
 \end{proof}
 
-\begin{lemma}[OLS rate in log-scale regression]
+\begin{lemma}[Pilot OLS rate in log-scale regression]
 \label{lem:ols-rate}
 In the pilot OLS regression of $Y_j = \alpha + H x_j + U_j$ with
 $U_j \iid \calN(0, v)$ (ignoring heteroscedasticity), the OLS estimator

@@ -4,8 +4,9 @@
 \begin{table}[h]
 \centering
 \small
-\caption{Empirical size of the $\chi^2(L-2)$ critical value at nominal
-$\alpha = 5\%$, under the power-law family.  $n=1000$, $H=0.6$.}
+\caption{Empirical size of the residual-based adequacy test using the
+$\chi^2(L-2)$ critical value at nominal level $\alpha = 5\%$, under the
+power-law family.  $n=1000$, $H=0.6$.}
 \label{tab:null}
 \begin{tabular}{lcccc}
 \toprule
@@ -21,17 +22,20 @@ $L$ & Mean($Q$) & Theory mean & Empirical size \\
 
 \begin{table}[h]
 \centering
-\caption{Power near the minimax boundary for the adequacy procedure.}
+\caption{Empirical power of the residual-based adequacy test at the
+information-scale separation boundary,
+with $\kappa^* = c\,(n\sum_{j \leq L} j^{2H})^{-1/2}$, $n=1000$, $L=20$, and
+$H=0.6$.}
 \label{tab:power-boundary}
 \begin{tabular}{lcc}
 \toprule
 $c = \kappa/\kappa^*$ & $\kappa$ & Power \\
 \midrule
-0.5 & 0.00354 & 0.154 \\
-1.0 & 0.00707 & 0.610 \\
-2.0 & 0.01414 & 0.989 \\
-3.0 & 0.02121 & 1.000 \\
-5.0 & 0.03536 & 1.000 \\
+0.5 & 0.00085 & 0.154 \\
+1.0 & 0.00169 & 0.610 \\
+2.0 & 0.00338 & 0.989 \\
+3.0 & 0.00508 & 1.000 \\
+5.0 & 0.00846 & 1.000 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -39,18 +43,18 @@ $c = \kappa/\kappa^*$ & $\kappa$ & Power \\
 \begin{table}[h]
 \centering
 \caption{RMSE of $\Hhat$ as a function of $n$, with $L=20$, $H=0.6$.
-The rate constant $C = \mathrm{RMSE} \cdot (n L^{2H+1})^{1/2}$ is
-stable across all $n$.}
+The rate constant $C = \mathrm{RMSE} \cdot (n\sum_{j \leq L} j^{2H})^{1/2}$
+is stable across all $n$.}
 \label{tab:rate}
 \begin{tabular}{lcccc}
 \toprule
-$n$ & RMSE($\Hhat$) & $(nL^{2H+1})^{-1/2}$ & $C$ \\
+$n$ & RMSE($\Hhat$) & $(n\sum_{j \leq L} j^{2H})^{-1/2}$ & $C$ \\
 \midrule
-200  & 0.00851 & 0.002620 & 3.25 \\
-500  & 0.00535 & 0.001657 & 3.23 \\
-1000 & 0.00377 & 0.001172 & 3.21 \\
-2000 & 0.00268 & 0.000829 & 3.24 \\
-5000 & 0.00169 & 0.000524 & 3.23 \\
+200  & 0.00851 & 0.003783 & 3.25 \\
+500  & 0.00535 & 0.002393 & 3.23 \\
+1000 & 0.00377 & 0.001692 & 3.21 \\
+2000 & 0.00268 & 0.001196 & 3.24 \\
+5000 & 0.00169 & 0.000757 & 3.23 \\
 \bottomrule
 \end{tabular}
 \end{table}

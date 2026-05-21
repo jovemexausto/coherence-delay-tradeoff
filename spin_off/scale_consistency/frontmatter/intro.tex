@@ -26,8 +26,8 @@ a \emph{power law}:
     D_j = \zeta\,j^H,\qquad \zeta > 0,\; H \in (0,1).
     \label{eq:power-law}
 \end{equation}
-This is scale consistency: the lag curve is compressed to the two-parameter
-family $(\zeta, H)$, with exponent $H$ interpreted as a roughness index of
+This compresses the lag curve to the two-parameter family $(\zeta, H)$, with
+exponent $H$ interpreted as a roughness index of
 the latent drift in locally stationary settings \citep{Dahlhaus1997,Vogt2012,TinioAlayaBouzebda2025}.
 
 The inferential problem is not standard.  In log-space,
@@ -36,12 +36,29 @@ so the observation noise depends on the same scale law that is being
 inferred.  The family is low-dimensional, but the noise is
 parameter-coupled.
 
+This coupling induces a single information scale across the paper.  With
+oracle weights $w_j^* = nD_j^2/\sigma_0^2$, the effective lag-information is
+\[
+    \mathcal I_{n,L}(H)
+    \;:=\;
+    n \sum_{j=1}^L j^{2H},
+\]
+up to constants depending on $\zeta$ and $\sigma_0$, or more precisely the
+matrix information $\mathbf X^\top \mathbf W^* \mathbf X$.  This quantity
+drives the variance of $\widehat H$, the non-centrality of the residual test,
+and the minimax boundary for distinguishing the power-law family from
+scale-inconsistent alternatives.  The regimes $L$ fixed and $L \to \infty$
+are therefore two specialisations of the same law: for fixed $L$,
+$\mathcal I_{n,L}(H) \asymp n$, whereas for consecutive lags
+$1,\dots,L_n$ with $L_n \to \infty$,
+$\mathcal I_{n,L_n}(H) \asymp nL_n^{2H+1}$.
+
 The main results establish a complete inference layer for this family: a
 feasible WLS limit theorem for $H$, exact oracle calibration of a residual
 adequacy statistic, a minimax lower bound for distinguishing the family from
 scale-inconsistent alternatives, and adaptivity in $H$.
 
-\paragraph{Main results.}
+\paragraph{Main contributions.}
 \begin{enumerate}[leftmargin=*,label=(\arabic*)]
 \item \textbf{Feasible inference for the exponent.}  \Cref{thm:clt-fwls}
 gives a central limit theorem for the two-step feasible WLS estimator
@@ -55,15 +72,17 @@ under the power-law family with oracle weights, and that two-step FWLS
 converges to the same law asymptotically as $n \to \infty$ with $L$ fixed.
 
 \item \textbf{Minimax boundary for model distinguishability.}
-\Cref{thm:lecam-lower} gives the minimax separation rate $(nL)^{-1/2}$ for
-distinguishing the power-law family from alternatives with scale
-inconsistency level $\kappa \geq \kappa^*$.
+\Cref{thm:lecam-lower} gives the minimax separation boundary
+$\kappa^* \asymp \mathcal I_{n,L}(H)^{-1/2}$, equivalently
+$\bigl(n\sum_{j \leq L} j^{2H}\bigr)^{-1/2}$, for distinguishing the
+power-law family from alternatives with departure level
+$\kappa \geq \kappa^*$.
 
 \item \textbf{Adaptive structural inference.}  \Cref{thm:adaptivity}
-shows that the FWLS adequacy procedure achieves the minimax rate without
+shows that the FWLS adequacy test achieves the minimax rate without
 prior knowledge of $H$.
 
-\item \textbf{Simulation signatures.}  The numerical study reports exact
+\item \textbf{Simulation evidence.}  The numerical study reports exact
 size calibration, FWLS-oracle agreement, and power curves consistent with the
-boundary $\kappa^* = (nL)^{-1/2}$ (\Cref{sec:sims}).
+boundary $\kappa^* \asymp \mathcal I_{n,L}(H)^{-1/2}$ (\Cref{sec:sims}).
 \end{enumerate}

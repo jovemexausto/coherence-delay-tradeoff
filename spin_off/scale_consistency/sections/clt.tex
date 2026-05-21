@@ -1,7 +1,7 @@
-\section{CLT for the Feasible WLS Estimator}
+\section{Asymptotic Normality of the Feasible WLS Estimator}
 \label{sec:clt}
 
-\subsection{Oracle WLS}
+\subsection{Oracle Weighted Least Squares}
 
 With known weights $w_j^* = 1/v_j = n\,D_j^2/\sigma_0^2$, the oracle
 WLS estimator of $\boldsymbol{\beta} = (\alpha, H)^\top$ in
@@ -14,7 +14,7 @@ WLS estimator of $\boldsymbol{\beta} = (\alpha, H)^\top$ in
 where $\mathbf{X} = [\mathbf{1}\mid \mathbf{x}]$, $\mathbf{x} = (\log
 1, \ldots, \log L)^\top$, and $\mathbf{W}^* = \diag(w_1^*, \ldots, w_L^*)$.
 
-\begin{proposition}[Oracle WLS CLT]
+\begin{proposition}[Asymptotic Normality of the Oracle WLS Estimator]
 \label{prop:oracle-clt}
 Under \Cref{ass:signal,ass:sigma,ass:lags}, as $n \to \infty$ with $L$
 fixed,
@@ -41,31 +41,40 @@ $(2,2)$ entry of $(\mathbf{X}^\top \mathbf{W}^* \mathbf{X})^{-1}$ follows
 by $2\times 2$ matrix inversion.
 \end{proof}
 
+\begin{remark}[Lag-energy information law]
+    For the power-law family, the oracle weights satisfy
+    $w_j^* = (n\zeta^2/\sigma_0^2) j^{2H}$.  Hence the scalar lag-energy
+    $\mathcal I_{n,L}(H) = n\sum_{j=1}^L j^{2H}$ is the basic information
+    budget behind the matrix $\mathbf X^\top \mathbf W^* \mathbf X$.
+    This same quantity reappears in the lower bound and in the non-centrality
+    of the adequacy statistic under local alternatives.
+\end{remark}
+
 \subsection{Two-step feasible WLS}
 
 Since $D_j$ is unknown, the oracle weights are infeasible.  We use the
 following two-step procedure.
 
-\begin{algorithm}[H]
-\caption{Two-Step FWLS Estimator}
-\label{alg:fwls}
-\begin{algorithmic}[1]
-\State \textbf{Input:} $(\Dhj)_{j=1}^L$, $n$, $\sigma_0$.
-\State \textbf{Step 1 (Pilot OLS).}  Compute
-    $(\hat\alpha_{\mathrm{pil}}, \hat H_{\mathrm{pil}})$ by unweighted
-    OLS of $\log \Dhj$ on $(\mathbf{1}, \log j)$.
-\State \textbf{Step 1b (Pilot imputation).}  Set
-    $\hat D_j^{\mathrm{pil}} = \exp(\hat\alpha_{\mathrm{pil}} +
-    \hat H_{\mathrm{pil}} \log j)$.
-\State \textbf{Step 2 (FWLS).}  Set $\hat w_j =
-    n (\hat D_j^{\mathrm{pil}})^2 / \sigma_0^2$ and compute
-    $(\hat\alpha, \Hhat)$ by WLS with weights $(\hat w_j)$.
-\State \textbf{Output:} $\Hhat$, $\hat\alpha$, residuals
-    $\hat U_j = \log \Dhj - \hat\alpha - \Hhat \log j$.
-\end{algorithmic}
-\end{algorithm}
+\begin{table}[h]
+\centering
+\small
+\caption{Two-step feasible weighted least squares procedure.}
+\label{tab:fwls-procedure}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{p{0.18\linewidth}p{0.74\linewidth}}
+\toprule
+Input & $(\Dhj)_{j=1}^L$, $n$, and $\sigma_0$. \\
+\midrule
+Step 1 & Compute $(\hat\alpha_{\mathrm{pil}}, \hat H_{\mathrm{pil}})$ by unweighted OLS of $\log \Dhj$ on $(\mathbf{1}, \log j)$. \\
+Step 2 & Form the pilot fitted profile $\hat D_j^{\mathrm{pil}} = \exp(\hat\alpha_{\mathrm{pil}} + \hat H_{\mathrm{pil}} \log j)$. \\
+Step 3 & Set $\hat w_j = n (\hat D_j^{\mathrm{pil}})^2 / \sigma_0^2$ and compute $(\hat\alpha, \Hhat)$ by WLS with weights $(\hat w_j)$. \\
+Output & Return $\Hhat$, $\hat\alpha$, and residuals $\hat U_j = \log \Dhj - \hat\alpha - \Hhat \log j$. \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
 
-\begin{theorem}[FWLS CLT]
+\begin{theorem}[Asymptotic Normality of the Feasible WLS Estimator]
 \label{thm:clt-fwls}
 Under \Cref{ass:signal,ass:sigma,ass:lags}, the two-step FWLS estimator
 $\Hhat$ satisfies, as $n \to \infty$ with $L$ fixed:

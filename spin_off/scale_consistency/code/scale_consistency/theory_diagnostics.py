@@ -22,10 +22,28 @@ def chi_square_null_variance(lags: int | np.ndarray) -> float:
     return 2.0 * float(chi_square_degrees_of_freedom(lags))
 
 
-def kappa_boundary(n: int, L: int, constant: float = 1.0) -> float:
-    if n <= 0 or L <= 0:
-        raise ValueError("n and L must be positive")
-    return float(constant) / math.sqrt(float(n * L))
+def lag_energy(lags: np.ndarray, H: float) -> float:
+    lag_array = np.asarray(lags, dtype=float)
+    if lag_array.ndim != 1 or lag_array.size == 0:
+        raise ValueError("lags must be a non-empty one-dimensional array")
+    if np.any(lag_array <= 0.0):
+        raise ValueError("lags must be positive")
+    return float(np.sum(lag_array ** (2.0 * float(H))))
+
+
+def information_scale(n: int, lags: np.ndarray, H: float) -> float:
+    if n <= 0:
+        raise ValueError("n must be positive")
+    return float(n) * lag_energy(lags, H)
+
+
+def kappa_boundary(
+    n: int,
+    lags: np.ndarray,
+    H: float,
+    constant: float = 1.0,
+) -> float:
+    return float(constant) / math.sqrt(information_scale(n, lags, H))
 
 
 def oracle_h_variance(
@@ -45,6 +63,5 @@ def oracle_h_variance(
 def scaled_rmse_constant(rmse: float, n: int, L: int, H: float) -> float:
     if rmse < 0.0:
         raise ValueError("rmse must be non-negative")
-    if n <= 0 or L <= 0:
-        raise ValueError("n and L must be positive")
-    return float(rmse) * math.sqrt(float(n) * float(L) ** (2.0 * H + 1.0))
+    lags = np.arange(1, int(L) + 1, dtype=float)
+    return float(rmse) * math.sqrt(information_scale(n, lags, H))

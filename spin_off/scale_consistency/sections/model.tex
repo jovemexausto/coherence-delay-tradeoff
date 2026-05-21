@@ -1,4 +1,4 @@
-\section{Model and Assumptions}
+\section{Observation Model and Testing Setup}
 \label{sec:model}
 
 \subsection{Observation model}
@@ -7,7 +7,6 @@ We observe a triangular array $\{\Dhj\}_{j=1}^{L}$ satisfying
 \begin{equation}
     \Dhj = D_j + \varepsilon_j,\qquad
     \varepsilon_j \iid \calN\!\left(0,\,\frac{\sigma_0^2}{n}\right),
-    \tag{M}
     \label{eq:M}
 \end{equation}
 where $D_j = \zeta\,j^H$ for unknown parameters $(\zeta, H) \in
@@ -43,9 +42,22 @@ The variance $v_j$ \emph{depends on $H$ and $\zeta$}, which are the
 parameters of interest.  This is the parameter-coupled heteroscedasticity
 that distinguishes our problem from standard regression.
 
+The resulting information budget is the weighted lag-energy
+\begin{equation}
+    \mathcal I_{n,L}(H)
+    \;:=\;
+    n \sum_{j=1}^L j^{2H},
+    \label{eq:lag-energy}
+\end{equation}
+up to the scale factor $\zeta^2/\sigma_0^2$.  For the exact oracle regression,
+the matrix information is $\mathbf X^\top \mathbf W^* \mathbf X$, and
+\eqref{eq:lag-energy} is its leading scalar summary along the lag profile.
+This same quantity will control estimation accuracy, test power, and the
+minimax separation boundary.
+
 \subsection{Hypotheses}
 
-Let $\kappa \geq 0$ measure the \emph{scale inconsistency}: under the
+Let $\kappa \geq 0$ measure the \emph{deviation from the power-law family}: under the
 alternative, each observation has an additional log-normal multiplicative
 factor,
 \[
@@ -54,8 +66,8 @@ factor,
 \]
 The hypotheses are:
 \begin{align*}
-    H_0&:\; \kappa = 0 \quad\text{(scale consistency)},\\
-    H_1&:\; \kappa \geq \kappa^* \quad\text{(scale inconsistency at level } \kappa^*\text{)}.
+    H_0&:\; \kappa = 0 \quad\text{(membership in the power-law family)},\\
+    H_1&:\; \kappa \geq \kappa^* \quad\text{(power-law departure at level } \kappa^*\text{)}.
 \end{align*}
 
 \subsection{Assumptions}
@@ -80,3 +92,11 @@ $L \geq 4$ is fixed as $n \to \infty$.
 The lags $x_j := \log j$ for $j = 1, \ldots, L$ satisfy
 $\sum_j (x_j - \bar{x})^2 \geq c_L > 0$.
 \end{assumption}
+
+\begin{remark}
+    The fixed-$L$ assumption is used for the exact oracle null law and the
+    baseline FWLS limit theory.  A growing-lag regime $L=L_n \to \infty$ is
+    treated separately in \Cref{sec:adaptivity}, where the same information
+    scale \eqref{eq:lag-energy} yields the rate
+    $(nL_n^{2H+1})^{-1/2}$ for consecutive lags.
+\end{remark}

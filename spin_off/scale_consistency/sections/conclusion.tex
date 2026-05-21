@@ -1,17 +1,19 @@
-\section{Conclusion}
+\section{Conclusion and Open Problems}
 \label{sec:conclusion}
 
-We have established a minimax inference theory for power-law lag geometry
-under noisy transport estimates.  The low-dimensional family
-$D_j = \zeta j^H$ remains inferable despite parameter-coupled noise: the
-roughness exponent admits a feasible oracle-equivalent estimator, adequacy of
-the family is testable through a residual statistic with an exact oracle null
-law, and the same procedure attains the minimax boundary without prior
-knowledge of $H$.
+We have established a structural inference theory for power-law lag geometry
+under noisy transport estimates.  The governing object is the weighted
+lag-energy $n\sum_{j \leq L} j^{2H}$: it controls the oracle information for
+$H$, the non-centrality of the residual-based adequacy test, and the minimax
+separation boundary.  The low-dimensional family $D_j = \zeta j^H$ therefore
+remains inferable despite parameter-coupled noise: the roughness exponent
+admits a feasible oracle-equivalent estimator, membership in the family is
+testable through a residual statistic with an exact oracle null law, and the
+same procedure attains the minimax boundary without prior knowledge of $H$.
 
-The simulations confirm exact calibration, FWLS-oracle agreement, and power
-curves matching the theoretical boundary.  The procedure is practical---it
-requires only standard WLS computations.
+The simulation evidence confirms null calibration, feasible-oracle agreement,
+and power curves matching the theoretical boundary.  The procedure is
+computationally simple: it requires only standard WLS computations.
 
 The remaining gaps are limited and explicit:
 \begin{itemize}[leftmargin=*]
@@ -27,6 +29,6 @@ The remaining gaps are limited and explicit:
     version of the test would allow continuous monitoring without inflating
     the false alarm rate.
     \item \emph{Composite $H$ classes.}  Extending the lower bound to
-    adaptive testing over H"older classes of the underlying drift (rather
+    adaptive testing over H\"older classes of the underlying drift (rather
     than the scalar $H$) is a natural next step.
 \end{itemize}

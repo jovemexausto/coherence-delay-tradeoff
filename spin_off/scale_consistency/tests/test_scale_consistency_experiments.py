@@ -38,6 +38,8 @@ class ScaleConsistencyExperimentsTest(unittest.TestCase):
         )
         self.assertEqual(len(rows), 2)
         self.assertTrue(all(0.0 <= row.empirical_power <= 1.0 for row in rows))
+        self.assertTrue(all(row.information_scale > 0.0 for row in rows))
+        self.assertTrue(all(row.local_noncentrality > 0.0 for row in rows))
 
     def test_rate_constant_experiment_returns_rows(self) -> None:
         rows = run_rate_constant_experiment(
@@ -45,6 +47,7 @@ class ScaleConsistencyExperimentsTest(unittest.TestCase):
         )
         self.assertEqual(len(rows), 2)
         self.assertTrue(all(row.scaled_constant > 0.0 for row in rows))
+        self.assertTrue(all(row.information_scale > 0.0 for row in rows))
 
 
 if __name__ == "__main__":

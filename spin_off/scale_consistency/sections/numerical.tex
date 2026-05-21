@@ -1,13 +1,13 @@
-\section{Numerical Experiments}
+\section{Simulation Evidence}
 \label{sec:sims}
 
 All experiments use the simulation model \eqref{eq:M} with $\zeta = 1$,
-$\sigma_0 = 1$, $H = 0.6$ (unless stated), and the two-step FWLS procedure
-(\Cref{alg:fwls}).  We used 8000 Monte Carlo replications for size and
+$\sigma_0 = 1$, $H = 0.6$ (unless stated), and the two-step FWLS procedure.
+We used 8000 Monte Carlo replications for size and
 5000 for power; detailed numerical tables are reported in
 Appendix~\ref{app:numerical_tables}.
 
-\subsection{Null distribution calibration}
+\subsection{Null Calibration}
 
 Figure~\ref{fig:null-calibration} shows that the residual adequacy statistic
 is already well calibrated at moderate lag counts: its empirical mean tracks
@@ -17,27 +17,28 @@ nominal level.  Table~\ref{tab:null} gives the exact grid values.
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=\linewidth]{artifacts/figures/scale_consistency/fig_null_calibration}
-\caption{Null calibration of the residual adequacy statistic.}
+\caption{Finite-sample null calibration of the residual-based adequacy statistic.}
 \label{fig:null-calibration}
 \end{figure}
 \FloatBarrier
 
-\subsection{Power at the minimax boundary}
+\subsection{Power at the Information-Scale Separation Boundary}
 
-Figure~\ref{fig:power-boundary} shows the transition at the minimax boundary:
-the adequacy procedure is informative but not overconfident at $c=1$, and it
+Figure~\ref{fig:power-boundary} shows the transition at the information-scale
+boundary $\kappa^* \asymp \bigl(n\sum_{j \leq L} j^{2H}\bigr)^{-1/2}$:
+ the adequacy test is informative but not overconfident at $c=1$, and it
 becomes decisive above the boundary.  Table~\ref{tab:power-boundary} records
-the exact values.
+the exact values together with the corresponding lag-information.
 
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=\linewidth]{artifacts/figures/scale_consistency/fig_power_boundary}
-\caption{Power transition at the minimax boundary.}
+\caption{Empirical power across the information-scale separation boundary.}
 \label{fig:power-boundary}
 \end{figure}
 \FloatBarrier
 
-\subsection{FWLS versus oracle}
+\subsection{Feasible-Oracle Agreement}
 
 Figure~\ref{fig:fwls-oracle-gap} shows that the feasible estimator tracks the
 oracle benchmark closely: the gap shrinks with $n$ and remains small across
@@ -46,26 +47,27 @@ the tested lag lengths.  This is the numerical counterpart of the CLT.
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=\linewidth]{artifacts/figures/scale_consistency/fig_fwls_oracle_gap}
-\caption{Agreement between feasible and oracle estimation.}
+\caption{Feasible-oracle agreement for estimation of $H$.}
 \label{fig:fwls-oracle-gap}
 \end{figure}
 \FloatBarrier
 
-\subsection{Rate constant}
+\subsection{Information-Normalized Error Constant}
 
 Figure~\ref{fig:rate-constant} shows that the FWLS error obeys the predicted
-scaling over two orders of magnitude in $n$, while the rescaled constant
-remains essentially flat.  Table~\ref{tab:rate} gives the exact grid values.
+information scaling over two orders of magnitude in $n$, while the rescaled
+constant remains essentially flat.  Table~\ref{tab:rate} gives the exact grid
+values.
 
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=\linewidth]{artifacts/figures/scale_consistency/fig_rate_constant}
-\caption{Rate-constant stabilization for $\widehat H$.}
+\caption{Stabilization of the information-normalized error constant for $\widehat H$.}
 \label{fig:rate-constant}
 \end{figure}
 \FloatBarrier
 
-\subsection{Robustness}
+\subsection{Sensitivity to Model Misspecification and Noise Law}
 
 Figure~\ref{fig:robustness} varies the scale law on the left and the noise law
 on the right.  The procedure is stable under moderate perturbations and
@@ -75,7 +77,7 @@ scope of the theorem.
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=\linewidth]{artifacts/figures/scale_consistency/fig_robustness}
-\caption{Sensitivity to scale misspecification and alternative noise laws.}
+\caption{Sensitivity of the adequacy test to power-law misspecification and noise law.}
 \label{fig:robustness}
 \end{figure}
 \FloatBarrier

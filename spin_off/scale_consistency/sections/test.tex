@@ -1,16 +1,17 @@
-\section{Residual Adequacy of the Power-Law Family}
+\section{Residual-Based Adequacy Test for the Power-Law Family}
 \label{sec:test}
 
-\subsection{Test statistic}
+\subsection{Residual-Based Test Statistic}
 
-Define the \emph{scale consistency statistic}
+Define the \emph{residual-based adequacy statistic}
 \begin{equation}
     Q \;:=\; \sum_{j=1}^{L} \hat w_j \,\hat U_j^2,
     \label{eq:Q-stat}
 \end{equation}
-where $\hat w_j$ and $\hat U_j$ are from \Cref{alg:fwls}.
+where $\hat w_j$ and $\hat U_j$ are produced by the two-step FWLS procedure in
+\Cref{tab:fwls-procedure}.
 
-\begin{theorem}[Null distribution]
+\begin{theorem}[Exact Oracle Null Law and Feasible Asymptotic Null Law]
 \label{thm:null-chi2}
 Under $H_0$ and \Cref{ass:signal,ass:sigma,ass:lags}:
 \begin{enumerate}[label=(\alph*)]
@@ -40,18 +41,19 @@ convergence in distribution passes through the CDF and $Q \dto \chi^2(L-2)$.
 \end{proof}
 
 \begin{remark}
-    Part~(a) is exact---not asymptotic---because the problem is a
-    weighted Gaussian linear regression with known weights.  For finite $n$,
-    the delta-method approximation in \eqref{eq:log-noise} introduces a bias
-    of order $O(n^{-1})$ per lag; this is negligible for the $\chi^2$
-    calibration at the rates we consider.  Simulations confirm empirical
-    sizes of 0.049--0.052 at $\alpha = 0.05$ for all $L \in \{10,20,30,50\}$
-    and $n = 1000$ (see \Cref{tab:null}).
+    Part~(a) is exact because the oracle problem is a weighted Gaussian linear
+    regression with known precision matrix.  Part~(b) is asymptotic because
+    the feasible statistic uses estimated weights and the log-noise model is a
+    delta-method approximation.  For finite $n$, the approximation error in
+    \eqref{eq:log-noise} contributes a bias of order $O(n^{-1})$ per lag;
+    this is negligible for the $\chi^2$ calibration at the rates we consider.
+    Simulations confirm empirical sizes of 0.049--0.052 at $\alpha = 0.05$
+    for all $L \in \{10,20,30,50\}$ and $n = 1000$ (see \Cref{tab:null}).
 \end{remark}
 
-\subsection{Decision rule}
+\subsection{Testing Rule}
 
-The scale consistency test at level $\alpha$ rejects $H_0$ when
+The residual-based adequacy test at level $\alpha$ rejects $H_0$ when
 \begin{equation}
     Q \;>\; q_{L-2,\,1-\alpha},
     \label{eq:test-rule}
