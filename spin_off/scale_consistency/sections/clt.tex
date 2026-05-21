@@ -1,4 +1,4 @@
-\section{Asymptotic Normality of the Feasible WLS Estimator}
+\section{Feasible Inference}
 \label{sec:clt}
 
 \subsection{Oracle Weighted Least Squares}
@@ -46,7 +46,7 @@ by $2\times 2$ matrix inversion.
     $w_j^* = (n\zeta^2/\sigma_0^2) j^{2H}$.  Hence the scalar lag-energy
     $\mathcal I_{n,L}(H) = n\sum_{j=1}^L j^{2H}$ is the basic information
     budget behind the matrix $\mathbf X^\top \mathbf W^* \mathbf X$.
-    This same quantity reappears in the lower bound and in the non-centrality
+    This same quantity reappears in the lower bound and in the departure scale
     of the adequacy statistic under local alternatives.
 \end{remark}
 
@@ -88,6 +88,15 @@ In particular, $\Hhat$ is \emph{asymptotically equivalent to the oracle
 WLS estimator}: the pilot estimation error inflates neither the asymptotic
 variance nor the rate.
 \end{theorem}
+
+\begin{remark}[$\sigma_0$ unknown]
+    When $\sigma_0$ is unknown, one may replace it by a consistent plug-in
+    estimate constructed from the pilot residuals.  This perturbs the feasible
+    weights by $O_p(n^{-1/2})$, so the asymptotic FWLS law is unchanged.  For
+    the adequacy test, the same plug-in step costs one additional finite-sample
+    degree of freedom, so a $\chi^2(L-3)$ critical value is the natural
+    finite-$n$ correction.
+\end{remark}
 
 \begin{proof}[Proof sketch]
 Write $\hat w_j = w_j^* \cdot r_j$ where $r_j = (\hat D_j^{\mathrm{pil}}

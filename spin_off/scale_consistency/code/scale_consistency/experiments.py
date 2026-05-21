@@ -24,13 +24,13 @@ from .theory_diagnostics import (
 
 @dataclass(frozen=True)
 class NullCalibrationConfig:
-    L_values: tuple[int, ...] = (10, 20)
-    n_values: tuple[int, ...] = (200, 1000)
-    H_values: tuple[float, ...] = (0.3, 0.6)
+    L_values: tuple[int, ...] = (10, 20, 30, 50)
+    n_values: tuple[int, ...] = (1000,)
+    H_values: tuple[float, ...] = (0.6,)
     sigma0_values: tuple[float, ...] = (1.0,)
     zeta: float = 1.0
     alpha_level: float = 0.05
-    repetitions: int = 200
+    repetitions: int = 8000
     seed: int = 1234
 
 
@@ -49,12 +49,12 @@ class NullCalibrationRow:
 
 @dataclass(frozen=True)
 class FWLSOracleConfig:
-    L_values: tuple[int, ...] = (10, 20)
-    n_values: tuple[int, ...] = (200, 1000)
+    L_values: tuple[int, ...] = (20,)
+    n_values: tuple[int, ...] = (200, 500, 1000, 2000, 5000)
     H: float = 0.6
     sigma0: float = 1.0
     zeta: float = 1.0
-    repetitions: int = 200
+    repetitions: int = 5000
     seed: int = 4321
 
 
@@ -62,21 +62,23 @@ class FWLSOracleConfig:
 class FWLSOracleRow:
     L: int
     n: int
+    rmse_h_fwls: float
+    rmse_h_oracle: float
+    rmse_ratio: float
     rmse_h_gap: float
     mean_abs_q_gap: float
-    variance_ratio: float
 
 
 @dataclass(frozen=True)
 class BoundaryPowerConfig:
     L: int = 20
-    n_values: tuple[int, ...] = (200, 1000)
-    c_values: tuple[float, ...] = (0.5, 1.0, 2.0, 3.0)
+    n_values: tuple[int, ...] = (1000,)
+    c_values: tuple[float, ...] = (0.5, 1.0, 2.0, 3.0, 5.0)
     H: float = 0.6
     sigma0: float = 1.0
     zeta: float = 1.0
     alpha_level: float = 0.05
-    repetitions: int = 200
+    repetitions: int = 5000
     seed: int = 2468
 
 
@@ -87,18 +89,18 @@ class BoundaryPowerRow:
     kappa: float
     lag_energy: float
     information_scale: float
-    local_noncentrality: float
+    boundary_scale: float
     empirical_power: float
 
 
 @dataclass(frozen=True)
 class RateConstantConfig:
     L: int = 20
-    n_values: tuple[int, ...] = (200, 500, 1000)
+    n_values: tuple[int, ...] = (200, 500, 1000, 2000, 5000)
     H: float = 0.6
     sigma0: float = 1.0
     zeta: float = 1.0
-    repetitions: int = 200
+    repetitions: int = 5000
     seed: int = 1357
 
 
@@ -241,15 +243,17 @@ def run_fwls_oracle_experiment(
                 oracle_values.append(oracle.H)
             fwls_array = np.asarray(fwls_values, dtype=float)
             oracle_array = np.asarray(oracle_values, dtype=float)
+            rmse_fwls = float(np.sqrt(np.mean(np.square(fwls_array - config.H))))
+            rmse_oracle = float(np.sqrt(np.mean(np.square(oracle_array - config.H))))
             rows.append(
                 FWLSOracleRow(
                     L=L,
                     n=n,
+                    rmse_h_fwls=rmse_fwls,
+                    rmse_h_oracle=rmse_oracle,
+                    rmse_ratio=rmse_fwls / rmse_oracle,
                     rmse_h_gap=float(np.sqrt(np.mean(np.square(h_gaps)))),
                     mean_abs_q_gap=float(np.mean(np.abs(q_gaps))),
-                    variance_ratio=float(
-                        np.var(fwls_array, ddof=1) / np.var(oracle_array, ddof=1)
-                    ),
                 )
             )
     return rows
@@ -292,7 +296,7 @@ def run_boundary_power_experiment(
                     kappa=kappa,
                     lag_energy=energy,
                     information_scale=info,
-                    local_noncentrality=(kappa**2) * info,
+                    boundary_scale=(kappa**2) * info,
                     empirical_power=float(rejections) / float(config.repetitions),
                 )
             )

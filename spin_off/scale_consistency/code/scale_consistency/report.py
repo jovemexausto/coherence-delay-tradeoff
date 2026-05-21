@@ -135,7 +135,7 @@ def generate_v1_reports(
             ("q_mean_theory", "$\\mathbb E[\\chi^2]$"),
         ],
         caption="Finite-sample null calibration of the residual-based adequacy test.",
-        label="tab:null-size-generated",
+        label="tab:null",
         column_spec="rrrrrr",
     )
     write_latex_table(
@@ -144,13 +144,14 @@ def generate_v1_reports(
         columns=[
             ("L", "$L$"),
             ("n", "$n$"),
-            ("rmse_h_gap", "RMSE gap"),
+            ("rmse_h_fwls", "RMSE($\\widehat H$)"),
+            ("rmse_h_oracle", "Oracle RMSE"),
+            ("rmse_ratio", "RMSE ratio"),
             ("mean_abs_q_gap", "Mean abs. $Q$ gap"),
-            ("variance_ratio", "Variance ratio"),
         ],
         caption="Feasible-oracle agreement for estimation and residual statistics.",
-        label="tab:fwls-oracle-generated",
-        column_spec="rrrrr",
+        label="tab:fwls-oracle",
+        column_spec="rrrrrr",
     )
     write_latex_table(
         boundary_rows,
@@ -159,11 +160,11 @@ def generate_v1_reports(
             ("n", "$n$"),
             ("c", "$c$"),
             ("kappa", "$\\kappa$"),
-            ("local_noncentrality", "$n\\kappa^2 \\sum j^{2H}$"),
+            ("boundary_scale", "$n\\kappa^2 \\sum j^{2H}$"),
             ("empirical_power", "Empirical power"),
         ],
-        caption="Empirical power of the residual-based adequacy test at the information-scale separation boundary.",
-        label="tab:boundary-power-generated",
+        caption="Empirical power of the residual-based adequacy test at the information-scale separation boundary, reported against the boundary scale $n\\kappa^2 \\sum j^{2H}$.",
+        label="tab:power-boundary",
         column_spec="rrrrr",
     )
     write_latex_table(
@@ -177,7 +178,7 @@ def generate_v1_reports(
             ("oracle_scaled_constant", "Oracle $C$"),
         ],
         caption="Information-normalized error constants for feasible and oracle WLS.",
-        label="tab:rate-constant-generated",
+        label="tab:rate",
         column_spec="rrrrr",
     )
     write_latex_table(
@@ -191,7 +192,7 @@ def generate_v1_reports(
             ("mean_q", "Mean $Q$"),
         ],
         caption="Sensitivity of the adequacy statistic to power-law misspecification.",
-        label="tab:misspecification-generated",
+        label="tab:misspecification",
         column_spec="lrrrr",
     )
     write_latex_table(
@@ -204,7 +205,7 @@ def generate_v1_reports(
             ("mean_q", "Mean $Q$"),
         ],
         caption="Sensitivity of the adequacy test to alternative noise laws.",
-        label="tab:noise-robustness-generated",
+        label="tab:noise-robustness",
         column_spec="lrrr",
     )
 

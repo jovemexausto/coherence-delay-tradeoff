@@ -38,7 +38,6 @@ from .model import (
     simulate_log_observations,
     simulate_observed_discrepancies,
 )
-from .plots import generate_v1_figures
 from .report import export_rows_csv, generate_v1_reports, write_latex_table
 from .theory_diagnostics import (
     chi_square_degrees_of_freedom,
@@ -99,3 +98,9 @@ __all__ = [
     "write_latex_table",
     "weighted_least_squares",
 ]
+
+
+def generate_v1_figures(*args, **kwargs):
+    from .plots import generate_v1_figures as _generate_v1_figures
+
+    return _generate_v1_figures(*args, **kwargs)

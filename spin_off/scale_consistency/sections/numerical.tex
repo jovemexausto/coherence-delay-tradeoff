@@ -26,8 +26,8 @@ nominal level.  Table~\ref{tab:null} gives the exact grid values.
 
 Figure~\ref{fig:power-boundary} shows the transition at the information-scale
 boundary $\kappa^* \asymp \bigl(n\sum_{j \leq L} j^{2H}\bigr)^{-1/2}$:
- the adequacy test is informative but not overconfident at $c=1$, and it
-becomes decisive above the boundary.  Table~\ref{tab:power-boundary} records
+the adequacy test is informative but not overconfident at $c=1$, and it
+gains power steadily above the boundary.  Table~\ref{tab:power-boundary} records
 the exact values together with the corresponding lag-information.
 
 \begin{figure}[!htbp]
@@ -41,8 +41,10 @@ the exact values together with the corresponding lag-information.
 \subsection{Feasible-Oracle Agreement}
 
 Figure~\ref{fig:fwls-oracle-gap} shows that the feasible estimator tracks the
-oracle benchmark closely: the gap shrinks with $n$ and remains small across
-the tested lag lengths.  This is the numerical counterpart of the CLT.
+oracle benchmark closely: the RMSE ratio stays numerically at one, while the
+gap shrinks with $n$.  This is the numerical counterpart of the CLT.  The
+appendix tables report both the FWLS/oracle RMSEs and the resulting ratio; the
+same calculations correct the earlier arithmetic slip in the appendix constant.
 
 \begin{figure}[!htbp]
 \centering
@@ -56,8 +58,8 @@ the tested lag lengths.  This is the numerical counterpart of the CLT.
 
 Figure~\ref{fig:rate-constant} shows that the FWLS error obeys the predicted
 information scaling over two orders of magnitude in $n$, while the rescaled
-constant remains essentially flat.  Table~\ref{tab:rate} gives the exact grid
-values.
+constant remains essentially flat near the corrected value $C \approx 2.22$.
+Table~\ref{tab:rate} gives the exact grid values.
 
 \begin{figure}[!htbp]
 \centering
@@ -83,7 +85,7 @@ scope of the theorem.
 \FloatBarrier
 
 Tables~\ref{tab:null}, \ref{tab:power-boundary}, and \ref{tab:rate}, together
-with the appendix robustness tables,
+with \Cref{tab:fwls-oracle} and the appendix robustness tables,
 provide the exact numerical grid values.
 
 \FloatBarrier

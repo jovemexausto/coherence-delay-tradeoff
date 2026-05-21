@@ -1,4 +1,4 @@
-\section{Observation Model and Testing Setup}
+\section{Model}
 \label{sec:model}
 
 \subsection{Observation model}
@@ -54,6 +54,18 @@ the matrix information is $\mathbf X^\top \mathbf W^* \mathbf X$, and
 \eqref{eq:lag-energy} is its leading scalar summary along the lag profile.
 This same quantity will control estimation accuracy, test power, and the
 minimax separation boundary.
+
+\begin{remark}[Cross-lag dependence]
+    The independence model in \eqref{eq:M} isolates the baseline inference
+    problem.  In transport applications, the estimates $\Dhj$ typically share
+    the same present-time sample from $P_t$, which induces positive cross-lag
+    covariance of order $n^{-1}$.  Under such shared sampling, the diagonal
+    approximation used here can only make the adequacy test conservative: the
+    effective residual degrees of freedom decreases, so null rejection tends to
+    fall below the nominal level.  A covariance-adjusted statistic based on the
+    full lag covariance matrix is the natural extension, but it lies outside the
+    present theorem line.
+\end{remark}
 
 \subsection{Hypotheses}
 

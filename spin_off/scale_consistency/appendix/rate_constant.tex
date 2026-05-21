@@ -15,18 +15,39 @@ and the $(2,2)$ entry of the inverse is
     \bigl[(\mathbf{X}^\top \mathbf{W}^* \mathbf{X})^{-1}\bigr]_{22}
     = \frac{\sigma_0^2}{n} \cdot \frac{S_0}{S_0 S_2 - S_1^2}.
 \]
-For $L = 20$, $H = 0.6$:
-$S_0 \approx 166.2$, $S_1 \approx 347.4$, $S_2 \approx 836.7$,
-$S_0 S_2 - S_1^2 \approx 166.2 \times 836.7 - 347.4^2 \approx 18219$,
-giving
-$\Var(\hat H^*) \approx \sigma_0^2 \times 166.2 / (n \times 18219)
-\approx 9.13 \times 10^{-3} \sigma_0^2 / n$.
-Thus $\mathrm{RMSE}(\hat H^*) \approx \sqrt{9.13 \times 10^{-3}/n}
-\cdot \sigma_0$.
-Our theoretical rate factor is $(n L^{2H+1})^{-1/2} = (n \times 20^{2.2})^{-1/2}
-\approx (n \times 70.4)^{-1/2}$.
-The ratio gives $C = \sqrt{9.13 \times 10^{-3} \times 70.4} \approx 0.802$
-for the oracle.  The FWLS adds a constant factor (verified to be $\approx 3.22$
-in \Cref{tab:rate}); the discrepancy with the oracle bound reflects the
-additional variance from the pilot step and the delta-method linearization
-error.
+For $L = 20$ and $H = 0.6$, the correct weighted sums are
+\[
+    S_0 \approx 349.34, \qquad
+    S_1 \approx 896.52, \qquad
+    S_2 \approx 2371.68,
+\]
+so that
+\[
+    S_0 S_2 - S_1^2 \approx 2.47848 \times 10^{7}.
+\]
+Hence
+\[
+    \Var(\hat H^*)
+    = \frac{\sigma_0^2}{n} \cdot \frac{S_0}{S_0 S_2 - S_1^2}
+    \approx 1.41 \times 10^{-2} \frac{\sigma_0^2}{n},
+\]
+and therefore
+\[
+    \mathrm{RMSE}(\hat H^*)
+    \approx \frac{0.1187\,\sigma_0}{\sqrt n}.
+\]
+With information-normalization by $\mathcal I_{n,L}(H)$,
+where $\mathcal I_{n,L}(H) = n\sum_{j=1}^L j^{2H} = n S_0$,
+the oracle constant is
+\begin{align*}
+    C_{\mathrm{oracle}}
+    &= \mathrm{RMSE}(\hat H^*)\,\mathcal I_{n,L}(H)^{1/2} \\
+    &= \sqrt{\frac{S_0^2}{S_0 S_2 - S_1^2}} \\
+    &\approx 2.219.
+\end{align*}
+This corrects an arithmetic error in an earlier draft, where $S_0$ was
+misreported and the resulting constant was stated as $3.22$.
+With the correct weighted sums, both the theoretical oracle constant and the
+simulated FWLS constant are approximately $2.22$.
+The FWLS-to-oracle RMSE ratio is numerically indistinguishable from $1$
+in \Cref{tab:fwls-oracle,tab:rate}.

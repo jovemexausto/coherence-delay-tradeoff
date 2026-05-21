@@ -31,6 +31,9 @@ class ScaleConsistencyExperimentsTest(unittest.TestCase):
         )
         self.assertEqual(len(rows), 1)
         self.assertGreaterEqual(rows[0].rmse_h_gap, 0.0)
+        self.assertGreater(rows[0].rmse_h_fwls, 0.0)
+        self.assertGreater(rows[0].rmse_h_oracle, 0.0)
+        self.assertGreater(rows[0].rmse_ratio, 0.0)
 
     def test_boundary_power_experiment_returns_full_grid(self) -> None:
         rows = run_boundary_power_experiment(
@@ -39,7 +42,7 @@ class ScaleConsistencyExperimentsTest(unittest.TestCase):
         self.assertEqual(len(rows), 2)
         self.assertTrue(all(0.0 <= row.empirical_power <= 1.0 for row in rows))
         self.assertTrue(all(row.information_scale > 0.0 for row in rows))
-        self.assertTrue(all(row.local_noncentrality > 0.0 for row in rows))
+        self.assertTrue(all(row.boundary_scale > 0.0 for row in rows))
 
     def test_rate_constant_experiment_returns_rows(self) -> None:
         rows = run_rate_constant_experiment(

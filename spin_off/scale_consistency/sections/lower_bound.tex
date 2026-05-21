@@ -1,4 +1,4 @@
-\section{Minimax Separation Lower Bound}
+\section{Lower Bound}
 \label{sec:lower}
 
 We now show that no test can do better than the information-scale boundary
@@ -90,37 +90,12 @@ and the conclusion follows from Le~Cam's lemma.
     boundary becomes $(nL_n^{2H+1})^{-1/2}$.
 \end{remark}
 
-\subsection{Matching Upper Bound for the Separation Boundary}
-
-The following proposition shows that the residual-based adequacy test achieves
-the lower bound.
-
-\begin{proposition}[Attainment of the Separation Boundary]
-\label{prop:upper-bound}
-The test \eqref{eq:test-rule} satisfies: for
-\[
-    \kappa^* = C_1 \left(n\sum_{j=1}^L j^{2H}\right)^{-1/2}
-\]
-with $C_1$ sufficiently large,
-\[
-    \Prob_0(\text{reject}) \leq \alpha + o(1),\qquad
-    \Prob_{\kappa^*}(\text{reject}) \geq 1 - \beta - o(1),
-\]
-for any $\beta > 0$.  In particular, the test is consistent at the
-minimax rate.
-\end{proposition}
-
-\begin{proof}
-Under $H_1$, the statistic $Q = \sum_j \hat w_j \hat U_j^2$ has
-\[
-    \E_{\kappa^*}[Q] = (L-2) + \frac{\kappa^{*2}}{1} \sum_j \hat w_j
-    \;\approx\; (L-2) + n\kappa^{*2} \sum_j D_j^2/\sigma_0^2.
-\]
-The non-centrality parameter is
-\[
-    \lambda = \frac{n\zeta^2}{\sigma_0^2}\,\kappa^{*2}\sum_j j^{2H}.
-\]
-At the displayed boundary, $\lambda \asymp C_1^2$.  For $C_1$ large, the
-non-central $\chi^2(L-2,\lambda)$ distribution places mass near
-$q_{L-2,1-\alpha} + \lambda$, so the power approaches 1.
-\end{proof}
+\begin{remark}[Fixed-$L$ boundary response]
+    For fixed $L$, the information-scale boundary is a local-testing scale, not
+    a consistency regime.  Under departures of the form
+    $\kappa = c\bigl(n\sum_{j=1}^L j^{2H}\bigr)^{-1/2}$, the adequacy test is
+    indexed by the constant $c$: larger $c$ produces larger variance inflation
+    in the residual quadratic form, but power does not converge to one merely by
+    sending $n \to \infty$ with $L$ fixed.  The theorem-level consistency
+    statement belongs to the growing-lag regime of \Cref{sec:adaptivity}.
+\end{remark}

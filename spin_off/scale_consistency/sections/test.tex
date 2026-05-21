@@ -1,4 +1,4 @@
-\section{Residual-Based Adequacy Test for the Power-Law Family}
+\section{Adequacy Test}
 \label{sec:test}
 
 \subsection{Residual-Based Test Statistic}
@@ -47,7 +47,7 @@ convergence in distribution passes through the CDF and $Q \dto \chi^2(L-2)$.
     delta-method approximation.  For finite $n$, the approximation error in
     \eqref{eq:log-noise} contributes a bias of order $O(n^{-1})$ per lag;
     this is negligible for the $\chi^2$ calibration at the rates we consider.
-    Simulations confirm empirical sizes of 0.049--0.052 at $\alpha = 0.05$
+    Simulations confirm empirical sizes of 0.046--0.055 at $\alpha = 0.05$
     for all $L \in \{10,20,30,50\}$ and $n = 1000$ (see \Cref{tab:null}).
 \end{remark}
 
@@ -67,3 +67,58 @@ standardised form
 \]
 rejecting when $T > z_{1-\alpha}$.  However, the direct $\chi^2$ critical
 value gives better finite-$L$ calibration (see \Cref{tab:null}).
+
+\subsection{Behavior Under Departures}
+
+\begin{proposition}[Response under departures]
+\label{prop:alternative-response}
+Let
+\[
+    \mathbf P
+    :=
+    (\mathbf W^*)^{1/2}\mathbf X
+    (\mathbf X^\top \mathbf W^* \mathbf X)^{-1}
+    \mathbf X^\top (\mathbf W^*)^{1/2}
+\]
+be the oracle projection matrix.  Under $H_1$, the perturbation
+$\kappa\,\xi_j$ in the log-domain model increases variance rather than
+shifting the mean.  Accordingly, the oracle adequacy statistic $Q^*$ is not a
+non-central $\chi^2$ variable.  Its expectation satisfies
+\[
+    \mathbb E_{H_1}[Q^*]
+    = (L-2) + \kappa^2\,\mathrm{tr}\!\left((\mathbf I - \mathbf P)\mathbf W^*\right).
+\]
+Moreover,
+\[
+    \mathrm{tr}\!\left((\mathbf I - \mathbf P)\mathbf W^*\right)
+    = \frac{n\zeta^2}{\sigma_0^2}\sum_{j=1}^L j^{2H} + O\!\left(nL^{2H}\right),
+\]
+so the departure scale is governed by the same information law as the lower
+bound, namely $n\kappa^2 \sum_{j=1}^L j^{2H}$ up to lower-order projection
+corrections.
+\end{proposition}
+
+\begin{proof}
+Under $H_1$, the whitened residual vector has covariance
+$\mathbf I + \kappa^2 \mathbf W^*$.  Applying the residual projection
+$\mathbf I - \mathbf P$ gives
+\[
+    Q^* = \| (\mathbf I - \mathbf P)\widetilde{\mathbf Y} \|^2,
+\]
+so the expectation is the trace of
+$(\mathbf I - \mathbf P)(\mathbf I + \kappa^2 \mathbf W^*)(\mathbf I - \mathbf P)$.
+Since $\mathbf I - \mathbf P$ is an idempotent projection of rank $L-2$,
+the null contribution is $L-2$, and the departure contribution is the stated
+trace term.  Because $\mathbf P$ has rank $2$ and
+$\|\mathbf W^*\|_{\mathrm{op}} = O(nL^{2H})$, the correction
+$\mathrm{tr}(\mathbf P\mathbf W^*)$ is $O(nL^{2H})$.
+\end{proof}
+
+\begin{remark}[Correction to the previous draft]
+    Earlier text described the alternative law of $Q^*$ as non-central
+    $\chi^2$.  That description is incorrect for the present model: non-central
+    $\chi^2$ behavior arises from mean shifts, whereas \eqref{eq:Q-stat} under
+    $H_1$ reflects covariance inflation.  The information-scale boundary and the
+    oracle-equivalence result are unchanged; only the interpretation of the
+    alternative law is corrected.
+\end{remark}

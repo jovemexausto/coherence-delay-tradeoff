@@ -50,14 +50,13 @@ def save_fwls_oracle_gap_figure(rows: list[object], output_path: Path) -> None:
         series = sorted(series, key=lambda row: row.n)
         ax.plot(
             [row.n for row in series],
-            [row.rmse_h_gap for row in series],
+            [row.rmse_ratio for row in series],
             "o-",
             label=f"L={L}",
         )
     ax.set_xscale("log")
-    ax.set_yscale("log")
     ax.set_xlabel("n")
-    ax.set_ylabel(r"RMSE$(\widehat H_{FWLS} - \widehat H_{oracle})$")
+    ax.set_ylabel(r"RMSE$(\widehat H)$/RMSE$(\widehat H^*)$")
     ax.set_title("Feasible-oracle agreement")
     ax.legend(frameon=False)
     fig.tight_layout()
