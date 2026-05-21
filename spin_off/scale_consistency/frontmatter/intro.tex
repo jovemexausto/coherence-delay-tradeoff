@@ -43,6 +43,16 @@ calibration, FWLS-oracle agreement, and a boundary transition aligned with the
 information scale.
 \end{enumerate}
 
+\paragraph{Relation to prior work.}
+Direct estimation of roughness exponents for Gaussian processes is classical
+\citep{istas1997quadratic,coeurjolly2001estimating}. The present problem differs
+because the exponent is inferred from estimated transport discrepancies, so the
+noise is itself parameter-coupled. The surrounding transport-rate literature
+provides the relevant first layer \citep{fournier2015rate,weed2019sharp,
+goldfeld2024limit,delbarrio2023improved}, while locally stationary drift and
+adaptive testing connect through \citep{dahlhaus1997fitting,
+vogt2012nonparametric,tinio2025bounds,brutsche2024similarity}.
+
 Section~\ref{sec:model} defines the observation model and the information
 scale. Section~\ref{sec:clt} gives the feasible inference theorem.
 Section~\ref{sec:test} establishes the residual adequacy law and its response

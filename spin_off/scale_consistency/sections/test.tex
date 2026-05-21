@@ -70,48 +70,27 @@ value gives better finite-$L$ calibration (see \Cref{tab:null}).
 
 \subsection{Behavior Under Departures}
 
-\begin{proposition}[Response under departures]
+\begin{proposition}[Power of the adequacy test]
 \label{prop:alternative-response}
-Let
+Under $H_1$ with parameter $\kappa > 0$, the marginal of each standardised
+residual $\sqrt{w_j^*}\,\widehat U_j$ has variance $1 + \kappa^2/v_j$.
+Consequently,
 \[
-    \mathbf P
-    :=
-    (\mathbf W^*)^{1/2}\mathbf X
-    (\mathbf X^\top \mathbf W^* \mathbf X)^{-1}
-    \mathbf X^\top (\mathbf W^*)^{1/2}
+    \E_\kappa[Q^*]
+    = (L-2) + \kappa^2 \sum_{j=1}^L w_j^*
+    = (L-2) + \frac{n\kappa^2}{\sigma_0^2}\sum_{j=1}^L j^{2H}.
 \]
-be the oracle projection matrix.  Under $H_1$, the perturbation
-$\kappa\,\xi_j$ in the log-domain model increases variance rather than
-shifting the mean.  Accordingly, the oracle adequacy statistic $Q^*$ is not a
-non-central $\chi^2$ variable.  Its expectation satisfies
-\[
-    \mathbb E_{H_1}[Q^*]
-    = (L-2) + \kappa^2\,\mathrm{tr}\!\left((\mathbf I - \mathbf P)\mathbf W^*\right).
-\]
-Moreover,
-\[
-    \mathrm{tr}\!\left((\mathbf I - \mathbf P)\mathbf W^*\right)
-    = \frac{n\zeta^2}{\sigma_0^2}\sum_{j=1}^L j^{2H} + O\!\left(nL^{2H}\right),
-\]
-so the departure scale is governed by the same information law as the lower
-bound, namely $n\kappa^2 \sum_{j=1}^L j^{2H}$ up to lower-order projection
-corrections.
+The oracle adequacy statistic is a variance-inflated quadratic form in normals,
+not a non-central $\chi^2$ variable.  For local departures, the mean inflation
+is governed by the same information scale as the lower bound.
 \end{proposition}
 
 \begin{proof}
-Under $H_1$, the whitened residual vector has covariance
-$\mathbf I + \kappa^2 \mathbf W^*$.  Applying the residual projection
-$\mathbf I - \mathbf P$ gives
-\[
-    Q^* = \| (\mathbf I - \mathbf P)\widetilde{\mathbf Y} \|^2,
-\]
-so the expectation is the trace of
-$(\mathbf I - \mathbf P)(\mathbf I + \kappa^2 \mathbf W^*)(\mathbf I - \mathbf P)$.
-Since $\mathbf I - \mathbf P$ is an idempotent projection of rank $L-2$,
-the null contribution is $L-2$, and the departure contribution is the stated
-trace term.  Because $\mathbf P$ has rank $2$ and
-$\|\mathbf W^*\|_{\mathrm{op}} = O(nL^{2H})$, the correction
-$\mathrm{tr}(\mathbf P\mathbf W^*)$ is $O(nL^{2H})$.
+The whitened residual vector has covariance $\mathbf I + \kappa^2 \mathbf W^*$.
+Projecting onto the residual subspace of rank $L-2$ yields the stated mean
+increment; the exact quadratic-form representation follows from diagonalising the
+projected covariance. The distribution is therefore a weighted sum of centered
+$\chi^2(1)$ terms.
 \end{proof}
 
 \begin{remark}[Correction to the previous draft]
