@@ -3,16 +3,15 @@
 
 All experiments use the simulation model \eqref{eq:M} with $\zeta = 1$,
 $\sigma_0 = 1$, $H = 0.6$ (unless stated), and the two-step FWLS procedure.
-We used 8000 Monte Carlo replications for size and
-5000 for power; detailed numerical tables are reported in
-Appendix~\ref{app:numerical_tables}.
+We used 8000 Monte Carlo replications for size and 5000 for power; detailed
+numerical tables are reported in Appendix~\ref{app:numerical_tables}.
 
 \subsection{Null Calibration}
 
-Figure~\ref{fig:null-calibration} shows that the residual adequacy statistic
-is already well calibrated at moderate lag counts: its empirical mean tracks
-the oracle null mean closely, and the rejection frequency remains near the
-nominal level.  Table~\ref{tab:null} gives the exact grid values.
+Figure~\ref{fig:null-calibration} shows that the residual adequacy statistic is
+well calibrated at moderate lag counts: its empirical mean tracks the oracle
+null mean closely, and the rejection frequency remains near the nominal
+level. Appendix Table~\ref{tab:null} gives the exact grid values.
 
 \begin{figure}[!htbp]
 \centering
@@ -26,9 +25,8 @@ nominal level.  Table~\ref{tab:null} gives the exact grid values.
 
 Figure~\ref{fig:power-boundary} shows the transition at the information-scale
 boundary $\kappa^* \asymp \bigl(n\sum_{j \leq L} j^{2H}\bigr)^{-1/2}$:
-the adequacy test is informative but not overconfident at $c=1$, and it
-gains power steadily above the boundary.  Table~\ref{tab:power-boundary} records
-the exact values together with the corresponding lag-information.
+the adequacy test is informative but not overconfident at $c=1$, and it gains
+power steadily above the boundary.
 
 \begin{figure}[!htbp]
 \centering
@@ -42,9 +40,8 @@ the exact values together with the corresponding lag-information.
 
 Figure~\ref{fig:fwls-oracle-gap} shows that the feasible estimator tracks the
 oracle benchmark closely: the RMSE ratio stays numerically at one, while the
-gap shrinks with $n$.  This is the numerical counterpart of the CLT.  The
-appendix tables report both the FWLS/oracle RMSEs and the resulting ratio; the
-same calculations correct the earlier arithmetic slip in the appendix constant.
+gap shrinks with $n$. This is the numerical counterpart of the CLT. Appendix
+Table~\ref{tab:fwls-oracle} reports the corresponding grid values.
 
 \begin{figure}[!htbp]
 \centering
@@ -54,38 +51,5 @@ same calculations correct the earlier arithmetic slip in the appendix constant.
 \end{figure}
 \FloatBarrier
 
-\subsection{Information-Normalized Error Constant}
-
-Figure~\ref{fig:rate-constant} shows that the FWLS error obeys the predicted
-information scaling over two orders of magnitude in $n$, while the rescaled
-constant remains essentially flat near the corrected value $C \approx 2.22$.
-Table~\ref{tab:rate} gives the exact grid values.
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=\linewidth]{artifacts/figures/scale_consistency/fig_rate_constant}
-\caption{Stabilization of the information-normalized error constant for $\widehat H$.}
-\label{fig:rate-constant}
-\end{figure}
-\FloatBarrier
-
-\subsection{Sensitivity to Model Misspecification and Noise Law}
-
-Figure~\ref{fig:robustness} varies the scale law on the left and the noise law
-on the right.  The procedure is stable under moderate perturbations and
-degrades visibly only when the structural assumptions are pushed beyond the
-scope of the theorem.
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=\linewidth]{artifacts/figures/scale_consistency/fig_robustness}
-\caption{Sensitivity of the adequacy test to power-law misspecification and noise law.}
-\label{fig:robustness}
-\end{figure}
-\FloatBarrier
-
-Tables~\ref{tab:null}, \ref{tab:power-boundary}, and \ref{tab:rate}, together
-with \Cref{tab:fwls-oracle} and the appendix robustness tables,
-provide the exact numerical grid values.
-
-\FloatBarrier
+Supplementary rate-stabilization and robustness diagnostics are relegated to
+the appendix.

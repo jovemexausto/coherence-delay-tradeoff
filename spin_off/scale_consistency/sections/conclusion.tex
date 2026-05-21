@@ -1,41 +1,16 @@
 \section{Conclusion and Open Problems}
 \label{sec:conclusion}
 
-We have established a structural inference theory for power-law lag geometry
-under noisy transport estimates.  The governing object is the weighted
-lag-energy $n\sum_{j \leq L} j^{2H}$: it controls the oracle information for
-$H$, the departure scale of the residual-based adequacy test, and the minimax
-separation boundary.  The low-dimensional family $D_j = \zeta j^H$ therefore
-remains inferable despite parameter-coupled noise: the roughness exponent
-admits a feasible oracle-equivalent estimator, membership in the family is
-testable through a residual statistic with an exact oracle null law, and the
-same procedure attains the minimax boundary without prior knowledge of $H$.
+We developed structural inference for power-law lag geometry under
+signal-coupled heteroscedastic noise. The governing quantity is the weighted
+lag-energy $n\sum_{j \leq L} j^{2H}$: it controls estimation of $H$, the
+residual adequacy statistic, and the minimax separation boundary. The same
+information scale covers fixed-$L$ and growing-$L$ regimes.
 
-The simulation evidence confirms null calibration, feasible-oracle agreement,
-and power curves matching the theoretical boundary.  The corrected
-information-normalized constant is approximately $2.22$, and the simulated
-FWLS/oracle RMSE ratio is numerically indistinguishable from $1$.  The
-procedure is computationally simple: it requires only standard WLS
-computations.
+The simulations support the theory at the level of calibration, oracle
+agreement, and separation-bound behavior. The corrected information-normalized
+constant is approximately $2.22$.
 
-The remaining gaps are limited and explicit:
-\begin{itemize}[leftmargin=*]
-    \item \emph{Non-Gaussian noise.}  The delta-method approximation
-    \eqref{eq:log-noise} holds in generality; the $\chi^2$ limit requires
-    only moment conditions, not exact Gaussianity.  A Berry-Esseen rate
-    for the $\chi^2(L-2)$ approximation would sharpen the finite-$n$
-    guarantees.
-    \item \emph{Unknown $\sigma_0$.}  Replacing $\sigma_0$ by a
-    consistent plug-in estimator adds an $O_p(n^{-1/2})$ perturbation
-    that does not change the asymptotic theory, but a clean finite-sample
-    degrees-of-freedom correction remains to be formalized.
-    \item \emph{Sequential testing.}  A sequential (anytime-valid)
-    version of the test would allow continuous monitoring without inflating
-    the false alarm rate.
-    \item \emph{Cross-lag dependence.}  Shared present-time sampling induces
-    residual covariance across lags, so the covariance-adjusted statistic is the
-    next natural theorem-level extension.
-    \item \emph{Composite $H$ classes.}  Extending the lower bound to
-    adaptive testing over H\"older classes of the underlying drift (rather
-    than the scalar $H$) is a natural next step.
-\end{itemize}
+Open problems remain on four fronts: sharper finite-sample calibration, plug-in
+handling of unknown $\sigma_0$, cross-lag dependence from shared sampling, and
+growing-lag extensions beyond the current power-law family.
