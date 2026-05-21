@@ -52,27 +52,19 @@ by $2\times 2$ matrix inversion.
 
 \subsection{Two-step feasible WLS}
 
-Since $D_j$ is unknown, the oracle weights are infeasible.  We use the
+Since $D_j$ is unknown, the oracle weights are infeasible. We use the
 following two-step procedure.
 
-\begin{table}[h]
-\centering
-\small
-\caption{Two-step feasible weighted least squares procedure.}
-\label{tab:fwls-procedure}
-\resizebox{\linewidth}{!}{%
-\begin{tabular}{p{0.18\linewidth}p{0.74\linewidth}}
-\toprule
-Input & $(\Dhj)_{j=1}^L$, $n$, and $\sigma_0$. \\
-\midrule
-Step 1 & Compute $(\hat\alpha_{\mathrm{pil}}, \hat H_{\mathrm{pil}})$ by unweighted OLS of $\log \Dhj$ on $(\mathbf{1}, \log j)$. \\
-Step 2 & Form the pilot fitted profile $\hat D_j^{\mathrm{pil}} = \exp(\hat\alpha_{\mathrm{pil}} + \hat H_{\mathrm{pil}} \log j)$. \\
-Step 3 & Set $\hat w_j = n (\hat D_j^{\mathrm{pil}})^2 / \sigma_0^2$ and compute $(\hat\alpha, \Hhat)$ by WLS with weights $(\hat w_j)$. \\
-Output & Return $\Hhat$, $\hat\alpha$, and residuals $\hat U_j = \log \Dhj - \hat\alpha - \Hhat \log j$. \\
-\bottomrule
-\end{tabular}%
-}
-\end{table}
+\begin{algorithm}[H]
+\caption{Two-Step FWLS Estimator}\label{alg:fwls}
+\begin{algorithmic}[1]
+\State \textbf{Input:} $(\Dhj)_{j=1}^L$, $n$, and $\sigma_0$.
+\State \textbf{Step 1 (Pilot OLS).} Compute $(\hat\alpha_{\mathrm{pil}}, \hat H_{\mathrm{pil}})$ by unweighted OLS of $\log \Dhj$ on $(\mathbf{1}, \log j)$.
+\State \textbf{Step 2 (Imputation).} Set $\hat D_j^{\mathrm{pil}} = \exp(\hat\alpha_{\mathrm{pil}} + \hat H_{\mathrm{pil}} \log j)$.
+\State \textbf{Step 3 (FWLS).} Set $\hat w_j = n (\hat D_j^{\mathrm{pil}})^2 / \sigma_0^2$ and compute $(\hat\alpha, \Hhat)$ by WLS with weights $(\hat w_j)$.
+\State \textbf{Output:} $\Hhat$, $\hat\alpha$, and residuals $\hat U_j = \log \Dhj - \hat\alpha - \Hhat \log j$.
+\end{algorithmic}
+\end{algorithm}
 
 \begin{theorem}[Asymptotic Normality of the Feasible WLS Estimator]
 \label{thm:clt-fwls}
