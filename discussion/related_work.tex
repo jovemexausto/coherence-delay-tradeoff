@@ -10,13 +10,21 @@ statistical law for distribution tracking: finite memory has a temporal-validity
 horizon determined jointly by a finite-sample exponent and a drift roughness
 exponent.
 
+This distinction is especially sharp relative to adaptive update policies such as
+\citet{MazzettoUpfal2023}. Those works optimize a decision or intervention rule
+under evolving data. The present object is earlier in the pipeline: it asks how
+long retained evidence continues to represent the present distribution before age
+becomes the dominant source of tracking error.
+
 \paragraph{Adaptive windowing, drift detection, and update policies.}
 Adaptive-window and concept-drift methods study when accumulated evidence is
 sufficient to react \citep{BifetGavalda2007,Gama2004,GamaSurvey2014}.
 \citet{hinder2023window} emphasize that the window length itself is part of the
 problem. Resource-aware update scheduling under drift addresses a related
 decision problem in which update cost must be balanced against accumulated loss
-\citep{PiasecznyEtAl2025RCCDA}. Streaming OT and MMD detectors contribute the
+\citep{PiasecznyEtAl2025RCCDA}, and finite-time analyses of sliding-window or
+discounted adaptation under switching environments make the same design variable
+explicit from the regret side \citep{GarivierMoulines2011}. Streaming OT and MMD detectors contribute the
 alarm-time perspective, emphasizing delay, power, and memory usage
 \citep{ShvetsovEtAl2020OTChangePoint,KalinkeEtAl2025MMDEW}. These works provide
 the reaction timescale. The horizon law adds the validity timescale: retained
@@ -28,8 +36,10 @@ Classical adaptive filtering and state-space tracking tune forgetting factors,
 gain schedules, or process-noise levels to balance smoothing against
 responsiveness \citep{Kalman1960,Jazwinski1970}. Locally stationary smoothing
 and bandwidth selection solve the analogous bias--variance problem for evolving
-regression or spectral targets \citep{Dahlhaus1997}. These literatures supply
-mechanisms for adaptation. The present work contributes the distributional law
+regression or spectral targets \citep{Dahlhaus1997,Vogt2012}. Recent Wasserstein-
+based results for locally stationary functional time series move that same local
+windowing logic directly into a transport metric \citep{TinioAlayaBouzebda2025}.
+These literatures supply mechanisms for adaptation. The present work contributes the distributional law
 that such mechanisms must respect when the retained object is an empirical
 distribution rather than a latent state or a local regression surface.
 
@@ -56,16 +66,24 @@ OT analyses make the recursive structure of regularized transport explicit
 fixed-$\varepsilon$ i.i.d. asymptotics and fully drifted triangular-array
 tracking.
 
+Smooth-functional and delta-method arguments provide the multivariate transfer
+mechanism behind this regime. Hadamard differentiability is the natural regularity
+class for lifting triangular-array fluctuations through a transport functional,
+and the fixed-$\varepsilon$ Sinkhorn map sits in that category after gauge
+fixing and uniform stability control \citep{GoldfeldEtAl2022}. That route is the
+right multivariate complement to the one-dimensional quantile-process proof
+model.
+
 \paragraph{Intrinsic geometry and operational calibration.}
 Geometry-aware calibration of regularization scales points toward intrinsic
 dimension as the relevant complexity variable in regularized transport
 \citep{GenansWintenberger2026}. Local intrinsic-dimension diagnostics such as
-TwoNN provide a direct proxy for effective support geometry
+TwoNN provide a direct statistic for effective support geometry
 \citep{FaccoEtAl2017}. That perspective enters through the operational Sinkhorn
 frontier: intrinsic geometry helps identify which finite-sample regime is
 available, and therefore which horizon law is relevant.
 
-\paragraph{Low-dimensional proxy geometries.}
+\paragraph{Low-dimensional surrogate geometries.}
 Sliced, max-sliced, subspace-robust, and projection-robust Wasserstein
 constructions replace ambient transport by one-dimensional or low-dimensional
 comparisons \citep{KolouriRohdeHoffmann2018,DeshpandeEtAl2019,PatyCuturi2019,
@@ -84,6 +102,21 @@ YatesEtAl2021AoI}. Together these viewpoints make age and nonstationarity into
 operational variables. The horizon law gives them a distributional statistical
 interpretation: age is costly because it accumulates geometric mismatch with the
 present, and the roughness exponent determines how fast that cost grows.
+
+\citet{KeehanAndersonWiesemann2025} are particularly close in spirit: they
+derive concentration bounds for weighted empirical laws under sequential
+Wasserstein drift and optimize weights for distributionally robust decisions.
+That question begins once a decision rule is fixed. The temporal-validity
+horizon addresses the preceding statistical question of how long evidence should
+be retained before staleness dominates the finite-sample gain. In this sense,
+their weighting problem and the present horizon problem are complementary rather
+than competing.
+
+Weighted empirical-process and weighted-Wasserstein precursors are also relevant
+for the non-uniform-memory line. In particular, \citet{Mason2016} studies
+weighted approximations to empirical Wasserstein fluctuations, providing a
+technical ancestor for the weighted-memory summaries $n_{\mathrm{eff}}(w)$ and
+$M_H(w)$ used here.
 
 Across these neighboring literatures, the shared theme is that
 nonstationarity makes retention scale matter. The present work identifies the

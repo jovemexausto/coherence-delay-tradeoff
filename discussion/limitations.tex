@@ -49,6 +49,10 @@ without changing the exponent across richer path classes.
 The minimal tapered-weight diagnostic is consistent with a modest constant-level
 gain on the default synthetic stream, but it is still only a single-stream signal
 and does not yet support a general non-uniform-memory claim.
+The theorem-oriented weighted summaries in the main text isolate the relevant
+quantities as $n_{\mathrm{eff}}(w)$ and $M_H(w)$; the remaining question is
+whether those summaries support a robust constant improvement beyond the uniform
+window on more than one drift profile.
 
 \paragraph{Online roughness estimation.}
 The law is stated in terms of the roughness parameters $H$ and $\zeta$, but no
@@ -58,7 +62,7 @@ memory inside the useful region under misspecification.
 \paragraph{Empirical scope.}
 The experiments are structurally motivated. Synthetic designs make the horizon
 law, useful-memory region, and validity-detection lag visible under controlled
-drift, while the ELEC2 diagnostic checks that the same retention signature
+drift, while the ELEC2 diagnostic shows that the same retention signature
 appears on a real stream. Their role is to expose the object, not to demonstrate
 competitive performance on a benchmark suite.
 
@@ -69,31 +73,65 @@ before detector alarms appear, but it does not prove a universal detection-delay
 theorem across detector classes.
 
 \paragraph{Open problems.}
-Four directions enlarge the useful-memory theory directly: sharp lower theory,
-memory design, online adaptation, and validity-detection theory.
+Five directions organize the remaining frontier: operational theorem closure,
+sharp lower theory, memory design, online roughness estimation, and online
+control together with validity-detection theory.
 
-\paragraph{Problem 0: sharp lower theory beyond the current benchmark family.}
+\paragraph{Problem 1: operational theorem closure for embedded Sinkhorn and smooth multivariate transfer.}
+Embedded Sinkhorn has a conditional moderate-band theorem, a certified
+band report, and a self-coupling stability certificate. The remaining problem is
+to prove the self-coupling stability bound in the embedded fixed-span model, and
+to lift the smooth transfer proposition to a transport-functional theorem with a
+verified Jacobian remainder bound.
+
+\paragraph{Problem 2: sharp lower theory beyond the current benchmark family.}
 The exact Gaussian constants are available within the proof scheme, but the
 class-tight lower-bound problem remains open for broader deterministic path
 classes and for alternative parametric deformations. The open problem is to
 extend the lower theory beyond the root-$n$ regime, beyond the location
 benchmark, and beyond the current class-level sharp constants.
 
-\paragraph{Problem 1: useful-memory design beyond uniform windows.}
-The analysis is built around uniform windows, with only brief discussion of
-other weighting schemes. The open question is whether non-uniform weights can
-enlarge the useful-memory region or improve constants without changing the
-exponent across broad path classes. A good answer would connect the horizon law
-to practical forgetting schemes without collapsing back into heuristic tuning.
+\paragraph{Problem 3: useful-memory design beyond uniform windows.}
+The analysis is built around uniform windows, but the weighted-memory theorem
+shows that uniform weights maximize effective sample size and linear ramps
+recover exact lag. The open problem is to determine when non-uniform weights can
+improve constants or enlarge the useful-memory region on richer path classes,
+and whether the summaries $n_{\mathrm{eff}}(w)$ and $M_H(w)$ support a robust
+optimization law of the form
+\[
+  \min_{w:\,\|w\|_1=1}
+  \bigl[C_K n_{\mathrm{eff}}(w)^{-a} + C_S\zeta M_H(w)\bigr].
+\]
+This is the memory-design problem that links static window design to fully
+adaptive control.
 
-\paragraph{Problem 2: online useful-memory adaptation.}
-The law depends on the roughness parameters $H$ and $\zeta$, but no online
-procedure is given here that estimates them and keeps memory inside the
-useful-memory region in real time. The open problem is to design an adaptive
-scheme with a provable excess-risk guarantee relative to the oracle region.
+\paragraph{Problem 4: online estimation of roughness and scale.}
+A structural controller, an intrinsic-dimension statistic, and an aggregated-lag
+roughness estimate are available. The open problem is to derive convergence
+rates for online estimators of $H$ and $\zeta$ when transport discrepancies are
+themselves observed with finite-sample error. A concrete target is the log--log
+estimator
+\[
+  \widehat H_L
+  \in \arg\min_H \sum_{j=1}^L
+  \bigl(\log \widehat D_j-\log \widehat\zeta-H\log j\bigr)^2,
+\]
+where $\widehat D_j$ estimates the lag-$j$ transport discrepancy. The open
+problem is to derive the rate of $\widehat H_L$ as a function of $L$, the
+finite-sample exponent $a$, and the lag-noise level, and then to propagate that
+rate through the horizon map to obtain a high-probability statement of the form
+$\mathbb P(\widehat n_t\in \mathcal U_\delta)\ge 1-\eta_{L,n}$.
 
-\paragraph{Problem 3: validity and detectability as coupled but distinct objects.}
-The experiments show a positive validity-detection lag, but there is no theorem
-yet relating exit from the useful-memory region to detector delay. The open
-problem is to prove detector-specific lower or upper laws that quantify when
-validity must fail before statistical detection.
+\paragraph{Problem 5: online control and validity-detection theory.}
+The positive validity-detection lag suggests that a memory controller can, in
+principle, react before standard alarms fire. The open problem is to prove an
+excess-risk guarantee of the form
+\[
+  \mathbb E\,\Phi(\widehat n_t) \le (1+\delta_t)\Phi(n_t^*)
+\]
+for an adaptive window rule, and to derive detector-specific lower or upper laws
+that quantify when validity must fail before statistical detection. Under stylized
+ramp drift, a natural target is a detector-specific law for the expected lag
+$\Delta_{\mathrm{val-det}}$, for example a scaling relation of the form
+$\mathbb E\,\Delta_{\mathrm{val-det}}\asymp (\zeta/\sigma)^{-2/(2H+1)}$ up to
+detector-dependent constants.

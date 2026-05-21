@@ -1,26 +1,26 @@
-\section{Finite-Sample Diagnostics}\label{app:finite_sample_geometry}
+\section{Finite-Sample and Operational Diagnostics}\label{app:finite_sample_geometry}
 
 This appendix gives finite-sample diagnostics for the theorem line and the
-remaining operational frontier. These checks are not substitutes for theorem
+remaining operational frontier. These diagnostics are not substitutes for theorem
 statements.
 
-\subsection{Finite-Sample Geometry Check}
+\subsection{Finite-Sample Geometry Diagnostic}
 
 For the finite-sample term, we estimate empirical $W_2$ between two i.i.d.
 samples from the same distribution using exact assignment in low and moderate
 dimension, then fit a log--log slope in $n$. We also probe the fixed-span
 one-dimensional triangular window directly by comparing a triangular-array
 sample, with one draw from each drifted component, against an i.i.d. sample from
-the same window mixture. In that check the within-window span $\zeta n^H$ is
-held fixed. Finally, we check the Sinkhorn proxy at a few fixed values of
+the same window mixture. In that diagnostic the within-window span $\zeta n^H$ is
+held fixed. Finally, we probe the Sinkhorn diagnostic at a few fixed values of
 $\varepsilon$.
 
 \input{artifacts/tables/gaussian/finite_sample_geometry}
 
 In low dimension, the raw i.i.d. Wasserstein term is compatible with a root-$n$
 rate, whereas higher-dimensional raw Wasserstein slows down. In the
-one-dimensional fixed-span triangular-array check, the recovered slopes stay near
-the corresponding i.i.d. mixture baseline, which is consistent with the
+one-dimensional fixed-span triangular-array diagnostic, the recovered slopes stay
+near the corresponding i.i.d. mixture baseline, which is consistent with the
 proof-model and design-effect reading used in the 1D proof-model proposition.
 
 \subsection{Bahadur Remainder Diagnostics}
@@ -66,6 +66,25 @@ moderate band such as $[0.2,0.8]$ the cross-coupling block remains contractive
 and the self-coupling inverse norms appear to plateau with sample size. Second,
 on the supported synthetic frontier grid, intrinsic-dimension estimates
 predict the observed stable-band cutoff better than ambient dimension.
-These diagnostics identify a useful regime proxy and isolate the band where the
+These diagnostics identify a useful regime statistic and isolate the band where the
 remaining instability is concentrated. They do not upgrade the embedded fixed-
 $\varepsilon$ statement from conjecture to theorem.
+
+The current self-coupling certificate is positive on the calibrated $(8,2)$ and
+$(12,2)$ moderate-band pairs, where both self blocks keep positive spectral gap,
+worst spectral radius below $0.97$, and largest-sample mean inverse norm below
+$3.0$.
+
+\input{artifacts/tables/conceptual/sinkhorn_self_coupling_certificate}
+
+\subsection{Smooth Multivariate Transfer Diagnostics}
+
+The multivariate transfer diagnostic uses a drifting three-dimensional mean vector and
+a smooth log-sum-exp functional. The finite-sample error of the window estimator,
+the drift-induced bias of the window target, and the linearization residual are
+tracked separately across window lengths. The target behavior is the same as in
+the abstract multivariate transfer lemma: the finite-sample piece decreases with
+window length, the drift piece increases, and the linearization residual remains
+lower order than the finite-sample term on the tested windows.
+
+\input{artifacts/tables/conceptual/multivariate_transfer_proxy}

@@ -1,0 +1,5 @@
+ambient_dim,intrinsic_dim,holder_smoothness_alpha,span,theorem_ready_epsilon_max
+8,1,2.0,0.25,0.5
+8,2,2.0,0.25,0.5
+12,1,2.0,0.25,0.2
+12,2,2.0,0.25,0.5

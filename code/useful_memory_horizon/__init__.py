@@ -126,9 +126,13 @@ from .online_horizon_adaptation import (
     run_online_horizon_adaptation_experiment,
 )
 from .weight_sensitivity import (
+    effective_lag_mean,
+    effective_sample_size,
     WeightSensitivityResult,
     WeightSensitivityRow,
+    horizon_proxy,
     lag_weight_w1,
+    lag_ages,
     run_weight_sensitivity_experiment,
 )
 from .twonn_dimension import twonn_dimension_estimate
@@ -143,6 +147,19 @@ from .twonn_geometry import (
     build_twonn_geometry_rows,
     run_twonn_geometry_experiment,
 )
+from .multivariate_transfer_proxy import (
+    MultivariateTransferProxyResult,
+    MultivariateTransferProxyRow,
+    drift_mean,
+    linearization_residual,
+    quadratic_remainder_bound,
+    run_multivariate_transfer_proxy_experiment,
+    save_multivariate_transfer_proxy_summary,
+    smooth_functional,
+    smooth_functional_gradient,
+)
+from .sinkhorn_self_coupling_certificate import certify_self_coupling_stability
+from .sinkhorn_theorem_ready_band import run_sinkhorn_theorem_ready_band_report
 
 __all__ = [
     "CarrierRoughnessResearchConfig",
@@ -237,16 +254,31 @@ __all__ = [
     "run_gaussian_witness_frontier",
     "run_online_horizon_adaptation_experiment",
     "run_weight_sensitivity_experiment",
+    "effective_lag_mean",
+    "effective_sample_size",
     "TwoNNOperationalDiagnosticConfig",
     "TwoNNOperationalDiagnosticResult",
     "TwonnGeometryConfig",
     "TwonnGeometryResult",
+    "MultivariateTransferProxyResult",
+    "MultivariateTransferProxyRow",
     "compare_twonn_to_ambient_on_operational_frontier",
+    "certify_self_coupling_stability",
     "build_twonn_geometry_rows",
     "run_twonn_geometry_experiment",
+    "drift_mean",
+    "linearization_residual",
+    "quadratic_remainder_bound",
+    "run_multivariate_transfer_proxy_experiment",
+    "save_multivariate_transfer_proxy_summary",
+    "run_sinkhorn_theorem_ready_band_report",
+    "smooth_functional",
+    "smooth_functional_gradient",
     "twonn_dimension_estimate",
     "run_invalidity_gap_experiment",
+    "horizon_proxy",
     "lag_weight_w1",
+    "lag_ages",
     "uniform_mixture_cdf",
     "uniform_mixture_quantiles",
     "run_roughness_scaling_experiment",

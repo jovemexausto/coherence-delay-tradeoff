@@ -1,4 +1,4 @@
-\section{Empirical Evidence}\label{sec:validation}
+\section{Empirical Signatures}\label{sec:empirical_signatures}
 
 These experiments expose the finite-sample signatures of the temporal-validity
 horizon, the useful-memory region induced by that horizon, and evidence
@@ -20,7 +20,7 @@ temporal roughness. The same shape appears on a real stream. The fixed-
 $\varepsilon$ Sinkhorn frontier receives structured empirical support. Temporal
 validity can fail before changepoint evidence becomes statistically visible.
 
-\subsection{A Finite-Memory Optimum}\label{sec:validation_memory_optimum}
+\subsection{Interior Memory Optimum}\label{sec:empirical_memory_optimum}
 
 The Gaussian horizon sweep isolates the variance--staleness trade-off directly.
 Small windows are variance dominated, large windows are stale, and the minimum
@@ -42,7 +42,7 @@ curve displays a flat near-optimal region, which is the empirical analogue of
 the useful-memory region defined from the envelope $\Phi$.
 
 \subsection{Roughness-Dependent Horizon Scaling}
-\label{sec:validation_roughness_scaling}
+\label{sec:empirical_roughness_scaling}
 
 The roughness-family experiment varies the roughness index directly. For each H\"older-type
 regime, the surrogate error obeys the same structural decomposition as the
@@ -65,7 +65,7 @@ function of drift regularity, not a fixed window rule.}
 The empirical optima separate by roughness class, matching the path-dependent
 horizon logic of \cref{cor:temporal_validity_horizon}.
 
-\subsection{A Real-Stream Diagnostic}
+\subsection{Real-Stream Retention Diagnostic}
 
 The same qualitative signature appears on a real nonstationary stream. Using
 ELEC2, consider the one-dimensional marginal law of \texttt{nswprice}. At each time,
@@ -79,8 +79,8 @@ of the finite-memory U-curve.
 \safeincludegraphics[width=0.88\linewidth]{artifacts/figures/elec2/fig_elec2_ucurve}
 \caption{ELEC2 real-stream diagnostic on the \texttt{nswprice} marginal. The mean
 anchor-block $W_1$ error exhibits a finite interior optimum and a near-optimal
-useful-memory band. The figure is diagnostic rather than competitive: it asks
-whether the temporal-validity signature appears on a real stream.}
+  useful-memory band. The figure is diagnostic: it asks whether the
+  temporal-validity signature appears on a real stream.}
 \label{fig:elec2_ucurve}
 \end{figure}
 
@@ -89,8 +89,8 @@ near-optimal band around it. The real stream therefore exhibits the same basic
 retention pattern as the synthetic horizon experiments: very short windows are
 too noisy, while very long windows become stale relative to the present block.
 
-\subsection{Operational Sinkhorn Evidence}
-\label{sec:validation_sinkhorn_evidence}
+\subsection{Moderate-Band Sinkhorn Evidence}
+\label{sec:empirical_sinkhorn_evidence}
 
 The fixed-$\varepsilon$ Sinkhorn experiments address the bandwise question: when
 a practical geometry replaces raw $W_2$, does the finite-sample term remain
@@ -124,6 +124,15 @@ a small mixed boundary region. Calibration details and supporting tables are
 kept in \cref{app:finite_sample_geometry}. The strongest support appears on
 moderate bands bounded away from zero.
 
+The certified-band report on the same calibrated grid is positive on the
+same stable pairs: it returns maximal certified bands of at least 0.5 for
+$(d,k)=(8,1)$, $(8,2)$, and $(12,2)$, and 0.2 for $(12,1)$. This does not prove
+the embedded theorem, but it identifies a concrete moderate-band regime in which
+the conditional stability assumptions are simultaneously satisfied by the current
+certificate.
+
+\input{artifacts/tables/conceptual/sinkhorn_theorem_ready_band}
+
 To probe whether the frontier is controlled more by local intrinsic geometry than
 by the ambient coordinate count, we estimate the effective intrinsic dimension
 with TwoNN on the same synthetic frontier family. On
@@ -134,7 +143,7 @@ calibration: the relevant control variable is the estimated local geometry, not
 the ambient coordinate count. The estimator therefore enters here as a
 regime-selection diagnostic for the band analysis.
 
-\subsection{Temporal Validity Can Fail Before Detector Alarm}\label{sec:validation_validity_lag}
+\subsection{Validity Precedes Detection}\label{sec:empirical_validity_lag}
 
 Temporal validity and changepoint evidence are different clocks. To make that
 separation explicit, consider a stream whose local drift rate ramps upward over
@@ -169,7 +178,7 @@ detector family as well. The empirical claim is robustness of the sign of
 $\Delta_{\mathrm{val-det}}$ on the tested detector/tuning family, not a
 detector-uniform delay law.
 
-\subsection{Empirical Signatures}\label{sec:validation_summary}
+\subsection{Empirical Signatures}\label{sec:empirical_summary}
 The experiments support a structural U-curve with a near-optimal useful-memory
 region, roughness-dependent horizon scaling, the same retention pattern on the
 ELEC2 stream, structured support for the fixed-$\varepsilon$ Sinkhorn frontier,

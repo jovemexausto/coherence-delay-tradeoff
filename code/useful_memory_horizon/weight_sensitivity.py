@@ -16,6 +16,9 @@ class WeightSensitivityRow:
     best_window: int
     mean_absolute_error: float
     w1_to_uniform: float
+    effective_sample_size: float
+    effective_lag_mean: float
+    horizon_proxy: float
 
 
 @dataclass(frozen=True, slots=True)
@@ -29,6 +32,12 @@ def _normalize(weights: np.ndarray) -> np.ndarray:
     if total <= 0.0:
         raise ValueError("weights must sum to a positive value")
     return weights / total
+
+
+def lag_ages(window: int) -> np.ndarray:
+    if window <= 0:
+        raise ValueError("window must be positive")
+    return np.arange(window - 1, -1, -1, dtype=float)
 
 
 def lag_weights(window: int, scheme: str) -> np.ndarray:
@@ -47,6 +56,22 @@ def lag_weight_w1(weights: np.ndarray) -> float:
     p = _normalize(np.asarray(weights, dtype=float))
     q = np.full(p.size, 1.0 / p.size, dtype=float)
     return float(np.sum(np.abs(np.cumsum(p - q)[:-1])))
+
+
+def effective_sample_size(weights: np.ndarray) -> float:
+    p = _normalize(np.asarray(weights, dtype=float))
+    return float(1.0 / np.sum(p * p))
+
+
+def effective_lag_mean(weights: np.ndarray) -> float:
+    p = _normalize(np.asarray(weights, dtype=float))
+    return float(np.dot(p, lag_ages(p.size)))
+
+
+def horizon_proxy(weights: np.ndarray, a: float = 0.5, H: float = 0.75) -> float:
+    if a <= 0.0 or H <= 0.0:
+        raise ValueError("a and H must be positive")
+    return effective_sample_size(weights) ** (-a) + effective_lag_mean(weights) ** H
 
 
 def weighted_moving_average(
@@ -88,6 +113,11 @@ def run_weight_sensitivity_experiment(
                 best_window=best_window,
                 mean_absolute_error=best_error,
                 w1_to_uniform=lag_weight_w1(lag_weights(best_window, scheme)),
+                effective_sample_size=effective_sample_size(
+                    lag_weights(best_window, scheme)
+                ),
+                effective_lag_mean=effective_lag_mean(lag_weights(best_window, scheme)),
+                horizon_proxy=horizon_proxy(lag_weights(best_window, scheme)),
             )
         )
     return WeightSensitivityResult(config=cfg, rows=tuple(rows))
@@ -99,7 +129,15 @@ def save_weight_sensitivity_summary(output_path: Path) -> WeightSensitivityResul
     with output_path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.writer(handle)
         writer.writerow(
-            ["scheme", "best_window", "mean_absolute_error", "w1_to_uniform"]
+            [
+                "scheme",
+                "best_window",
+                "mean_absolute_error",
+                "w1_to_uniform",
+                "effective_sample_size",
+                "effective_lag_mean",
+                "horizon_proxy",
+            ]
         )
         for row in result.rows:
             writer.writerow(
@@ -108,6 +146,9 @@ def save_weight_sensitivity_summary(output_path: Path) -> WeightSensitivityResul
                     row.best_window,
                     row.mean_absolute_error,
                     row.w1_to_uniform,
+                    row.effective_sample_size,
+                    row.effective_lag_mean,
+                    row.horizon_proxy,
                 ]
             )
     return result

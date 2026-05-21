@@ -26,6 +26,53 @@ Its corresponding staleness at time $t$ is the weighted transport misalignment
 For a uniform window, $A(w)=(n-1)/2$, so window length and temporal age are the
 same object up to constants.
 
+Non-uniform weights separate two summaries. The finite-sample term is governed by
+the effective sample size
+\[
+  n_{\mathrm{eff}}(w) \coloneqq \Bigl(\sum_{j=0}^{n-1} w_j^2\Bigr)^{-1},
+\]
+while the drift term is governed by weighted lag moments. For each $H\in(0,1]$,
+define
+\[
+  M_H(w) \coloneqq \sum_{j=0}^{n-1} j^H w_j.
+\]
+Then any weighted horizon law of the form
+\[
+  \mathbb E\,d\!\left(\widehat P_t^{(w)},P_t\right)
+  \le C_K n_{\mathrm{eff}}(w)^{-a} + C_S\zeta M_H(w)
+\]
+induces a weighted useful-memory region by balancing the two summaries. On a
+linear ramp, $M_1(w)=A(w)$ exactly, so the effective lag recovers the exact
+staleness term.
+
+\begin{proposition}[Uniform weights maximize effective sample size]
+\label{prop:uniform_maximizes_effective_sample_size}
+Let $w_0,\dots,w_{n-1}$ be nonnegative weights with $\sum_{j=0}^{n-1} w_j=1$.
+Then
+\[
+  n_{\mathrm{eff}}(w) \le n,
+\]
+with equality if and only if $w_j=1/n$ for all $j$. Moreover, if the drift
+profile is an exact linear ramp in the sense that the lag-$j$ contribution is
+proportional to $j$, then the weighted staleness equals the effective lag:
+\[
+  S_t(w)=c\,A(w)
+\]
+for the corresponding linear coefficient $c$.
+\end{proposition}
+
+\begin{proof}
+By Cauchy--Schwarz,
+\[
+  1=\Bigl(\sum_{j=0}^{n-1} w_j\Bigr)^2
+  \le n\sum_{j=0}^{n-1} w_j^2,
+\]
+so $n_{\mathrm{eff}}(w)=1/\sum_j w_j^2\le n$, with equality exactly when the
+weights are all equal. On an exact linear ramp, the lag-$j$ contribution is
+proportional to $j$, so averaging with weights $w_j$ gives the weighted mean lag
+$A(w)$ and hence $S_t(w)=cA(w)$.
+\end{proof}
+
 Throughout, $P_t$ denotes the present target law,
 $\bar P_t^{(n)}$ the window target obtained by averaging the last $n$ target
 laws, and $\widehat P_t^{(n)}$ the estimator built from the last $n$
@@ -78,6 +125,77 @@ Taking expectations and applying the two assumptions yields the claim.
 The theorem isolates the structure of the problem:
 the path class supplies the staleness term, while the chosen geometry and sample
 regime supply the finite-sample term.
+
+\begin{proposition}[Triangular-array transfer for Hadamard-differentiable functionals]
+\label{prop:hadamard_triangular_transfer}
+Let $\mathcal T$ be a functional on probability laws that is Hadamard
+differentiable at $P_t$ tangentially to a linear subspace of signed measures, with
+derivative $\dot{\mathcal T}_{P_t}$ bounded on the relevant tangent class. Suppose
+that for the triangular-array estimator and its window target, the base metric
+satisfies
+\[
+  \mathbb E\,d\!\left(\widehat P_t^{(n)},\bar P_t^{(n)}\right) \le C_K n^{-a}
+\]
+and the drift envelope satisfies
+\[
+  d\!\left(\bar P_t^{(n)},P_t\right) \le C_S\zeta n^H.
+\]
+If the remainder in the Hadamard expansion is $o(n^{-a})$ uniformly on the
+relevant class, then there exist constants $\widetilde C_K,\widetilde C_S>0$
+such that
+\[
+  \mathbb E\,\bigl\|\mathcal T(\widehat P_t^{(n)})-\mathcal T(P_t)\bigr\|
+  \le \widetilde C_K n^{-a} + \widetilde C_S\zeta n^H.
+\]
+\end{proposition}
+
+\begin{proof}
+Write the Hadamard expansion at $P_t$ and apply the boundedness of the derivative
+to the centered triangular-array fluctuation. The drift term contributes through
+the same envelope as the base metric because $\mathcal T$ is locally Lipschitz on
+the class. The remainder is lower order by assumption, so the transformed law
+inherits the same horizon envelope.
+\end{proof}
+
+\begin{proposition}[Finite-dimensional smooth transfer]
+\label{prop:smooth_finite_dimensional_transfer}
+Let $\phi_1,\dots,\phi_k$ be bounded measurable functions and let
+$Z(P)=\bigl(\mathbb E_P[\phi_1],\dots,\mathbb E_P[\phi_k]\bigr)$. Let
+$g\in C^2(U)$ on an open set $U\subset\mathbb R^k$ containing the relevant
+range of $Z$. Define $T(P)=g(Z(P))$. Suppose that on the triangular-array window
+target and estimator,
+\[
+  \mathbb E\,\|Z(\widehat P_t^{(n)})-Z(\bar P_t^{(n)})\| \le C_K n^{-a}
+\]
+and
+\[
+  \|Z(\bar P_t^{(n)})-Z(P_t)\| \le C_S\zeta n^H.
+\]
+If the Hessian of $g$ is bounded by $M$ on the relevant range, then
+\[
+  \mathbb E\,|T(\widehat P_t^{(n)})-T(P_t)|
+  \le \widetilde C_K n^{-a} + \widetilde C_S\zeta n^H,
+\]
+and the Taylor remainder is quadratic in the moment error:
+\[
+  \begin{aligned}
+  |T(P')-T(P)-\nabla g(Z(P))^\top &\bigl(Z(P')-Z(P)\bigr)| \\
+  \le \frac{M}{2}\|Z(P')-Z(P)\|^2.
+  \end{aligned}
+\]
+\end{proposition}
+
+\begin{proof}
+Apply the multivariate Taylor formula to $g$ around $Z(P_t)$. The bounded Hessian
+gives the stated quadratic remainder. The first-order term is controlled by the
+assumed finite-sample and drift envelopes for $Z$, and the same decomposition as
+in \cref{prop:hadamard_triangular_transfer} yields the horizon law for $T$.
+\end{proof}
+
+The same decomposition extends to non-uniform weights once the two summaries
+$n_{\mathrm{eff}}(w)$ and $M_H(w)$ are controlled. The theorem-level question is
+whether weighted forgetting enlarges the useful-memory region beyond a constant
+factor on richer path classes, or whether it only changes the leading constant.
 
 \begin{corollary}[Temporal-validity horizon]
 \label{cor:temporal_validity_horizon}
@@ -346,25 +464,9 @@ The main conclusion is the exponent. Under this bounded-support fixed-span
 regime, the triangular-array finite-sample term remains root-$n$.
 \end{proof}
 
-\begin{remark}[Sufficient conditions for the proof model]
-The substantive assumption in \cref{prop:one_dimensional_root_n_bound} is
-item~(iv). For i.i.d. quantile processes, Bahadur representations of this type
-are classical; see \citet{Bahadur1966} and
-\citet[Chapter~21]{vanDerVaart1998}. In the fixed-span triangular-array model,
-a concrete sufficient package is a common compact support $[L,U]$; rowwise
-densities $f_{n,j}$ uniformly bounded above and below by positive constants; a
-uniform smoothness bound on $f_{n,j}$ across rows; and a rowwise quantile
-process whose integrated Bahadur remainder satisfies
-$\mathbb E\int_0^1 R_n(u)^2\,du=o(n^{-1})$. This package is compatible with
-bounded smooth monotone deformations of a common base law with uniformly bounded
-derivatives, and with fixed-support location perturbations when the support
-constraint is preserved. Separate diagnostics on a smooth fixed-support
-deformation model show integrated residual decay faster than $n^{-1}$ across the
-tested span and roughness values, which is consistent with item~(iv) on that
-class.
-\end{remark}
+\subsection{Verifiable Sufficient Conditions for the 1D Proof Model}
 
-An explicit deformation class makes these conditions verifiable. Let
+An explicit deformation class makes the proof-model hypotheses verifiable. Let
 \[
   g_\delta(x)=x+\delta x(1-x), \qquad x\in[0,1], \qquad |\delta|\le \Delta<1.
 \]
@@ -376,20 +478,92 @@ so the transformed densities satisfy
 \[
   \frac{1}{1+\Delta}\le f_\delta(y) \le \frac{1}{1-\Delta},
 \]
-and the same support is preserved. For rowwise mixtures generated by a fixed-span
-array of such deformations, the density lower bound and smoothness constants are
-therefore explicit functions of the deformation radius $\Delta$, while the
-within-window drift span enters only through the deformation amplitudes. On the
-tested smooth fixed-support family, the integrated residual decays at empirical
-rates between $1.40$ and $1.54$ for spans $0.2$ and $0.4$, and the scaled
-quantity $n\int_0^1 R_n(u)^2du$ still decays at rates between $0.40$ and $0.54$;
-see \cref{app:finite_sample_geometry}. On the fixed-span triangular-array
+and the same support is preserved.
+
+\begin{corollary}[Verifiable Bahadur remainder for the smooth deformation class]
+\label{cor:bahadur_sufficient_conditions_smooth_deformation}
+Assume that each row law has the form
+\[
+  P_{n,j}=(g_{\delta_{n,j}})_\#\,\mathrm{Unif}[0,1],
+  \qquad |\delta_{n,j}|\le \Delta<1,
+\]
+and that the within-window span is uniformly bounded in $n$. Then item~(iv) of
+\cref{prop:one_dimensional_root_n_bound} holds. More precisely, there exists a
+constant $C_\Delta<\infty$ such that
+\[
+  \mathbb E\int_0^1 R_n(u)^2\,du \le C_\Delta n^{-2}.
+\]
+Consequently,
+\[
+  \mathbb E\,W_2\!\left(\widehat P_n^{\mathrm{tri}},\bar P_n\right)=O(n^{-1/2})
+\]
+on this deformation class.
+\end{corollary}
+
+\begin{proof}
+Write $\bar F_n$ and $q_n$ for the mixture cdf and quantile. Since each
+$g_{\delta_{n,j}}$ is an increasing diffeomorphism of $[0,1]$, every mixture law
+$\bar P_n$ is supported on $[0,1]$ and has density
+$\bar f_n=\frac1n\sum_{j=1}^n f_{\delta_{n,j}}$ satisfying the explicit bounds
+\[
+  \frac{1}{1+\Delta}\le \bar f_n(y)\le \frac{1}{1-\Delta},
+  \qquad
+  \|\bar f_n'\|_\infty\le \frac{2\Delta}{(1-\Delta)^3}.
+\]
+Hence the inverse map $\bar F_n^{-1}$ is uniformly twice differentiable on
+$(0,1)$, with second derivative bounded by a constant depending only on
+$\Delta$. Applying the second-order Taylor expansion of $\bar F_n^{-1}$ around
+$u=\bar F_n(q_n(u))$ gives
+\[
+  \widehat q_n(u)-q_n(u)
+  = \frac{u-\widehat F_n(q_n(u))}{\bar f_n(q_n(u))} + R_n(u),
+\]
+with
+\[
+  |R_n(u)|\le C_\Delta\,|\widehat F_n(q_n(u))-u|^2.
+\]
+Now
+\[
+  \widehat F_n(q_n(u))
+  =\frac1n\sum_{j=1}^n \mathbf 1\{X_{n,j}\le q_n(u)\}
+\]
+is an average of independent Bernoulli variables with mean $u$. Uniformly in
+$u$, its fourth centered moment is $O(n^{-2})$. Therefore
+\[
+  \mathbb E\,R_n(u)^2\le C_\Delta\,\mathbb E|\widehat F_n(q_n(u))-u|^4
+  \le C_\Delta' n^{-2},
+\]
+and integrating over $u\in(0,1)$ yields
+\[
+  \mathbb E\int_0^1 R_n(u)^2\,du\le C_\Delta' n^{-2}=o(n^{-1}).
+\]
+The root-$n$ claim then follows from \cref{prop:one_dimensional_root_n_bound}.
+The same smoothness package is consistent with the classical Bahadur theory of
+\citet{Bahadur1966} and \citet[Chapter~21]{vanDerVaart1998}, but here the
+explicit deformation bounds make the integrated remainder quantitative.
+\end{proof}
+
+\begin{remark}[Weak rowwise dependence]
+The proof of \cref{prop:one_dimensional_root_n_bound} uses independence within a
+row only through the $O(n^{-1})$ variance bound for the empirical cdf term and
+through item~(iv). Consequently, the same root-$n$ conclusion persists under any
+short-range dependent rowwise model for which the empirical cdf still has
+$L_2$ fluctuation of order $n^{-1/2}$ and the integrated Bahadur remainder
+remains $o(n^{-1})$. Short-range mixing conditions are one natural route to such
+a package, but the present paper does not develop a general dependent-row
+theorem.
+\end{remark}
+
+On the tested smooth fixed-support family, the integrated residual decays at
+empirical rates between $1.40$ and $1.54$ for spans $0.2$ and $0.4$, and the
+scaled quantity $n\int_0^1 R_n(u)^2du$ still decays at rates between $0.40$ and
+$0.54$; see \cref{app:finite_sample_geometry}. On the fixed-span triangular-array
 uniform-kernel model, the residual-to-MSE ratio drops from about $0.38$ at
 $n=25$ to about $0.11$ at $n=400$, with integrated residual rates $1.43$ for the
 triangular sample and $1.49$ for the i.i.d. mixture benchmark. These diagnostics
-do not replace a general verification theorem, but they make the proof-model
-assumption explicit on two common deformation families and quantify its span
-dependence on the classes currently used in the manuscript.
+do not replace a general verification theorem, but they now sit behind an
+explicit sufficient-condition corollary on the smooth deformation class and
+quantify span dependence on the classes currently used in the manuscript.
 
 \subsection{Structural Lower Bound in the Root-$n$ Regime}\label{subsec:lower_bound}
 
@@ -657,6 +831,64 @@ Minimizing over $h$ gives the same horizon scale $(\sigma/\zeta)^{2/(2H+1)}$.
 Combining the two sides proves the theorem.
 \end{proof}
 
+\subsection{Multivariate Extension via Sliced and Product Geometries}
+
+The horizon law also extends beyond one dimension when the multivariate geometry
+reduces to a uniformly controlled family of one-dimensional transport problems.
+This is the natural setting for sliced or coordinate-averaged Wasserstein
+constructions, where the finite-sample term is built by integrating projected
+one-dimensional errors.
+
+\begin{corollary}[Sliced-Wasserstein transfer under uniform projected control]
+\label{cor:sliced_wasserstein_transfer}
+Let $\rho$ be a probability measure on a family of one-dimensional projections
+$\theta$, and define
+\[
+  SW_{2,\rho}^2(P,Q)
+  \coloneqq \int W_2^2(P_{\theta},Q_{\theta})\,\rho(d\theta),
+\]
+where $P_{\theta}$ denotes the pushforward of $P$ under projection $\theta$.
+Assume that for every $\theta$ in the support of $\rho$:
+\begin{enumerate}[label=(\roman*)]
+  \item the projected triangular-array window satisfies the hypotheses of
+  \cref{prop:one_dimensional_root_n_bound} with constants uniform in $\theta$;
+  \item the projected drift path obeys the same H\"older staleness envelope with
+  exponent $H$ and amplitude at most $\zeta$ uniformly in $\theta$.
+\end{enumerate}
+Then there exist constants $C_K,C_S<\infty$ such that
+\[
+  \mathbb E\,SW_{2,\rho}\!\left(\widehat P_t^{(n)},P_t\right)
+  \le C_K n^{-1/2} + C_S\zeta n^H.
+\]
+Consequently,
+\[
+  n^*(H)\asymp (C_K/\zeta)^{1/(H+1/2)}.
+\]
+Coordinate-averaged product constructions are included as the special case in
+which $\rho$ is supported on coordinate projections.
+\end{corollary}
+
+\begin{proof}
+For each projection $\theta$, \cref{prop:one_dimensional_root_n_bound} gives
+\[
+  \mathbb E\,W_2^2\!\left(\widehat P_{t,\theta}^{(n)},\bar P_{t,\theta}^{(n)}\right)
+  \le C n^{-1}
+\]
+with $C$ uniform in $\theta$. Integrating over $\rho$ yields
+\[
+  \mathbb E\,SW_{2,\rho}^2\!\left(\widehat P_t^{(n)},\bar P_t^{(n)}\right)
+  \le C n^{-1},
+\]
+and Jensen gives the root-$n$ bound for
+$\mathbb E\,SW_{2,\rho}(\widehat P_t^{(n)},\bar P_t^{(n)})$. The projected
+H\"older bound integrates in the same way, giving
+\[
+  SW_{2,\rho}\!\left(\bar P_t^{(n)},P_t\right)\le C_S\zeta n^H.
+\]
+Applying \cref{thm:abstract_upper_law} with $d=SW_{2,\rho}$ yields the stated
+envelope and horizon scale.
+\end{proof}
+
 \subsection{Benchmark Theorems and Operational Extensions}
 
 The Gaussian benchmark and the fixed-$\varepsilon$ Sinkhorn extension place the
@@ -797,7 +1029,36 @@ compact support is also uniform on $\mathcal B$ by the fixed-$\varepsilon$
 asymptotics of \citet{GoldfeldEtAl2022} and the compact-support null bounds of
 \citet[Thm.~5.1, after fixed-$\varepsilon$ rescaling]{delBarrioEtAl2023}. Since
 the triangular-to-i.i.d. $W_2$ comparison is independent of $\varepsilon$, the
-constants in the pointwise proof can be chosen uniformly over $\mathcal B$.
+  constants in the pointwise proof can be chosen uniformly over $\mathcal B$.
+\end{proof}
+
+\begin{proposition}[Conditional embedded fixed-$\varepsilon$ band inheritance]
+\label{prop:conditional_embedded_sinkhorn_band}
+Assume the fixed-$\varepsilon$ Sinkhorn setting from
+\cref{def:fixed_epsilon_sinkhorn_setting}. Suppose that on a compact band
+$\mathcal B=[\varepsilon_{\min},\varepsilon_{\max}]$, the centered Sinkhorn
+scaling map admits a uniform linearization with remainder $o(n^{-1/2})$ and a
+uniform self-coupling inverse bound. Then there exists $C_{\mathcal B}<\infty$
+such that
+\[
+  \sup_{\varepsilon\in\mathcal B}
+  \mathbb E\,S_{\varepsilon}\!\left(\widehat P_{t,\mathrm{tri}}^{(n)},\bar P_t^{(n)}\right)
+  \le C_{\mathcal B} n^{-1/2}.
+\]
+Consequently, on any such band the induced horizon scale satisfies
+\[
+  \sup_{\varepsilon\in\mathcal B} n_{\varepsilon}^*(H)
+  \asymp (C_{\mathcal B}/\zeta)^{1/(H+1/2)}.
+\]
+\end{proposition}
+
+\begin{proof}
+The linearization hypothesis reduces the triangular-array Sinkhorn divergence to
+its first-order influence term plus an $o(n^{-1/2})$ remainder. The uniform
+self-coupling inverse bound keeps the influence operator bounded across
+$\mathcal B$, while the triangular-array fluctuation of the empirical measure is
+root-$n$ on the embedded fixed-span class. The same balance then gives the
+uniform $n^{-1/2}$ bound and the stated horizon scale.
 \end{proof}
 
 \begin{conjecture}[Bandwise fixed-$\varepsilon$ Sinkhorn horizon inheritance]
