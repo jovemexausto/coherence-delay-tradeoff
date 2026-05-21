@@ -1,0 +1,69 @@
+\section{Introduction}
+\label{sec:intro}
+
+Let $\{P_t\}_{t \geq 0}$ be a family of probability measures on
+$\R^d$ evolving over time.  The object of interest is the lagged transport
+geometry encoded by the Wasserstein-2 discrepancy curve
+\[
+    D_j \;:=\; W_2(P_{t-j}, P_t),\qquad j = 1, 2, \ldots, L.
+\]
+This curve is typically observed through estimators $\Dhj$ constructed from
+$n$ i.i.d.\ samples from each $P_{t-j}$ and $P_t$, rather than through the
+population values $D_j$ themselves.  Under standard conditions on the measures
+\citep{FournierGuillin2015,GoldfeldEtAl2022,delBarrioEtAl2023}, the plug-in Wasserstein estimator
+satisfies
+\begin{equation}
+    \Dhj = D_j + \varepsilon_j,\qquad
+    \varepsilon_j \sim \mathrm{AN}\!\left(0,\; \frac{\sigma_0^2}{n}\right),
+    \label{eq:obs-model}
+\end{equation}
+where $\sigma_0^2 > 0$ is a nuisance constant depending on the local
+geometry of the measures.
+
+A low-dimensional structural hypothesis is that the discrepancy curve follows
+a \emph{power law}:
+\begin{equation}
+    D_j = \zeta\,j^H,\qquad \zeta > 0,\; H \in (0,1).
+    \label{eq:power-law}
+\end{equation}
+This is scale consistency: the lag curve is compressed to the two-parameter
+family $(\zeta, H)$, with exponent $H$ interpreted as a roughness index of
+the latent drift in locally stationary settings \citep{Dahlhaus1997,Vogt2012,TinioAlayaBouzebda2025}.
+
+The inferential problem is not standard.  In log-space,
+$\Var(\log \Dhj) \approx \sigma_0^2/(n D_j^2) = \sigma_0^2 /(n\,\zeta^2\,j^{2H})$,
+so the observation noise depends on the same scale law that is being
+inferred.  The family is low-dimensional, but the noise is
+parameter-coupled.
+
+The main results establish a complete inference layer for this family: a
+feasible WLS limit theorem for $H$, exact oracle calibration of a residual
+adequacy statistic, a minimax lower bound for distinguishing the family from
+scale-inconsistent alternatives, and adaptivity in $H$.
+
+\paragraph{Main results.}
+\begin{enumerate}[leftmargin=*,label=(\arabic*)]
+\item \textbf{Feasible inference for the exponent.}  \Cref{thm:clt-fwls}
+gives a central limit theorem for the two-step feasible WLS estimator
+$\Hhat$ of $H$ in the heteroscedastic log-scale model.  The
+pilot-estimation error does not inflate the asymptotic variance beyond the
+oracle rate.
+
+\item \textbf{Residual adequacy test.}  \Cref{thm:null-chi2} shows that
+the weighted residual sum of squares $Q$ satisfies $Q \sim \chi^2(L-2)$
+under the power-law family with oracle weights, and that two-step FWLS
+converges to the same law asymptotically as $n \to \infty$ with $L$ fixed.
+
+\item \textbf{Minimax boundary for model distinguishability.}
+\Cref{thm:lecam-lower} gives the minimax separation rate $(nL)^{-1/2}$ for
+distinguishing the power-law family from alternatives with scale
+inconsistency level $\kappa \geq \kappa^*$.
+
+\item \textbf{Adaptive structural inference.}  \Cref{thm:adaptivity}
+shows that the FWLS adequacy procedure achieves the minimax rate without
+prior knowledge of $H$.
+
+\item \textbf{Simulation signatures.}  The numerical study reports exact
+size calibration, FWLS-oracle agreement, and power curves consistent with the
+boundary $\kappa^* = (nL)^{-1/2}$ (\Cref{sec:sims}).
+\end{enumerate}

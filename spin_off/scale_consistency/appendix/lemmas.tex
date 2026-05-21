@@ -1,0 +1,39 @@
+\section{Auxiliary Lemmas}
+\label{app:lemmas}
+
+\begin{lemma}[KL divergence between scaled Gaussians]
+\label{lem:kl-gaussian}
+For $\kappa^2 \leq v$,
+\begin{align*}
+    D_{\mathrm{KL}}\bigl(\calN(0, \kappa^2+v)\|\calN(0,v)\bigr)
+    &= \frac{1}{2}\left[\frac{\kappa^2}{v} - \log\!\left(1 + \frac{\kappa^2}{v}\right)\right] \\
+    &\leq \frac{\kappa^4}{4v^2}.
+\end{align*}
+\end{lemma}
+
+\begin{proof}
+Standard formula; the upper bound is the second-order Taylor remainder of
+$-\log(1+x)$ at $x = \kappa^2/v$.
+\end{proof}
+
+\begin{lemma}[OLS rate in log-scale regression]
+\label{lem:ols-rate}
+In the pilot OLS regression of $Y_j = \alpha + H x_j + U_j$ with
+$U_j \iid \calN(0, v)$ (ignoring heteroscedasticity), the OLS estimator
+$\hat H_{\mathrm{pil}}$ satisfies
+\[
+    \hat H_{\mathrm{pil}} - H = \frac{\sum_j (x_j - \bar x) U_j}
+    {\sum_j (x_j - \bar x)^2}
+    \;\sim\;
+    \calN\!\left(0,\; \frac{v}{\sum_j (x_j-\bar x)^2}\right).
+\]
+For $L$ fixed and $v = \sigma_0^2 n^{-1} j^{-2H}$ heteroscedastic,
+$\hat H_{\mathrm{pil}} - H = O_p(n^{-1/2})$.
+\end{lemma}
+
+\begin{proof}
+Follows from the Gauss-Markov structure of OLS and the boundedness of
+$v_j \leq \sigma_0^2/n$ (since $j \geq 1$, $j^{2H} \geq 1$).
+\end{proof}
+
+% ═══════════════════════════════════════════════════════════════════════════

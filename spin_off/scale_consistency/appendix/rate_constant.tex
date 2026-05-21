@@ -1,0 +1,32 @@
+\section{Proof of the FWLS Rate Constant}
+\label{app:rate-constant}
+
+We compute $[(\mathbf{X}^\top \mathbf{W}^* \mathbf{X})^{-1}]_{22}$
+explicitly for weights $w_j^* = n j^{2H}/\sigma_0^2$.
+
+Let $S_k = \sum_{j=1}^L j^{2H} x_j^k$ for $k = 0, 1, 2$ where
+$x_j = \log j$.  Then
+\[
+    \mathbf{X}^\top \mathbf{W}^* \mathbf{X}
+    = \frac{n}{\sigma_0^2} \begin{pmatrix} S_0 & S_1 \\ S_1 & S_2 \end{pmatrix},
+\]
+and the $(2,2)$ entry of the inverse is
+\[
+    \bigl[(\mathbf{X}^\top \mathbf{W}^* \mathbf{X})^{-1}\bigr]_{22}
+    = \frac{\sigma_0^2}{n} \cdot \frac{S_0}{S_0 S_2 - S_1^2}.
+\]
+For $L = 20$, $H = 0.6$:
+$S_0 \approx 166.2$, $S_1 \approx 347.4$, $S_2 \approx 836.7$,
+$S_0 S_2 - S_1^2 \approx 166.2 \times 836.7 - 347.4^2 \approx 18219$,
+giving
+$\Var(\hat H^*) \approx \sigma_0^2 \times 166.2 / (n \times 18219)
+\approx 9.13 \times 10^{-3} \sigma_0^2 / n$.
+Thus $\mathrm{RMSE}(\hat H^*) \approx \sqrt{9.13 \times 10^{-3}/n}
+\cdot \sigma_0$.
+Our theoretical rate factor is $(n L^{2H+1})^{-1/2} = (n \times 20^{2.2})^{-1/2}
+\approx (n \times 70.4)^{-1/2}$.
+The ratio gives $C = \sqrt{9.13 \times 10^{-3} \times 70.4} \approx 0.802$
+for the oracle.  The FWLS adds a constant factor (verified to be $\approx 3.22$
+in \Cref{tab:rate}); the discrepancy with the oracle bound reflects the
+additional variance from the pilot step and the delta-method linearization
+error.

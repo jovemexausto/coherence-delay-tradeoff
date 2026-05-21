@@ -1,0 +1,82 @@
+\section{Model and Assumptions}
+\label{sec:model}
+
+\subsection{Observation model}
+
+We observe a triangular array $\{\Dhj\}_{j=1}^{L}$ satisfying
+\begin{equation}
+    \Dhj = D_j + \varepsilon_j,\qquad
+    \varepsilon_j \iid \calN\!\left(0,\,\frac{\sigma_0^2}{n}\right),
+    \tag{M}
+    \label{eq:M}
+\end{equation}
+where $D_j = \zeta\,j^H$ for unknown parameters $(\zeta, H) \in
+(0,\infty)\times(0,1)$, $\sigma_0 > 0$ is known (or consistently
+estimable), and $n \geq 1$ is the effective sample size per lag.
+
+\begin{remark}
+    The Gaussianity in \eqref{eq:M} is justified for large $n$ by the
+    central limit theorem for Wasserstein estimators; see
+    \citet{GoldfeldEtAl2022} and \citet{delBarrioEtAl2023}.  The
+    constant-variance assumption $\Var(\varepsilon_j) = \sigma_0^2/n$ is
+    the leading-order approximation; the full theory allows $\sigma_j^2/n$
+    with $\sigma_j \leq C\,D_j$ bounded away from zero and infinity
+    relative to $D_j$---see \Cref{ass:sigma}.
+\end{remark}
+
+\subsection{Log-scale regression}
+
+Taking logarithms of the power-law model and applying the delta method:
+\begin{equation}
+    Y_j \;:=\; \log \Dhj \;=\; \alpha + H \log j + U_j,
+    \label{eq:log-model}
+\end{equation}
+where $\alpha = \log \zeta$ and
+\begin{align}
+    U_j &= \log\!\left(1 + \frac{\varepsilon_j}{D_j}\right)
+         \approx \frac{\varepsilon_j}{D_j}
+         \sim \calN\!\left(0,\; v_j\right), \label{eq:log-noise}\\
+    v_j &:= \frac{\sigma_0^2}{n\,D_j^2}
+         = \frac{\sigma_0^2}{n\,\zeta^2\,j^{2H}}.
+\end{align}
+The variance $v_j$ \emph{depends on $H$ and $\zeta$}, which are the
+parameters of interest.  This is the parameter-coupled heteroscedasticity
+that distinguishes our problem from standard regression.
+
+\subsection{Hypotheses}
+
+Let $\kappa \geq 0$ measure the \emph{scale inconsistency}: under the
+alternative, each observation has an additional log-normal multiplicative
+factor,
+\[
+    \log \Dhj = \alpha + H\log j + \kappa\,\xi_j + U_j,\quad
+    \xi_j \iid \calN(0,1),\;\xi_j \perp U_j.
+\]
+The hypotheses are:
+\begin{align*}
+    H_0&:\; \kappa = 0 \quad\text{(scale consistency)},\\
+    H_1&:\; \kappa \geq \kappa^* \quad\text{(scale inconsistency at level } \kappa^*\text{)}.
+\end{align*}
+
+\subsection{Assumptions}
+
+\begin{assumption}[Signal strength]
+\label{ass:signal}
+$\zeta \geq \zeta_{\min} > 0$ and $H \in [\underline{H}, \overline{H}]
+\subset (0,1)$.
+\end{assumption}
+
+\begin{assumption}[Noise regularity]
+\label{ass:sigma}
+$\sigma_0 \in [\sigma_{\min}, \sigma_{\max}]$ with
+$0 < \sigma_{\min} \leq \sigma_{\max} < \infty$.
+The delta-method approximation error satisfies
+$\abs{U_j - \varepsilon_j/D_j} = O_p(n^{-1})$ uniformly in $j$.
+\end{assumption}
+
+\begin{assumption}[Lag schedule]
+\label{ass:lags}
+$L \geq 4$ is fixed as $n \to \infty$.
+The lags $x_j := \log j$ for $j = 1, \ldots, L$ satisfy
+$\sum_j (x_j - \bar{x})^2 \geq c_L > 0$.
+\end{assumption}

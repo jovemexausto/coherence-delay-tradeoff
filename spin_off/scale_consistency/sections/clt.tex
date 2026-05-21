@@ -1,0 +1,99 @@
+\section{CLT for the Feasible WLS Estimator}
+\label{sec:clt}
+
+\subsection{Oracle WLS}
+
+With known weights $w_j^* = 1/v_j = n\,D_j^2/\sigma_0^2$, the oracle
+WLS estimator of $\boldsymbol{\beta} = (\alpha, H)^\top$ in
+\eqref{eq:log-model} is
+\begin{equation}
+    \boldsymbol{\hat\beta}^* = (\mathbf{X}^\top \mathbf{W}^* \mathbf{X})^{-1}
+    \mathbf{X}^\top \mathbf{W}^* \mathbf{Y},
+    \label{eq:oracle-wls}
+\end{equation}
+where $\mathbf{X} = [\mathbf{1}\mid \mathbf{x}]$, $\mathbf{x} = (\log
+1, \ldots, \log L)^\top$, and $\mathbf{W}^* = \diag(w_1^*, \ldots, w_L^*)$.
+
+\begin{proposition}[Oracle WLS CLT]
+\label{prop:oracle-clt}
+Under \Cref{ass:signal,ass:sigma,ass:lags}, as $n \to \infty$ with $L$
+fixed,
+\[
+    n^{1/2}\,\bigl(\hat H^* - H\bigr) \;\dto\; \calN\!\left(0,\;
+    \sigma_0^2 \bigl[(\mathbf{X}^\top \mathbf{W}^* \mathbf{X})^{-1}\bigr]_{22}\right),
+\]
+where $[\,\cdot\,]_{22}$ denotes the $(2,2)$ entry.
+Explicitly,
+\begin{equation}
+    \Var(\hat H^*) \;\approx\; \frac{\sigma_0^2}{n}
+    \cdot \frac{S_{w^*}}
+    {S_{w^*} S_{w^* x^2} - (S_{w^* x})^2},
+    \label{eq:oracle-var}
+\end{equation}
+where $S_{w^*} = \sum_j w_j^*$, $S_{w^* x} = \sum_j w_j^* x_j$,
+$S_{w^* x^2} = \sum_j w_j^* x_j^2$.
+\end{proposition}
+
+\begin{proof}
+Standard weighted least squares with $\mathbf{U} \sim
+\calN(\mathbf{0}, \sigma_0^2 n^{-1} (\mathbf{W}^*)^{-1})$; the
+$(2,2)$ entry of $(\mathbf{X}^\top \mathbf{W}^* \mathbf{X})^{-1}$ follows
+by $2\times 2$ matrix inversion.
+\end{proof}
+
+\subsection{Two-step feasible WLS}
+
+Since $D_j$ is unknown, the oracle weights are infeasible.  We use the
+following two-step procedure.
+
+\begin{algorithm}[H]
+\caption{Two-Step FWLS Estimator}
+\label{alg:fwls}
+\begin{algorithmic}[1]
+\State \textbf{Input:} $(\Dhj)_{j=1}^L$, $n$, $\sigma_0$.
+\State \textbf{Step 1 (Pilot OLS).}  Compute
+    $(\hat\alpha_{\mathrm{pil}}, \hat H_{\mathrm{pil}})$ by unweighted
+    OLS of $\log \Dhj$ on $(\mathbf{1}, \log j)$.
+\State \textbf{Step 1b (Pilot imputation).}  Set
+    $\hat D_j^{\mathrm{pil}} = \exp(\hat\alpha_{\mathrm{pil}} +
+    \hat H_{\mathrm{pil}} \log j)$.
+\State \textbf{Step 2 (FWLS).}  Set $\hat w_j =
+    n (\hat D_j^{\mathrm{pil}})^2 / \sigma_0^2$ and compute
+    $(\hat\alpha, \Hhat)$ by WLS with weights $(\hat w_j)$.
+\State \textbf{Output:} $\Hhat$, $\hat\alpha$, residuals
+    $\hat U_j = \log \Dhj - \hat\alpha - \Hhat \log j$.
+\end{algorithmic}
+\end{algorithm}
+
+\begin{theorem}[FWLS CLT]
+\label{thm:clt-fwls}
+Under \Cref{ass:signal,ass:sigma,ass:lags}, the two-step FWLS estimator
+$\Hhat$ satisfies, as $n \to \infty$ with $L$ fixed:
+\begin{equation}
+    n^{1/2}\bigl(\Hhat - H\bigr) \;\dto\;
+    \calN\!\Bigl(0,\; \sigma_0^2
+    \bigl[(\mathbf{X}^\top \mathbf{W}^* \mathbf{X})^{-1}\bigr]_{22}\Bigr).
+    \label{eq:fwls-clt}
+\end{equation}
+In particular, $\Hhat$ is \emph{asymptotically equivalent to the oracle
+WLS estimator}: the pilot estimation error inflates neither the asymptotic
+variance nor the rate.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+Write $\hat w_j = w_j^* \cdot r_j$ where $r_j = (\hat D_j^{\mathrm{pil}}
+/ D_j)^2$.  Since $\hat H_{\mathrm{pil}} - H = O_p(n^{-1/2})$ (OLS
+rate in $\log$-scale with bounded regressors), we have
+$\log r_j = 2(\hat H_{\mathrm{pil}} - H)\log j + O_p(n^{-1}) = O_p(n^{-1/2}\log j)$,
+hence $r_j = 1 + O_p(n^{-1/2}\log j)$ uniformly in $j$.
+
+The FWLS estimator with weights $\hat w_j = w_j^*(1 + \delta_j)$,
+$\delta_j = r_j - 1 = O_p(n^{-1/2}\log j)$, satisfies
+\[
+    \Hhat - H = \hat H^* + R_n,
+\]
+where the remainder $R_n = O_p(n^{-1}\log L)$ via a second-order
+Taylor expansion of the WLS normal equations in the weight perturbation.
+Since $n^{1/2} R_n = O_p(n^{-1/2}\log L) \to 0$, the Slutsky theorem
+gives \eqref{eq:fwls-clt}.
+\end{proof}

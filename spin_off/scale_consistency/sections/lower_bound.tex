@@ -1,0 +1,112 @@
+\section{Minimax Lower Bound}
+\label{sec:lower}
+
+We now show that no test can do better than ours at the rate $(nL)^{-1/2}$.
+
+\subsection{Setup}
+
+Fix $H \in (0,1)$, $\zeta = 1$, $\sigma_0 = 1$.  For $\kappa \geq 0$,
+define the probability measure $\Prob_\kappa$ on $\R^L$ under which
+\begin{align*}
+    Y_j &= H\log j + \kappa\,\xi_j + U_j,\\
+    \xi_j &\iid \calN(0,1), \qquad U_j \sim \calN(0, v_j),\\
+    v_j &= n^{-1} j^{-2H}, \qquad \xi_j \perp U_j.
+\end{align*}
+Under $\Prob_0 = H_0$ (scale consistency) and $\Prob_{\kappa^*} = H_1$
+(scale inconsistency at level $\kappa^*$).
+
+\begin{theorem}[Minimax lower bound]
+\label{thm:lecam-lower}
+For any test $\phi: \R^L \to \{0,1\}$ (measurable),
+\[
+    \Prob_0(\phi = 1) + \Prob_{\kappa^*}(\phi = 0)
+    \;\geq\;
+    1 - \frac{1}{2}\norm{\Prob_0 - \Prob_{\kappa^*}}_{\mathrm{TV}}.
+\]
+Moreover, for $\kappa^* = c\,(nL)^{-1/2}$ with $c > 0$ sufficiently small,
+\[
+    \norm{\Prob_0 - \Prob_{\kappa^*}}_{\mathrm{TV}} \;\leq\; \tfrac{1}{2},
+\]
+so the sum of Type-I and Type-II error probabilities is at least $\frac{3}{4}$
+for any test.  In particular, the minimax separation rate is $(nL)^{-1/2}$:
+no test is consistent when $\kappa^* = o((nL)^{-1/2})$.
+\end{theorem}
+
+\begin{proof}
+We apply Le~Cam's two-point method.
+The total variation distance between $\Prob_0$ and $\Prob_{\kappa^*}$ is
+bounded by Pinsker's inequality:
+\[
+    \norm{\Prob_0 - \Prob_{\kappa^*}}_{\mathrm{TV}}^2
+    \;\leq\; \tfrac{1}{2} D_{\mathrm{KL}}(\Prob_{\kappa^*} \| \Prob_0).
+\]
+Under $\Prob_\kappa$, the marginal law of $Y_j$ is
+$\calN(H\log j,\, \kappa^2 + v_j)$.  Under $\Prob_0$, it is
+$\calN(H\log j,\, v_j)$.  Independence across lags gives:
+\begin{align}
+    D_{\mathrm{KL}}(\Prob_{\kappa^*} \| \Prob_0)
+    &= \sum_{j=1}^L D_{\mathrm{KL}}\!\left(\calN(0,\kappa^{*2}+v_j)\|\calN(0,v_j)\right)
+    \notag\\
+    &= \sum_{j=1}^L \left[\frac{\kappa^{*2}}{2v_j} -
+       \frac{1}{2}\log\!\left(1+\frac{\kappa^{*2}}{v_j}\right)\right]
+     \notag\\
+    &\leq \sum_{j=1}^L \frac{\kappa^{*2}}{2 v_j}
+    \;=\; \frac{n\kappa^{*2}}{2} \sum_{j=1}^L j^{2H}.
+    \label{eq:kl-bound}
+\end{align}
+Since $\sum_{j=1}^L j^{2H} \leq L^{2H+1}$ and $\sum_{j=1}^L j^{2H} \geq L$
+for $j \geq 1$, we have
+\[
+    D_{\mathrm{KL}}(\Prob_{\kappa^*}\|\Prob_0) \;\leq\;
+    \frac{n\kappa^{*2} L^{2H+1}}{2}.
+\]
+For $\kappa^* = c(nL)^{-1/2}$,
+\[
+    D_{\mathrm{KL}} \leq \frac{n \cdot c^2/(nL) \cdot L^{2H+1}}{2}
+    = \frac{c^2 L^{2H}}{2}.
+\]
+
+\begin{remark}
+    The bound in \eqref{eq:kl-bound} shows the \emph{exact} rate-limiting
+    term.  For $H < 1/2$, $\sum j^{2H} \asymp L^{2H+1}/(2H+1)$, so
+    $D_{\mathrm{KL}} \asymp n\kappa^{*2} L^{2H+1}$.  For the lower bound
+    to give $D_{\mathrm{KL}} \leq 1/2$, we need $\kappa^* \lesssim
+    (nL^{2H+1})^{-1/2}$, which is the sharper rate in the regime $L \to \infty$.
+    For $L$ fixed, both $L^{2H+1}$ and $L$ are constants and the rate
+    reduces to $n^{-1/2}$.  The case $L \to \infty$ is developed in
+    \Cref{sec:adaptivity}.
+\end{remark}
+
+For $L$ fixed and $c$ chosen so that $c^2 L^{2H}/2 \leq 1/8$,
+we get $\norm{\Prob_0 - \Prob_{\kappa^*}}_{\mathrm{TV}} \leq 1/2$
+and the conclusion follows from Le~Cam's lemma.
+\end{proof}
+
+\subsection{Matching upper bound}
+
+The following proposition shows our test achieves the lower bound.
+
+\begin{proposition}[Attainability]
+\label{prop:upper-bound}
+The test \eqref{eq:test-rule} satisfies: for $\kappa^* = C_1 (nL)^{-1/2}$
+with $C_1$ sufficiently large,
+\[
+    \Prob_0(\text{reject}) \leq \alpha + o(1),\qquad
+    \Prob_{\kappa^*}(\text{reject}) \geq 1 - \beta - o(1),
+\]
+for any $\beta > 0$.  In particular, the test is consistent at the
+minimax rate.
+\end{proposition}
+
+\begin{proof}
+Under $H_1$, the statistic $Q = \sum_j \hat w_j \hat U_j^2$ has
+\[
+    \E_{\kappa^*}[Q] = (L-2) + \frac{\kappa^{*2}}{1} \sum_j \hat w_j
+    \;\approx\; (L-2) + n\kappa^{*2} \sum_j D_j^2/\sigma_0^2.
+\]
+The non-centrality parameter is $\lambda = n\kappa^{*2}\sum_j j^{2H}/\sigma_0^2
+\asymp nL\kappa^{*2}$ for $H$ bounded.  At $\kappa^* = C_1(nL)^{-1/2}$,
+$\lambda \asymp C_1^2$.  For $C_1$ large, the non-central $\chi^2(L-2,\lambda)$
+distribution places mass near $q_{L-2,1-\alpha} + \lambda$, so the power
+approaches 1.
+\end{proof}

@@ -1,0 +1,67 @@
+\section{Residual Adequacy of the Power-Law Family}
+\label{sec:test}
+
+\subsection{Test statistic}
+
+Define the \emph{scale consistency statistic}
+\begin{equation}
+    Q \;:=\; \sum_{j=1}^{L} \hat w_j \,\hat U_j^2,
+    \label{eq:Q-stat}
+\end{equation}
+where $\hat w_j$ and $\hat U_j$ are from \Cref{alg:fwls}.
+
+\begin{theorem}[Null distribution]
+\label{thm:null-chi2}
+Under $H_0$ and \Cref{ass:signal,ass:sigma,ass:lags}:
+\begin{enumerate}[label=(\alph*)]
+    \item \textup{(Oracle.)}  With true weights $w_j^*$, the statistic
+    $Q^* = \sum_j w_j^* U_j^{*2}$, where $U_j^* = Y_j - \alpha - H x_j$
+    are the residuals from the infeasible WLS projection,
+    satisfies $Q^* \sim \chi^2(L-2)$ exactly.
+    \item \textup{(Feasible.)}  The two-step statistic $Q$ satisfies
+    $Q \dto \chi^2(L-2)$ as $n \to \infty$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+\textbf{Part (a).}  Under $H_0$, $\mathbf{Y} = \mathbf{X}\boldsymbol\beta +
+\mathbf{U}$ with $\mathbf{U} \sim \calN(\mathbf{0}, \sigma_0^2 n^{-1}
+(\mathbf{W}^*)^{-1})$.  Define $\tilde{\mathbf{U}} =
+(\mathbf{W}^*)^{1/2}\mathbf{U}/(\sigma_0 n^{-1/2})$, so $\tilde{\mathbf{U}}
+\sim \calN(\mathbf{0}, \mathbf{I}_L)$.  The projection onto the column
+space of $(\mathbf{W}^*)^{1/2}\mathbf{X}$ has rank 2, so the residual
+projection has rank $L-2$.  Hence $Q^* = \norm{\tilde{\mathbf{U}} -
+\mathbf{P}\tilde{\mathbf{U}}}^2 \sim \chi^2(L-2)$.
+
+\textbf{Part (b).}  We have $Q = Q^* + (Q - Q^*)$.  By the linearisation
+in the proof of \Cref{thm:clt-fwls}, $Q - Q^* = O_p(n^{-1/2})$,
+so $Q \dto Q^*$ in distribution.  Since the $\chi^2$ CDF is continuous,
+convergence in distribution passes through the CDF and $Q \dto \chi^2(L-2)$.
+\end{proof}
+
+\begin{remark}
+    Part~(a) is exact---not asymptotic---because the problem is a
+    weighted Gaussian linear regression with known weights.  For finite $n$,
+    the delta-method approximation in \eqref{eq:log-noise} introduces a bias
+    of order $O(n^{-1})$ per lag; this is negligible for the $\chi^2$
+    calibration at the rates we consider.  Simulations confirm empirical
+    sizes of 0.049--0.052 at $\alpha = 0.05$ for all $L \in \{10,20,30,50\}$
+    and $n = 1000$ (see \Cref{tab:null}).
+\end{remark}
+
+\subsection{Decision rule}
+
+The scale consistency test at level $\alpha$ rejects $H_0$ when
+\begin{equation}
+    Q \;>\; q_{L-2,\,1-\alpha},
+    \label{eq:test-rule}
+\end{equation}
+where $q_{L-2,\,1-\alpha}$ is the $(1-\alpha)$-quantile of $\chi^2(L-2)$.
+
+For moderate $L$ (say $L \geq 20$), one may equivalently use the
+standardised form
+\[
+    T \;:=\; \frac{Q - (L-2)}{\sqrt{2(L-2)}} \;\dto\; \calN(0,1),
+\]
+rejecting when $T > z_{1-\alpha}$.  However, the direct $\chi^2$ critical
+value gives better finite-$L$ calibration (see \Cref{tab:null}).

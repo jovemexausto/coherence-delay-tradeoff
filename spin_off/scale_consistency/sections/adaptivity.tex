@@ -1,0 +1,44 @@
+\section{Adaptivity in $H$}
+\label{sec:adaptivity}
+
+In practice, $H$ is unknown.  The FWLS statistic $Q$ depends on $H$ only
+through the pilot weights $\hat w_j$; the critical value $q_{L-2,1-\alpha}$
+is free of $H$.  We now show this adaptation is cost-free.
+
+\begin{theorem}[Adaptive attainment of minimax rate]
+\label{thm:adaptivity}
+Suppose $L = L_n \to \infty$ with $L_n = o(n^{1/(2\overline{H}+1)})$.
+Under \Cref{ass:signal,ass:sigma,ass:lags} and $H_0$:
+\begin{enumerate}[label=(\alph*)]
+    \item $Q \dto \chi^2(L-2)$ and the test \eqref{eq:test-rule} has
+    asymptotic size $\alpha$.
+    \item Under $H_1$ with $\kappa \geq C_1 (nL^{2H+1})^{-1/2}$, the test
+    has power tending to 1.
+    \item No test achieves power tending to 1 when
+    $\kappa = o((nL^{2H+1})^{-1/2})$, for any $H$-adaptive sequence of tests.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+\textbf{Parts (a) and (b).}
+When $L \to \infty$, the key step is showing that the pilot estimation
+error $\hat H_{\mathrm{pil}} - H = O_p((nL^{2H+1}\log^2 L)^{-1/2})$
+(oracle OLS rate in log-scale, using the bounds of \Cref{prop:oracle-clt})
+translates to a weight perturbation $\delta_j = O_p((nL^{2H+1})^{-1/2}
+\log j)$ that contributes negligibly to $Q$:
+\begin{align*}
+    Q - Q^* &= \sum_j w_j^* \delta_j \hat U_j^2 + O_p\bigl(n^{-1}\log L\bigr) \\
+            &= O_p\bigl((nL^{2H+1})^{-1/4} L^{1/2}\bigr) = o_p(1).
+\end{align*}
+under the assumed growth of $L$.  Convergence of the $\chi^2(L-2)$
+distribution then follows from the Berry-Esseen theorem applied to the
+standardised statistic $T$.
+
+\textbf{Part (c).}
+The lower bound in \Cref{thm:lecam-lower} extends to $L \to \infty$ by
+tracking the full sum $\sum_j j^{2H} \asymp L^{2H+1}/(2H+1)$ in
+\eqref{eq:kl-bound}, giving the minimax rate $(nL^{2H+1})^{-1/2}$.
+Adaptivity in $H$ is free because the critical value $q_{L-2,1-\alpha}$
+and the rejection region do not depend on $H$; the test remains valid
+for all $H \in [\underline{H}, \overline{H}]$ simultaneously.
+\end{proof}
