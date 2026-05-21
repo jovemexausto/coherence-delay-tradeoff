@@ -1,0 +1,25 @@
+\section{Limitations and Open Problems}
+\label{sec:limitations}
+
+The theorem line isolates a baseline independence model. The remaining gaps are
+structured as follows.
+
+\begin{enumerate}[leftmargin=*,label=(\arabic*)]
+\item \textbf{Finite-sample calibration.} The oracle null law for $Q^*$ is exact,
+while the feasible statistic relies on a delta-method approximation. A
+nonasymptotic bound for the gap $Q-Q^*$ would quantify the finite-$n$ cost of
+feasibility.
+
+\item \textbf{Unknown $\sigma_0$.} The main theorems treat $\sigma_0$ as fixed.
+A full finite-sample correction for plug-in scale estimation should formalize the
+degrees-of-freedom adjustment already suggested by the model.
+
+\item \textbf{Cross-lag dependence.} Shared present-time sampling induces
+covariance across lags. The diagonal model is conservative, but a covariance-
+adjusted analogue remains to be proved.
+
+\item \textbf{Growing-lag and broader departures.} The current adaptivity result
+covers consecutive lags under the exact power-law family. Extending the lower
+and upper theory to more general lag schedules and to departures from exact
+power-law geometry is open.
+\end{enumerate}
