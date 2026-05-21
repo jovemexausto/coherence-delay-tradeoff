@@ -571,12 +571,13 @@ is already well calibrated at moderate lag counts: its empirical mean tracks
 the oracle null mean closely, and the rejection frequency remains near the
 nominal level.  Table~\ref{tab:null} gives the exact grid values.
 
-\begin{figure}[t]
+\begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=\linewidth]{artifacts/figures/scale_consistency/fig_null_calibration}
 \caption{Null calibration of the residual adequacy statistic.}
 \label{fig:null-calibration}
 \end{figure}
+\FloatBarrier
 
 \subsection{Power at the minimax boundary}
 
@@ -585,12 +586,13 @@ the adequacy procedure is informative but not overconfident at $c=1$, and it
 becomes decisive above the boundary.  Table~\ref{tab:power-boundary} records
 the exact values.
 
-\begin{figure}[t]
+\begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=\linewidth]{artifacts/figures/scale_consistency/fig_power_boundary}
 \caption{Power transition at the minimax boundary.}
 \label{fig:power-boundary}
 \end{figure}
+\FloatBarrier
 
 \subsection{FWLS versus oracle}
 
@@ -598,12 +600,13 @@ Figure~\ref{fig:fwls-oracle-gap} shows that the feasible estimator tracks the
 oracle benchmark closely: the gap shrinks with $n$ and remains small across
 the tested lag lengths.  This is the numerical counterpart of the CLT.
 
-\begin{figure}[t]
+\begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=\linewidth]{artifacts/figures/scale_consistency/fig_fwls_oracle_gap}
 \caption{Agreement between feasible and oracle estimation.}
 \label{fig:fwls-oracle-gap}
 \end{figure}
+\FloatBarrier
 
 \subsection{Rate constant}
 
@@ -611,12 +614,13 @@ Figure~\ref{fig:rate-constant} shows that the FWLS error obeys the predicted
 scaling over two orders of magnitude in $n$, while the rescaled constant
 remains essentially flat.  Table~\ref{tab:rate} gives the exact grid values.
 
-\begin{figure}[t]
+\begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=\linewidth]{artifacts/figures/scale_consistency/fig_rate_constant}
 \caption{Rate-constant stabilization for $\widehat H$.}
 \label{fig:rate-constant}
 \end{figure}
+\FloatBarrier
 
 \subsection{Robustness}
 
@@ -625,16 +629,19 @@ on the right.  The procedure is stable under moderate perturbations and
 degrades visibly only when the structural assumptions are pushed beyond the
 scope of the theorem.
 
-\begin{figure}[t]
+\begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=\linewidth]{artifacts/figures/scale_consistency/fig_robustness}
 \caption{Sensitivity to scale misspecification and alternative noise laws.}
 \label{fig:robustness}
 \end{figure}
+\FloatBarrier
 
 Tables~\ref{tab:null}, \ref{tab:power-boundary}, and \ref{tab:rate}, together
 with the appendix robustness tables,
 provide the exact numerical grid values.
+
+\FloatBarrier
 
 % ═══════════════════════════════════════════════════════════════════════════
 \section{Operational Implication}

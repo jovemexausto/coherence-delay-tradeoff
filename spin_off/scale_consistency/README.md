@@ -5,7 +5,7 @@ power-law lag geometry under noisy transport estimates.
 
 ## Layout
 
-- `scale_consistency.tex`: manuscript entrypoint
+- `main.tex`: manuscript entrypoint
 - `code/`: dedicated Python package for the spin-off
 - `tests/`: dedicated spin-off tests
 - `artifacts/`: figures, tables, and CSV outputs for this paper
@@ -20,7 +20,7 @@ and Python package under `code/scale_consistency/`.
 
 Run from this directory:
 
-`tectonic scale_consistency.tex`
+`tectonic main.tex`
 
 ## Local test command
 
