@@ -1,9 +1,9 @@
-\section{Inference and Adequacy}
+\section{Structural Inference}
 \label{sec:test}
 
-\subsection{Residual-Based Adequacy Statistic}
+\subsection{Residual Law}
 
-Define the \emph{residual-based adequacy statistic}
+Define the residual statistic
 \begin{equation}
     Q \;:=\; \sum_{j=1}^{L} \hat w_j \,\hat U_j^2,
     \label{eq:Q-stat}
@@ -11,7 +11,7 @@ Define the \emph{residual-based adequacy statistic}
 where $\hat w_j$ and $\hat U_j$ are produced by the two-step FWLS procedure in
 \Cref{alg:fwls}.
 
-\begin{theorem}[Exact Oracle Null Law and Feasible Asymptotic Null Law]
+\begin{theorem}[Exact Oracle Residual Law and Feasible Asymptotic Counterpart]
 \label{thm:null-chi2}
 Under $H_0$ and \Cref{ass:signal,ass:sigma,ass:lags}:
 \begin{enumerate}[label=(\alph*)]
@@ -53,7 +53,7 @@ convergence in distribution passes through the CDF and $Q \dto \chi^2(L-2)$.
 
 \subsection{Testing Rule}
 
-The residual-based adequacy test at level $\alpha$ rejects $H_0$ when
+The residual rule at level $\alpha$ rejects $H_0$ when
 \begin{equation}
     Q \;>\; q_{L-2,\,1-\alpha},
     \label{eq:test-rule}
@@ -70,7 +70,7 @@ value gives better finite-$L$ calibration (see \Cref{tab:null}).
 
 \subsection{Behavior Under Departures}
 
-\begin{proposition}[Power of the adequacy test]
+\begin{proposition}[Power of the residual law]
 \label{prop:alternative-response}
 Under $H_1$ with parameter $\kappa > 0$, the marginal of each standardised
 residual $\sqrt{w_j^*}\,\widehat U_j$ has variance $1 + \kappa^2/v_j$.

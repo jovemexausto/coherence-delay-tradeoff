@@ -1,4 +1,4 @@
-\section{Simulation Evidence}
+\section{Empirical Signatures}
 \label{sec:sims}
 
 All experiments use the simulation model \eqref{eq:M} with $\zeta = 1$,
@@ -8,15 +8,15 @@ numerical tables are reported in Appendix~\ref{app:numerical_tables}.
 
 \subsection{Null Calibration}
 
-Figure~\ref{fig:null-calibration} shows that the residual adequacy statistic is
-well calibrated at moderate lag counts: its empirical mean tracks the oracle
-null mean closely, and the rejection frequency remains near the nominal
-level. Appendix Table~\ref{tab:null} gives the exact grid values.
+Figure~\ref{fig:null-calibration} shows the oracle residual law at moderate lag
+counts: its empirical mean tracks the oracle null mean closely, and the
+rejection frequency remains near the nominal level. Appendix Table~\ref{tab:null}
+gives the exact grid values.
 
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=\linewidth]{artifacts/figures/scale_consistency/fig_null_calibration}
-\caption{Finite-sample null calibration of the residual-based adequacy statistic.}
+\caption{Finite-sample behavior of the oracle residual law.}
 \label{fig:null-calibration}
 \end{figure}
 \FloatBarrier
@@ -25,7 +25,7 @@ level. Appendix Table~\ref{tab:null} gives the exact grid values.
 
 Figure~\ref{fig:power-boundary} shows the transition at the information-scale
 boundary $\kappa^* \asymp \bigl(n\sum_{j \leq L} j^{2H}\bigr)^{-1/2}$:
-the adequacy test is informative but not overconfident at $c=1$, and it gains
+the residual law is informative but not overconfident at $c=1$, and it gains
 power steadily above the boundary.
 
 \begin{figure}[!htbp]

@@ -21,7 +21,7 @@ This coupling produces one information law for the whole paper:
     \mathcal I_{n,L}(H) = n \sum_{j=1}^L j^{2H},
 \]
 up to scale factors depending on $\zeta$ and $\sigma_0$. The same quantity
-governs estimation of $H$, residual adequacy testing, the minimax separation
+governs estimation of $H$, the residual law, the minimax separation
 boundary, and adaptivity across lag regimes. Fixed $L$ and growing $L$ are
 therefore two regimes of one inferential scale.
 
@@ -29,22 +29,22 @@ The main contributions are:
 \begin{enumerate}[leftmargin=*,label=(\arabic*)]
 \item \textbf{One feasible inference layer.} The two-step FWLS estimator of
 $H$ is asymptotically oracle-equivalent, and the residual statistic has an
-exact oracle null law with a feasible asymptotic counterpart.
+exact oracle law with a feasible asymptotic counterpart.
 
 \item \textbf{One optimality scale.} The minimax separation boundary is of
 order $\bigl(n\sum_{j \leq L} j^{2H}\bigr)^{-1/2}$, with fixed-$L$ and
 growing-$L$ rates obtained as special cases.
 
-\item \textbf{One adaptive procedure.} The same test attains the boundary
-without prior knowledge of $H$.
+\item \textbf{One adaptive procedure.} The same inferential scale attains the
+boundary without prior knowledge of $H$.
 
 \item \textbf{One unknown-scale extension.} A decoupled Gaussian benchmark for
-unknown $\sigma_0$ yields an exact split-$F$ null law, while same-sample
-parametric bootstrap restores near-nominal calibration on the tested grid.
+unknown $\sigma_0$ yields an exact split-$F$ law, while same-sample parametric
+bootstrap restores near-nominal calibration on the tested grid.
 
-\item \textbf{Three empirical signatures.} The simulations show null
-calibration, FWLS-oracle agreement, and a boundary transition aligned with the
-information scale.
+\item \textbf{Three empirical signatures.} The simulations show the oracle law,
+FWLS-oracle agreement, and a boundary transition aligned with the information
+scale.
 \end{enumerate}
 
 \paragraph{Relation to prior work.}
@@ -54,12 +54,12 @@ because the exponent is inferred from estimated transport discrepancies, so the
 noise is itself parameter-coupled. The surrounding transport-rate literature
 provides the relevant first layer \citep{fournier2015rate,weed2019sharp,
 goldfeld2024limit,delbarrio2023improved}, while locally stationary drift and
-adaptive testing connect through \citep{dahlhaus1997fitting,
+adaptive inference connect through \citep{dahlhaus1997fitting,
 vogt2012nonparametric,tinio2025bounds,brutsche2024similarity}.
 
 Section~\ref{sec:model} defines the observation model and the information
 scale. Section~\ref{sec:clt} gives the feasible inference theorem.
-Section~\ref{sec:test} establishes the residual adequacy law and its response
+Section~\ref{sec:test} establishes the residual law and its response
 under departures. Section~\ref{sec:lower} proves the separation lower bound,
 Section~\ref{sec:adaptivity} extends it to the growing-lag regime,
 Section~\ref{sec:sims} provides the empirical signatures, and

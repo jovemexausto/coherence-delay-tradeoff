@@ -1,9 +1,9 @@
 \section{Unknown-Scale Extension}
 \label{sec:application}
 
-Unknown $\sigma_0$ introduces self-normalization into the adequacy statistic.
-The clean benchmark is obtained by decoupling scale estimation from residual
-testing. Let block $A$ and block $B$ be independent copies of the Gaussian
+Unknown $\sigma_0$ introduces self-normalization into the residual law. The
+clean benchmark is obtained by decoupling scale estimation from residual
+evaluation. Let block $A$ and block $B$ be independent copies of the Gaussian
 observation model under $H_0$, with effective sample sizes $n_A$ and $n_B$.
 Write $x_j = \log j$ and $\alpha = \log \zeta$.
 
@@ -62,5 +62,5 @@ Appendix Table~\ref{tab:sigma0-plugin} then separates three feasible behaviors
 on the tested grid. Naive same-sample $\chi^2$ calibration collapses to
 near-zero rejection. The fully feasible split-$F$ procedure is conservative.
 Same-sample parametric bootstrap restores rejection frequencies close to the
-nominal level. The theorem-level statement therefore belongs to the decoupled
-benchmark, while the bootstrap path provides the operational extension.
+nominal level. The theorem-level statement belongs to the decoupled benchmark,
+while the bootstrap path provides the operational extension.
