@@ -1,8 +1,9 @@
-\section{Operational Implication}
+\section{Unknown-Scale Extension}
 \label{sec:application}
 
-The unknown-scale problem admits a clean decoupled benchmark under sample
-splitting. Let block $A$ and block $B$ be independent copies of the Gaussian
+Unknown $\sigma_0$ introduces self-normalization into the adequacy statistic.
+The clean benchmark is obtained by decoupling scale estimation from residual
+testing. Let block $A$ and block $B$ be independent copies of the Gaussian
 observation model under $H_0$, with effective sample sizes $n_A$ and $n_B$.
 Write $x_j = \log j$ and $\alpha = \log \zeta$.
 
@@ -56,10 +57,10 @@ with independence from block $A$. Since
 the stated $F$ law follows.
 \end{proof}
 
-This proposition identifies the natural benchmark for unknown $\sigma_0$ under
-decoupled scale estimation. Appendix Table~\ref{tab:sigma0-plugin} shows three
-distinct regimes on the tested grid: naive same-sample $\chi^2$ calibration
-collapses to near-zero rejection, the oracle split-$F$ benchmark remains close
-to nominal size, and the fully feasible split-$F$ procedure is conservative.
-The same table shows that same-sample parametric bootstrap restores near-nominal
-size for the operational procedure.
+The benchmark law isolates the decoupled geometry of the unknown-scale problem.
+Appendix Table~\ref{tab:sigma0-plugin} then separates three feasible behaviors
+on the tested grid. Naive same-sample $\chi^2$ calibration collapses to
+near-zero rejection. The fully feasible split-$F$ procedure is conservative.
+Same-sample parametric bootstrap restores rejection frequencies close to the
+nominal level. The theorem-level statement therefore belongs to the decoupled
+benchmark, while the bootstrap path provides the operational extension.
