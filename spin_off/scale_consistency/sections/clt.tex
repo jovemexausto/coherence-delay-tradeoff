@@ -82,12 +82,16 @@ variance nor the rate.
 \end{theorem}
 
 \begin{remark}[$\sigma_0$ unknown]
-    When $\sigma_0$ is unknown, one may replace it by a consistent plug-in
-    estimate constructed from the pilot residuals.  This perturbs the feasible
-    weights by $O_p(n^{-1/2})$, so the asymptotic FWLS law is unchanged.  For
-    the adequacy test, the same plug-in step costs one additional finite-sample
-    degree of freedom, so a $\chi^2(L-3)$ critical value is the natural
-    finite-$n$ correction.
+    When $\sigma_0$ is unknown, a pilot plug-in estimate constructed from the
+    residual scale yields a self-normalized FWLS fit. In the adequacy test,
+    a naive $\chi^2(L-3)$ calibration is strongly conservative because the
+    estimated scale and the residual statistic are coupled through the same
+    data. Under sample splitting, the Gaussian benchmark with oracle profile and
+    independent scale estimate has the exact split-$F$ law of
+    \Cref{prop:oracle-split-f}, whereas the fully feasible split procedure
+    remains conservative on the tested grid. For the same-sample procedure, a
+    parametric bootstrap based on the fitted null profile restores near-nominal
+    size; see \Cref{tab:sigma0-plugin}.
 \end{remark}
 
 \begin{proof}[Proof sketch]

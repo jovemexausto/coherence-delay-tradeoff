@@ -3,11 +3,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import numpy as np
+from scipy.stats import f
 
 from .estimation import (
     feasible_wls,
     oracle_wls,
     residual_statistic,
+    run_split_scale_consistency_test,
     run_scale_consistency_test,
 )
 from .model import simulate_observed_discrepancies
@@ -111,6 +113,34 @@ class RateConstantRow:
     information_scale: float
     scaled_constant: float
     oracle_scaled_constant: float
+
+
+@dataclass(frozen=True)
+class Sigma0PluginConfig:
+    L_values: tuple[int, ...] = (10, 20, 30, 50)
+    n_values: tuple[int, ...] = (500, 1000)
+    H_values: tuple[float, ...] = (0.6,)
+    sigma0_values: tuple[float, ...] = (1.0,)
+    zeta: float = 1.0
+    alpha_level: float = 0.05
+    repetitions: int = 300
+    bootstrap_repetitions: int = 400
+    seed: int = 24680
+
+
+@dataclass(frozen=True)
+class Sigma0PluginRow:
+    L: int
+    n: int
+    H: float
+    sigma0: float
+    empirical_size_naive: float
+    empirical_size_bootstrap: float
+    empirical_size_oracle_split_f: float
+    empirical_size_split_f: float
+    mean_sigma0_hat: float
+    mean_sigma0_hat_ratio: float
+    mean_df_naive: float
 
 
 @dataclass(frozen=True)
@@ -339,6 +369,142 @@ def run_rate_constant_experiment(
                 ),
             )
         )
+    return rows
+
+
+def run_sigma0_plugin_experiment(
+    config: Sigma0PluginConfig = Sigma0PluginConfig(),
+) -> list[Sigma0PluginRow]:
+    rng = np.random.default_rng(config.seed)
+    rows: list[Sigma0PluginRow] = []
+    for L in config.L_values:
+        lags = _lags(L)
+        for n in config.n_values:
+            for H in config.H_values:
+                for sigma0 in config.sigma0_values:
+                    rejections = 0
+                    bootstrap_rejections = 0
+                    oracle_split_f_rejections = 0
+                    split_f_rejections = 0
+                    sigma0_hats: list[float] = []
+                    dfs: list[int] = []
+                    n_scale = max(n // 2, 1)
+                    n_test = max(n - n_scale, 1)
+                    for _ in range(config.repetitions):
+                        obs = simulate_observed_discrepancies(
+                            lags,
+                            config.zeta,
+                            H,
+                            sigma0,
+                            n,
+                            rng=rng,
+                        )
+                        result = run_scale_consistency_test(
+                            obs,
+                            lags,
+                            None,
+                            n,
+                            alpha_level=config.alpha_level,
+                            calibration="chi2",
+                        )
+                        bootstrap_result = run_scale_consistency_test(
+                            obs,
+                            lags,
+                            None,
+                            n,
+                            alpha_level=config.alpha_level,
+                            calibration="bootstrap",
+                            bootstrap_repetitions=config.bootstrap_repetitions,
+                            rng=rng,
+                        )
+                        scale_obs = simulate_observed_discrepancies(
+                            lags,
+                            config.zeta,
+                            H,
+                            sigma0,
+                            n_scale,
+                            rng=rng,
+                        )
+                        test_obs = simulate_observed_discrepancies(
+                            lags,
+                            config.zeta,
+                            H,
+                            sigma0,
+                            n_test,
+                            rng=rng,
+                        )
+                        split_result = run_split_scale_consistency_test(
+                            scale_obs,
+                            test_obs,
+                            lags,
+                            n_scale,
+                            n_test,
+                            alpha_level=config.alpha_level,
+                        )
+                        scale_y = np.log(scale_obs)
+                        test_y = np.log(test_obs)
+                        true_signal = np.log(config.zeta) + H * np.log(lags)
+                        true_scale = config.zeta * lags**H
+                        oracle_sigma0_sq_hat = (
+                            float(n_scale)
+                            * float(np.sum((true_scale * (scale_y - true_signal)) ** 2))
+                            / float(len(lags))
+                        )
+                        oracle_sigma0_hat = float(np.sqrt(oracle_sigma0_sq_hat))
+                        oracle_test = oracle_wls(
+                            test_y,
+                            lags,
+                            config.zeta,
+                            H,
+                            oracle_sigma0_hat,
+                            n_test,
+                        )
+                        oracle_split_statistic = residual_statistic(
+                            oracle_test.residuals, oracle_test.weights
+                        )
+                        oracle_split_critical_value = float(
+                            (len(lags) - 2)
+                            * f.ppf(
+                                1.0 - config.alpha_level,
+                                len(lags) - 2,
+                                len(lags),
+                            )
+                        )
+                        rejections += int(result.reject)
+                        bootstrap_rejections += int(bootstrap_result.reject)
+                        oracle_split_f_rejections += int(
+                            oracle_split_statistic > oracle_split_critical_value
+                        )
+                        split_f_rejections += int(split_result.reject)
+                        sigma0_hats.append(
+                            float(result.estimate.sigma0_hat)
+                            if result.estimate.sigma0_hat is not None
+                            else float("nan")
+                        )
+                        dfs.append(result.degrees_of_freedom)
+                    sigma0_hat_array = np.asarray(sigma0_hats, dtype=float)
+                    rows.append(
+                        Sigma0PluginRow(
+                            L=L,
+                            n=n,
+                            H=H,
+                            sigma0=sigma0,
+                            empirical_size_naive=float(rejections)
+                            / float(config.repetitions),
+                            empirical_size_bootstrap=float(bootstrap_rejections)
+                            / float(config.repetitions),
+                            empirical_size_oracle_split_f=float(
+                                oracle_split_f_rejections
+                            )
+                            / float(config.repetitions),
+                            empirical_size_split_f=float(split_f_rejections)
+                            / float(config.repetitions),
+                            mean_sigma0_hat=float(np.nanmean(sigma0_hat_array)),
+                            mean_sigma0_hat_ratio=float(np.nanmean(sigma0_hat_array))
+                            / float(sigma0),
+                            mean_df_naive=float(np.mean(np.asarray(dfs, dtype=float))),
+                        )
+                    )
     return rows
 
 

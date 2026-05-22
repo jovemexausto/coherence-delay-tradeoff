@@ -15,6 +15,7 @@ from .experiments import (
     NoiseRobustnessConfig,
     NullCalibrationConfig,
     RateConstantConfig,
+    Sigma0PluginConfig,
 )
 from .report import generate_v1_reports
 
@@ -163,6 +164,7 @@ def generate_v1_figures(
     rate_config: RateConstantConfig | None = None,
     misspec_config: MisspecificationConfig | None = None,
     noise_config: NoiseRobustnessConfig | None = None,
+    sigma0_plugin_config: Sigma0PluginConfig | None = None,
 ) -> dict[str, Path]:
     rows = generate_v1_reports(
         output_root,
@@ -172,6 +174,7 @@ def generate_v1_figures(
         rate_config=rate_config,
         misspec_config=misspec_config,
         noise_config=noise_config,
+        sigma0_plugin_config=sigma0_plugin_config,
     )
     null_path = _figure_path(output_root, "fig_null_calibration.pdf")
     fwls_path = _figure_path(output_root, "fig_fwls_oracle_gap.pdf")

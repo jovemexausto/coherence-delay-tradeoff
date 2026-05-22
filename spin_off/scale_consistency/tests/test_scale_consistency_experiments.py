@@ -7,10 +7,12 @@ from scale_consistency.experiments import (
     FWLSOracleConfig,
     NullCalibrationConfig,
     RateConstantConfig,
+    Sigma0PluginConfig,
     run_boundary_power_experiment,
     run_fwls_oracle_experiment,
     run_null_calibration_experiment,
     run_rate_constant_experiment,
+    run_sigma0_plugin_experiment,
 )
 
 
@@ -51,6 +53,26 @@ class ScaleConsistencyExperimentsTest(unittest.TestCase):
         self.assertEqual(len(rows), 2)
         self.assertTrue(all(row.scaled_constant > 0.0 for row in rows))
         self.assertTrue(all(row.information_scale > 0.0 for row in rows))
+
+    def test_sigma0_plugin_experiment_returns_rows(self) -> None:
+        rows = run_sigma0_plugin_experiment(
+            Sigma0PluginConfig(
+                L_values=(10,),
+                n_values=(500,),
+                repetitions=20,
+                bootstrap_repetitions=20,
+            )
+        )
+        self.assertEqual(len(rows), 1)
+        self.assertGreaterEqual(rows[0].empirical_size_naive, 0.0)
+        self.assertLessEqual(rows[0].empirical_size_naive, 1.0)
+        self.assertGreaterEqual(rows[0].empirical_size_bootstrap, 0.0)
+        self.assertLessEqual(rows[0].empirical_size_bootstrap, 1.0)
+        self.assertGreaterEqual(rows[0].empirical_size_oracle_split_f, 0.0)
+        self.assertLessEqual(rows[0].empirical_size_oracle_split_f, 1.0)
+        self.assertGreaterEqual(rows[0].empirical_size_split_f, 0.0)
+        self.assertLessEqual(rows[0].empirical_size_split_f, 1.0)
+        self.assertGreater(rows[0].mean_sigma0_hat, 0.0)
 
 
 if __name__ == "__main__":

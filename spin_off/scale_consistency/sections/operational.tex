@@ -1,11 +1,65 @@
 \section{Operational Implication}
 \label{sec:application}
 
-The inferred scale law supplies a low-dimensional summary of lagged transport
-geometry for downstream memory rules.  In particular, when the power-law
-family is not rejected, the estimated pair $(\widehat\zeta, \widehat H)$ can
-serve as an input to horizon-based memory laws.  Under
-\Cref{ass:signal,ass:sigma,ass:lags}, the adequacy test has type-I error
-rate at most $\alpha = 5\%$, power tending to one above the boundary
-$\kappa^* = C_1\bigl(n\sum_{j \leq L} j^{2H}\bigr)^{-1/2}$, and no tuning of
-$H$ required.
+The unknown-scale problem admits a clean decoupled benchmark under sample
+splitting. Let block $A$ and block $B$ be independent copies of the Gaussian
+observation model under $H_0$, with effective sample sizes $n_A$ and $n_B$.
+Write $x_j = \log j$ and $\alpha = \log \zeta$.
+
+\begin{proposition}[Oracle Split-$F$ Benchmark]
+\label{prop:oracle-split-f}
+Assume that the power-law profile $(\alpha,H)$ is known and define the scale
+estimator on block $A$ by
+\[
+    \hat\sigma_{A}^{2}
+    :=
+    \frac{n_A}{L}
+    \sum_{j=1}^{L} D_j^2\bigl(Y^{A}_{j} - \alpha - Hx_j\bigr)^2.
+\]
+On block $B$, form the oracle weighted residual statistic
+\[
+    Q_{B,\mathrm{split}}^*
+    :=
+    \sum_{j=1}^{L} \hat w^{(A)}_j \bigl(U^{*(B)}_j\bigr)^2,
+    \qquad
+    \hat w^{(A)}_j = \frac{n_B D_j^2}{\hat\sigma_A^2},
+\]
+where $U^{*(B)}_j$ are the oracle WLS residuals computed on block $B$.
+Then
+\[
+    Q_{B,\mathrm{split}}^* \sim (L-2)\,F_{L-2,L}
+\]
+exactly.
+\end{proposition}
+
+\begin{proof}
+Under $H_0$,
+\[
+    \frac{n_A}{\sigma_0^2}
+    \sum_{j=1}^{L} D_j^2\bigl(Y^{A}_{j} - \alpha - Hx_j\bigr)^2
+    \sim \chi^2_L,
+\]
+because the block-$A$ coordinates are independent centered Gaussians with known
+mean and variance $\sigma_0^2/(n_A D_j^2)$. On block $B$, oracle WLS projects
+onto a two-dimensional regression space, so
+\[
+    \frac{1}{\sigma_0^2} Q_{B,\mathrm{oracle}}^* \sim \chi^2_{L-2}
+\]
+with independence from block $A$. Since
+\[
+    Q_{B,\mathrm{split}}^*
+    =
+    \frac{\sigma_0^2}{\hat\sigma_A^2} Q_{B,\mathrm{oracle}}^*
+    =
+    \frac{L\,\chi^2_{L-2}}{\chi^2_L},
+\]
+the stated $F$ law follows.
+\end{proof}
+
+This proposition identifies the natural benchmark for unknown $\sigma_0$ under
+decoupled scale estimation. Appendix Table~\ref{tab:sigma0-plugin} shows three
+distinct regimes on the tested grid: naive same-sample $\chi^2$ calibration
+collapses to near-zero rejection, the oracle split-$F$ benchmark remains close
+to nominal size, and the fully feasible split-$F$ procedure is conservative.
+The same table shows that same-sample parametric bootstrap restores near-nominal
+size for the operational procedure.

@@ -10,9 +10,12 @@ while the feasible statistic relies on a delta-method approximation. A
 nonasymptotic bound for the gap $Q-Q^*$ would quantify the finite-$n$ cost of
 feasibility.
 
-\item \textbf{Unknown $\sigma_0$.} The main theorems treat $\sigma_0$ as fixed.
-A full finite-sample correction for plug-in scale estimation should formalize the
-degrees-of-freedom adjustment already suggested by the model.
+\item \textbf{Unknown $\sigma_0$.} A pilot plug-in estimator gives a
+self-normalized path for inference, and a parametric bootstrap yields stable
+calibration on the tested grid. The oracle split-$F$ benchmark isolates a clean
+decoupled route, but the fully feasible split-$F$ procedure remains
+conservative. A theorem for the same-sample null law, or for the bootstrap
+validity itself, remains open.
 
 \item \textbf{Cross-lag dependence.} Shared present-time sampling induces
 covariance across lags. The diagonal model is conservative, but a covariance-

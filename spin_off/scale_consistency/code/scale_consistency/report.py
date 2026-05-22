@@ -11,12 +11,14 @@ from .experiments import (
     MisspecificationConfig,
     NoiseRobustnessConfig,
     RateConstantConfig,
+    Sigma0PluginConfig,
     run_boundary_power_experiment,
     run_fwls_oracle_experiment,
     run_misspecification_experiment,
     run_noise_robustness_experiment,
     run_null_calibration_experiment,
     run_rate_constant_experiment,
+    run_sigma0_plugin_experiment,
 )
 
 
@@ -93,6 +95,7 @@ def generate_v1_reports(
     rate_config: RateConstantConfig | None = None,
     misspec_config: MisspecificationConfig | None = None,
     noise_config: NoiseRobustnessConfig | None = None,
+    sigma0_plugin_config: Sigma0PluginConfig | None = None,
 ) -> dict[str, list[Any]]:
     csv_root = output_root / "csv" / "scale_consistency"
     table_root = output_root / "tables" / "scale_consistency"
@@ -115,6 +118,9 @@ def generate_v1_reports(
     noise_rows = run_noise_robustness_experiment(
         NoiseRobustnessConfig() if noise_config is None else noise_config
     )
+    sigma0_plugin_rows = run_sigma0_plugin_experiment(
+        Sigma0PluginConfig() if sigma0_plugin_config is None else sigma0_plugin_config
+    )
 
     export_rows_csv(null_rows, csv_root / "null_calibration.csv")
     export_rows_csv(fwls_rows, csv_root / "fwls_oracle.csv")
@@ -122,6 +128,7 @@ def generate_v1_reports(
     export_rows_csv(rate_rows, csv_root / "rate_constant.csv")
     export_rows_csv(misspec_rows, csv_root / "misspecification.csv")
     export_rows_csv(noise_rows, csv_root / "noise_robustness.csv")
+    export_rows_csv(sigma0_plugin_rows, csv_root / "sigma0_plugin.csv")
 
     write_latex_table(
         null_rows,
@@ -208,6 +215,23 @@ def generate_v1_reports(
         label="tab:noise-robustness",
         column_spec="lrrr",
     )
+    write_latex_table(
+        sigma0_plugin_rows,
+        table_root / "tab_sigma0_plugin.tex",
+        columns=[
+            ("L", "$L$"),
+            ("n", "$n$"),
+            ("empirical_size_naive", "Naive size"),
+            ("empirical_size_bootstrap", "Bootstrap size"),
+            ("empirical_size_oracle_split_f", "Oracle split-$F$ size"),
+            ("empirical_size_split_f", "Split-$F$ size"),
+            ("mean_sigma0_hat_ratio", "Mean $\hat\sigma_0/\sigma_0$"),
+            ("mean_df_naive", "Mean naive d.f."),
+        ],
+        caption="Unknown-$\sigma_0$ calibration under pilot plug-in estimation: naive $\chi^2$, parametric bootstrap, oracle split-$F$, and feasible split-$F$ calibrations.",
+        label="tab:sigma0-plugin",
+        column_spec="rrrrrrrr",
+    )
 
     return {
         "null": null_rows,
@@ -216,6 +240,7 @@ def generate_v1_reports(
         "rate_constant": rate_rows,
         "misspecification": misspec_rows,
         "noise_robustness": noise_rows,
+        "sigma0_plugin": sigma0_plugin_rows,
     }
 
 

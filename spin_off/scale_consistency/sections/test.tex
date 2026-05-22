@@ -9,7 +9,7 @@ Define the \emph{residual-based adequacy statistic}
     \label{eq:Q-stat}
 \end{equation}
 where $\hat w_j$ and $\hat U_j$ are produced by the two-step FWLS procedure in
-\Cref{tab:fwls-procedure}.
+\Cref{alg:fwls}.
 
 \begin{theorem}[Exact Oracle Null Law and Feasible Asymptotic Null Law]
 \label{thm:null-chi2}
@@ -93,11 +93,9 @@ projected covariance. The distribution is therefore a weighted sum of centered
 $\chi^2(1)$ terms.
 \end{proof}
 
-\begin{remark}[Correction to the previous draft]
-    Earlier text described the alternative law of $Q^*$ as non-central
-    $\chi^2$.  That description is incorrect for the present model: non-central
-    $\chi^2$ behavior arises from mean shifts, whereas \eqref{eq:Q-stat} under
-    $H_1$ reflects covariance inflation.  The information-scale boundary and the
-    oracle-equivalence result are unchanged; only the interpretation of the
-    alternative law is corrected.
-\end{remark}
+    \begin{remark}
+    The alternative law of $Q^*$ is a variance-inflated quadratic form, not a
+    non-central $\chi^2$.  Non-centrality arises from mean shifts, whereas
+    \eqref{eq:Q-stat} under $H_1$ reflects covariance inflation.  The
+    information-scale boundary and the oracle-equivalence result are unchanged.
+    \end{remark}

@@ -11,6 +11,7 @@ from scale_consistency.experiments import (
     NoiseRobustnessConfig,
     NullCalibrationConfig,
     RateConstantConfig,
+    Sigma0PluginConfig,
 )
 from scale_consistency.plots import generate_v1_figures
 from scale_consistency.report import generate_v1_reports
@@ -37,6 +38,9 @@ class ScaleConsistencyReportingTest(unittest.TestCase):
                 "noise_config": NoiseRobustnessConfig(
                     noise_models=("gaussian", "bounded"), repetitions=10
                 ),
+                "sigma0_plugin_config": Sigma0PluginConfig(
+                    L_values=(10,), n_values=(200,), repetitions=10
+                ),
             }
             report_rows = generate_v1_reports(output_root, **kwargs)
             figure_paths = generate_v1_figures(output_root, **kwargs)
@@ -49,6 +53,7 @@ class ScaleConsistencyReportingTest(unittest.TestCase):
                     "rate_constant",
                     "misspecification",
                     "noise_robustness",
+                    "sigma0_plugin",
                 },
             )
             self.assertTrue(
