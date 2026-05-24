@@ -1,6 +1,6 @@
 \section{Related Work}\label{sec:related}
 
-\paragraph{Nonstationary optimization and dynamic regret.}
+\paragraph{Drifted optimization and regret.}
 Dynamic-regret and variation-budget analyses show that under drift, forgetting
 scales and window lengths must adapt to how quickly the target moves
 \citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,YuanLamperski2020,
@@ -8,14 +8,14 @@ MazzettoUpfal2023,WangXieChenLuiZhou2024}. The object studied here is earlier in
 pipeline: it asks how long retained evidence remains temporally valid before age
 becomes the dominant source of tracking error.
 
-\paragraph{Adaptive windowing and drift detection.}
+\paragraph{Adaptive windows and detection.}
 Adaptive-window and concept-drift methods study when accumulated evidence is
 sufficient to react \citep{BifetGavalda2007,Gama2004,GamaSurvey2014}. Those works
 provide the reaction timescale. The horizon law adds the validity timescale:
 retained evidence can cease to represent the present before change statistics
 cross an alarm threshold.
 
-\paragraph{Adaptive filtering and locally stationary smoothing.}
+\paragraph{Filtering and local smoothing.}
 Classical adaptive filtering and state-space tracking tune forgetting factors,
 gain schedules, or process-noise levels to balance smoothing against
 responsiveness \citep{Kalman1960,Jazwinski1970}. Locally stationary smoothing
@@ -25,7 +25,7 @@ supply mechanisms for adaptation. The horizon law provides the distributional
 law that such mechanisms must respect when the retained object is an empirical
 distribution.
 
-\paragraph{Transport geometry and operational calibration.}
+\paragraph{Transport geometry.}
 Wasserstein distance and Sinkhorn-type estimators provide the finite-sample
 geometries that enter the horizon law \citep{FournierGuillin2015,
 BoissardLeGouic2014,NilesWeedBach2019,GenevayEtAl2019,MenaWeed2019,
@@ -35,7 +35,7 @@ dimension and regularization calibration determine which regime is available
 \citep{KolouriRohdeHoffmann2018,DeshpandeEtAl2019,PatyCuturi2019,
 LinEtAl2020,NadjahiEtAl2020,NietertEtAl2022,GenansWintenberger2026,FaccoEtAl2017}.
 
-\paragraph{Age and nonstationarity.}
+\paragraph{Age and drift.}
 Wasserstein nonstationarity measures and Age-of-Information formulations make
 age into an operational variable \citep{JiangLiZhang2020,
 KeehanAndersonWiesemann2025,AminiVinas2026,KaulYatesGruteser2012,
