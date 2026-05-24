@@ -41,6 +41,7 @@ umh-generate-gaussian = "useful_memory_horizon.gaussian:main"
 umh-generate-roughness = "useful_memory_horizon.roughness_family:main"
 umh-generate-invalidity-gap = "useful_memory_horizon.invalidity_gap:main"
 umh-generate-finite-sample = "useful_memory_horizon.finite_sample_geometry:main"
+umh-run-inferable-horizon = "useful_memory_horizon.inferable_horizon:main"
 
 [tool.setuptools]
 package-dir = {"" = "code"}

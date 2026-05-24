@@ -81,6 +81,70 @@ WLS estimator}: the pilot estimation error inflates neither the asymptotic
 variance nor the rate.
 \end{theorem}
 
+\begin{corollary}[Joint law and smooth downstream functionals]
+\label{cor:joint-law-smooth-functional}
+Under \Cref{ass:signal,ass:sigma,ass:lags},
+\[
+  n^{1/2}
+  \begin{pmatrix}
+    \hat\alpha-\alpha \\
+    \Hhat-H
+  \end{pmatrix}
+  \dto
+  \calN\!\left(
+    \mathbf 0,
+    \frac{\sigma_0^2}{\zeta^2\Delta_H}
+    \begin{pmatrix}
+      R_2(H) & -R_1(H) \\
+      -R_1(H) & R_0(H)
+    \end{pmatrix}
+  \right),
+\]
+where
+\[
+  R_k(H) = \sum_{j=1}^L j^{2H}(\log j)^k,
+  \qquad
+  \Delta_H = R_0(H)R_2(H)-R_1(H)^2.
+\]
+Equivalently,
+\[
+  \sqrt{\mathcal I_{n,L}(H)}
+  \begin{pmatrix}
+    \hat\alpha-\alpha \\
+    \Hhat-H
+  \end{pmatrix}
+  \dto \calN(\mathbf 0,\Sigma_{L,H,\zeta}),
+\]
+with
+\[
+  \Sigma_{L,H,\zeta}
+  =
+  \frac{\sigma_0^2R_0(H)}{\zeta^2\Delta_H}
+  \begin{pmatrix}
+    R_2(H) & -R_1(H) \\
+    -R_1(H) & R_0(H)
+  \end{pmatrix}.
+\]
+Therefore, for any $C^1$ map $g$ defined on a neighborhood of
+$(\alpha,H)$,
+\[
+  \sqrt{\mathcal I_{n,L}(H)}
+  \bigl(g(\hat\alpha,\Hhat)-g(\alpha,H)\bigr)
+  \dto
+  \calN\!\left(
+    0,
+    \nabla g(\alpha,H)^\top \Sigma_{L,H,\zeta}\nabla g(\alpha,H)
+  \right).
+\]
+\end{corollary}
+
+\begin{proof}
+The weighted least-squares normal equations are two-dimensional. Inverting the
+oracle information matrix gives the displayed covariance formula, and the same
+perturbation argument as in \Cref{thm:clt-fwls} transfers the law from oracle WLS
+to FWLS. The final claim is the multivariate delta method.
+\end{proof}
+
 \begin{remark}[$\sigma_0$ unknown]
     When $\sigma_0$ is unknown, a pilot plug-in estimate constructed from the
     residual scale yields a self-normalized FWLS fit. In the adequacy test,

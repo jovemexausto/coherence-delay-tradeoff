@@ -39,9 +39,17 @@ and bandwidth selection solve the analogous bias--variance problem for evolving
 regression or spectral targets \citep{Dahlhaus1997,Vogt2012}. Recent Wasserstein-
 based results for locally stationary functional time series move that same local
 windowing logic directly into a transport metric \citep{TinioAlayaBouzebda2025}.
-These literatures supply mechanisms for adaptation. The present work contributes the distributional law
+These literatures supply mechanisms for adaptation. The horizon law provides the distributional law
 that such mechanisms must respect when the retained object is an empirical
 distribution rather than a latent state or a local regression surface.
+
+Lag-geometry inference under noisy transport observations is complementary to
+that structural law. 
+\citet{Parreira2026Jul} study power-law lag geometry through a parameter-coupled
+heteroscedastic regression, deriving an information law for estimating
+$(H,\zeta)$ and testing the adequacy of the lag model itself. That inferential
+layer supplies one route for estimating the roughness inputs that enter the
+horizon law developed here.
 
 \paragraph{Distribution tracking under transport geometry.}
 Wasserstein distance and Sinkhorn-type estimators provide the finite-sample
@@ -119,7 +127,7 @@ technical ancestor for the weighted-memory summaries $n_{\mathrm{eff}}(w)$ and
 $M_H(w)$ used here.
 
 Across these neighboring literatures, the shared theme is that
-nonstationarity makes retention scale matter. The present work identifies the
+nonstationarity makes retention scale matter. The horizon law identifies the
 statistical object that organizes that dependence for distribution tracking: a
 temporal-validity horizon, together with a useful-memory region and a distinct
 detectability timescale.

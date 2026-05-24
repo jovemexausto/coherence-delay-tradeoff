@@ -1,0 +1,175 @@
+\section{Inferable Horizons}
+\label{sec:inferable_horizons}
+
+The horizon law is structural, but its operational use requires more than the
+existence of an optimizer. A data-driven memory rule needs estimators of the
+drift-geometry parameters $(H,\zeta)$, together with a quantitative criterion
+that compares inferential resolution to the curvature of the useful-memory
+region. This section records that bridge.
+
+Write $\alpha = \log \zeta$, and let $m$ denote the per-lag sample size used to
+estimate lagged transport discrepancies. For a fixed lag design
+$1,\dots,L$, define the lag-energy information scale
+\[
+  \mathcal I_{m,L}(H) \coloneqq m\sum_{j=1}^L j^{2H}.
+\]
+
+\begin{assumption}[Lag-geometry inference input]
+\label{ass:lag_geometry_input}
+For the lag model $D_j = \zeta j^H$, suppose there are estimators
+$(\widehat \alpha_{m,L},\widehat H_{m,L})$ such that, on compact parameter sets,
+\[
+  \sqrt{\mathcal I_{m,L}(H)}
+  \begin{pmatrix}
+    \widehat \alpha_{m,L} - \alpha \\
+    \widehat H_{m,L} - H
+  \end{pmatrix}
+  \Rightarrow \mathcal N(\mathbf 0, \Sigma_{L,H,\zeta}).
+\]
+\end{assumption}
+
+The power-law lag-geometry model of \citet{Parreira2026Jul} provides one
+concrete source of this assumption.
+
+The continuous optimizer of the horizon envelope can be written as the smooth
+map
+\[
+  n_\star(\alpha,H)
+  = \left(\frac{aC_K}{H C_S e^{\alpha}}\right)^{1/(a+H)},
+\]
+\[
+  g(\alpha,H) \coloneqq \log n_\star(\alpha,H).
+\]
+Its gradient is
+\[
+  \nabla g(\alpha,H)
+  =
+  \begin{pmatrix}
+    -(a+H)^{-1} \\
+    -\bigl[H(a+H)\bigr]^{-1} - g(\alpha,H)(a+H)^{-1}
+  \end{pmatrix}.
+\]
+
+\begin{theorem}[Plug-in Horizon Central Limit Law]
+\label{thm:plugin_horizon_clt}
+Under \Cref{ass:lag_geometry_input},
+\[
+  \sqrt{\mathcal I_{m,L}(H)}
+  \bigl(\log \widehat n_\star - \log n_\star\bigr)
+  \Rightarrow \mathcal N(0,\tau^2),
+\]
+where $\widehat n_\star = n_\star(\widehat \alpha_{m,L},\widehat H_{m,L})$ and
+\[
+  \tau^2
+  = \nabla g(\alpha,H)^\top \Sigma_{L,H,\zeta} \nabla g(\alpha,H).
+\]
+\end{theorem}
+
+\begin{proof}
+The map $g$ is smooth on any compact set bounded away from $H=0$ and
+$\zeta=0$. Apply the multivariate delta method to
+$(\widehat \alpha_{m,L},\widehat H_{m,L})$ under
+\Cref{ass:lag_geometry_input}.
+\end{proof}
+
+The useful-memory region is the set
+\[
+  \mathcal U_\delta = \{n : \Phi(n) \le (1+\delta)\Phi(n_\star)\}.
+\]
+Let $(x_-(\delta;a,H),x_+(\delta;a,H))$ be the normalized endpoints from
+\Cref{prop:useful_memory_region}, and define the log-radius
+\[
+  r_\delta(a,H)
+  \coloneqq
+  \min\bigl\{-\log x_-(\delta;a,H),\,\log x_+(\delta;a,H)\bigr\}.
+\]
+This quantity measures the operational tolerance of the horizon law: it is the
+largest symmetric log-error around $n_\star$ that stays inside the useful-memory
+region.
+
+\begin{theorem}[Operational Identifiability of Useful Memory]
+\label{thm:operational_identifiability}
+Under \Cref{ass:lag_geometry_input},
+\[
+  \mathbb{P}\bigl(\widehat n_\star \in \mathcal U_\delta\bigr)
+  =
+  2\Phi_{\mathcal N}\!\left(
+    \frac{\sqrt{\mathcal I_{m,L}(H)}\,r_\delta(a,H)}{\tau}
+  \right) - 1 + o(1),
+\]
+where $\Phi_{\mathcal N}$ is the standard normal CDF. In particular,
+\[
+  \frac{\sqrt{\mathcal I_{m,L}(H)}\,r_\delta(a,H)}{\tau(H,\zeta)} \to \infty
+  \quad \Longrightarrow \quad
+  \mathbb{P}\bigl(\widehat n_\star \in \mathcal U_\delta\bigr) \to 1.
+\]
+\end{theorem}
+
+\begin{proof}
+By \Cref{prop:useful_memory_region},
+$\widehat n_\star \in \mathcal U_\delta$ if and only if
+$|\log \widehat n_\star - \log n_\star| \le r_\delta(a,H)$. Standardize this
+event with \Cref{thm:plugin_horizon_clt} and use the symmetry of the Gaussian
+limit.
+\end{proof}
+
+The quantity
+\[
+  \mathfrak S_{\delta,m,L}
+  \coloneqq
+  \frac{\sqrt{\mathcal I_{m,L}(H)}\,r_\delta(a,H)}{\tau(H,\zeta)}
+\]
+is therefore the operational identifiability score of the horizon. It compares
+lag-geometry information to the curvature-imposed precision requirement of the
+useful-memory region.
+
+Appendix-style saturation is not informative here: the relevant comparison lies
+across the transition from low to moderate identifiability. Table
+\ref{tab:inferable_horizon} records representative regimes across that
+transition.
+
+\input{artifacts/tables/inferable_horizon/tab_inferable_horizon.tex}
+
+\begin{proposition}[Plug-in Horizon Regret]
+\label{prop:plugin_horizon_regret}
+Let $u = \log(\widehat n_\star/n_\star)$. Then, as $u \to 0$,
+\[
+  \frac{\Phi(\widehat n_\star)-\Phi(n_\star)}{\Phi(n_\star)}
+  = \frac{aH}{2}u^2 + O(u^3).
+\]
+Consequently,
+\[
+  \mathbb E\!
+  \left[
+    \frac{\Phi(\widehat n_\star)-\Phi(n_\star)}{\Phi(n_\star)}
+  \right]
+  = \frac{aH}{2}\frac{\tau^2}{\mathcal I_{m,L}(H)} + o\!\left(\mathcal I_{m,L}(H)^{-1}\right).
+\]
+\end{proposition}
+
+\begin{proof}
+By \Cref{prop:useful_memory_region},
+\[
+  \frac{\Phi(n_\star e^u)}{\Phi(n_\star)} = \Psi(e^u)
+  = \frac{H e^{-au} + a e^{Hu}}{a+H}.
+\]
+Differentiate at $u=0$. The first derivative vanishes and the second derivative
+equals $aH$, giving the quadratic expansion. The expectation bound then follows
+from \Cref{thm:plugin_horizon_clt} and the boundedness of third moments on
+compact parameter sets.
+\end{proof}
+
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=0.94\linewidth]{artifacts/figures/inferable_horizon/fig_operational_identifiability}
+\caption{Operational identifiability of useful memory. Across the tested grid,
+useful-region hit rates collapse against the score
+$\mathfrak S_{\delta,m,L} = \sqrt{\mathcal I_{m,L}(H)}r_\delta(a,H)/\tau(H,\zeta)$,
+matching the Gaussian approximation from \Cref{thm:operational_identifiability}.}
+\label{fig:inferable_horizon}
+\end{figure}
+
+This section separates two questions that need not agree. A temporal-validity
+horizon may exist structurally without being operationally identifiable from the
+available lag geometry. The gap between existence and operational inferability
+is governed by the score $\mathfrak S_{\delta,m,L}$.

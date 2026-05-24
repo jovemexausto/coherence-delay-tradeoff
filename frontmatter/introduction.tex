@@ -34,6 +34,12 @@ region: the memory lengths whose total tracking error remains within
 $(1+\delta)$ times the optimum. The horizon fixes the scale of that region, and
 its normalized shape depends only on the exponents $a$ and $H$.
 
+Operational use adds a second question. A horizon can exist structurally while
+still being statistically difficult to locate from noisy lagged transport
+discrepancies. The inferable-horizon layer developed below records that bridge:
+lag-geometry information must exceed the curvature scale of the useful-memory
+region for data-driven memory selection to be reliable.
+
 The tractable one-dimensional bounded-support fixed-span triangular-array model
 establishes the law through the quantile representation of $W_2^2$, a
 triangular-array Bahadur expansion, and a design-effect comparison. In that
@@ -77,5 +83,5 @@ validity and changepoint evidence are different statistical objects:
 retained evidence can stop representing the present before change becomes
 detectable. The neighboring literatures on regret, window adaptation, smoothing,
 filtering, and transport geometry isolate separate pieces of that story; the
-present work identifies the time scale on which retained evidence remains
+analysis here identifies the time scale on which retained evidence remains
 temporally valid before age becomes the dominant source of error.

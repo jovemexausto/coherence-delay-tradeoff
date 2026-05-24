@@ -5,7 +5,8 @@ tracking under drift, and the closed operational corollary is the induced
 useful-memory region. The theorem-level results are the general horizon law, the
 useful-memory region proposition, the uniform-window staleness bound, the
 one-dimensional root-$n$ proof model, the structural Gaussian lower bound at the
-exponent level, and the Gaussian location minimax benchmark. The remaining
+exponent level, the Gaussian location minimax benchmark, and the plug-in
+inferable-horizon laws for coverage and regret under lag-geometry input. The remaining
 claims are narrower.
 
 \paragraph{Finite-sample scope.}
@@ -55,9 +56,10 @@ whether those summaries support a robust constant improvement beyond the uniform
 window on more than one drift profile.
 
 \paragraph{Online roughness estimation.}
-The law is stated in terms of the roughness parameters $H$ and $\zeta$, but no
-fully online procedure is proposed here for estimating them or for keeping the
-memory inside the useful region under misspecification.
+The inferable-horizon section gives a batch plug-in law that propagates
+uncertainty from lag-geometry estimation into the selected horizon. What remains
+open is a fully online procedure for estimating $H$ and $\zeta$ and for keeping
+the memory inside the useful region under misspecification.
 
 \paragraph{Empirical scope.}
 The experiments are structurally motivated. Synthetic designs make the horizon
@@ -84,12 +86,12 @@ to prove the self-coupling stability bound in the embedded fixed-span model, and
 to lift the smooth transfer proposition to a transport-functional theorem with a
 verified Jacobian remainder bound.
 
-\paragraph{Problem 2: sharp lower theory beyond the current benchmark family.}
+\paragraph{Problem 2: sharp lower theory beyond the benchmark family.}
 The exact Gaussian constants are available within the proof scheme, but the
 class-tight lower-bound problem remains open for broader deterministic path
 classes and for alternative parametric deformations. The open problem is to
 extend the lower theory beyond the root-$n$ regime, beyond the location
-benchmark, and beyond the current class-level sharp constants.
+benchmark, and beyond the available class-level sharp constants.
 
 \paragraph{Problem 3: useful-memory design beyond uniform windows.}
 The analysis is built around uniform windows, but the weighted-memory theorem
@@ -106,10 +108,11 @@ This is the memory-design problem that links static window design to fully
 adaptive control.
 
 \paragraph{Problem 4: online estimation of roughness and scale.}
-A structural controller, an intrinsic-dimension statistic, and an aggregated-lag
-roughness estimate are available. The open problem is to derive convergence
-rates for online estimators of $H$ and $\zeta$ when transport discrepancies are
-themselves observed with finite-sample error. A concrete target is the log--log
+A batch plug-in horizon law is now available once a lag-geometry CLT is given.
+The remaining step is to derive convergence rates for online estimators of $H$
+and $\zeta$ when transport discrepancies are themselves observed with
+finite-sample error. A structural controller, an intrinsic-dimension statistic,
+and an aggregated-lag roughness estimate are available. A concrete target is the log--log
 estimator
 \[
   \widehat H_L
