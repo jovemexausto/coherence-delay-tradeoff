@@ -30,10 +30,27 @@ real-stream retention, and validity-detection separation. They do not identify
 detector-uniform delay laws or competitive end-to-end performance.
 
 \paragraph{Open problems.}
-Three fronts are open. The first is theorem closure for embedded Sinkhorn and
-richer multivariate transfer. The second is lower theory beyond the
-Gaussian benchmark and beyond the root-$n$ regime. The third is memory design
-and online control: when non-uniform weights enlarge the useful-memory region beyond
-constant factors, how to estimate $(H,\zeta)$ online under lag noise, and how to
-keep a data-driven controller inside the useful-memory region with high
-probability.
+The remaining frontier is organized by four questions.
+
+\begin{enumerate}[label=\textbf{(\arabic*)},leftmargin=*,itemsep=2pt,topsep=3pt]
+  \item \textbf{Embedded Sinkhorn closure.}
+  Prove the centered self-coupling stability lemma and the associated uniform
+  linearization bound needed to turn the conditional moderate-band embedded
+  fixed-$\varepsilon$ statement into a theorem.
+
+  \item \textbf{Multivariate transfer beyond finite families.}
+  Extend theorem-level transfer from finite projection families to richer
+  dominated multivariate classes, and determine how far this route can go toward
+  raw multivariate Wasserstein tracking.
+
+  \item \textbf{Lower theory beyond the Gaussian benchmark.}
+  Sharpen the lower theory beyond the current Gaussian location benchmark, both
+  for broader deterministic H\"older path classes and for finite-sample regimes
+  beyond root-$n$.
+
+  \item \textbf{Memory design and online control.}
+  Determine when non-uniform weights enlarge the useful-memory region beyond
+  constant factors, derive stable online estimators of $(H,\zeta)$ under lag
+  noise, and obtain high-probability guarantees that a data-driven controller
+  remains inside the useful-memory region.
+\end{enumerate}

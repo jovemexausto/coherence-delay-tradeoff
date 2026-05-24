@@ -1,82 +1,75 @@
 \section{Introduction}\label{sec:intro}
 
-Retained evidence under drift has two competing effects. Larger memory reduces
-finite-sample noise, but it also increases the age of the observations used to
-estimate the present. The resulting object is a temporal-validity horizon: the
-largest memory scale that remains useful before drift-induced staleness overtakes
-the remaining sampling gain.
+Retained evidence under drift is simultaneously informative and obsolete. Larger
+memory reduces finite-sample noise, but it also increases the age of the
+observations used to estimate the present. Finite-memory distribution tracking
+therefore has a temporal-validity horizon: a largest memory scale that remains
+useful before drift-induced staleness overtakes the remaining sampling gain.
 
-The horizon law takes the form
+This horizon is governed by the balance law
 \[
   \mathbb E\,d\!\left(\widehat P_t^{(n)},P_t\right)
   \leq
   C_K n^{-a} + C_S\zeta n^H,
 \]
-where $a>0$ is the finite-sample rate exponent of the chosen geometry and
-estimator, $H\in(0,1]$ is the temporal roughness exponent of the drift path,
-and $\zeta$ is the roughness amplitude. Balancing these terms yields the
-temporal-validity horizon
+where $a>0$ is the finite-sample rate exponent of the chosen geometry,
+$H\in(0,1]$ is the temporal roughness exponent of the drift path, and $\zeta$
+is the roughness amplitude. Balancing the finite-sample term against the
+staleness term yields the temporal-validity horizon
 \[
   n^*(a,H) \asymp (C_K/\zeta)^{1/(a+H)}.
 \]
-The horizon depends jointly on finite-sample geometry and on the temporal
-regularity with which drift accumulates staleness.
+The same envelope induces a useful-memory region: the memory lengths whose
+tracking error stays within a fixed factor of the optimum. Its normalized
+geometry depends only on $(a,H)$.
 
-At any fixed tolerance $\delta>0$, the same envelope induces a useful-memory
-region: the memory lengths whose total tracking error remains within a fixed
-factor of the optimum. Its normalized shape depends only on $(a,H)$.
+This object is structural, but operational use requires more than the existence
+of an optimizer. Memory selection from data depends on whether noisy lagged
+transport discrepancies can localize the horizon within the useful-memory
+region. That question leads to horizon inference and to an identifiability
+criterion for useful-memory selection.
 
-A horizon can exist structurally while still being statistically difficult to
-locate from noisy lagged transport discrepancies. The inferable-horizon layer
-makes that bridge explicit: lag-geometry information must exceed the curvature
-scale of the useful-memory region for data-driven memory selection to be
-reliable.
+The theorem line closes in a tractable one-dimensional bounded-support fixed-
+span triangular-array model. There, the quantile representation of $W_2^2$, a
+triangular-array Bahadur expansion, and a design-effect comparison yield a
+root-$n$ finite-sample term under explicit compact-support, fixed-span, and
+integrated-remainder hypotheses. A structural Gaussian lower bound shows that
+the horizon is imposed by drift geometry rather than by a particular estimator,
+and the Gaussian location model supplies a matching benchmark on deterministic
+H\"older paths. Beyond that proof model, finite projection families and sliced
+Wasserstein yield transfer results under uniform projected control, while in
+fixed-$\varepsilon$ Sinkhorn geometry one-dimensional inheritance is explicit on
+compact support and the embedded low-dimensional extension is reduced to a
+conditional theorem problem. Empirically, the same object appears through
+interior U-curves, roughness-dependent scaling, real-stream diagnostics, and
+validity loss before the first detector alarm.
 
-The tractable one-dimensional bounded-support fixed-span triangular-array model
-establishes the law through the quantile representation of $W_2^2$, a
-triangular-array Bahadur expansion, and a design-effect comparison. In that
-regime, the finite-sample term satisfies the root-$n$ rate
-\[
-  \mathbb E\,W_2\!\left(\widehat P_n^{\mathrm{tri}},\bar P_n\right)
-  = O(n^{-1/2}).
-\]
-under explicit compact-support, fixed-span, and integrated-remainder
-hypotheses. This yields a closed theorem line in a tractable one-dimensional
-bounded-support fixed-span model.
+Five contributions:
+\begin{enumerate}[label=\textbf{(\arabic*)},leftmargin=*,itemsep=2pt,topsep=3pt]
+  \item \textbf{Temporal-validity horizon and useful-memory region.}
+  The temporal-validity horizon governs finite-memory distribution tracking
+  under drift, together with a useful-memory region whose normalized geometry is
+  determined by $(a,H)$.
 
-The structural lower bound shows that the horizon is imposed by the drift
-geometry itself. A Gaussian lower-bound construction sharpens the constant-level
-geometry, and in the Gaussian location model the horizon yields a minimax
-benchmark on deterministic H\"older paths.
+  \item \textbf{Closed theorem line in a tractable proof model.}
+  A one-dimensional root-$n$ triangular-array proof model, the exact
+  uniform-window staleness bound, a structural Gaussian lower bound, and a
+  Gaussian location benchmark show that the horizon is structural.
 
-For fixed-$\varepsilon$ Sinkhorn geometry on an embedded fixed-span model, the
-proved structural ingredients yield one-dimensional inheritance results on
-compact support, while the embedded low-dimensional extension isolates the
-embedded operational gap.
+  \item \textbf{Transfer and operational geometry.}
+  Finite projection families and sliced geometries yield transfer theorems,
+  one-dimensional fixed-$\varepsilon$ Sinkhorn inheritance is proved, and the
+  embedded low-dimensional Sinkhorn step is isolated as a conditional theorem
+  problem.
 
-Broader regular distribution families and operational geometries support
-different finite-sample rates, and therefore different members of the horizon
-family. The compact-support one-dimensional proof model, the structural Gaussian
-lower bound, and the Gaussian location benchmark close the core law, while
-finite projection families, sliced Wasserstein, and fixed-$\varepsilon$ Sinkhorn
-exhibit transfer or operational versions of the horizon logic.
+  \item \textbf{Horizon inference and identifiability.}
+  Plug-in horizon inference yields an identifiability criterion for
+  useful-memory selection and a quadratic regret law for horizon mislocation.
 
-The temporal-validity horizon and the induced useful-memory region are the
-governing structural objects for finite-memory tracking under drift. Temporal
-validity and changepoint evidence are distinct statistical clocks: validity can
-fail before alarm. The inferable-horizon layer then propagates lag-geometry
-uncertainty into plug-in horizon coverage and operational regret.
+  \item \textbf{Empirical signatures of temporal validity.}
+  Empirical results exhibit interior U-curves, roughness-dependent scaling,
+  real-stream finite-memory diagnostics, and pre-detection validity loss.
+\end{enumerate}
 
-The finite-memory U-curve, roughness-dependent horizon scaling, the
-fixed-$\varepsilon$ Sinkhorn evidence, and the measurable lag between validity
-loss and the first detector alarm appear in the experiments. The neighboring
-literatures on regret, window adaptation, smoothing, filtering, and transport
-geometry isolate related pieces of that story; the analysis here identifies the
-time scale on which retained evidence remains temporally valid before temporal age
-becomes the dominant source of error.
-
-\Cref{sec:useful_memory_under_drift} develops the horizon law, useful-memory
-region, proof model, and structural benchmarks. \Cref{sec:inferable_horizons}
-gives the plug-in horizon bridge, and \Cref{sec:extensions_status} develops the
-extension and operational layer. Later sections present empirical
-signatures, literature placement, limitations, and conclusions.
+Memory length under drift is a statistical scale set jointly by finite-sample
+geometry and temporal roughness.

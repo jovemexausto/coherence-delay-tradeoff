@@ -65,7 +65,7 @@ function of drift regularity, not a fixed window rule.}
 The empirical optima separate by roughness class, matching the path-dependent
 horizon logic of \cref{cor:temporal_validity_horizon}.
 
-\subsection{Real-Stream Retention Diagnostic}
+\subsection{Real-Stream Memory Diagnostic}
 
 A similar signature appears on a real nonstationary stream. Using
 ELEC2, consider the one-dimensional marginal law of \texttt{nswprice}. At each time,
@@ -95,7 +95,7 @@ ratios between $1.31$ and $1.68$. An interior pattern also appears on the
 optimizing scale moves more substantially across segments and anchor lengths; see
 \Cref{tab:elec2_robustness}.
 
-\subsection{Moderate-Band Sinkhorn Evidence}
+\subsection{Moderate-Band Sinkhorn Diagnostics}
 \label{sec:empirical_sinkhorn_evidence}
 
 The fixed-$\varepsilon$ Sinkhorn experiments address the bandwise question: when
@@ -120,7 +120,7 @@ Intrinsic-dimension estimates from TwoNN track the stable-band cutoff better tha
 ambient dimension on the tested grid, so the regime-selection variable is local
 geometry rather than ambient dimension.
 
-\subsection{Validity Precedes Detection}\label{sec:empirical_validity_lag}
+\subsection{Validity Loss Before Detection}\label{sec:empirical_validity_lag}
 
 Temporal validity and changepoint evidence are different clocks. To make that
 separation explicit, consider a stream whose local drift rate ramps upward over
@@ -166,6 +166,6 @@ family, not a detector-uniform delay law; see
 
 \subsection{Empirical Summary}\label{sec:empirical_summary}
 The experiments support a structural U-curve with a near-optimal useful-memory
-region, roughness-dependent horizon scaling, the retention pattern on the
+region, roughness-dependent horizon scaling, a corresponding pattern on the
 ELEC2 stream, structured support for the fixed-$\varepsilon$ Sinkhorn frontier,
 and a measurable lag between validity loss and detector alarm.
