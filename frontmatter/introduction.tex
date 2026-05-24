@@ -36,7 +36,7 @@ its normalized shape depends only on the exponents $a$ and $H$.
 
 Operational use adds a second question. A horizon can exist structurally while
 still being statistically difficult to locate from noisy lagged transport
-discrepancies. The inferable-horizon layer developed below records that bridge:
+discrepancies. The inferable-horizon layer makes that bridge explicit:
 lag-geometry information must exceed the curvature scale of the useful-memory
 region for data-driven memory selection to be reliable.
 
@@ -72,9 +72,13 @@ multivariate root-$n$ transfer route under uniform projected control, and fixed-
 $\varepsilon$ Sinkhorn supplies an operational geometry in which the same horizon
 logic remains visible.
 
-Useful memory is the near-optimal finite-memory region induced by the
-temporal-validity horizon. It is the set of memory lengths whose total tracking
-error remains within a fixed multiplicative tolerance of the optimum.
+The temporal-validity horizon and the induced useful-memory region are the
+governing structural objects for finite-memory tracking under drift. The law is
+proved in a tractable one-dimensional root-$n$ model and matched with structural
+Gaussian lower theory. Temporal validity and changepoint evidence emerge as
+distinct statistical clocks, with validity capable of failing before alarm. An
+inferable-horizon layer then propagates lag-geometry uncertainty into plug-in
+horizon coverage and operational regret.
 
 The finite-memory U-curve, roughness-dependent horizon scaling, the
 fixed-$\varepsilon$ Sinkhorn evidence, and the measurable lag between validity
@@ -85,3 +89,11 @@ detectable. The neighboring literatures on regret, window adaptation, smoothing,
 filtering, and transport geometry isolate separate pieces of that story; the
 analysis here identifies the time scale on which retained evidence remains
 temporally valid before age becomes the dominant source of error.
+
+\Cref{sec:useful_memory_under_drift} develops the horizon law, useful-memory
+region, proof model, lower theory, and benchmark results. \Cref{sec:empirical_signatures}
+records the main empirical signatures. \Cref{sec:inferable_horizons} gives the
+plug-in horizon bridge, and
+\Cref{sec:online_adaptation,sec:limitations_open_problems,sec:related,sec:conclusion}
+close the operational frontier, limitations, literature boundary, and main
+conclusions.

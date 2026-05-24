@@ -1,51 +1,53 @@
 \section{Implications for Online Adaptation}\label{sec:online_adaptation}
 
-The horizon law identifies the quantities that any adaptive memory rule must
-track. A policy that updates memory online needs a finite-sample regime,
-represented by the exponent $a$ or by an operational exponent
-$a_{\varepsilon}$, together with a local roughness description of the recent
-path through the pair $(H,\zeta)$. Once these objects are available, the
-structural scale $n_\star$ and the useful-memory region $\mathcal U_\delta$
-follow directly from the horizon law.
+An online memory rule needs three ingredients: a finite-sample regime, a local
+drift geometry, and a criterion that relates estimation uncertainty to the
+curvature of the useful-memory region. The horizon law supplies the target once
+the regime parameter $a$ and the local roughness pair $(H,\zeta)$ are known.
+The inferable-horizon results identify the batch requirement: lag-geometry
+information must be strong enough to place the plug-in horizon inside the
+useful-memory region with high probability. The remaining online question is how
+to maintain that requirement under streaming noise and local nonstationarity.
 
-In operational geometries, local support structure enters before roughness
-estimation. The embedded fixed-$\varepsilon$ theory already shows that intrinsic
-complexity controls which finite-sample regime is available through the
-threshold $\alpha>k/2$. A local intrinsic-dimension statistic such as TwoNN
-therefore serves as a regime-selection statistic: it does not estimate the
-horizon by itself, but it selects the finite-sample law to which the horizon
-formula should be attached.
+In operational transport geometries, local support structure enters before
+roughness estimation. The embedded fixed-$\varepsilon$ theory shows that
+intrinsic complexity controls which finite-sample regime is available through
+the threshold $\alpha>k/2$. A local intrinsic-dimension diagnostic such as
+TwoNN therefore acts as a regime-selection statistic: it does not estimate the
+horizon directly, but it selects the finite-sample law to which the horizon map
+should be attached.
 
 The roughness side is a separate statistical task. In deterministic H\"older
-paths, $H$ and $\zeta$ govern how quickly staleness can accumulate with lag. A
-direct log--log fit to one short empirical sequence of transport discrepancies is
-too unstable to play that role reliably: single-path local motion, finite-sample
-noise, and short-lag discreteness all distort the envelope. The practical online
-object is therefore a stabilized roughness estimate built from aggregated recent
-  lags, together with an activity-style scale statistic for band selection.
+paths, $H$ and $\zeta$ govern how quickly staleness accumulates with lag. A
+single short log--log fit is too unstable to support online control reliably:
+local motion, finite-sample noise, and short-lag discreteness all distort the
+envelope. The natural online object is therefore a stabilized lag-geometry
+estimate built from aggregated recent lags. The companion lag-geometry paper
+\citep{Parreira2026Jul} gives the batch inferential law for that step; the open
+problem here is to obtain a rolling or recursively updated version with local
+stationarity guarantees.
 
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.94\linewidth]{artifacts/figures/online/fig_online_implications}
-\caption{Embedded geometry and online adaptation. Left: TwoNN recovers the
-intrinsic regime and aggregated lag statistics estimate $H$ far more accurately
-than endpoint slopes. Middle: the structural controller improves decisively on
-the naive plug-in rule and beats the activity and static baselines, although the
-broader validation-based adaptive hybrid remains stronger. Right: the structural
-controller tracks the contraction and expansion of the oracle window on the
-default phase profile.}
+\caption{Embedded geometry and online adaptation. Left: aggregated lag
+statistics estimate $H$ far more accurately than endpoint slopes in the tested
+low-intrinsic-dimensional regime. Middle: excess tracking error over the oracle
+controller, showing that the structural controller improves decisively on the
+direct plug-in rule and on the activity and static baselines, while the broader
+adaptive hybrid remains strongest. Right: oracle, structural, adaptive, and
+phase-averaged windows across the four drift phases of the default profile.}
 \label{fig:online_adaptation}
 \end{figure}
 
-That comparison also distinguishes two controller architectures. A direct plug-
-in rule based on a local slope and intercept is too unstable to be a useful
-online prescription. A more viable rule is structural: estimate the local regime
-with intrinsic geometry, estimate $H$ from aggregated lag discrepancies, use an
-  activity statistic for the current scale of motion, and then map those quantities to
- an admissible useful-memory band. In the synthetic study, that
-structural controller improves substantially on the naive plug-in rule and on a
-pure activity baseline, even though a wider validation-based hybrid remains more
-accurate.
+The comparison in \Cref{fig:online_adaptation} separates two controller
+architectures. A direct plug-in rule based on a local slope and intercept is too
+unstable to be useful. A structural controller first selects the finite-sample
+regime, then estimates roughness from aggregated lag discrepancies, and finally
+maps those quantities into an admissible useful-memory band. On the synthetic
+phase profile, that controller improves substantially on the naive plug-in rule
+and on a pure activity baseline, although the broader validation-based hybrid
+remains more accurate.
 
 On any compact parameter range with $H$ bounded away from zero and $\zeta$
 bounded above and below, the map
@@ -53,13 +55,17 @@ bounded above and below, the map
   (H,\zeta) \mapsto n_\star(H,\zeta)
   = \left(\frac{aC_K}{H C_S\zeta}\right)^{1/(a+H)}
 \]
-is Lipschitz in $(H,\log \zeta)$ after taking logarithms. Small estimation error
-in the roughness class therefore produces only a controlled multiplicative error
-in the plug-in horizon. The remaining difficulty is the scale variable: a local
-  activity statistic is good enough to produce a useful controller, but not yet stable
-enough to match the stronger validation-based hybrid.
+is Lipschitz in $(H,\log \zeta)$ after taking logarithms. The inferable-horizon
+section sharpens this qualitative statement: online adaptation is viable only
+when the rolling lag-geometry estimate is precise relative to the log-radius of
+the useful-memory region. The remaining difficulty is the scale variable: a
+local activity statistic is good enough to produce a useful controller, but not
+yet stable enough to match the stronger validation-based hybrid.
 
-The online problem is therefore structurally well posed. The horizon law
-supplies the target for adaptation; the remaining task is to estimate its
-ingredients with guarantees strong enough to keep a data-driven memory rule
-inside the useful-memory region.
+The online problem is therefore a two-error problem. One term comes from
+statistical uncertainty in the estimated lag geometry; the other comes from the
+parameter drift accumulated within the estimation window itself. The horizon law
+supplies the target for adaptation, and the inferable-horizon results supply the
+batch bridge from lag geometry to memory choice. A time-uniform guarantee that
+combines those two errors and keeps a data-driven memory rule inside the
+useful-memory region remains open.

@@ -88,11 +88,12 @@ def write_representative_coverage_table(
     lines = [
         r"\begin{table}[!htbp]",
         r"\centering",
-        r"\caption{Representative inferable-horizon regimes across the operational identifiability transition.}",
+        r"\small",
+        r"\caption{Representative regimes across the inferable-horizon transition.}",
         r"\label{tab:inferable_horizon}",
         r"\begin{tabular}{rrrrrrr}",
         r"\toprule",
-        r"$L$ & $m$ & $H$ & $\delta$ & $\mathfrak S_{\delta,m,L}$ & Empirical & Gaussian \\",
+        r"$L$ & $m$ & $H$ & $\delta$ & $\mathfrak S$ & Empirical & Gaussian \\",
         r"\midrule",
     ]
     for row in rows:

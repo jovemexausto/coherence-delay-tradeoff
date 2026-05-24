@@ -1,24 +1,21 @@
 \begin{abstract}
-We investigate the fundamental limits of tracking an evolving distribution under
-temporal drift. Longer memory reduces finite-sample estimation noise but also
-introduces staleness through age mismatch with the present state. This balance is
-formalized by a finite temporal-validity horizon, which induces a near-optimal
-useful-memory region around the scale $n^*(a,H) \asymp (C_K/\zeta)^{1/(a+H)}$;
-the finite-sample rate exponent $a$ and the temporal roughness exponent $H$
-govern the expansion and contraction of that region. Under explicit compact-
-support and fixed-span assumptions, a tractable one-dimensional proof model
-yields a root-$n$ finite-sample term, with verifiable sufficient conditions for
-the integrated Bahadur remainder on a smooth deformation class. A Gaussian lower
-bound shows that the boundary is structural rather than estimator-specific, and
-the corresponding Gaussian location model admits a minimax benchmark theorem on
-deterministic H\"older paths. Beyond one dimension, sliced or coordinate-
-averaged Wasserstein gives a multivariate root-$n$ transfer route under uniform
-projected control. A plug-in horizon law then propagates lag-geometry
-uncertainty into memory selection, yielding an operational identifiability
-criterion and a quadratic regret expansion for inferred horizons. Finally,
-empirical evidence confirms the predicted interior memory optima,
-roughness-dependent scaling, the same retention signature on a real stream, and
-a measurable lag between the loss of temporal validity and the activation of
+We study the temporal validity of retained evidence for distribution tracking
+under drift. Longer memory reduces finite-sample noise but also ages the
+evidence, producing the horizon law
+\[
+  \mathbb E\,d\!\left(\widehat P_t^{(n)},P_t\right)
+  \le C_K n^{-a} + C_S\zeta n^H,
+\]
+with optimal scale $n_\star(a,H) \asymp (C_K/\zeta)^{1/(a+H)}$. This law induces
+a useful-memory region of near-optimal window lengths whose normalized geometry
+depends only on $(a,H)$. In a tractable one-dimensional root-$n$ proof model we
+establish the upper law, and a Gaussian lower-bound construction shows that the
+horizon is structural rather than estimator-specific. We then add an
+inferable-horizon layer: when lag geometry is estimated from noisy transport
+discrepancies, plug-in horizon uncertainty is governed by an operational
+identifiability criterion and yields a quadratic regret law for memory
+selection. Experiments show an interior U-curve, roughness-dependent scaling, a
+real-stream retention signature, and a positive lag between validity loss and
 standard changepoint alarms.
 \end{abstract}
 
