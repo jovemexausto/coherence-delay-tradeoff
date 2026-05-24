@@ -6,7 +6,10 @@ from pathlib import Path
 
 from .common import export_rows_csv
 from .operational_regime_frontier import map_operational_regime
-from .operational_theorem_frontier import maximal_theorem_ready_epsilon_band
+from .operational_theorem_frontier import (
+    certify_structural_operational_region,
+    maximal_theorem_ready_epsilon_band,
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -46,6 +49,18 @@ def run_sinkhorn_theorem_ready_band_report(
             holder_smoothness_alpha=holder_smoothness_alpha,
             span=span,
         )
+        certificate = (
+            None
+            if theorem_ready_epsilon_max is None
+            else certify_structural_operational_region(
+                rows,
+                ambient_dim=ambient_dim,
+                intrinsic_dim=intrinsic_dim,
+                epsilon_max=theorem_ready_epsilon_max,
+                holder_smoothness_alpha=holder_smoothness_alpha,
+                span=span,
+            )
+        )
         report_rows.append(
             {
                 "ambient_dim": ambient_dim,
@@ -53,6 +68,21 @@ def run_sinkhorn_theorem_ready_band_report(
                 "holder_smoothness_alpha": holder_smoothness_alpha,
                 "span": span,
                 "theorem_ready_epsilon_max": theorem_ready_epsilon_max,
+                "rows_in_band": "" if certificate is None else certificate.rows_in_band,
+                "min_iid_a": "" if certificate is None else certificate.min_iid_a,
+                "min_triangular_a": ""
+                if certificate is None
+                else certificate.min_triangular_a,
+                "max_gap": "" if certificate is None else certificate.max_gap,
+                "critical_smoothness_alpha": ""
+                if certificate is None
+                else certificate.critical_smoothness_alpha,
+                "exact_complexity_inheritance": ""
+                if certificate is None
+                else certificate.exact_complexity_inheritance,
+                "parametric_region_holds": ""
+                if certificate is None
+                else certificate.parametric_region_holds,
             }
         )
     return report_rows

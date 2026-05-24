@@ -5,7 +5,10 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from .common import export_rows_csv
-from .operational_region_thresholds import maximal_stable_epsilon_band
+from .operational_region_thresholds import (
+    certify_operational_epsilon_band,
+    maximal_stable_epsilon_band,
+)
 from .operational_regime_frontier import map_operational_regime
 
 
@@ -49,13 +52,31 @@ def derive_bandwise_sinkhorn_frontier(
     ]
     band_summary = []
     for ambient_dim, intrinsic_dim in pairs:
+        epsilon_max = maximal_stable_epsilon_band(
+            rows, ambient_dim=ambient_dim, intrinsic_dim=intrinsic_dim
+        )
+        certificate = (
+            None
+            if epsilon_max is None
+            else certify_operational_epsilon_band(
+                rows,
+                ambient_dim=ambient_dim,
+                intrinsic_dim=intrinsic_dim,
+                epsilon_max=epsilon_max,
+            )
+        )
         band_summary.append(
             {
                 "ambient_dim": ambient_dim,
                 "intrinsic_dim": intrinsic_dim,
-                "epsilon_max": maximal_stable_epsilon_band(
-                    rows, ambient_dim=ambient_dim, intrinsic_dim=intrinsic_dim
-                ),
+                "epsilon_max": epsilon_max,
+                "rows_in_band": "" if certificate is None else certificate.rows_in_band,
+                "min_iid_a": "" if certificate is None else certificate.min_iid_a,
+                "min_triangular_a": ""
+                if certificate is None
+                else certificate.min_triangular_a,
+                "max_gap": "" if certificate is None else certificate.max_gap,
+                "all_useful": "" if certificate is None else certificate.all_useful,
             }
         )
     return BandwiseFrontierResult(row_summary=row_summary, band_summary=band_summary)

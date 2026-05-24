@@ -11,6 +11,7 @@ from .carrier_roughness_research import (
     _embedded_uniform_window_sample,
 )
 from .common import export_rows_csv
+from .sinkhorn import _sinkhorn_kernel_from_cost
 
 
 def _pairwise_squared_distances(x: np.ndarray, y: np.ndarray) -> np.ndarray:
@@ -31,7 +32,7 @@ def _sinkhorn_scalings(
     a = np.full(n, 1.0 / n)
     b = np.full(m, 1.0 / m)
     cost = _pairwise_squared_distances(x, y)
-    kernel = np.exp(-(cost - float(np.min(cost))) / epsilon)
+    kernel = _sinkhorn_kernel_from_cost(cost, epsilon)
     u = np.ones(n)
     v = np.ones(m)
     for _ in range(max_iters):

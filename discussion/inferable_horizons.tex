@@ -123,15 +123,66 @@ is therefore the operational identifiability score of the horizon. It compares
 lag-geometry information to the curvature-imposed precision requirement of the
 useful-memory region.
 
+\begin{proposition}[Deterministic stability of the horizon map]
+\label{prop:deterministic_horizon_stability}
+Let $K\subset \mathbb R\times(0,\infty)$ be compact. Then there exists a finite
+constant $L_K$ such that, for all $(\alpha_1,H_1),(\alpha_2,H_2)\in K$,
+\[
+  |g(\alpha_1,H_1)-g(\alpha_2,H_2)|
+  \le L_K\bigl(|\alpha_1-\alpha_2|+|H_1-H_2|\bigr).
+\]
+Consequently, if $(\alpha,H)$ and $(\widehat\alpha_{m,L},\widehat H_{m,L})$ lie in
+$K$ and
+\[
+  |\widehat\alpha_{m,L}-\alpha|+|\widehat H_{m,L}-H|
+  \le \frac{r_\delta(a,H)}{L_K},
+\]
+then $\widehat n_\star\in \mathcal U_\delta$.
+\end{proposition}
+
+\begin{proof}
+The gradient of $g$ is continuous on $K$, so $\|\nabla g\|_1$ is bounded there.
+Apply the mean-value theorem to obtain the Lipschitz bound. The inclusion claim
+follows from
+$|\log \widehat n_\star-\log n_\star|\le r_\delta(a,H)$ together with the
+characterization of $\mathcal U_\delta$ from \Cref{prop:useful_memory_region}.
+\end{proof}
+
 The informative regime lies across the transition from low to moderate
 identifiability. Table \ref{tab:inferable_horizon} records representative
 points across that transition.
 
 \input{artifacts/tables/inferable_horizon/tab_inferable_horizon.tex}
 
-\begin{proposition}[Plug-in Horizon Regret]
+On the tested grid, the plug-in central limit law is also well calibrated at the
+scale level: the empirical standard deviation of $\log \widehat n_\star$ tracks
+the delta-method prediction closely, and the nominal $95\%$ Gaussian interval
+coverage stays near its target across the reported regimes. The same simulation
+suite gives a direct calibration check for the regret expansion.
+
+\begin{proposition}[Deterministic and asymptotic plug-in horizon regret]
 \label{prop:plugin_horizon_regret}
 Let $u = \log(\widehat n_\star/n_\star)$. Then, as $u \to 0$,
+\[
+  \frac{\Phi(\widehat n_\star)-\Phi(n_\star)}{\Phi(n_\star)}
+  = \Psi(e^u)-1
+  = \frac{H e^{-au} + a e^{Hu}}{a+H} - 1.
+\]
+Consequently, for every $r>0$,
+\[
+  |u|\le r
+  \quad\Longrightarrow\quad
+  \frac{\Phi(\widehat n_\star)-\Phi(n_\star)}{\Phi(n_\star)}
+  \le
+  B_r(a,H),
+\]
+where
+\[
+  B_r(a,H)
+  \coloneqq
+  \max\bigl\{\Psi(e^r)-1,\,\Psi(e^{-r})-1\bigr\}.
+\]
+Moreover,
 \[
   \frac{\Phi(\widehat n_\star)-\Phi(n_\star)}{\Phi(n_\star)}
   = \frac{aH}{2}u^2 + O(u^3).
@@ -152,10 +203,11 @@ By \Cref{prop:useful_memory_region},
   \frac{\Phi(n_\star e^u)}{\Phi(n_\star)} = \Psi(e^u)
   = \frac{H e^{-au} + a e^{Hu}}{a+H}.
 \]
-Differentiate at $u=0$. The first derivative vanishes and the second derivative
-equals $aH$, giving the quadratic expansion. The expectation bound then follows
-from \Cref{thm:plugin_horizon_clt} and the boundedness of third moments on
-compact parameter sets.
+The deterministic bound follows by maximizing this exact expression over
+$u\in[-r,r]$. Differentiate at $u=0$. The first derivative vanishes and the
+second derivative equals $aH$, giving the quadratic expansion. The expectation
+bound then follows from \Cref{thm:plugin_horizon_clt} and the boundedness of
+third moments on compact parameter sets.
 \end{proof}
 
 \begin{figure}[!htbp]
@@ -166,6 +218,16 @@ useful-region hit rates collapse against the score
 $\mathfrak S_{\delta,m,L} = \sqrt{\mathcal I_{m,L}(H)}r_\delta(a,H)/\tau(H,\zeta)$,
 matching the Gaussian approximation from \Cref{thm:operational_identifiability}.}
 \label{fig:inferable_horizon}
+\end{figure}
+
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=0.84\linewidth]{artifacts/figures/inferable_horizon/fig_operational_regret}
+\caption{Quadratic operational regret. Across the tested grid, the empirical
+relative regret of the plug-in horizon aligns with the quadratic law from
+\Cref{prop:plugin_horizon_regret}, showing that horizon mislocation costs are
+second order in log-scale error in the theorem regime.}
+\label{fig:inferable_horizon_regret}
 \end{figure}
 
 This section separates two questions that need not agree. A temporal-validity

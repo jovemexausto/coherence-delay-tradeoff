@@ -1,0 +1,5 @@
+run_id,profile_name,seed,observation_scale,aggregated_history,validation_tail,max_window_index_jump,best_static_window,mean_oracle_error,mean_plugin_error,mean_activity_error,mean_structural_error,mean_adaptive_error,mean_best_static_error,plugin_to_oracle_ratio,activity_to_oracle_ratio,structural_to_oracle_ratio,adaptive_to_oracle_ratio,structural_beats_plugin,structural_beats_activity,adaptive_beats_structural
+dd6abdcd64e3,default,0,1.0,160,160,1,12,0.186191,0.770412,0.262591,0.246746,0.241576,0.271887,4.137762,1.410334,1.325233,1.297469,1,1,1
+e292312e68c8,default,1,1.0,160,160,1,12,0.220066,0.917438,0.293067,0.303344,0.287676,0.284684,4.168912,1.331718,1.378422,1.307223,1,0,1
+f58dc09c17e8,rough,0,1.0,160,160,1,61,0.110419,0.275583,0.182562,0.14797,0.164939,0.109556,2.49579,1.653351,1.340077,1.493758,1,1,0
+d295f24ffe5d,rough,1,1.0,160,160,1,41,0.135505,0.296058,0.189036,0.170762,0.176699,0.152694,2.184854,1.395053,1.260189,1.304008,1,1,0

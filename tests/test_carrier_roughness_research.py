@@ -96,6 +96,12 @@ class CarrierRoughnessResearchTest(unittest.TestCase):
                 for row in sinkhorn_rows
             )
         )
+        self.assertTrue(all("sample_role" in row for row in sinkhorn_rows))
+        self.assertTrue(all("epsilon" in row for row in sinkhorn_rows))
+        self.assertEqual(
+            {str(row["sample_role"]) for row in sinkhorn_rows},
+            {"iid_mixture", "triangular_window"},
+        )
 
     def test_operational_sinkhorn_mid_high_dimensional_carrier_stays_useful(
         self,
@@ -129,14 +135,14 @@ class CarrierRoughnessResearchTest(unittest.TestCase):
             iid_row = next(
                 row
                 for row in sinkhorn_rows
-                if f"eps={epsilon:.2f}" in str(row["setting"])
-                and "iid mixture" in str(row["setting"])
+                if abs(float(row["epsilon"]) - epsilon) <= 1e-12
+                and str(row["sample_role"]) == "iid_mixture"
             )
             tri_row = next(
                 row
                 for row in sinkhorn_rows
-                if f"eps={epsilon:.2f}" in str(row["setting"])
-                and "triangular" in str(row["setting"])
+                if abs(float(row["epsilon"]) - epsilon) <= 1e-12
+                and str(row["sample_role"]) == "triangular_window"
             )
             iid_a = float(iid_row["carrier_a"])
             tri_a = float(tri_row["carrier_a"])

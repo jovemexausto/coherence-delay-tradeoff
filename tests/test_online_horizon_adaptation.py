@@ -7,11 +7,17 @@ import numpy as np
 from useful_memory_horizon.online_horizon_adaptation import (
     OnlineAdaptationConfig,
     activity_window_from_proxy,
+    build_online_adaptation_configs,
+    build_online_phase_rows,
+    build_online_summary_rows,
+    build_online_timeline_rows,
     estimate_aggregated_roughness,
     estimate_local_activity,
     estimate_local_roughness,
+    make_profile_config,
     phase_profile,
     run_online_horizon_adaptation_experiment,
+    run_online_adaptation_sweep,
 )
 
 
@@ -103,6 +109,40 @@ class OnlineHorizonAdaptationTest(unittest.TestCase):
             )
         ]
         self.assertLessEqual(max(jumps, default=0), 1)
+
+    def test_profile_factory_builds_named_profile(self) -> None:
+        config = make_profile_config("rough", seed=3, observation_scale=0.8)
+        self.assertEqual(config.profile_name, "rough")
+        self.assertEqual(config.seed, 3)
+        self.assertEqual(config.observation_scale, 0.8)
+
+    def test_online_summary_phase_and_timeline_exports(self) -> None:
+        result = run_online_horizon_adaptation_experiment(
+            make_profile_config("default", seed=1)
+        )
+        summary_rows = build_online_summary_rows([result])
+        phase_rows = build_online_phase_rows([result])
+        timeline_rows = build_online_timeline_rows(result, stride=32)
+        self.assertEqual(len(summary_rows), 1)
+        self.assertGreaterEqual(len(phase_rows), 1)
+        self.assertGreaterEqual(len(timeline_rows), 1)
+        self.assertIn("structural_to_oracle_ratio", summary_rows[0])
+        self.assertIn("phase_index", phase_rows[0])
+        self.assertIn("structural_validation_score", timeline_rows[0])
+
+    def test_online_sweep_builder_and_runner(self) -> None:
+        configs = build_online_adaptation_configs(
+            profile_names=("default", "smooth"),
+            seeds=(0,),
+            observation_scales=(1.0,),
+            aggregated_histories=(160,),
+            validation_tails=(160,),
+            max_window_index_jump_values=(None, 1),
+        )
+        self.assertEqual(len(configs), 4)
+        results = run_online_adaptation_sweep(configs[:1])
+        self.assertEqual(len(results), 1)
+        self.assertLess(results[0].mean_structural_error, results[0].mean_plugin_error)
 
 
 if __name__ == "__main__":

@@ -70,12 +70,15 @@ These diagnostics identify a useful regime statistic and isolate the band where 
 remaining instability is concentrated. They do not upgrade the embedded fixed-
 $\varepsilon$ statement from conjecture to theorem.
 
-The current self-coupling certificate is positive on the calibrated $(8,2)$ and
-$(12,2)$ moderate-band pairs, where both self blocks keep positive spectral gap,
-worst spectral radius below $0.97$, and largest-sample mean inverse norm below
-$3.0$.
+The calibrated summary now separates three ingredients on the same embedded grid:
+the empirically stable band, the theorem-ready band obtained from the structural
+certificate, and the self-coupling proxy on the calibrated pairs where that
+proxy is currently informative. On $(8,2)$ and $(12,2)$, the empirical and
+theorem-ready bands both reach $0.5$, and the two self-coupling blocks keep
+positive spectral gap, worst spectral radius below $0.97$, and largest-sample
+mean inverse norm below $3.0$.
 
-\input{artifacts/tables/conceptual/sinkhorn_self_coupling_certificate}
+\input{artifacts/tables/conceptual/sinkhorn_frontier_summary}
 
 \subsection{Smooth Multivariate Transfer Diagnostics}
 
@@ -88,3 +91,15 @@ window length, the drift piece increases, and the linearization residual remains
 lower order than the finite-sample term on the tested windows.
 
 \input{artifacts/tables/conceptual/multivariate_transfer_proxy}
+
+\subsection{Robustness Summaries}
+
+The real-stream, validity-gap, and online-controller sweeps are summarized here
+in compact form. Their role is to delimit where the qualitative signatures remain
+stable on the tested grids.
+
+\input{artifacts/tables/conceptual/elec2_robustness_summary}
+
+\input{artifacts/tables/conceptual/validity_gap_robustness_summary}
+
+\input{artifacts/tables/conceptual/online_controller_summary}

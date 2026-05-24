@@ -49,6 +49,15 @@ phase profile, that controller improves substantially on the naive plug-in rule
 and on a pure activity baseline, although the broader validation-based hybrid
 remains more accurate.
 
+On the tested default and rough phase profiles with two seeds and a bounded
+window-jump constraint, the structural controller improves on the direct plug-in
+rule in all runs and beats the activity baseline in three of the four runs. The
+validation-based hybrid remains strongest on the default profile, but it is not
+uniformly best on the rough profile. The tested profiles therefore support a
+separation between unstable direct plug-in control and the more stable
+band-constrained structural rule, without establishing theorem-level dominance
+for any single online controller; see \Cref{tab:online_controller_summary}.
+
 On any compact parameter range with $H$ bounded away from zero and $\zeta$
 bounded above and below, the map
 \[

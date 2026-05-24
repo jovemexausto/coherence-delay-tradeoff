@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+import argparse
 import math
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
+from pathlib import Path
 
 import numpy as np
+
+from .common import build_manifest_row, export_rows_csv, stable_run_id
 
 
 def _default_candidate_windows() -> tuple[int, ...]:
@@ -13,6 +17,7 @@ def _default_candidate_windows() -> tuple[int, ...]:
 
 @dataclass(frozen=True, slots=True)
 class OnlineAdaptationConfig:
+    profile_name: str = "default"
     phase_lengths: tuple[int, ...] = (300, 300, 300, 300)
     holder_exponents: tuple[float, ...] = (1.0, 0.75, 0.5, 1.0)
     roughness_scales: tuple[float, ...] = (0.001, 0.08, 0.001, 0.08)
@@ -49,6 +54,9 @@ class RoughnessEstimate:
 class OnlineAdaptationResult:
     config: OnlineAdaptationConfig
     time: np.ndarray
+    phase_index: np.ndarray
+    holder_truth: np.ndarray
+    roughness_truth: np.ndarray
     latent_mean: np.ndarray
     observations: np.ndarray
     oracle_window: np.ndarray
@@ -61,6 +69,17 @@ class OnlineAdaptationResult:
     adaptive_estimate: np.ndarray
     structural_estimate: np.ndarray
     activity_estimate: np.ndarray
+    plugin_holder_hat: np.ndarray
+    plugin_roughness_hat: np.ndarray
+    adaptive_holder_hat: np.ndarray
+    adaptive_roughness_hat: np.ndarray
+    structural_holder_hat: np.ndarray
+    structural_roughness_hat: np.ndarray
+    activity_proxy: np.ndarray
+    structural_band_min: np.ndarray
+    structural_band_max: np.ndarray
+    adaptive_validation_score: np.ndarray
+    structural_validation_score: np.ndarray
     best_static_window: int
     best_static_estimate: np.ndarray
     oracle_error: np.ndarray
@@ -75,6 +94,96 @@ class OnlineAdaptationResult:
     mean_structural_error: float
     mean_activity_error: float
     mean_best_static_error: float
+
+
+@dataclass(frozen=True, slots=True)
+class ControllerDecision:
+    chosen_window: int
+    holder_hat: float
+    roughness_hat: float
+    activity_proxy: float
+    band_min: int
+    band_max: int
+    validation_score: float
+
+
+def _parse_csv_ints(text: str) -> tuple[int, ...]:
+    return tuple(int(part.strip()) for part in text.split(",") if part.strip())
+
+
+def _parse_csv_floats(text: str) -> tuple[float, ...]:
+    return tuple(float(part.strip()) for part in text.split(",") if part.strip())
+
+
+def _parse_csv_strings(text: str) -> tuple[str, ...]:
+    return tuple(part.strip() for part in text.split(",") if part.strip())
+
+
+def _phase_index_array(config: OnlineAdaptationConfig) -> np.ndarray:
+    phase_index = np.empty(sum(config.phase_lengths), dtype=int)
+    start = 0
+    for phase, length in enumerate(config.phase_lengths):
+        phase_index[start : start + length] = phase
+        start += length
+    return phase_index
+
+
+def make_profile_config(
+    profile_name: str,
+    *,
+    seed: int,
+    observation_scale: float = 1.0,
+    aggregated_history: int = 160,
+    validation_tail: int = 160,
+    max_window_index_jump: int | None = None,
+) -> OnlineAdaptationConfig:
+    profiles: dict[str, dict[str, tuple[float, ...] | tuple[int, ...]]] = {
+        "default": {
+            "phase_lengths": (300, 300, 300, 300),
+            "holder_exponents": (1.0, 0.75, 0.5, 1.0),
+            "roughness_scales": (0.001, 0.08, 0.001, 0.08),
+            "phase_signs": (1.0, -1.0, 1.0, -1.0),
+        },
+        "smooth": {
+            "phase_lengths": (300, 300, 300, 300),
+            "holder_exponents": (1.0, 1.0, 0.9, 1.0),
+            "roughness_scales": (0.001, 0.01, 0.002, 0.01),
+            "phase_signs": (1.0, -1.0, 1.0, -1.0),
+        },
+        "rough": {
+            "phase_lengths": (300, 300, 300, 300),
+            "holder_exponents": (0.55, 0.45, 0.4, 0.5),
+            "roughness_scales": (0.03, 0.08, 0.04, 0.08),
+            "phase_signs": (1.0, -1.0, 1.0, -1.0),
+        },
+        "alternating": {
+            "phase_lengths": (240, 240, 240, 240, 240),
+            "holder_exponents": (1.0, 0.5, 1.0, 0.5, 1.0),
+            "roughness_scales": (0.002, 0.06, 0.002, 0.06, 0.002),
+            "phase_signs": (1.0, -1.0, 1.0, -1.0, 1.0),
+        },
+        "ramp_up": {
+            "phase_lengths": (300, 300, 300, 300),
+            "holder_exponents": (1.0, 0.85, 0.7, 0.55),
+            "roughness_scales": (0.001, 0.01, 0.03, 0.08),
+            "phase_signs": (1.0, 1.0, 1.0, 1.0),
+        },
+    }
+    if profile_name not in profiles:
+        raise ValueError(f"unknown profile_name: {profile_name}")
+    profile = profiles[profile_name]
+    return OnlineAdaptationConfig(
+        profile_name=profile_name,
+        phase_lengths=profile["phase_lengths"],  # type: ignore[arg-type]
+        holder_exponents=profile["holder_exponents"],  # type: ignore[arg-type]
+        roughness_scales=profile["roughness_scales"],  # type: ignore[arg-type]
+        phase_signs=profile["phase_signs"],  # type: ignore[arg-type]
+        observation_scale=observation_scale,
+        aggregated_history=aggregated_history,
+        validation_tail=validation_tail,
+        max_window_index_jump=max_window_index_jump,
+        seed=seed,
+    )
 
 
 def phase_profile(
@@ -363,7 +472,7 @@ def _structural_window(
     config: OnlineAdaptationConfig,
     previous_proxy: float,
     previous_window: int,
-) -> tuple[RoughnessEstimate, float]:
+) -> ControllerDecision:
     roughness = estimate_aggregated_roughness(values, end_index, config)
     current_proxy = estimate_local_activity(values, end_index, config)
     activity_proxy = (
@@ -405,13 +514,20 @@ def _structural_window(
         )
         best_window = config.candidate_windows[previous_index + step]
     best_window = _project_window_to_grid(best_window, config, end_index)
-    return (
-        RoughnessEstimate(
-            holder_exponent=roughness.holder_exponent,
-            roughness_scale=roughness.roughness_scale,
-            plugin_window=best_window,
-        ),
-        activity_proxy,
+    best_score = float(
+        scores.get(
+            best_window,
+            _validation_score(values, end_index, best_window, config.validation_tail),
+        )
+    )
+    return ControllerDecision(
+        chosen_window=best_window,
+        holder_hat=roughness.holder_exponent,
+        roughness_hat=roughness.roughness_scale,
+        activity_proxy=activity_proxy,
+        band_min=int(min(feasible_windows)),
+        band_max=int(max(feasible_windows)),
+        validation_score=best_score,
     )
 
 
@@ -420,7 +536,7 @@ def _adaptive_window(
     end_index: int,
     config: OnlineAdaptationConfig,
     previous_window: int,
-) -> RoughnessEstimate:
+) -> ControllerDecision:
     estimate = estimate_local_roughness(values, end_index, config)
     scores = {
         window: _validation_score(values, end_index, window, config.validation_tail)
@@ -439,10 +555,14 @@ def _adaptive_window(
         )
         best_window = config.candidate_windows[prev_index + step]
     best_window = _project_window_to_grid(best_window, config, end_index)
-    return RoughnessEstimate(
-        holder_exponent=estimate.holder_exponent,
-        roughness_scale=estimate.roughness_scale,
-        plugin_window=best_window,
+    return ControllerDecision(
+        chosen_window=best_window,
+        holder_hat=estimate.holder_exponent,
+        roughness_hat=estimate.roughness_scale,
+        activity_proxy=float("nan"),
+        band_min=int(best_window),
+        band_max=int(best_window),
+        validation_score=float(scores[best_window]),
     )
 
 
@@ -451,6 +571,7 @@ def run_online_horizon_adaptation_experiment(
 ) -> OnlineAdaptationResult:
     cfg = config or OnlineAdaptationConfig()
     latent_mean, holder_truth, roughness_truth = phase_profile(cfg)
+    phase_index = _phase_index_array(cfg)
     rng = np.random.default_rng(cfg.seed)
     observations = latent_mean + rng.normal(
         scale=cfg.observation_scale, size=latent_mean.size
@@ -466,6 +587,17 @@ def run_online_horizon_adaptation_experiment(
     adaptive_estimate = np.full(latent_mean.size, np.nan, dtype=float)
     structural_estimate = np.full(latent_mean.size, np.nan, dtype=float)
     activity_estimate = np.full(latent_mean.size, np.nan, dtype=float)
+    plugin_holder_hat = np.full(latent_mean.size, np.nan, dtype=float)
+    plugin_roughness_hat = np.full(latent_mean.size, np.nan, dtype=float)
+    adaptive_holder_hat = np.full(latent_mean.size, np.nan, dtype=float)
+    adaptive_roughness_hat = np.full(latent_mean.size, np.nan, dtype=float)
+    structural_holder_hat = np.full(latent_mean.size, np.nan, dtype=float)
+    structural_roughness_hat = np.full(latent_mean.size, np.nan, dtype=float)
+    activity_proxy_trace = np.full(latent_mean.size, np.nan, dtype=float)
+    structural_band_min = np.full(latent_mean.size, np.nan, dtype=float)
+    structural_band_max = np.full(latent_mean.size, np.nan, dtype=float)
+    adaptive_validation_score = np.full(latent_mean.size, np.nan, dtype=float)
+    structural_validation_score = np.full(latent_mean.size, np.nan, dtype=float)
     previous_adaptive_window = min(cfg.candidate_windows)
     previous_structural_proxy = 0.0
     previous_structural_window = min(cfg.candidate_windows)
@@ -475,18 +607,30 @@ def run_online_horizon_adaptation_experiment(
         oracle_window[t] = oracle_window_from_latent(latent_mean, t, cfg)
         plugin = estimate_local_roughness(observations, t, cfg)
         plugin_window[t] = plugin.plugin_window
+        plugin_holder_hat[t] = plugin.holder_exponent
+        plugin_roughness_hat[t] = plugin.roughness_scale
         adaptive = _adaptive_window(observations, t, cfg, previous_adaptive_window)
-        adaptive_window[t] = adaptive.plugin_window
-        previous_adaptive_window = adaptive.plugin_window
-        structural, previous_structural_proxy = _structural_window(
+        adaptive_window[t] = adaptive.chosen_window
+        adaptive_holder_hat[t] = adaptive.holder_hat
+        adaptive_roughness_hat[t] = adaptive.roughness_hat
+        adaptive_validation_score[t] = adaptive.validation_score
+        previous_adaptive_window = adaptive.chosen_window
+        structural = _structural_window(
             observations,
             t,
             cfg,
             previous_structural_proxy,
             previous_structural_window,
         )
-        structural_window[t] = structural.plugin_window
-        previous_structural_window = structural.plugin_window
+        structural_window[t] = structural.chosen_window
+        structural_holder_hat[t] = structural.holder_hat
+        structural_roughness_hat[t] = structural.roughness_hat
+        structural_band_min[t] = structural.band_min
+        structural_band_max[t] = structural.band_max
+        structural_validation_score[t] = structural.validation_score
+        activity_proxy_trace[t] = structural.activity_proxy
+        previous_structural_proxy = structural.activity_proxy
+        previous_structural_window = structural.chosen_window
         previous_activity_proxy, activity_window[t] = _activity_window(
             observations,
             t,
@@ -524,6 +668,9 @@ def run_online_horizon_adaptation_experiment(
     return OnlineAdaptationResult(
         config=cfg,
         time=time[valid],
+        phase_index=phase_index[valid],
+        holder_truth=holder_truth[valid],
+        roughness_truth=roughness_truth[valid],
         latent_mean=latent_mean[valid],
         observations=observations[valid],
         oracle_window=oracle_window[valid],
@@ -536,6 +683,17 @@ def run_online_horizon_adaptation_experiment(
         adaptive_estimate=adaptive_estimate[valid],
         structural_estimate=structural_estimate[valid],
         activity_estimate=activity_estimate[valid],
+        plugin_holder_hat=plugin_holder_hat[valid],
+        plugin_roughness_hat=plugin_roughness_hat[valid],
+        adaptive_holder_hat=adaptive_holder_hat[valid],
+        adaptive_roughness_hat=adaptive_roughness_hat[valid],
+        structural_holder_hat=structural_holder_hat[valid],
+        structural_roughness_hat=structural_roughness_hat[valid],
+        activity_proxy=activity_proxy_trace[valid],
+        structural_band_min=structural_band_min[valid],
+        structural_band_max=structural_band_max[valid],
+        adaptive_validation_score=adaptive_validation_score[valid],
+        structural_validation_score=structural_validation_score[valid],
         best_static_window=best_static_window,
         best_static_estimate=static_estimates[valid],
         oracle_error=oracle_error,
@@ -551,3 +709,307 @@ def run_online_horizon_adaptation_experiment(
         mean_activity_error=float(np.mean(activity_error)),
         mean_best_static_error=float(np.mean(best_static_error_trace)),
     )
+
+
+def build_online_summary_rows(
+    results: list[OnlineAdaptationResult],
+) -> list[dict[str, float | int | str]]:
+    rows: list[dict[str, float | int | str]] = []
+    for result in results:
+        config = asdict(result.config)
+        run_id = stable_run_id(config)
+        rows.append(
+            {
+                "run_id": run_id,
+                "profile_name": result.config.profile_name,
+                "seed": result.config.seed,
+                "observation_scale": result.config.observation_scale,
+                "aggregated_history": result.config.aggregated_history,
+                "validation_tail": result.config.validation_tail,
+                "max_window_index_jump": ""
+                if result.config.max_window_index_jump is None
+                else result.config.max_window_index_jump,
+                "best_static_window": result.best_static_window,
+                "mean_oracle_error": round(result.mean_oracle_error, 6),
+                "mean_plugin_error": round(result.mean_plugin_error, 6),
+                "mean_activity_error": round(result.mean_activity_error, 6),
+                "mean_structural_error": round(result.mean_structural_error, 6),
+                "mean_adaptive_error": round(result.mean_adaptive_error, 6),
+                "mean_best_static_error": round(result.mean_best_static_error, 6),
+                "plugin_to_oracle_ratio": round(
+                    result.mean_plugin_error / result.mean_oracle_error, 6
+                ),
+                "activity_to_oracle_ratio": round(
+                    result.mean_activity_error / result.mean_oracle_error, 6
+                ),
+                "structural_to_oracle_ratio": round(
+                    result.mean_structural_error / result.mean_oracle_error, 6
+                ),
+                "adaptive_to_oracle_ratio": round(
+                    result.mean_adaptive_error / result.mean_oracle_error, 6
+                ),
+                "structural_beats_plugin": int(
+                    result.mean_structural_error < result.mean_plugin_error
+                ),
+                "structural_beats_activity": int(
+                    result.mean_structural_error < result.mean_activity_error
+                ),
+                "adaptive_beats_structural": int(
+                    result.mean_adaptive_error < result.mean_structural_error
+                ),
+            }
+        )
+    return rows
+
+
+def build_online_phase_rows(
+    results: list[OnlineAdaptationResult],
+) -> list[dict[str, float | int | str]]:
+    rows: list[dict[str, float | int | str]] = []
+    for result in results:
+        run_id = stable_run_id(asdict(result.config))
+        for phase in np.unique(result.phase_index):
+            mask = result.phase_index == phase
+            rows.append(
+                {
+                    "run_id": run_id,
+                    "profile_name": result.config.profile_name,
+                    "phase_index": int(phase),
+                    "phase_length": int(np.sum(mask)),
+                    "holder_truth": round(float(np.mean(result.holder_truth[mask])), 6),
+                    "roughness_truth": round(
+                        float(np.mean(result.roughness_truth[mask])), 6
+                    ),
+                    "mean_oracle_window": round(
+                        float(np.mean(result.oracle_window[mask])), 3
+                    ),
+                    "mean_plugin_window": round(
+                        float(np.mean(result.plugin_window[mask])), 3
+                    ),
+                    "mean_activity_window": round(
+                        float(np.mean(result.activity_window[mask])), 3
+                    ),
+                    "mean_structural_window": round(
+                        float(np.mean(result.structural_window[mask])), 3
+                    ),
+                    "mean_adaptive_window": round(
+                        float(np.mean(result.adaptive_window[mask])), 3
+                    ),
+                    "mean_oracle_error": round(
+                        float(np.mean(result.oracle_error[mask])), 6
+                    ),
+                    "mean_plugin_error": round(
+                        float(np.mean(result.plugin_error[mask])), 6
+                    ),
+                    "mean_activity_error": round(
+                        float(np.mean(result.activity_error[mask])), 6
+                    ),
+                    "mean_structural_error": round(
+                        float(np.mean(result.structural_error[mask])), 6
+                    ),
+                    "mean_adaptive_error": round(
+                        float(np.mean(result.adaptive_error[mask])), 6
+                    ),
+                }
+            )
+    return rows
+
+
+def build_online_timeline_rows(
+    result: OnlineAdaptationResult,
+    *,
+    stride: int = 1,
+) -> list[dict[str, float | int | str]]:
+    rows: list[dict[str, float | int | str]] = []
+    run_id = stable_run_id(asdict(result.config))
+    for idx in range(0, result.time.size, max(stride, 1)):
+        rows.append(
+            {
+                "run_id": run_id,
+                "time": int(result.time[idx]),
+                "phase_index": int(result.phase_index[idx]),
+                "latent_mean": round(float(result.latent_mean[idx]), 6),
+                "observation": round(float(result.observations[idx]), 6),
+                "holder_truth": round(float(result.holder_truth[idx]), 6),
+                "roughness_truth": round(float(result.roughness_truth[idx]), 6),
+                "oracle_window": int(result.oracle_window[idx]),
+                "plugin_window": int(result.plugin_window[idx]),
+                "activity_window": int(result.activity_window[idx]),
+                "structural_window": int(result.structural_window[idx]),
+                "adaptive_window": int(result.adaptive_window[idx]),
+                "oracle_error": round(float(result.oracle_error[idx]), 6),
+                "plugin_error": round(float(result.plugin_error[idx]), 6),
+                "activity_error": round(float(result.activity_error[idx]), 6),
+                "structural_error": round(float(result.structural_error[idx]), 6),
+                "adaptive_error": round(float(result.adaptive_error[idx]), 6),
+                "plugin_holder_hat": round(float(result.plugin_holder_hat[idx]), 6),
+                "plugin_roughness_hat": round(
+                    float(result.plugin_roughness_hat[idx]), 6
+                ),
+                "structural_holder_hat": round(
+                    float(result.structural_holder_hat[idx]), 6
+                ),
+                "structural_roughness_hat": round(
+                    float(result.structural_roughness_hat[idx]), 6
+                ),
+                "adaptive_holder_hat": round(float(result.adaptive_holder_hat[idx]), 6),
+                "adaptive_roughness_hat": round(
+                    float(result.adaptive_roughness_hat[idx]), 6
+                ),
+                "activity_proxy": round(float(result.activity_proxy[idx]), 6),
+                "structural_band_min": ""
+                if np.isnan(result.structural_band_min[idx])
+                else int(result.structural_band_min[idx]),
+                "structural_band_max": ""
+                if np.isnan(result.structural_band_max[idx])
+                else int(result.structural_band_max[idx]),
+                "structural_validation_score": round(
+                    float(result.structural_validation_score[idx]), 6
+                ),
+                "adaptive_validation_score": round(
+                    float(result.adaptive_validation_score[idx]), 6
+                ),
+            }
+        )
+    return rows
+
+
+def build_online_adaptation_configs(
+    *,
+    profile_names: tuple[str, ...],
+    seeds: tuple[int, ...],
+    observation_scales: tuple[float, ...],
+    aggregated_histories: tuple[int, ...],
+    validation_tails: tuple[int, ...],
+    max_window_index_jump_values: tuple[int | None, ...],
+) -> list[OnlineAdaptationConfig]:
+    configs: list[OnlineAdaptationConfig] = []
+    for profile_name in profile_names:
+        for seed in seeds:
+            for observation_scale in observation_scales:
+                for aggregated_history in aggregated_histories:
+                    for validation_tail in validation_tails:
+                        for max_jump in max_window_index_jump_values:
+                            configs.append(
+                                make_profile_config(
+                                    profile_name,
+                                    seed=seed,
+                                    observation_scale=observation_scale,
+                                    aggregated_history=aggregated_history,
+                                    validation_tail=validation_tail,
+                                    max_window_index_jump=max_jump,
+                                )
+                            )
+    return configs
+
+
+def run_online_adaptation_sweep(
+    configs: list[OnlineAdaptationConfig],
+) -> list[OnlineAdaptationResult]:
+    return [run_online_horizon_adaptation_experiment(config) for config in configs]
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Generate online adaptation artifacts."
+    )
+    parser.add_argument(
+        "--csv-dir", type=Path, default=Path("artifacts/csv/online_adaptation")
+    )
+    parser.add_argument(
+        "--profiles",
+        type=str,
+        default="default",
+        help="Comma-separated profile names.",
+    )
+    parser.add_argument(
+        "--seeds",
+        type=str,
+        default="0,1,2",
+        help="Comma-separated seeds.",
+    )
+    parser.add_argument(
+        "--observation-scales",
+        type=str,
+        default="1.0",
+        help="Comma-separated observation noise scales.",
+    )
+    parser.add_argument(
+        "--aggregated-histories",
+        type=str,
+        default="160",
+        help="Comma-separated aggregated-history settings.",
+    )
+    parser.add_argument(
+        "--validation-tails",
+        type=str,
+        default="160",
+        help="Comma-separated validation-tail settings.",
+    )
+    parser.add_argument(
+        "--max-window-index-jumps",
+        type=str,
+        default="",
+        help="Comma-separated index-jump caps; empty means no cap.",
+    )
+    parser.add_argument(
+        "--timeline-stride",
+        type=int,
+        default=8,
+        help="Stride for timeline export.",
+    )
+    return parser.parse_args()
+
+
+def main() -> None:
+    args = parse_args()
+    args.csv_dir.mkdir(parents=True, exist_ok=True)
+    max_jump_values: tuple[int | None, ...]
+    if args.max_window_index_jumps:
+        max_jump_values = tuple(_parse_csv_ints(args.max_window_index_jumps))
+    else:
+        max_jump_values = (None,)
+    configs = build_online_adaptation_configs(
+        profile_names=_parse_csv_strings(args.profiles),
+        seeds=_parse_csv_ints(args.seeds),
+        observation_scales=_parse_csv_floats(args.observation_scales),
+        aggregated_histories=_parse_csv_ints(args.aggregated_histories),
+        validation_tails=_parse_csv_ints(args.validation_tails),
+        max_window_index_jump_values=max_jump_values,
+    )
+    results = run_online_adaptation_sweep(configs)
+    export_rows_csv(build_online_summary_rows(results), args.csv_dir / "summary.csv")
+    export_rows_csv(
+        build_online_phase_rows(results), args.csv_dir / "phase_summary.csv"
+    )
+    timeline_rows: list[dict[str, float | int | str]] = []
+    for result in results:
+        timeline_rows.extend(
+            build_online_timeline_rows(result, stride=args.timeline_stride)
+        )
+    export_rows_csv(timeline_rows, args.csv_dir / "timeline.csv")
+    manifest = build_manifest_row(
+        "online_adaptation",
+        {
+            "profiles": _parse_csv_strings(args.profiles),
+            "seeds": _parse_csv_ints(args.seeds),
+            "observation_scales": _parse_csv_floats(args.observation_scales),
+            "aggregated_histories": _parse_csv_ints(args.aggregated_histories),
+            "validation_tails": _parse_csv_ints(args.validation_tails),
+            "max_window_index_jumps": max_jump_values,
+            "timeline_stride": args.timeline_stride,
+        },
+        run_id=stable_run_id(
+            {
+                "profiles": args.profiles,
+                "seeds": args.seeds,
+                "observation_scales": args.observation_scales,
+                "aggregated_histories": args.aggregated_histories,
+                "validation_tails": args.validation_tails,
+                "max_window_index_jumps": args.max_window_index_jumps,
+                "timeline_stride": args.timeline_stride,
+            }
+        ),
+        notes="Online adaptation sweep with summary, phase, and timeline exports.",
+    )
+    export_rows_csv([manifest], args.csv_dir / "manifest.csv")

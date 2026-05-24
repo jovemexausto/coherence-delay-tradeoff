@@ -32,6 +32,13 @@ dominated class.
 ### 3. Fixed-`epsilon` Sinkhorn horizon inheritance theorem
 
 Replace the current operational conjecture by a full triangular-array theorem.
+The next usable target is the calibrated embedded `k=2` moderate-band
+inheritance statement on a band bounded away from zero, with the theorem line
+organized around uniform self-coupling stability, uniform linearization, and a
+root-`n` influence-class bound.
+The exact missing sub-lemma is the centered self-coupling stability statement on
+`B=[eps_min, eps_max]` with a strict contraction bound on the self blocks and a
+uniform inverse-norm bound on the centered subspace.
 
 ### 4. Lower theory beyond the root-`n` regime
 

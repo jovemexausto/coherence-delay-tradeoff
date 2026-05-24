@@ -1,14 +1,19 @@
 from __future__ import annotations
 
 import argparse
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import kstest, norm
 
-from .common import export_rows_csv
+from .common import (
+    build_manifest_row,
+    export_rows_csv,
+    spawn_rng,
+    stable_run_id,
+)
 from .useful_memory_region import (
     continuous_optimal_horizon,
     horizon_envelope,
@@ -29,10 +34,19 @@ class InferableHorizonConfig:
     sigma0: float = 1.0
     repetitions: int = 4000
     seed: int = 12345
+    suite_name: str = "default"
+
+
+@dataclass(frozen=True, slots=True)
+class InferableHorizonDraws:
+    alpha_hats: np.ndarray
+    H_hats: np.ndarray
+    log_horizon_hats: np.ndarray
 
 
 @dataclass(frozen=True, slots=True)
 class InferableHorizonSuite:
+    scenario_rows: list[dict[str, float | int | str]]
     joint_clt_rows: list[dict[str, float | int]]
     plugin_clt_rows: list[dict[str, float | int]]
     coverage_rows: list[dict[str, float | int]]
@@ -44,6 +58,7 @@ def export_inferable_horizon_suite(
     output_root: Path,
 ) -> None:
     csv_root = output_root / "csv" / "inferable_horizon"
+    export_rows_csv(suite.scenario_rows, csv_root / "scenarios.csv")
     export_rows_csv(suite.joint_clt_rows, csv_root / "joint_clt.csv")
     export_rows_csv(suite.plugin_clt_rows, csv_root / "plugin_clt.csv")
     export_rows_csv(suite.coverage_rows, csv_root / "coverage.csv")
@@ -59,6 +74,7 @@ def transition_coverage_config(repetitions: int, seed: int) -> InferableHorizonC
         delta_values=(0.005, 0.01, 0.02, 0.05),
         repetitions=repetitions,
         seed=seed,
+        suite_name="transition",
     )
 
 
@@ -206,6 +222,62 @@ def horizon_gradient_log_map(
     d_alpha = -1.0 / (a + H)
     d_H = -(1.0 / (H * (a + H))) - log_n_star / (a + H)
     return np.asarray([d_alpha, d_H], dtype=float)
+
+
+def horizon_log_lipschitz_constant(
+    alpha_bounds: tuple[float, float],
+    H_bounds: tuple[float, float],
+    C_K: float,
+    a: float,
+    C_S: float,
+) -> float:
+    alpha_min, alpha_max = alpha_bounds
+    H_min, H_max = H_bounds
+    if alpha_min > alpha_max:
+        raise ValueError("alpha_bounds must be ordered")
+    if H_min <= 0.0 or H_min > H_max:
+        raise ValueError("H_bounds must be ordered and positive")
+    corner_values = [
+        abs(float(horizon_log_map(alpha, H, C_K, a, C_S)))
+        for alpha in (alpha_min, alpha_max)
+        for H in (H_min, H_max)
+    ]
+    max_abs_log_horizon = max(corner_values)
+    d_alpha_bound = 1.0 / (a + H_min)
+    d_H_bound = (1.0 / (H_min * (a + H_min))) + max_abs_log_horizon / (a + H_min)
+    return float(d_alpha_bound + d_H_bound)
+
+
+def useful_region_parameter_radius(
+    alpha_bounds: tuple[float, float],
+    H_bounds: tuple[float, float],
+    C_K: float,
+    a: float,
+    C_S: float,
+    H: float,
+    delta: float,
+) -> float:
+    lipschitz = horizon_log_lipschitz_constant(alpha_bounds, H_bounds, C_K, a, C_S)
+    return float(useful_region_log_radius(a, H, delta) / lipschitz)
+
+
+def exact_relative_regret_from_log_ratio(
+    log_ratio: np.ndarray | float, a: float, H: float
+) -> np.ndarray | float:
+    log_ratio_array = np.asarray(log_ratio, dtype=float)
+    return (H * np.exp(-a * log_ratio_array) + a * np.exp(H * log_ratio_array)) / (
+        a + H
+    ) - 1.0
+
+
+def deterministic_relative_regret_bound(
+    log_error_radius: float, a: float, H: float
+) -> float:
+    if log_error_radius < 0.0:
+        raise ValueError("log_error_radius must be nonnegative")
+    upper = float(exact_relative_regret_from_log_ratio(log_error_radius, a, H))
+    lower = float(exact_relative_regret_from_log_ratio(-log_error_radius, a, H))
+    return max(upper, lower)
 
 
 def useful_region_log_radius(a: float, H: float, delta: float) -> float:
@@ -370,6 +442,34 @@ def simulate_fwls_joint_estimates(
     repetitions: int,
     rng: np.random.Generator,
 ) -> tuple[np.ndarray, np.ndarray]:
+    draws = simulate_fwls_draws(
+        H,
+        zeta,
+        sigma0,
+        sample_size,
+        lag_count,
+        repetitions,
+        rng,
+        C_K=1.0,
+        a=0.5,
+        C_S=1.0,
+    )
+    return (draws.alpha_hats, draws.H_hats)
+
+
+def simulate_fwls_draws(
+    H: float,
+    zeta: float,
+    sigma0: float,
+    sample_size: int,
+    lag_count: int,
+    repetitions: int,
+    rng: np.random.Generator,
+    *,
+    C_K: float,
+    a: float,
+    C_S: float,
+) -> InferableHorizonDraws:
     lags = lag_grid(lag_count)
     signal = zeta * lags**H
     alpha_hats = np.empty(repetitions, dtype=float)
@@ -385,108 +485,160 @@ def simulate_fwls_joint_estimates(
             sample_size,
             sigma0,
         )
-    return (alpha_hats, H_hats)
+    log_horizon_hats = horizon_log_map(alpha_hats, H_hats, C_K, a, C_S)
+    return InferableHorizonDraws(
+        alpha_hats=alpha_hats,
+        H_hats=H_hats,
+        log_horizon_hats=np.asarray(log_horizon_hats, dtype=float),
+    )
 
 
-def _joint_clt_row(
+def _scenario_metadata(
+    config: InferableHorizonConfig,
+    *,
     H: float,
-    zeta: float,
-    sigma0: float,
-    sample_size: int,
     lag_count: int,
-    repetitions: int,
-    rng: np.random.Generator,
-) -> dict[str, float | int]:
-    lags = lag_grid(lag_count)
-    alpha_hats, H_hats = simulate_fwls_joint_estimates(
-        H,
-        zeta,
-        sigma0,
-        sample_size,
-        lag_count,
-        repetitions,
-        rng,
-    )
-    alpha_true = float(np.log(zeta))
-    covariance_theory = theoretical_joint_covariance_scaled(lags, H, zeta, sigma0)
-    covariance_empirical = np.cov(
-        np.sqrt(sample_size) * (alpha_hats - alpha_true),
-        np.sqrt(sample_size) * (H_hats - H),
-    )
+    sample_size: int,
+    zeta: float,
+) -> dict[str, float | int | str]:
+    payload = {
+        "suite_name": config.suite_name,
+        "H": H,
+        "lag_count": lag_count,
+        "sample_size": sample_size,
+        "zeta": zeta,
+        "sigma0": config.sigma0,
+        "a": config.a,
+        "C_K": config.C_K,
+        "C_S": config.C_S,
+    }
+    scenario_id = stable_run_id(payload)
+    scenario_seed = int(scenario_id, 16)
     return {
+        "scenario_id": scenario_id,
+        "suite_name": config.suite_name,
+        "master_seed": config.seed,
+        "scenario_seed": scenario_seed,
+        "repetitions": config.repetitions,
         "lag_count": lag_count,
         "sample_size": sample_size,
         "H": H,
         "zeta": zeta,
+        "sigma0": config.sigma0,
+        "a": config.a,
+        "C_K": config.C_K,
+        "C_S": config.C_S,
+    }
+
+
+def _std_error_from_sample(values: np.ndarray) -> float:
+    array = np.asarray(values, dtype=float)
+    if array.size <= 1:
+        return 0.0
+    return float(np.std(array, ddof=1) / np.sqrt(array.size))
+
+
+def _rate_standard_error(success_rate: float, repetitions: int) -> float:
+    if repetitions <= 0:
+        return 0.0
+    clipped = min(max(float(success_rate), 0.0), 1.0)
+    return float(np.sqrt(clipped * (1.0 - clipped) / float(repetitions)))
+
+
+def _joint_clt_row(
+    scenario: dict[str, float | int | str],
+    draws: InferableHorizonDraws,
+) -> dict[str, float | int]:
+    H = float(scenario["H"])
+    zeta = float(scenario["zeta"])
+    sigma0 = float(scenario["sigma0"])
+    sample_size = int(scenario["sample_size"])
+    lag_count = int(scenario["lag_count"])
+    repetitions = int(scenario["repetitions"])
+    lags = lag_grid(lag_count)
+    alpha_true = float(np.log(zeta))
+    covariance_theory = theoretical_joint_covariance_scaled(lags, H, zeta, sigma0)
+    alpha_scaled = np.sqrt(sample_size) * (draws.alpha_hats - alpha_true)
+    H_scaled = np.sqrt(sample_size) * (draws.H_hats - H)
+    covariance_empirical = np.cov(
+        alpha_scaled,
+        H_scaled,
+    )
+    cov_products = (alpha_scaled - np.mean(alpha_scaled)) * (
+        H_scaled - np.mean(H_scaled)
+    )
+    return {
+        **scenario,
         "var_alpha_theory_scaled": float(covariance_theory[0, 0]),
         "var_alpha_empirical_scaled": float(covariance_empirical[0, 0]),
+        "var_alpha_empirical_scaled_se": float(
+            abs(covariance_empirical[0, 0]) * np.sqrt(2.0 / max(repetitions - 1, 1))
+        ),
         "var_H_theory_scaled": float(covariance_theory[1, 1]),
         "var_H_empirical_scaled": float(covariance_empirical[1, 1]),
+        "var_H_empirical_scaled_se": float(
+            abs(covariance_empirical[1, 1]) * np.sqrt(2.0 / max(repetitions - 1, 1))
+        ),
         "cov_theory_scaled": float(covariance_theory[0, 1]),
         "cov_empirical_scaled": float(covariance_empirical[0, 1]),
+        "cov_empirical_scaled_se": _std_error_from_sample(cov_products),
     }
 
 
 def _plugin_clt_row(
-    H: float,
-    zeta: float,
-    sigma0: float,
-    sample_size: int,
-    lag_count: int,
-    repetitions: int,
-    a: float,
-    C_K: float,
-    C_S: float,
-    rng: np.random.Generator,
-) -> tuple[dict[str, float | int], np.ndarray, np.ndarray, np.ndarray]:
+    scenario: dict[str, float | int | str],
+    draws: InferableHorizonDraws,
+) -> dict[str, float | int]:
+    H = float(scenario["H"])
+    zeta = float(scenario["zeta"])
+    sigma0 = float(scenario["sigma0"])
+    sample_size = int(scenario["sample_size"])
+    lag_count = int(scenario["lag_count"])
+    repetitions = int(scenario["repetitions"])
+    a = float(scenario["a"])
+    C_K = float(scenario["C_K"])
+    C_S = float(scenario["C_S"])
     lags = lag_grid(lag_count)
-    alpha_hats, H_hats = simulate_fwls_joint_estimates(
-        H,
-        zeta,
-        sigma0,
-        sample_size,
-        lag_count,
-        repetitions,
-        rng,
-    )
-    log_horizon_hats = horizon_log_map(alpha_hats, H_hats, C_K, a, C_S)
     log_horizon_true = horizon_log_map(float(np.log(zeta)), H, C_K, a, C_S)
     tau2 = plug_in_horizon_tau_squared(lags, H, zeta, sigma0, C_K, a, C_S)
     std_theory = float(np.sqrt(tau2 / sample_size))
-    standardized = (log_horizon_hats - log_horizon_true) / std_theory
+    standardized = (draws.log_horizon_hats - log_horizon_true) / std_theory
     ci_half_width = norm.ppf(0.975) * std_theory
     ci_coverage = float(
-        np.mean(np.abs(log_horizon_hats - log_horizon_true) <= ci_half_width)
+        np.mean(np.abs(draws.log_horizon_hats - log_horizon_true) <= ci_half_width)
     )
-    row = {
-        "lag_count": lag_count,
-        "sample_size": sample_size,
-        "H": H,
-        "zeta": zeta,
+    std_empirical = float(np.std(draws.log_horizon_hats, ddof=1))
+    return {
+        **scenario,
         "tau2": tau2,
         "std_log_horizon_theory": std_theory,
-        "std_log_horizon_empirical": float(np.std(log_horizon_hats, ddof=1)),
+        "std_log_horizon_empirical": std_empirical,
+        "std_log_horizon_empirical_se": float(
+            std_empirical / np.sqrt(2.0 * max(repetitions - 1, 1))
+        ),
         "ks_pvalue": float(kstest(standardized, "norm").pvalue),
         "ci95_coverage": ci_coverage,
+        "ci95_coverage_se": _rate_standard_error(ci_coverage, repetitions),
     }
-    return (row, alpha_hats, H_hats, log_horizon_hats)
 
 
 def _coverage_rows(
-    H: float,
-    zeta: float,
-    sigma0: float,
-    sample_size: int,
-    lag_count: int,
-    a: float,
-    C_K: float,
-    C_S: float,
+    scenario: dict[str, float | int | str],
     delta_values: tuple[float, ...],
-    log_horizon_hats: np.ndarray,
+    draws: InferableHorizonDraws,
 ) -> list[dict[str, float | int]]:
+    H = float(scenario["H"])
+    zeta = float(scenario["zeta"])
+    sigma0 = float(scenario["sigma0"])
+    sample_size = int(scenario["sample_size"])
+    lag_count = int(scenario["lag_count"])
+    repetitions = int(scenario["repetitions"])
+    a = float(scenario["a"])
+    C_K = float(scenario["C_K"])
+    C_S = float(scenario["C_S"])
     lags = lag_grid(lag_count)
     n_star = continuous_optimal_horizon(C_K, a, C_S, zeta, H)
-    n_hats = np.exp(log_horizon_hats)
+    n_hats = np.exp(draws.log_horizon_hats)
     tau = float(
         np.sqrt(
             plug_in_horizon_information_tau_squared(
@@ -507,19 +659,18 @@ def _coverage_rows(
         upper = n_star * upper_x
         radius = useful_region_log_radius(a, H, delta)
         score = np.sqrt(lag_energy(sample_size, lags, H)) * radius / tau
+        empirical_hit_rate = float(np.mean((n_hats >= lower) & (n_hats <= upper)))
         rows.append(
             {
-                "lag_count": lag_count,
-                "sample_size": sample_size,
-                "H": H,
-                "zeta": zeta,
+                **scenario,
                 "delta": delta,
                 "radius": radius,
                 "identifiability_score": float(score),
                 "lower": float(lower),
                 "upper": float(upper),
-                "empirical_hit_rate": float(
-                    np.mean((n_hats >= lower) & (n_hats <= upper))
+                "empirical_hit_rate": empirical_hit_rate,
+                "empirical_hit_rate_se": _rate_standard_error(
+                    empirical_hit_rate, repetitions
                 ),
                 "gaussian_hit_rate": float(2.0 * norm.cdf(score) - 1.0),
             }
@@ -528,18 +679,19 @@ def _coverage_rows(
 
 
 def _regret_row(
-    H: float,
-    zeta: float,
-    sigma0: float,
-    sample_size: int,
-    lag_count: int,
-    a: float,
-    C_K: float,
-    C_S: float,
-    log_horizon_hats: np.ndarray,
+    scenario: dict[str, float | int | str],
+    draws: InferableHorizonDraws,
 ) -> dict[str, float | int]:
+    H = float(scenario["H"])
+    zeta = float(scenario["zeta"])
+    sigma0 = float(scenario["sigma0"])
+    sample_size = int(scenario["sample_size"])
+    lag_count = int(scenario["lag_count"])
+    a = float(scenario["a"])
+    C_K = float(scenario["C_K"])
+    C_S = float(scenario["C_S"])
     lags = lag_grid(lag_count)
-    n_hats = np.exp(log_horizon_hats)
+    n_hats = np.exp(draws.log_horizon_hats)
     regrets = np.asarray(
         [
             relative_useful_memory_regret(n_hat, C_K, a, C_S, zeta, H)
@@ -549,21 +701,20 @@ def _regret_row(
     )
     tau2 = plug_in_horizon_tau_squared(lags, H, zeta, sigma0, C_K, a, C_S)
     theory = 0.5 * a * H * tau2 / float(sample_size)
+    empirical_regret = float(np.mean(regrets))
     return {
-        "lag_count": lag_count,
-        "sample_size": sample_size,
-        "H": H,
-        "zeta": zeta,
-        "empirical_relative_regret": float(np.mean(regrets)),
+        **scenario,
+        "empirical_relative_regret": empirical_regret,
+        "empirical_relative_regret_se": _std_error_from_sample(regrets),
         "theoretical_relative_regret": float(theory),
-        "empirical_to_theoretical_ratio": float(np.mean(regrets) / theory),
+        "empirical_to_theoretical_ratio": float(empirical_regret / theory),
     }
 
 
 def run_inferable_horizon_suite(
     config: InferableHorizonConfig = InferableHorizonConfig(),
 ) -> InferableHorizonSuite:
-    rng = np.random.default_rng(config.seed)
+    scenario_rows: list[dict[str, float | int | str]] = []
     joint_rows: list[dict[str, float | int]] = []
     plugin_rows: list[dict[str, float | int]] = []
     coverage_rows: list[dict[str, float | int]] = []
@@ -573,59 +724,42 @@ def run_inferable_horizon_suite(
         for lag_count in config.lag_counts:
             for sample_size in config.sample_sizes:
                 for zeta in config.zeta_values:
-                    joint_rows.append(
-                        _joint_clt_row(
-                            H,
-                            zeta,
-                            config.sigma0,
-                            sample_size,
-                            lag_count,
-                            config.repetitions,
-                            rng,
-                        )
+                    scenario = _scenario_metadata(
+                        config,
+                        H=H,
+                        lag_count=lag_count,
+                        sample_size=sample_size,
+                        zeta=zeta,
                     )
-                    plugin_row, _, _, log_horizon_hats = _plugin_clt_row(
+                    scenario_rows.append(scenario)
+                    rng = spawn_rng(
+                        config.seed, "inferable-horizon", str(scenario["scenario_id"])
+                    )
+                    draws = simulate_fwls_draws(
                         H,
                         zeta,
                         config.sigma0,
                         sample_size,
                         lag_count,
                         config.repetitions,
-                        config.a,
-                        config.C_K,
-                        config.C_S,
                         rng,
+                        C_K=config.C_K,
+                        a=config.a,
+                        C_S=config.C_S,
                     )
-                    plugin_rows.append(plugin_row)
+                    joint_rows.append(_joint_clt_row(scenario, draws))
+                    plugin_rows.append(_plugin_clt_row(scenario, draws))
                     coverage_rows.extend(
                         _coverage_rows(
-                            H,
-                            zeta,
-                            config.sigma0,
-                            sample_size,
-                            lag_count,
-                            config.a,
-                            config.C_K,
-                            config.C_S,
+                            scenario,
                             config.delta_values,
-                            log_horizon_hats,
+                            draws,
                         )
                     )
-                    regret_rows.append(
-                        _regret_row(
-                            H,
-                            zeta,
-                            config.sigma0,
-                            sample_size,
-                            lag_count,
-                            config.a,
-                            config.C_K,
-                            config.C_S,
-                            log_horizon_hats,
-                        )
-                    )
+                    regret_rows.append(_regret_row(scenario, draws))
 
     return InferableHorizonSuite(
+        scenario_rows=scenario_rows,
         joint_clt_rows=joint_rows,
         plugin_clt_rows=plugin_rows,
         coverage_rows=coverage_rows,
@@ -649,23 +783,39 @@ def parse_args() -> argparse.Namespace:
         default=1000,
         help="Monte Carlo repetitions per configuration.",
     )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=12345,
+        help="Master seed for deterministic scenario-level Monte Carlo.",
+    )
+    parser.add_argument(
+        "--transition-seed",
+        type=int,
+        default=2026,
+        help="Master seed for the transition-coverage suite.",
+    )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
     suite = run_inferable_horizon_suite(
-        InferableHorizonConfig(repetitions=args.repetitions)
+        InferableHorizonConfig(repetitions=args.repetitions, seed=args.seed)
     )
     export_inferable_horizon_suite(suite, args.output_root)
     transition_suite = run_inferable_horizon_suite(
         transition_coverage_config(
-            repetitions=max(args.repetitions, 1000), seed=args.repetitions + 2026
+            repetitions=max(args.repetitions, 1000), seed=args.transition_seed
         )
     )
     export_rows_csv(
         transition_suite.coverage_rows,
         args.output_root / "csv" / "inferable_horizon" / "coverage_transition.csv",
+    )
+    export_rows_csv(
+        transition_suite.scenario_rows,
+        args.output_root / "csv" / "inferable_horizon" / "transition_scenarios.csv",
     )
     figure_root = args.output_root / "figures" / "inferable_horizon"
     save_coverage_collapse_figure(
@@ -679,6 +829,22 @@ def main() -> None:
     write_representative_coverage_table(
         select_representative_coverage_rows(transition_suite.coverage_rows),
         args.output_root / "tables" / "inferable_horizon" / "tab_inferable_horizon.tex",
+    )
+    manifest = build_manifest_row(
+        "inferable_horizon",
+        asdict(InferableHorizonConfig(repetitions=args.repetitions, seed=args.seed)),
+        run_id=stable_run_id(
+            {
+                "suite_name": "default",
+                "repetitions": args.repetitions,
+                "seed": args.seed,
+            }
+        ),
+        seed=args.seed,
+        notes="Scenario-seeded inferable-horizon bridge with Monte Carlo uncertainty fields.",
+    )
+    export_rows_csv(
+        [manifest], args.output_root / "csv" / "inferable_horizon" / "manifest.csv"
     )
 
 

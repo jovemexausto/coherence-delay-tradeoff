@@ -1,0 +1,16 @@
+\begin{table}[!htbp]
+\centering
+\small
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{ccccc}
+\toprule
+Variable & Runs & Interior & Best-window range & Edge/best range \\
+\midrule
+\texttt{nswprice} & 9 & 9/9 & $14$--$435$ & $1.31$--$1.68$ \\
+\texttt{nswdemand} & 9 & 9/9 & $25$--$327$ & $1.15$--$3.24$ \\
+\bottomrule
+\end{tabular}
+}
+\caption{ELEC2 robustness summary across anchor sizes $24$, $48$, and $96$ and segment starts $0$, $8000$, and $16000$, with segment length $4000$. The interior-optimum count records how often the best window stays away from the search boundary; the edge/best range reports the ratio between the worse boundary error and the optimum.}
+\label{tab:elec2_robustness}
+\end{table}

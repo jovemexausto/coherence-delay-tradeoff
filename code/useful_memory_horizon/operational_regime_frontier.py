@@ -19,6 +19,25 @@ class OperationalRegimeRow:
     useful: bool
 
 
+def _select_sinkhorn_summary_row(
+    summary_rows: list[dict[str, str | float]],
+    *,
+    ambient_dim: int,
+    intrinsic_dim: int,
+    epsilon: float,
+    sample_role: str,
+) -> dict[str, str | float]:
+    return next(
+        row
+        for row in summary_rows
+        if row["experiment"] == "sinkhorn-fixed-span"
+        and int(row["ambient_dim"]) == ambient_dim
+        and int(row["intrinsic_dim"]) == intrinsic_dim
+        and abs(float(row["epsilon"]) - epsilon) <= 1e-12
+        and str(row["sample_role"]) == sample_role
+    )
+
+
 def map_operational_regime(
     ambient_intrinsic_pairs: tuple[tuple[int, int], ...],
     epsilons: tuple[float, ...] = (0.5, 0.2, 0.1, 0.05),
@@ -52,21 +71,19 @@ def map_operational_regime(
     ]
     for ambient_dim, intrinsic_dim in ambient_intrinsic_pairs:
         for epsilon in epsilons:
-            iid_row = next(
-                row
-                for row in summary_rows
-                if f"ambient d={ambient_dim}, intrinsic k={intrinsic_dim}"
-                in str(row["setting"])
-                and f"eps={epsilon:.2f}" in str(row["setting"])
-                and "iid mixture" in str(row["setting"])
+            iid_row = _select_sinkhorn_summary_row(
+                summary_rows,
+                ambient_dim=ambient_dim,
+                intrinsic_dim=intrinsic_dim,
+                epsilon=epsilon,
+                sample_role="iid_mixture",
             )
-            triangular_row = next(
-                row
-                for row in summary_rows
-                if f"ambient d={ambient_dim}, intrinsic k={intrinsic_dim}"
-                in str(row["setting"])
-                and f"eps={epsilon:.2f}" in str(row["setting"])
-                and "triangular" in str(row["setting"])
+            triangular_row = _select_sinkhorn_summary_row(
+                summary_rows,
+                ambient_dim=ambient_dim,
+                intrinsic_dim=intrinsic_dim,
+                epsilon=epsilon,
+                sample_role="triangular_window",
             )
             iid_a = float(iid_row["carrier_a"])
             triangular_a = float(triangular_row["carrier_a"])

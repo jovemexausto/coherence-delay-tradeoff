@@ -17,6 +17,15 @@ def _pairwise_squared_distances(x: np.ndarray, y: np.ndarray) -> np.ndarray:
     return np.maximum(x_norm + y_norm - 2.0 * x @ y.T, 0.0)
 
 
+def _sinkhorn_kernel_from_cost(cost: np.ndarray, epsilon: float) -> np.ndarray:
+    if epsilon <= 0.0:
+        raise ValueError("epsilon must be positive")
+    shifted = cost - float(np.min(cost))
+    exponent = -shifted / epsilon
+    exponent = np.clip(exponent, -700.0, 0.0)
+    return np.exp(exponent)
+
+
 def sinkhorn_cost(
     x: np.ndarray,
     y: np.ndarray,
@@ -30,8 +39,7 @@ def sinkhorn_cost(
     a = np.full(x.shape[0], 1.0 / x.shape[0])
     b = np.full(y.shape[0], 1.0 / y.shape[0])
     cost = _pairwise_squared_distances(x, y)
-    cost_shift = float(np.min(cost))
-    kernel = np.exp(-(cost - cost_shift) / epsilon)
+    kernel = _sinkhorn_kernel_from_cost(cost, epsilon)
     u = np.ones_like(a)
     v = np.ones_like(b)
     iteration = 0

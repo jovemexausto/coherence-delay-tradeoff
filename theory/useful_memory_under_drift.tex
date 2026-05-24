@@ -831,13 +831,64 @@ Minimizing over $h$ gives the same horizon scale $(\sigma/\zeta)^{2/(2H+1)}$.
 Combining the two sides proves the theorem.
 \end{proof}
 
-\subsection{Multivariate Extension via Sliced and Product Geometries}
+\subsection{Multivariate Extension via Finite Projection Families, Sliced, and Product Geometries}
 
 The horizon law also extends beyond one dimension when the multivariate geometry
 reduces to a uniformly controlled family of one-dimensional transport problems.
 This is the natural setting for sliced or coordinate-averaged Wasserstein
 constructions, where the finite-sample term is built by integrating projected
 one-dimensional errors.
+
+\begin{corollary}[Finite-family projection transfer]\label{cor:finite_projection_transfer}
+Let $\Pi=\{\theta_1,\dots,\theta_m\}$ be a finite family of linear maps from the
+ambient space to $\mathbb R$, and define
+\[
+  d_{\Pi}(P,Q)
+  \coloneqq
+  \Bigl(\frac{1}{m}\sum_{r=1}^m
+  W_2^2\!\left(P_{\theta_r},Q_{\theta_r}\right)\Bigr)^{1/2}.
+\]
+Assume that for every $r=1,\dots,m$:
+\begin{enumerate}[label=(\roman*)]
+  \item the projected triangular-array window satisfies the hypotheses of
+  \cref{prop:one_dimensional_root_n_bound} with constants uniform in $r$;
+  \item the projected drift path obeys the same H\"older staleness envelope with
+  exponent $H$ and amplitude at most $\zeta$ uniformly in $r$.
+\end{enumerate}
+Then there exist constants $C_{K,\Pi},C_{S,\Pi}<\infty$ such that
+\[
+  \mathbb E\,d_{\Pi}\!\left(\widehat P_t^{(n)},P_t\right)
+  \le C_{K,\Pi} n^{-1/2} + C_{S,\Pi}\zeta n^H.
+\]
+Consequently,
+\[
+  n_{\Pi}^*(H)\asymp (C_{K,\Pi}/\zeta)^{1/(H+1/2)}.
+\]
+In particular, the same law holds for coordinate-averaged product
+constructions obtained by taking $\Pi$ to be the coordinate projections.
+\end{corollary}
+
+\begin{proof}
+For each $r$, \cref{prop:one_dimensional_root_n_bound} gives
+\[
+  \mathbb E\,W_2^2\!\left(\widehat P_{t,\theta_r}^{(n)},\bar P_{t,\theta_r}^{(n)}\right)
+  \le C n^{-1}
+\]
+with $C$ uniform in $r$. Averaging over $r$ yields
+\[
+  \mathbb E\,d_{\Pi}^2\!\left(\widehat P_t^{(n)},\bar P_t^{(n)}\right)
+  \le C n^{-1},
+\]
+and Jensen gives the root-$n$ bound for
+$\mathbb E\,d_{\Pi}(\widehat P_t^{(n)},\bar P_t^{(n)})$. The projected H\"older
+bound averages in the same way:
+\[
+  d_{\Pi}\!\left(\bar P_t^{(n)},P_t\right)
+  \le C_{S,\Pi}\zeta n^H.
+\]
+Applying \cref{thm:abstract_upper_law} with $d=d_{\Pi}$ yields the displayed
+envelope and horizon scale.
+\end{proof}
 
 \begin{corollary}[Sliced-Wasserstein transfer under uniform projected control]
 \label{cor:sliced_wasserstein_transfer}
@@ -864,8 +915,9 @@ Consequently,
 \[
   n^*(H)\asymp (C_K/\zeta)^{1/(H+1/2)}.
 \]
-Coordinate-averaged product constructions are included as the special case in
-which $\rho$ is supported on coordinate projections.
+Finite projection families are included by taking $\rho$ supported on finitely
+many atoms; \cref{cor:finite_projection_transfer} states that case directly for
+multivariate tracking.
 \end{corollary}
 
 \begin{proof}
@@ -933,6 +985,47 @@ three items in \cref{def:fixed_epsilon_sinkhorn_setting} are structural: the
 support-complexity inheritance is exact, and the dual-complexity condition is
 precisely the LCA threshold $\alpha>k/2$.
 \end{proposition}
+
+\begin{proposition}[Conditional embedded moderate-band Sinkhorn inheritance]
+\label{prop:conditional_embedded_sinkhorn_inheritance}
+Fix the calibrated embedded fixed-span model with intrinsic dimension $k=2$ and
+a compact moderate band $\mathcal B=[\varepsilon_{\min},\varepsilon_{\max}]$
+bounded away from zero. Assume:
+\begin{enumerate}[label=(\roman*)]
+  \item a centered self-coupling stability lemma holds uniformly on $\mathcal B$
+  with a spectral-radius bound strictly below one and a uniform inverse-norm
+  bound on the centered subspace;
+  \item the centered Sinkhorn scaling map admits a uniform implicit-function
+  linearization on $\mathcal B$ with remainder $o(n^{-1/2})$;
+  \item the induced influence class satisfies a root-$n$ triangular empirical-
+  process bound on the embedded support class;
+  \item the embedded fixed-span support and dual-complexity hypotheses of
+  \cref{prop:operational_sinkhorn_ingredients} hold.
+\end{enumerate}
+Then there exists a finite constant $C_{\mathcal B}$ such that
+\[
+  \sup_{\varepsilon\in\mathcal B}
+  \mathbb E\,S_{\varepsilon}\!
+  \left(\widehat P_{t,\mathrm{tri}}^{(n)},\bar P_t^{(n)}\right)
+  \le C_{\mathcal B} n^{-1/2}.
+\]
+Consequently the corresponding temporal-validity horizon on $S_{\varepsilon}$ has
+the root-$n$ horizon scale
+\[
+  n^*_{\mathcal B}(H)
+  \asymp
+  \left(C_{\mathcal B}/\zeta\right)^{1/(H+1/2)}.
+\]
+\end{proposition}
+
+\begin{proof}
+Under (i)--(iii), the regularized Sinkhorn value admits a uniform first-order
+expansion on $\mathcal B$ with a remainder lower order than $n^{-1/2}$. The
+embedded fixed-span support and dual-complexity hypotheses in (iv) supply the
+same structural comparison needed in the 1D proof model. Applying the abstract
+horizon law with $a=1/2$ yields the stated envelope and the induced horizon
+scale.
+\end{proof}
 
 \begin{proposition}[Pointwise fixed-$\varepsilon$ inheritance in the 1D proof model]
 \label{prop:pointwise_sinkhorn_1d}

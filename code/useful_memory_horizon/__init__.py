@@ -116,13 +116,22 @@ from .gaussian_witness_frontier import (
 from .online_horizon_adaptation import (
     OnlineAdaptationConfig,
     OnlineAdaptationResult,
+    ControllerDecision,
     RoughnessEstimate,
     activity_window_from_proxy,
+    build_online_adaptation_configs,
+    build_online_phase_rows,
+    build_online_summary_rows,
+    build_online_timeline_rows,
+    estimate_aggregated_roughness,
     estimate_local_activity,
     estimate_local_roughness,
+    horizon_window_from_activity,
+    make_profile_config,
     oracle_window_from_truth,
     phase_profile,
     plugin_window_from_roughness,
+    run_online_adaptation_sweep,
     run_online_horizon_adaptation_experiment,
 )
 from .weight_sensitivity import (
@@ -136,11 +145,14 @@ from .weight_sensitivity import (
     run_weight_sensitivity_experiment,
 )
 from .inferable_horizon import (
+    deterministic_relative_regret_bound,
+    exact_relative_regret_from_log_ratio,
     export_inferable_horizon_suite,
     InferableHorizonConfig,
     InferableHorizonSuite,
     fwls_estimate,
     horizon_gradient_log_map,
+    horizon_log_lipschitz_constant,
     horizon_log_map,
     lag_energy,
     operational_identifiability_score,
@@ -153,6 +165,7 @@ from .inferable_horizon import (
     save_regret_scaling_figure,
     simulate_fwls_joint_estimates,
     theoretical_joint_covariance_scaled,
+    useful_region_parameter_radius,
     useful_region_log_radius,
 )
 from .twonn_dimension import twonn_dimension_estimate
@@ -179,6 +192,7 @@ from .multivariate_transfer_proxy import (
     smooth_functional_gradient,
 )
 from .sinkhorn_self_coupling_certificate import certify_self_coupling_stability
+from .sinkhorn_frontier_summary import build_sinkhorn_frontier_summary
 from .sinkhorn_theorem_ready_band import run_sinkhorn_theorem_ready_band_report
 
 __all__ = [
@@ -214,6 +228,7 @@ __all__ = [
     "UCurveResult",
     "OnlineAdaptationConfig",
     "OnlineAdaptationResult",
+    "ControllerDecision",
     "RoughnessEstimate",
     "WeightSensitivityResult",
     "WeightSensitivityRow",
@@ -226,8 +241,11 @@ __all__ = [
     "build_slope_rows",
     "build_trace_rows",
     "build_ucurve_rows",
+    "build_sinkhorn_frontier_summary",
     "continuous_optimal_horizon",
+    "deterministic_relative_regret_bound",
     "estimate_log_slope",
+    "exact_relative_regret_from_log_ratio",
     "endpoint_minimal_profile",
     "exact_fixed_h_optimal_beta",
     "exact_gaussian_asymptotic_constant",
@@ -242,6 +260,7 @@ __all__ = [
     "estimate_local_roughness",
     "fixed_h_beta_root",
     "horizon_gradient_log_map",
+    "horizon_log_lipschitz_constant",
     "horizon_window_from_activity",
     "horizon_envelope",
     "horizon_log_map",
@@ -250,6 +269,12 @@ __all__ = [
     "oracle_window_from_truth",
     "phase_profile",
     "plugin_window_from_roughness",
+    "build_online_adaptation_configs",
+    "build_online_phase_rows",
+    "build_online_summary_rows",
+    "build_online_timeline_rows",
+    "make_profile_config",
+    "run_online_adaptation_sweep",
     "normalized_envelope_ratio",
     "ramp_energy_constant",
     "ramp_profile",
@@ -328,4 +353,5 @@ __all__ = [
     "useful_memory_bounds",
     "useful_memory_interval",
     "useful_region_log_radius",
+    "useful_region_parameter_radius",
 ]
