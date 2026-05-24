@@ -25,42 +25,28 @@ governs estimation of $H$, the residual law, the minimax separation
 boundary, and adaptivity across lag regimes. Fixed $L$ and growing $L$ are
 therefore two regimes of one inferential scale.
 
-The main contributions are:
-\begin{enumerate}[leftmargin=*,label=(\arabic*)]
-\item \textbf{One feasible inference layer.} The two-step FWLS estimator is
-asymptotically oracle-equivalent, yielding a joint inferential law for the
-power-law parameters and an exact oracle law for the residual statistic with a
-feasible asymptotic counterpart.
-
-\item \textbf{One optimality scale.} The minimax separation boundary is of
-order $\bigl(n\sum_{j \leq L} j^{2H}\bigr)^{-1/2}$, with fixed-$L$ and
-growing-$L$ rates obtained as special cases.
-
-\item \textbf{One adaptive procedure.} The same inferential scale attains the
-boundary without prior knowledge of $H$.
-
-\item \textbf{One unknown-scale extension.} A decoupled Gaussian benchmark for
-unknown $\sigma_0$ yields an exact split-$F$ law, while same-sample parametric
-bootstrap restores near-nominal calibration on the tested grid.
-
-\item \textbf{Three empirical signatures.} The simulations show the oracle law,
-FWLS-oracle agreement, and a boundary transition aligned with the information
-scale.
-\end{enumerate}
+The paper develops one inferential layer for this geometry. The two-step FWLS
+estimator is asymptotically oracle-equivalent, with a joint law for the
+power-law parameters and an exact oracle residual law with a feasible asymptotic
+counterpart. The minimax separation boundary is of order
+$\bigl(n\sum_{j \leq L} j^{2H}\bigr)^{-1/2}$, with fixed-$L$ and growing-$L$
+rates as two regimes of the same information law. The procedure is adaptive in
+$H$, and the unknown-scale extension separates an exact decoupled split-$F$
+benchmark from a same-sample bootstrap calibration path.
 
 \paragraph{Relation to prior work.}
 Direct estimation of roughness exponents for Gaussian processes is classical
-\citep{istas1997quadratic,coeurjolly2001estimating}. The present problem differs
-because the exponent is inferred from estimated transport discrepancies, so the
-noise is itself parameter-coupled. The surrounding transport-rate literature
+\citep{istas1997quadratic,coeurjolly2001estimating}. Here the exponent is
+inferred from estimated transport discrepancies, so the noise is itself
+parameter-coupled. The surrounding transport-rate literature
 provides the relevant first layer \citep{fournier2015rate,weed2019sharp,
 goldfeld2024limit,delbarrio2023improved}, while locally stationary drift and
 adaptive inference connect through \citep{dahlhaus1997fitting,
 vogt2012nonparametric,tinio2025bounds,brutsche2024similarity}.
 The temporal-validity horizon law of \citet{Parreira2026May} gives one
 downstream use of the pair $(H,\zeta)$: those parameters govern the structural
-scale of finite memory under drift. The present paper studies the inferential
-layer for the lag geometry itself.
+scale of finite memory under drift. The lag-geometry object itself is the focus
+here.
 
 Section~\ref{sec:model} defines the observation model and the information
 scale. Section~\ref{sec:clt} gives the feasible inference theorem.
