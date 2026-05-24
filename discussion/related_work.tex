@@ -4,130 +4,47 @@
 Dynamic-regret and variation-budget analyses show that under drift, forgetting
 scales and window lengths must adapt to how quickly the target moves
 \citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,YuanLamperski2020,
-MazzettoUpfal2023,WangXieChenLuiZhou2024}. That literature isolates the control
-importance of retention scale. The horizon law gives the corresponding
-statistical law for distribution tracking: finite memory has a temporal-validity
-horizon determined jointly by a finite-sample exponent and a drift roughness
-exponent.
-
-This distinction is especially sharp relative to adaptive update policies such as
-\citet{MazzettoUpfal2023}. Those works optimize a decision or intervention rule
-under evolving data. The present object is earlier in the pipeline: it asks how
-long retained evidence continues to represent the present distribution before age
+MazzettoUpfal2023,WangXieChenLuiZhou2024}. The object studied here is earlier in the
+pipeline: it asks how long retained evidence remains temporally valid before age
 becomes the dominant source of tracking error.
 
-\paragraph{Adaptive windowing, drift detection, and update policies.}
+\paragraph{Adaptive windowing and drift detection.}
 Adaptive-window and concept-drift methods study when accumulated evidence is
-sufficient to react \citep{BifetGavalda2007,Gama2004,GamaSurvey2014}.
-\citet{hinder2023window} emphasize that the window length itself is part of the
-problem. Resource-aware update scheduling under drift addresses a related
-decision problem in which update cost must be balanced against accumulated loss
-\citep{PiasecznyEtAl2025RCCDA}, and finite-time analyses of sliding-window or
-discounted adaptation under switching environments make the same design variable
-explicit from the regret side \citep{GarivierMoulines2011}. Streaming OT and MMD detectors contribute the
-alarm-time perspective, emphasizing delay, power, and memory usage
-\citep{ShvetsovEtAl2020OTChangePoint,KalinkeEtAl2025MMDEW}. These works provide
-the reaction timescale. The horizon law adds the validity timescale: retained
-evidence can cease to represent the present before change statistics cross an
-alarm threshold.
+sufficient to react \citep{BifetGavalda2007,Gama2004,GamaSurvey2014}. Those works
+provide the reaction timescale. The horizon law adds the validity timescale:
+retained evidence can cease to represent the present before change statistics
+cross an alarm threshold.
 
 \paragraph{Adaptive filtering and locally stationary smoothing.}
 Classical adaptive filtering and state-space tracking tune forgetting factors,
 gain schedules, or process-noise levels to balance smoothing against
 responsiveness \citep{Kalman1960,Jazwinski1970}. Locally stationary smoothing
 and bandwidth selection solve the analogous bias--variance problem for evolving
-regression or spectral targets \citep{Dahlhaus1997,Vogt2012}. Recent Wasserstein-
-based results for locally stationary functional time series move that same local
-windowing logic directly into a transport metric \citep{TinioAlayaBouzebda2025}.
-These literatures supply mechanisms for adaptation. The horizon law provides the distributional law
-that such mechanisms must respect when the retained object is an empirical
-distribution rather than a latent state or a local regression surface.
+regression or spectral targets \citep{Dahlhaus1997,Vogt2012}. These literatures
+supply mechanisms for adaptation. The horizon law provides the distributional
+law that such mechanisms must respect when the retained object is an empirical
+distribution.
 
-Lag-geometry inference under noisy transport observations is complementary to
-that structural law. 
-\citet{Parreira2026Jul} study power-law lag geometry through a parameter-coupled
-heteroscedastic regression, deriving an information law for estimating
-$(H,\zeta)$ and testing the adequacy of the lag model itself. That inferential
-layer supplies one route for estimating the roughness inputs that enter the
-horizon law developed here.
-
-\paragraph{Distribution tracking under transport geometry.}
+\paragraph{Transport geometry and operational calibration.}
 Wasserstein distance and Sinkhorn-type estimators provide the finite-sample
-geometries that enter the horizon law. For empirical Wasserstein distances,
-\citet{FournierGuillin2015}, \citet{BoissardLeGouic2014}, and
-\citet{NilesWeedBach2019} show that the sampling exponent depends on geometric
-complexity even before drift enters. The horizon law takes that finite-sample
-exponent as one input and composes it with a staleness exponent induced by the
-drift path. In this sense, the transport literature provides the sampling side
-of the law, while the horizon law provides its temporal counterpart.
+geometries that enter the horizon law \citep{FournierGuillin2015,
+BoissardLeGouic2014,NilesWeedBach2019,GenevayEtAl2019,MenaWeed2019,
+delBarrioEtAl2023,GoldfeldEtAl2022}. Sliced and projection-robust variants
+show that geometry choice can change the finite-sample exponent, while intrinsic
+dimension and regularization calibration determine which regime is available
+\citep{KolouriRohdeHoffmann2018,DeshpandeEtAl2019,PatyCuturi2019,
+LinEtAl2020,NadjahiEtAl2020,NietertEtAl2022,GenansWintenberger2026,FaccoEtAl2017}.
 
-\paragraph{Entropic and smoothed transport as operational geometries.}
-Regularized transport changes both statistical stability and computational
-behavior \citep{GenevayEtAl2019,MenaWeed2019,delBarrioEtAl2023,
-RigolletStromme2025,Stromme2023MID,GroppeHundrieser2024LCA,
-EcksteinNutz2022,GhosalNutzBernton2022}. Fixed-$\varepsilon$ Sinkhorn theory
-provides i.i.d. asymptotics, differentiability, null limit laws, and stability
-constants \citep{GoldfeldEtAl2022}. Those results are the finite-sample anchor
-for the operational horizon law developed here. Recent linear-Gaussian entropic-
-OT analyses make the recursive structure of regularized transport explicit
-\citep{AkyildizEtAl2024}, suggesting a constructive intermediate regime between
-fixed-$\varepsilon$ i.i.d. asymptotics and fully drifted triangular-array
-tracking.
+\paragraph{Age and nonstationarity.}
+Wasserstein nonstationarity measures and Age-of-Information formulations make
+age into an operational variable \citep{JiangLiZhang2020,
+KeehanAndersonWiesemann2025,AminiVinas2026,KaulYatesGruteser2012,
+YatesEtAl2021AoI}. The temporal-validity horizon gives that variable a
+distributional interpretation: age is costly because it accumulates geometric
+mismatch with the present.
 
-Smooth-functional and delta-method arguments provide the multivariate transfer
-mechanism behind this regime. Hadamard differentiability is the natural regularity
-class for lifting triangular-array fluctuations through a transport functional,
-and the fixed-$\varepsilon$ Sinkhorn map sits in that category after gauge
-fixing and uniform stability control \citep{GoldfeldEtAl2022}. That route is the
-right multivariate complement to the one-dimensional quantile-process proof
-model.
-
-\paragraph{Intrinsic geometry and operational calibration.}
-Geometry-aware calibration of regularization scales points toward intrinsic
-dimension as the relevant complexity variable in regularized transport
-\citep{GenansWintenberger2026}. Local intrinsic-dimension diagnostics such as
-TwoNN provide a direct statistic for effective support geometry
-\citep{FaccoEtAl2017}. That perspective enters through the operational Sinkhorn
-frontier: intrinsic geometry helps identify which finite-sample regime is
-available, and therefore which horizon law is relevant.
-
-\paragraph{Low-dimensional surrogate geometries.}
-Sliced, max-sliced, subspace-robust, and projection-robust Wasserstein
-constructions replace ambient transport by one-dimensional or low-dimensional
-comparisons \citep{KolouriRohdeHoffmann2018,DeshpandeEtAl2019,PatyCuturi2019,
-LinEtAl2020,NadjahiEtAl2020,NietertEtAl2022}. These examples show concretely
-that geometry choice can change the finite-sample exponent. They therefore fit
-naturally into the horizon framework as alternative sampling geometries whose
-drift-induced useful-memory scales need not match raw Wasserstein behavior.
-
-\paragraph{Wasserstein nonstationarity and Age of Information.}
-Wasserstein nonstationarity measures already appear in online optimization and
-distributionally robust optimization under drift
-\citep{JiangLiZhang2020,KeehanAndersonWiesemann2025,AminiVinas2026}. The
-Age-of-Information literature treats age as a resource that must be balanced
-against communication or update costs \citep{KaulYatesGruteser2012,
-YatesEtAl2021AoI}. Together these viewpoints make age and nonstationarity into
-operational variables. The horizon law gives them a distributional statistical
-interpretation: age is costly because it accumulates geometric mismatch with the
-present, and the roughness exponent determines how fast that cost grows.
-
-\citet{KeehanAndersonWiesemann2025} are particularly close in spirit: they
-derive concentration bounds for weighted empirical laws under sequential
-Wasserstein drift and optimize weights for distributionally robust decisions.
-That question begins once a decision rule is fixed. The temporal-validity
-horizon addresses the preceding statistical question of how long evidence should
-be retained before staleness dominates the finite-sample gain. In this sense,
-their weighting problem and the present horizon problem are complementary rather
-than competing.
-
-Weighted empirical-process and weighted-Wasserstein precursors are also relevant
-for the non-uniform-memory line. In particular, \citet{Mason2016} studies
-weighted approximations to empirical Wasserstein fluctuations, providing a
-technical ancestor for the weighted-memory summaries $n_{\mathrm{eff}}(w)$ and
-$M_H(w)$ used here.
-
-Across these neighboring literatures, the shared theme is that
-nonstationarity makes retention scale matter. The horizon law identifies the
-statistical object that organizes that dependence for distribution tracking: a
-temporal-validity horizon, together with a useful-memory region and a distinct
-detectability timescale.
+\paragraph{Lag-geometry inference.}
+Lag-geometry inference under noisy transport observations is complementary to the
+structural law. \citet{Parreira2026Jul} study power-law lag geometry through a
+parameter-coupled heteroscedastic regression, deriving an information law for
+estimating $(H,\zeta)$ and testing the lag model itself.

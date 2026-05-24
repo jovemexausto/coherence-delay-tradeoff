@@ -4,54 +4,28 @@ Under drift, memory is never purely beneficial. It reduces finite-sample noise,
 but it also ages. The resulting trade-off makes finite memory a
 temporal-validity object with a finite horizon.
 
-That idea is formalized through the horizon law
+The horizon law
 \[
   \mathbb E\,d\!\left(\widehat P_t^{(n)},P_t\right)
   \le C_K n^{-a} + C_S\zeta n^H,
 \]
-whose optimal scale is
+and its optimizer
 \[
-  n^*(a,H) \asymp (C_K/\zeta)^{1/(a+H)}.
+  n^*(a,H) \asymp (C_K/\zeta)^{1/(a+H)}
 \]
-Finite-memory tracking under drift is governed by this balance between
-finite-sample accuracy and drift-induced staleness, and the same balance induces
-a useful-memory region around the optimal scale.
+summarize that balance. This law induces a useful-memory region around the
+optimal scale.
 
-A tractable one-dimensional proof model supplies a rigorous root-$n$
-finite-sample regime, and a structural Gaussian lower-bound construction shows
-that the corresponding horizon is not an artifact of one estimator. The same
-object yields a Gaussian location minimax benchmark on deterministic H\"older
-paths. In fixed-$\varepsilon$ Sinkhorn geometry, the compact-support
-one-dimensional pointwise and bandwise inheritance theorems show that the same
-horizon logic remains visible in an operational transport geometry.
+The core theory closes in a tractable one-dimensional root-$n$ proof model,
+matched with a structural Gaussian lower bound and a Gaussian location
+benchmark. In fixed-$\varepsilon$ Sinkhorn geometry, the one-dimensional
+inheritance results place the horizon law in an operational transport geometry.
 
-The same decomposition extends to non-uniform lag weights through effective
-sample size and weighted lag moment summaries. The theorem-level question is
-whether that weighted horizon law improves constants on richer drift classes or
-only reshapes the same balance.
+The empirical signatures align with the theory: finite-memory U-curves, roughness-
+dependent horizon scaling, a real-stream retention pattern, and a positive lag
+between validity loss and detector alarm. Inferable horizons then add a second
+distinction: a temporal-validity horizon can exist structurally and still be
+operationally hard to estimate from lag geometry alone.
 
-The finite-memory U-curve, roughness-dependent horizon scaling, a useful-memory
-region around the optimal scale, and a strictly positive lag between validity
-loss and detector alarm all fit the same horizon law. The resulting message is
-both theoretical and operational: retained evidence has a path-dependent horizon,
-useful memory occupies a finite near-optimal region, and statistical
-detectability need not coincide with temporal validity.
-
-The inferable-horizon layer adds a second distinction. A temporal-validity
-horizon can exist structurally and yet remain operationally non-identifiable from
-the available lag geometry. The plug-in horizon law, the useful-region coverage
-criterion, and the quadratic regret expansion identify the information scale on
-which a data-driven memory choice becomes reliable.
-
-Temporal validity of retained evidence is therefore a first-class statistical
-object under drift. The horizon law identifies its governing scale, the
-useful-memory region records its operational range, and the detectability lag
-shows that validity can fail before alarms appear. The inferable-horizon bridge
-adds a fourth statement: operational memory choice is controlled jointly by lag-
-geometry information and by the curvature of the useful-memory region.
-
-The five open problems in \cref{sec:limitations_open_problems} mark the precise
-frontier of this program. The first two close the structural theorem line, the
-third isolates the design limits of memory itself, and the last two turn the
-horizon law into a fully online object with estimation and control guarantees.
-Together they define a coherent next stage for temporal validity under drift.
+The open frontier consists of embedded Sinkhorn closure, non-uniform memory
+design, and online control.

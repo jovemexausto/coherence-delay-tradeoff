@@ -13,66 +13,6 @@ enough changepoint evidence accumulates to trigger an alarm.}
 \label{fig:finite_sample_staleness_tradeoff}
 \end{figure}
 
-For a finite-memory estimator with lag weights $w_0,\dots,w_{n-1}$, the natural
-age variable is the effective lag
-\[
-  A(w) \coloneqq \sum_{j=0}^{n-1} j\,w_j.
-\]
-Its corresponding staleness at time $t$ is the weighted transport misalignment
-\[
-  S_t(w) \coloneqq \sum_{j=0}^{n-1} w_j\,
-  W_2\!\left(P_{t-j},P_t\right).
-\]
-For a uniform window, $A(w)=(n-1)/2$, so window length and temporal age are the
-same object up to constants.
-
-Non-uniform weights separate two summaries. The finite-sample term is governed by
-the effective sample size
-\[
-  n_{\mathrm{eff}}(w) \coloneqq \Bigl(\sum_{j=0}^{n-1} w_j^2\Bigr)^{-1},
-\]
-while the drift term is governed by weighted lag moments. For each $H\in(0,1]$,
-define
-\[
-  M_H(w) \coloneqq \sum_{j=0}^{n-1} j^H w_j.
-\]
-Then any weighted horizon law of the form
-\[
-  \mathbb E\,d\!\left(\widehat P_t^{(w)},P_t\right)
-  \le C_K n_{\mathrm{eff}}(w)^{-a} + C_S\zeta M_H(w)
-\]
-induces a weighted useful-memory region by balancing the two summaries. On a
-linear ramp, $M_1(w)=A(w)$ exactly, so the effective lag recovers the exact
-staleness term.
-
-\begin{proposition}[Uniform weights maximize effective sample size]
-\label{prop:uniform_maximizes_effective_sample_size}
-Let $w_0,\dots,w_{n-1}$ be nonnegative weights with $\sum_{j=0}^{n-1} w_j=1$.
-Then
-\[
-  n_{\mathrm{eff}}(w) \le n,
-\]
-with equality if and only if $w_j=1/n$ for all $j$. Moreover, if the drift
-profile is an exact linear ramp in the sense that the lag-$j$ contribution is
-proportional to $j$, then the weighted staleness equals the effective lag:
-\[
-  S_t(w)=c\,A(w)
-\]
-for the corresponding linear coefficient $c$.
-\end{proposition}
-
-\begin{proof}
-By Cauchy--Schwarz,
-\[
-  1=\Bigl(\sum_{j=0}^{n-1} w_j\Bigr)^2
-  \le n\sum_{j=0}^{n-1} w_j^2,
-\]
-so $n_{\mathrm{eff}}(w)=1/\sum_j w_j^2\le n$, with equality exactly when the
-weights are all equal. On an exact linear ramp, the lag-$j$ contribution is
-proportional to $j$, so averaging with weights $w_j$ gives the weighted mean lag
-$A(w)$ and hence $S_t(w)=cA(w)$.
-\end{proof}
-
 Throughout, $P_t$ denotes the present target law,
 $\bar P_t^{(n)}$ the window target obtained by averaging the last $n$ target
 laws, and $\widehat P_t^{(n)}$ the estimator built from the last $n$
@@ -81,7 +21,7 @@ relative to $\bar P_t^{(n)}$, while the staleness term refers to the
 discrepancy between $\bar P_t^{(n)}$ and $P_t$.
 
 Finite-sample error relative to $\bar P_t^{(n)}$ and staleness relative to
-$P_t$ combine into a horizon law. When both sides are controlled, the same scale
+$P_t$ combine into a horizon law. When both sides are controlled, the resulting scale
 induces a useful-memory region: the range of memory lengths whose tracking
 error remains near optimal.
 
@@ -152,9 +92,9 @@ such that
 \begin{proof}
 Write the Hadamard expansion at $P_t$ and apply the boundedness of the derivative
 to the centered triangular-array fluctuation. The drift term contributes through
-the same envelope as the base metric because $\mathcal T$ is locally Lipschitz on
+the base-metric envelope because $\mathcal T$ is locally Lipschitz on
 the class. The remainder is lower order by assumption, so the transformed law
-inherits the same horizon envelope.
+inherits the horizon envelope.
 \end{proof}
 
 \begin{proposition}[Finite-dimensional smooth transfer]
@@ -188,14 +128,9 @@ and the Taylor remainder is quadratic in the moment error:
 \begin{proof}
 Apply the multivariate Taylor formula to $g$ around $Z(P_t)$. The bounded Hessian
 gives the stated quadratic remainder. The first-order term is controlled by the
-assumed finite-sample and drift envelopes for $Z$, and the same decomposition as
-in \cref{prop:hadamard_triangular_transfer} yields the horizon law for $T$.
+assumed finite-sample and drift envelopes for $Z$, and the argument from
+\cref{prop:hadamard_triangular_transfer} yields the horizon law for $T$.
 \end{proof}
-
-The same decomposition extends to non-uniform weights once the two summaries
-$n_{\mathrm{eff}}(w)$ and $M_H(w)$ are controlled. The theorem-level question is
-whether weighted forgetting enlarges the useful-memory region beyond a constant
-factor on richer path classes, or whether it only changes the leading constant.
 
 \begin{corollary}[Temporal-validity horizon]
 \label{cor:temporal_validity_horizon}
@@ -236,8 +171,7 @@ $\delta>0$, define the useful-memory region by
 \[
   \mathcal U_\delta \coloneqq \{n>0: \Phi(n) \le (1+\delta)\Phi(n_\star)\}.
 \]
-This object records not only where the envelope is minimized, but also how much
-memory remains acceptable up to a fixed tolerance.
+This object records how much memory remains acceptable up to a fixed tolerance.
 
 \begin{proposition}[Useful-memory region at tolerance $\delta$]
 \label{prop:useful_memory_region}
@@ -300,7 +234,7 @@ The case $H=1$ is the local Lipschitz envelope; smaller $H$ correspond to slower
 accumulation of staleness with lag.
 
 \begin{lemma}[Hölder staleness bound via averaged couplings]
-\label{lem:Hölder_staleness_bound}
+\label{lem:holder_staleness_bound}
 Let
 \[
   \bar P_t^{(n)} \coloneqq \frac{1}{n}\sum_{j=0}^{n-1} P_{t-j}.
@@ -344,7 +278,7 @@ Applying the Hölder envelope gives the displayed finite-$n$ constant, and takin
 square roots completes the proof.
 \end{proof}
 
-Combining \cref{lem:Hölder_staleness_bound} with
+Combining \cref{lem:holder_staleness_bound} with
 \cref{cor:temporal_validity_horizon} yields the horizon family
 \[
   n^*(a,H) \asymp (C_K/\zeta)^{1/(a+H)}.
@@ -354,7 +288,7 @@ In the root-$n$ finite-sample regime $a=1/2$,
   n^*(1/2,H) \asymp (C_K/\zeta)^{2/(1+2H)}.
 \]
 The finite-$n$ constant in
-\cref{lem:Hölder_staleness_bound} is the constant used here for
+\cref{lem:holder_staleness_bound} is the constant used here for
 uniform windows; the simpler $(2H+1)^{-1/2}$ expression is its large-window
 limit.
 
@@ -550,7 +484,7 @@ through item~(iv). Consequently, the same root-$n$ conclusion persists under any
 short-range dependent rowwise model for which the empirical cdf still has
 $L_2$ fluctuation of order $n^{-1/2}$ and the integrated Bahadur remainder
 remains $o(n^{-1})$. Short-range mixing conditions are one natural route to such
-a package, but the present paper does not develop a general dependent-row
+a package, but no general dependent-row
 theorem.
 \end{remark}
 
@@ -633,7 +567,7 @@ artifact.
 
 The proposition above is the lower-bound fact needed for the main horizon law.
 The same Gaussian construction also exposes the constant-level geometry.
-The following proposition records the sharp Gaussian constants available within
+The following proposition gives the sharp Gaussian constants available within
 that proof scheme.
 
 \subsection{Gaussian Lower-Bound Geometry}
@@ -941,15 +875,55 @@ Applying \cref{thm:abstract_upper_law} with $d=SW_{2,\rho}$ yields the stated
 envelope and horizon scale.
 \end{proof}
 
+\subsection{Weighted-Memory Summaries}
+
+The main line above is stated for uniform windows, but the same decomposition
+extends to non-uniform lag weights. For a finite-memory estimator with weights
+$w_0,\dots,w_{n-1}$, define the effective sample size
+\[
+  n_{\mathrm{eff}}(w) \coloneqq \Bigl(\sum_{j=0}^{n-1} w_j^2\Bigr)^{-1}
+\]
+and the weighted lag moment
+\[
+  M_H(w) \coloneqq \sum_{j=0}^{n-1} j^H w_j.
+\]
+Any weighted horizon law of the form
+\[
+  \mathbb E\,d\!\left(\widehat P_t^{(w)},P_t\right)
+  \le C_K n_{\mathrm{eff}}(w)^{-a} + C_S\zeta M_H(w)
+\]
+balances the finite-sample and staleness terms through these two summaries.
+
+\begin{proposition}[Uniform weights maximize effective sample size]
+\label{prop:uniform_maximizes_effective_sample_size}
+Let $w_0,\dots,w_{n-1}$ be nonnegative weights with $\sum_{j=0}^{n-1} w_j=1$.
+Then
+\[
+  n_{\mathrm{eff}}(w) \le n,
+\]
+with equality if and only if $w_j=1/n$ for all $j$. Moreover, if the drift
+profile is an exact linear ramp in the sense that the lag-$j$ contribution is
+proportional to $j$, then the weighted staleness equals the effective lag.
+\end{proposition}
+
+\begin{proof}
+By Cauchy--Schwarz,
+\[
+  1=\Bigl(\sum_{j=0}^{n-1} w_j\Bigr)^2
+  \le n\sum_{j=0}^{n-1} w_j^2,
+\]
+so $n_{\mathrm{eff}}(w)=1/\sum_j w_j^2\le n$, with equality exactly when the
+weights are all equal. On an exact linear ramp, averaging the lag contribution
+with weights $w_j$ recovers the weighted mean lag.
+\end{proof}
+
 \subsection{Benchmark Theorems and Operational Extensions}
 
-The Gaussian benchmark and the fixed-$\varepsilon$ Sinkhorn extension place the
-horizon law in two broader settings: a full path-class benchmark with theorem-
-level closure, and an operational transport geometry in which the one-
-dimensional compact-support inheritance theory is already explicit. The
-linear-Gaussian entropic-OT setting suggests an intermediate recursive regime
-between the i.i.d. fixed-$\varepsilon$ theory and the embedded low-dimensional
-extension \citep{Kalman1960,Jazwinski1970,AkyildizEtAl2024}.
+The Gaussian benchmark closes a full path-class model, while the
+fixed-$\varepsilon$ Sinkhorn results place the same horizon logic in an
+operational transport geometry. The linear-Gaussian entropic-OT setting suggests
+an intermediate recursive regime between the i.i.d. fixed-$\varepsilon$ theory
+and the embedded low-dimensional extension \citep{Kalman1960,Jazwinski1970,AkyildizEtAl2024}.
 
 \paragraph{Fixed-$\varepsilon$ Sinkhorn setting.}
 For fixed-$\varepsilon$ debiased Sinkhorn, the central question is whether a
@@ -1181,7 +1155,7 @@ $a_{\varepsilon}$, then the operational horizon law should be
 The i.i.d. benchmark comes from existing fixed-$\varepsilon$ entropic transport
 results, including fixed-marginal limit theory for the Sinkhorn divergence and
 intrinsic-complexity adaptation \citep{GoldfeldEtAl2022,Stromme2023MID,
-GroppeHundrieser2024LCA}. In the present embedded fixed-span model,
+GroppeHundrieser2024LCA}. In the embedded fixed-span model considered here,
 support-complexity inheritance is exact and the dual smoothness threshold
 reduces to $\alpha>k/2$. Calibration then asks whether triangular and i.i.d.
 rate estimates remain close across the regularization band. Additional

@@ -3,7 +3,7 @@
 \ifPDFTeX
   \usepackage[utf8]{inputenc}
 \fi
-\usepackage[top=1.7cm, bottom=1.8cm, left=1.45cm, right=1.45cm]{geometry}
+\usepackage[top=1.55cm, bottom=1.6cm, left=1.35cm, right=1.35cm]{geometry}
 \usepackage{amsmath, amsthm, amssymb, mathtools}
 \usepackage{booktabs}
 \usepackage{array}
@@ -21,14 +21,14 @@
 \usepackage{lmodern}
 \usepackage[font=small,labelfont=bf]{caption}
 
-\setlength{\columnsep}{18pt}
+\setlength{\columnsep}{16pt}
 \setlength{\columnseprule}{0pt}
 
 % Float spacing tuned for dense manuscript pages.
-\setlength{\textfloatsep}{18pt plus 4pt minus 3pt}
-\setlength{\floatsep}{10pt plus 2pt minus 2pt}
-\setlength{\intextsep}{14pt plus 3pt minus 3pt}
-\setlength{\abovecaptionskip}{6pt plus 2pt minus 2pt}
+\setlength{\textfloatsep}{14pt plus 3pt minus 2pt}
+\setlength{\floatsep}{8pt plus 2pt minus 2pt}
+\setlength{\intextsep}{10pt plus 2pt minus 2pt}
+\setlength{\abovecaptionskip}{4pt plus 1pt minus 1pt}
 \setlength{\belowcaptionskip}{0pt}
 \renewcommand{\topfraction}{0.92}
 \renewcommand{\bottomfraction}{0.8}
@@ -44,13 +44,13 @@
 \makeatother
 
 % Give tables a little top padding so they do not feel glued to the text above.
-\AtBeginEnvironment{table}{\vspace*{4pt}}
-\AtBeginEnvironment{figure}{\vspace*{2pt}}
+\AtBeginEnvironment{table}{\vspace*{0pt}}
+\AtBeginEnvironment{figure}{\vspace*{0pt}}
 
 \usepackage[colorlinks=true, linkcolor=blue!60!black, citecolor=green!50!black,
             urlcolor=cyan!70!black,
             pdftitle={Useful Memory under Drift: Temporal-Validity Horizons for Finite-Memory Distribution Tracking},
-            pdfauthor={Parreira Figueiredo}]{hyperref}
+            pdfauthor={Vinicius Parreira}]{hyperref}
 \usepackage{cleveref}
 \usepackage{orcidlink}
 

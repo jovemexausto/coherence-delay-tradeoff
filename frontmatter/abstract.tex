@@ -1,24 +1,18 @@
 \begin{abstract}
 We study the temporal validity of retained evidence for distribution tracking
-under drift. Longer memory reduces finite-sample noise but also ages the
-evidence, producing the horizon law
-\[
-  \mathbb E\,d\!\left(\widehat P_t^{(n)},P_t\right)
-  \le C_K n^{-a} + C_S\zeta n^H,
-\]
-with optimal scale $n_\star(a,H) \asymp (C_K/\zeta)^{1/(a+H)}$. This law induces
-a useful-memory region of near-optimal window lengths whose normalized geometry
-depends only on $(a,H)$. In a tractable one-dimensional root-$n$ proof model we
-establish the upper law, and a Gaussian lower-bound construction shows that the
-horizon is structural rather than estimator-specific. For finite families of
-one-dimensional projections, including coordinate-averaged product Wasserstein,
-the same root-$n$ horizon law holds under uniform projected control. An
-inferable-horizon layer then propagates lag-geometry uncertainty into memory
-selection: when lag geometry is estimated from noisy transport
-discrepancies, plug-in horizon uncertainty is governed by an operational
-identifiability criterion and yields a quadratic regret law for memory
-selection. Experiments show an interior U-curve, roughness-dependent scaling, a
-real-stream retention signature, and a positive lag between validity loss and
+under drift. The central object is a temporal-validity horizon: the memory scale
+at which the gain from larger samples is overtaken by drift-induced staleness.
+A general law balances a finite-sample term and a staleness term, yielding an
+optimal memory scale and a useful-memory region whose normalized geometry
+depends only on the finite-sample and drift exponents. We prove this law in a
+tractable one-dimensional root-$n$ proof model, show through a Gaussian
+lower-bound construction and a Gaussian location benchmark that the horizon is
+structural, and extend the horizon law to finite projection families and
+one-dimensional fixed-$\varepsilon$ Sinkhorn geometry. An inferable-horizon
+layer propagates lag-geometry uncertainty into data-driven memory selection
+through an operational identifiability criterion and a quadratic regret law.
+Experiments reveal interior U-curves, roughness-dependent scaling, a real-stream
+retention signature, and a regime in which temporal validity fails before
 standard changepoint alarms.
 \end{abstract}
 

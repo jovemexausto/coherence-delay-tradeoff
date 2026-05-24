@@ -1,11 +1,11 @@
 \section{Inferable Horizons}
 \label{sec:inferable_horizons}
 
-The horizon law is structural, but its operational use requires more than the
+The horizon law is structural, but operational use requires more than the
 existence of an optimizer. A data-driven memory rule needs estimators of the
-drift-geometry parameters $(H,\zeta)$, together with a quantitative criterion
-that compares inferential resolution to the curvature of the useful-memory
-region. The resulting bridge turns temporal validity into an inferable object.
+drift-geometry parameters $(H,\zeta)$ together with a criterion that compares
+inferential resolution to the curvature of the useful-memory region. This
+section turns temporal validity into an inferable object.
 
 Write $\alpha = \log \zeta$, and let $m$ denote the per-lag sample size used to
 estimate lagged transport discrepancies. For a fixed lag design
@@ -83,9 +83,8 @@ Let $(x_-(\delta;a,H),x_+(\delta;a,H))$ be the normalized endpoints from
   \coloneqq
   \min\bigl\{-\log x_-(\delta;a,H),\,\log x_+(\delta;a,H)\bigr\}.
 \]
-This quantity measures the operational tolerance of the horizon law: it is the
-largest symmetric log-error around $n_\star$ that stays inside the useful-memory
-region.
+This quantity is the largest symmetric log-error around $n_\star$ that stays
+inside the useful-memory region.
 
 \begin{theorem}[Operational Identifiability of Useful Memory]
 \label{thm:operational_identifiability}
@@ -149,7 +148,7 @@ characterization of $\mathcal U_\delta$ from \Cref{prop:useful_memory_region}.
 \end{proof}
 
 The informative regime lies across the transition from low to moderate
-identifiability. Table \ref{tab:inferable_horizon} records representative
+identifiability. Table \Cref{tab:inferable_horizon} shows representative
 points across that transition.
 
 \input{artifacts/tables/inferable_horizon/tab_inferable_horizon.tex}
@@ -157,8 +156,8 @@ points across that transition.
 On the tested grid, the plug-in central limit law is also well calibrated at the
 scale level: the empirical standard deviation of $\log \widehat n_\star$ tracks
 the delta-method prediction closely, and the nominal $95\%$ Gaussian interval
-coverage stays near its target across the reported regimes. The same simulation
-suite gives a direct calibration check for the regret expansion.
+coverage stays near its target across the reported regimes. The simulation suite
+also calibrates the regret expansion directly.
 
 \begin{proposition}[Deterministic and asymptotic plug-in horizon regret]
 \label{prop:plugin_horizon_regret}
@@ -213,7 +212,7 @@ third moments on compact parameter sets.
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.94\linewidth]{artifacts/figures/inferable_horizon/fig_operational_identifiability}
-\caption{Operational identifiability of useful memory. Across the tested grid,
+\caption{Operational identifiability of the useful-memory region. Across the tested grid,
 useful-region hit rates collapse against the score
 $\mathfrak S_{\delta,m,L} = \sqrt{\mathcal I_{m,L}(H)}r_\delta(a,H)/\tau(H,\zeta)$,
 matching the Gaussian approximation from \Cref{thm:operational_identifiability}.}
@@ -230,7 +229,7 @@ second order in log-scale error in the theorem regime.}
 \label{fig:inferable_horizon_regret}
 \end{figure}
 
-This section separates two questions that need not agree. A temporal-validity
-horizon may exist structurally without being operationally identifiable from the
-available lag geometry. The gap between existence and operational inferability
-is governed by the score $\mathfrak S_{\delta,m,L}$.
+Structural existence and operational identifiability need not coincide. A
+temporal-validity horizon may exist even when the available lag geometry is too
+noisy to localize it reliably. The gap is governed by the score
+$\mathfrak S_{\delta,m,L}$.

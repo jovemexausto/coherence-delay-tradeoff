@@ -1,8 +1,8 @@
 \section{Finite-Sample and Operational Diagnostics}\label{app:finite_sample_geometry}
 
 This appendix gives finite-sample diagnostics for the theorem line and the
-remaining operational frontier. These diagnostics are not substitutes for theorem
-statements.
+operational frontier. These diagnostics support theorem-facing regimes without
+changing claim status.
 
 \subsection{Finite-Sample Geometry Diagnostic}
 
@@ -66,11 +66,11 @@ moderate band such as $[0.2,0.8]$ the cross-coupling block remains contractive
 and the self-coupling inverse norms appear to plateau with sample size. Second,
 on the supported synthetic frontier grid, intrinsic-dimension estimates
 predict the observed stable-band cutoff better than ambient dimension.
-These diagnostics identify a useful regime statistic and isolate the band where the
-remaining instability is concentrated. They do not upgrade the embedded fixed-
+These diagnostics identify a useful regime statistic and isolate the band where
+the instability is concentrated. They do not upgrade the embedded fixed-
 $\varepsilon$ statement from conjecture to theorem.
 
-The calibrated summary now separates three ingredients on the same embedded grid:
+The calibrated summary separates three ingredients on the same embedded grid:
 the empirically stable band, the theorem-ready band obtained from the structural
 certificate, and the self-coupling proxy on the calibrated pairs where that
 proxy is currently informative. On $(8,2)$ and $(12,2)$, the empirical and
@@ -79,6 +79,8 @@ positive spectral gap, worst spectral radius below $0.97$, and largest-sample
 mean inverse norm below $3.0$.
 
 \input{artifacts/tables/conceptual/sinkhorn_frontier_summary}
+
+\input{artifacts/tables/conceptual/sinkhorn_theorem_ready_band}
 
 \subsection{Smooth Multivariate Transfer Diagnostics}
 
@@ -95,8 +97,8 @@ lower order than the finite-sample term on the tested windows.
 \subsection{Robustness Summaries}
 
 The real-stream, validity-gap, and online-controller sweeps are summarized here
-in compact form. Their role is to delimit where the qualitative signatures remain
-stable on the tested grids.
+in compact form. They delimit where the qualitative signatures remain stable on
+the tested grids.
 
 \input{artifacts/tables/conceptual/elec2_robustness_summary}
 

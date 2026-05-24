@@ -1,4 +1,4 @@
-# Scale-Consistency Spin-Off
+# Power-Law Lag Geometry
 
 This workspace isolates the spin-off paper on structural inference for
 power-law lag geometry under noisy transport estimates.

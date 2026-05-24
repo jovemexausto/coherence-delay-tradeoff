@@ -1,6 +1,6 @@
 \section{Empirical Signatures}\label{sec:empirical_signatures}
 
-These experiments expose the finite-sample signatures of the temporal-validity
+The experiments display the finite-sample signatures of the temporal-validity
 horizon, the useful-memory region induced by that horizon, and evidence
 relevant to the fixed-$\varepsilon$ Sinkhorn frontier.
 
@@ -14,7 +14,7 @@ short anchor block on the marginal distribution of \texttt{nswprice}. The empiri
 goal is qualitative and structural: persistence of shape, ordering, and sign
 across repeated runs, not precise constant estimation for every curve.
 
-The empirical signatures are fivefold. Finite-memory risk exhibits an interior
+Five signatures recur across the experiments. Finite-memory risk exhibits an interior
 optimum together with a near-optimal useful-memory band. That optimum moves with
 temporal roughness. The same shape appears on a real stream. The fixed-
 $\varepsilon$ Sinkhorn frontier receives structured empirical support. Temporal
@@ -35,8 +35,8 @@ gain. The optimum remains finite across drift strengths.}
 \label{fig:memory_optimum}
 \end{figure}
 
-This is the basic empirical signature of temporal validity under drift. Under
-stationarity, more memory would continue to help. Under drift, the same horizon
+This interior optimum is the basic empirical signature of temporal validity under drift. Under
+stationarity, more memory would continue to help. Under drift, the horizon
 that reduces variance also ages the evidence. Around the minimizing horizon, the
 curve displays a flat near-optimal region, which is the empirical analogue of
 the useful-memory region defined from the envelope $\Phi$.
@@ -50,7 +50,7 @@ theory,
 \[
   \mathcal E(n) \approx \sigma n^{-1/2} + \zeta n^H,
 \]
-and the experiment records the empirically optimal horizon across a sweep of
+and the experiment traces the empirically optimal horizon across a sweep of
 $\zeta$ values.
 
 \begin{figure}[!htbp]
@@ -67,7 +67,7 @@ horizon logic of \cref{cor:temporal_validity_horizon}.
 
 \subsection{Real-Stream Retention Diagnostic}
 
-The same qualitative signature appears on a real nonstationary stream. Using
+A similar signature appears on a real nonstationary stream. Using
 ELEC2, consider the one-dimensional marginal law of \texttt{nswprice}. At each time,
 approximate the present target by a short anchor block of 48 observations and
 compare it, in $W_1$, with the empirical law induced by the preceding memory
@@ -79,8 +79,7 @@ of the finite-memory U-curve.
 \safeincludegraphics[width=0.88\linewidth]{artifacts/figures/elec2/fig_elec2_ucurve}
 \caption{ELEC2 real-stream diagnostic on the \texttt{nswprice} marginal. The mean
 anchor-block $W_1$ error exhibits a finite interior optimum and a near-optimal
-  useful-memory band. The figure is diagnostic: it asks whether the
-  temporal-validity signature appears on a real stream.}
+useful-memory band, matching the temporal-validity signature on a real stream.}
 \label{fig:elec2_ucurve}
 \end{figure}
 
@@ -91,7 +90,7 @@ too noisy, while very long windows become stale relative to the present block.
 On a robustness grid with anchor sizes $24$, $48$, and $96$ and three
 contiguous segments of length $4000$, the \texttt{nswprice} marginal retains an
 interior optimum in all nine tested configurations, with edge-to-best error
-ratios between $1.31$ and $1.68$. The same interior pattern appears on the
+ratios between $1.31$ and $1.68$. An interior pattern also appears on the
 \texttt{nswdemand} marginal in all nine tested configurations, although the
 optimizing scale moves more substantially across segments and anchor lengths; see
 \Cref{tab:elec2_robustness}.
@@ -104,51 +103,22 @@ a practical geometry replaces raw $W_2$, does the finite-sample term remain
 stable enough for the horizon law to stay informative in an embedded operational
 regime? The pointwise and bandwise one-dimensional fixed-support statements
 appear in \cref{prop:pointwise_sinkhorn_1d,prop:bandwise_sinkhorn_1d}; the
-calibrated embedded fixed-span model extends the same question to a broader
+calibrated embedded fixed-span model extends the question to a broader
 low-dimensional setting.
 
 The fixed-$\varepsilon$ Sinkhorn geometry on embedded low-intrinsic-dimensional
-support shows that the corresponding finite-sample term remains stable across
-the tested regularization values and that the triangular slope stays close to
-the i.i.d. benchmark, with no separate exponent emerging. Combined with
-the structural ingredients isolated in \cref{prop:operational_sinkhorn_ingredients},
-this identifies a stable embedded operating regime. In the calibrated fixed-span model
-with $\alpha=2$ and span $0.25$, the maximal observed stable bands are
-$\varepsilon_{\max}=0.5$ for $(d,k)=(8,1)$, $(8,2)$, and $(12,2)$, and
-$\varepsilon_{\max}=0.2$ for $(12,1)$.
+support keeps the finite-sample term close to the i.i.d. benchmark across a
+moderate regularization band, with no separate exponent emerging on the tested
+grid. In the calibrated fixed-span model with $\alpha=2$ and span $0.25$, the
+stable regime is widest on $(8,1)$, $(8,2)$, and $(12,2)$, and narrower on
+$(12,1)$. Direct Jacobian probes localize the remaining instability in the
+self-coupling blocks, while the calibrated certificate identifies a
+moderate-band regime on which the conditional theorem rests. Supporting tables
+and calibration details are kept in \cref{app:finite_sample_geometry}.
 
-The same synthetic family also separates two mechanisms. Raw $W_2$ comparison
-between the triangular and i.i.d. empirical measures slows once intrinsic
-dimension increases, so the embedded fixed-$\varepsilon$ statement does not
-follow from the available $W_2$ transfer route. Direct Jacobian probes of the
-centered Sinkhorn scaling map instead isolate a moderate-band regime: on
-$\varepsilon\in[0.2,0.8]$, the cross-coupling block stays contractive, while
-the self-coupling blocks are the main source of instability but appear
-numerically to plateau with sample size.
-
-The calibrated fixed-span model shows that the tested grid has a stable core and
-a small mixed boundary region. Calibration details and supporting tables are
-kept in \cref{app:finite_sample_geometry}. The strongest support appears on
-moderate bands bounded away from zero.
-
-The certified-band report on the same calibrated grid is positive on the
-same stable pairs: it returns maximal certified bands of at least 0.5 for
-$(d,k)=(8,1)$, $(8,2)$, and $(12,2)$, and 0.2 for $(12,1)$. This does not prove
-the embedded theorem, but it identifies a concrete moderate-band regime in which
-the conditional stability assumptions are simultaneously satisfied by the current
-certificate.
-
-\input{artifacts/tables/conceptual/sinkhorn_theorem_ready_band}
-
-To probe whether the frontier is controlled more by local intrinsic geometry than
-by the ambient coordinate count, we estimate the effective intrinsic dimension
-with TwoNN on the same synthetic frontier family. On
-the nine-pair, six-$\varepsilon$ grid studied here, the resulting \(\hat{k}\)
-predicts the stable-band cutoff better than ambient dimension and improves the
-binary cut at \(\varepsilon=0.2\). This is consistent with geometry-aware
-calibration: the relevant control variable is the estimated local geometry, not
-the ambient coordinate count. The estimator therefore enters here as a
-regime-selection diagnostic for the band analysis.
+Intrinsic-dimension estimates from TwoNN track the stable-band cutoff better than
+ambient dimension on the tested grid, so the regime-selection variable is local
+geometry rather than ambient dimension.
 
 \subsection{Validity Precedes Detection}\label{sec:empirical_validity_lag}
 
@@ -180,22 +150,22 @@ alarm threshold.
 
 The positive lag is not a knife-edge feature of one tuning choice. Across the
 tested ADWIN thresholds, mean detection time remains strictly later than mean
-validity-expiry time, and the same qualitative lag persists under a different
+validity-expiry time, and the qualitative lag persists under a different
 detector family as well. On the raw-observation input, the full tested grid of
 ADWIN and Page--Hinkley detectors, operating windows $160$, $220$, and $300$,
 and the reported threshold sweep keeps positive-gap rate equal to one together
 with unit detection rate. Page--Hinkley reacts earlier on this drift family,
 with mean gaps between about $205$ and $345$, while ADWIN yields mean gaps
 between about $429$ and $620$. Residualized detector inputs are not uniformly
-better on the same stream: ADWIN on absolute residuals fails to trigger on the
+better on this stream: ADWIN on absolute residuals fails to trigger on the
 tested grid, whereas Page--Hinkley still detects but with lower detection rates
 and substantially larger delays. The empirical claim is robustness of the sign
 of $\Delta_{\mathrm{val-det}}$ on the tested observation-based detector/tuning
 family, not a detector-uniform delay law; see
 \Cref{tab:validity_gap_robustness}.
 
-\subsection{Empirical Signatures}\label{sec:empirical_summary}
+\subsection{Empirical Summary}\label{sec:empirical_summary}
 The experiments support a structural U-curve with a near-optimal useful-memory
-region, roughness-dependent horizon scaling, the same retention pattern on the
+region, roughness-dependent horizon scaling, the retention pattern on the
 ELEC2 stream, structured support for the fixed-$\varepsilon$ Sinkhorn frontier,
 and a measurable lag between validity loss and detector alarm.
