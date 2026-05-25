@@ -44,13 +44,12 @@ functional makes that geometry explicit through a closed-form persistence surfac
 Classical adaptive filtering and state-space tracking tune forgetting factors,
 gain schedules, or process-noise levels to balance smoothing against
 responsiveness \citep{Kalman1960,Jazwinski1970}. Locally stationary smoothing
-and bandwidth selection solve the analogous bias--variance problem for evolving
-regression or spectral targets \citep{Dahlhaus1997,Vogt2012}. Those literatures
-make the same trade-off visible as a variance term versus a drift-induced local
-bias term. The horizon law lifts that logic from scalar smoothing targets to
-distribution tracking, where the finite-sample exponent depends on the chosen
-probability geometry and the resulting balance defines a measurable validity
-geometry for retained evidence.
+and bandwidth selection, together with dynamic-regret analyses for time-varying
+statistical estimation, solve a closely related trade-off for evolving regression
+or spectral targets \citep{Dahlhaus1997,Vogt2012}. The temporal-validity horizon
+places that trade-off inside a persistence field for retained evidence, where
+the finite-sample exponent depends on the chosen probability geometry and the
+resulting balance defines a measurable validity geometry.
 
 \paragraph{Transport geometry.}
 Wasserstein distance and Sinkhorn-type estimators provide the finite-sample

@@ -3,7 +3,7 @@
 
 \subsection{Separability and Horizon Geometry}\label{subsec:abstract_upper_law}
 
-\begin{lemma}[Auxiliary decomposition principle]\label{thm:abstract_upper_law}
+\begin{lemma}[Separability of $V$]\label{thm:abstract_upper_law}
 Let $d$ be a probability metric satisfying the triangle inequality. At time $t$,
 let $P_t$ be the present target law, let $\bar P_t^{(n)}$ be the window target,
 and let $\widehat P_t^{(n)}$ be the estimator built from the last $n$
@@ -42,7 +42,7 @@ provide finite-sample acquisition. The decomposition itself is elementary; the
 substantive content lies in the benchmark closure, transfer, and lower-theory
 results that follow.
 
-\begin{theorem}[Gaussian location minimax benchmark on the deterministic H\"older class]
+\begin{theorem}[Main result: Gaussian location minimax benchmark on the deterministic H\"older class]
 \label{thm:gaussian_location_minimax_holder}
 Fix $H\in(0,1]$, $\zeta>0$, and $\sigma>0$. Let $\mathfrak M_H(\zeta)$ denote the
 class of deterministic mean paths $(\mu_s)_{s\in\mathbb Z}$ such that
@@ -95,6 +95,9 @@ and its asymptotic risk constant is
   &\quad \times \Bigl(2\varphi_{\mathrm G}(y_H)+y_H\bigl(2\Phi_{\mathrm G}(y_H)-1\bigr)\Bigr).
   \end{aligned}
 \]
+The closed forms above are explicit for the uniform-window mean estimator on the
+benchmark class. They sharpen the constructive upper side of the benchmark,
+while the lower side is sharp at the exponent level.
 \end{theorem}
 
 \begin{proposition}[Triangular-array transfer for Hadamard-differentiable functionals]
@@ -550,9 +553,8 @@ triangular-array model appear in \cref{app:finite_sample_geometry}.
 
 \subsection{Structural Lower Bound}\label{subsec:lower_bound}
 
-The upper law would be substantially weaker if it were only an estimator-specific
-statement. The lower bound shows that, in the root-$n$ finite-sample regime
-$a=1/2$, the horizon is imposed by the drift geometry itself.
+The lower bound shows that, in the root-$n$ finite-sample regime $a=1/2$, the
+horizon is imposed by the drift geometry itself.
 
 \begin{figure}[!htbp]
 \centering
@@ -613,8 +615,8 @@ calculation used here.
 
 For the abstract drifting class, this lower bound is subclass based rather than
 class-tight, but it is enough to show that the horizon is a structural feature
-of the problem and not an estimator artifact. The Gaussian location theorem
-below closes the corresponding benchmark model.
+of the problem. The Gaussian location theorem below closes the corresponding
+benchmark model.
 
 The proposition above is the lower-bound fact needed for the main horizon law.
 The same Gaussian construction also exposes the constant-level geometry.
@@ -811,6 +813,9 @@ and the embedded low-dimensional extension \citep{Kalman1960,Jazwinski1970,Akyil
 The finite-discrete theorem and the calibrated support-growth theorem are proved
 statements. The figures and tables in this section are regime diagnostics for the
 calibrated support-growth hypotheses.
+The calibrated support-growth assumptions are therefore regime-specific on the
+tested grid, not a universal statement for all growing-support Sinkhorn
+geometries.
 
 \paragraph{Fixed-$\varepsilon$ Sinkhorn setting.}
 For fixed-$\varepsilon$ debiased Sinkhorn, the central question is whether a

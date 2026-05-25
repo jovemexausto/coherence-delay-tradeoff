@@ -1,28 +1,39 @@
 \section{Introduction}\label{sec:intro}
 
 Inferential structures possess finite persistence under flow. The temporal-
-validity functional $V(\phi,\tau)$ assigns that persistence value to an
-inferential structure $\phi$ and a drift class $\tau$. Here $\phi$ indexes the
-geometry and estimation rule used to retain evidence, while $\tau$ indexes the
-admissible flow of the target law. Retention lowers sampling noise and ages
-evidence at the same time. Change detection exposes the same relation: a
-detector can remain silent after retained evidence has already become stale.
+validity functional
+\[
+  V(\phi,\tau)
+  = \inf_{n\ge 1}\bigl(C_K(\phi)n^{-a(\phi)} + C_S\zeta(\tau)n^{H(\tau)}\bigr)
+\]
+assigns that persistence value to an inferential structure $\phi$ and a drift
+class $\tau$. Here $\phi$ indexes the geometry and estimation rule used to
+retain evidence, while $\tau$ indexes the admissible flow of the target law.
+Retention lowers sampling noise and ages evidence at the same time. Change
+detection exposes the same relation: a detector can remain silent after retained
+evidence has already become stale.
 
-The working object is a field of persistence values on inferential structures.
+The working object is the validity field $V$ on inferential structures and flow.
+
+The $V$-optimal problem asks, for fixed $\tau$, which geometry $\phi$ minimizes
+$V(\phi,\tau)$. That geometry-selection problem is distinct from the memory-
+length optimization at fixed $(\phi,\tau)$ and becomes visible only after the
+functional is written in closed form.
 
 Let $P_t$ denote the present target law, let $\bar P_t^{(n)}$ denote the window
 target formed from the last $n$ target laws, and let $\widehat P_t^{(n)}$ be the
-estimator built from the last $n$ observations. Tracking error then separates
-into a finite-sample term relative to $\bar P_t^{(n)}$ and a staleness term
-between $\bar P_t^{(n)}$ and $P_t$:
+estimator built from the last $n$ observations. In the deterministic
+H"older--Wasserstein constitutive model, tracking error separates into a
+finite-sample term relative to $\bar P_t^{(n)}$ and a staleness term between
+$\bar P_t^{(n)}$ and $P_t$:
 \[
   \mathbb E\,d\!\left(\widehat P_t^{(n)},P_t\right)
   \le C_K n^{-a} + C_S\zeta n^H.
 \]
 When the finite-sample term decays like $n^{-a}$ and the staleness term grows
 like $\zeta n^H$, their balance defines the temporal-validity horizon and the
-induced useful-memory region. Optimizing that envelope yields the temporal-
-validity functional
+induced useful-memory region. In the deterministic H"older--Wasserstein
+constitutive model, this balance realizes the temporal-validity functional
 \[
   V(\phi,\tau)=\inf_{n\ge 1}\bigl(C_K(\phi)n^{-a(\phi)}+C_S\zeta(\tau)n^{H(\tau)}\bigr).
 \]
@@ -40,7 +51,7 @@ structural: it is imposed jointly by metric geometry and drift regularity.
 \end{figure}
 
 Three proved cases make the law concrete. A one-dimensional root-$n$ proof
-anchor closes the basic finite-memory regime, while bounded-cardinality finite-
+anchor closes the basic persistence regime, while bounded-cardinality finite-
 discrete and calibrated support-growth embedded Sinkhorn classes show that the
 same mechanism persists in operational transport geometry.
 
@@ -48,9 +59,14 @@ The benchmark closure is the Gaussian location minimax theorem on the
 deterministic H\"older class, where the upper and lower horizon rates meet.
 
 Finite projection families and sliced transport provide transfer theorems,
-validity observability from lag geometry yields identifiability and regret bounds, and the same object
-appears empirically through U-curves, roughness scaling, and validity loss
-before detector alarm.
+validity observability from lag geometry yields identifiability and regret
+bounds, and the same object appears empirically through U-curves, roughness
+scaling, and validity loss before detector alarm.
 
-The central object is inferential persistence: the persistence profile of an
-inferential structure relative to a nonstationary flow.
+Inferential persistence is the central object: the residual validity profile of
+an inferential structure relative to a nonstationary flow.
+
+This formulation opens a small program of five frontiers: class-tight lower
+theory beyond the Gaussian benchmark, transfer beyond the proved projected
+range, support-changing embedded Sinkhorn, online validity control under
+streaming noise, and flow models beyond deterministic H"older flow.
