@@ -1,54 +1,41 @@
-\section{Limitations and Further Directions}\label{sec:limitations_open_problems}
+\section{Limitations and Open Problems}\label{sec:limitations_open_problems}
 
 The closed theorem line covers the temporal-validity horizon, its useful-memory
 geometry, the one-dimensional proof anchor, the Gaussian lower and benchmark
 results, the embedded Sinkhorn theorems, and horizon-inference guarantees.
 
-\paragraph{Closed theory.}
-The fully proved finite-sample instantiation is the one-dimensional root-$n$
-regime under bounded support and fixed span. The structural lower bound is
-subclass based, and the exact Gaussian constants are internal to the available
-proof scheme rather than class-tight across broader deterministic H\"older path
-classes. Finite-family projection transfer is theorem-level under uniform
-projected control, but richer dominated families and raw multivariate Wasserstein
-lie beyond the proved range. In particular, no theorem here closes a general
-high-dimensional horizon law for raw multivariate Wasserstein, where the
-effective finite-sample exponent can become too small for practical memory
-selection.
-
-\paragraph{Embedded Sinkhorn.}
-For fixed-$\varepsilon$ Sinkhorn, the compact-support one-dimensional pointwise
-and bandwise inheritance results are explicit, and bounded-cardinality finite
-discrete embedded classes satisfy the same moderate-band root-$n$ law under a
-uniform diameter bound and a positive mass floor. The calibrated support-growth
-family is also closed on the discrete $k=2$ grid. What remains open is support
-change beyond that fixed support-growth construction.
-
-\paragraph{Empirical scope.}
-The experiments target structural signatures: U-curves, roughness scaling,
-real-stream retention, and validity-detection separation. They do not identify
-detector-uniform delay laws or competitive end-to-end performance.
-
-\paragraph{Further directions.}
+The remaining open problems in the present line are the following.
 
 \begin{enumerate}[label=\textbf{(\arabic*)},leftmargin=*,itemsep=2pt,topsep=3pt]
-  \item \textbf{High-dimensional horizon geometry.}
-  Identify which transport geometries in higher dimension preserve a
-  nondegenerate temporal-validity horizon by keeping the effective finite-sample
-  exponent away from zero. The main candidates are intrinsic-dimension,
-  smoothed, and projection-robust formulations.
+  \item \textbf{Class-tight lower theory beyond the Gaussian benchmark.}
+  The abstract lower proposition establishes that the temporal-validity horizon
+  is structural by means of a Gaussian two-point subclass, and the Gaussian
+  location benchmark closes the corresponding minimax rate on the deterministic
+  H\"older class. What remains open is class-tight lower theory for broader
+  drifting classes beyond that benchmark model.
 
-  \item \textbf{Sequential validity versus detection delay.}
-  Quantify the structural gap between the validity horizon and the time-uniform
-  detection horizon under false-alarm control, and determine how that gap scales
-  across detector classes.
+  \item \textbf{Transfer beyond the proved projected range.}
+  Finite-family projection transfer is theorem-level under uniform projected
+  control, and the effective-exponent corollary shows how any geometry with a
+  proved finite-sample exponent inherits a horizon scale. What remains unproved
+  is an analogous theorem for richer dominated families and for raw
+  multivariate Wasserstein, where the effective exponent can become too small
+  for practical memory selection.
 
-  \item \textbf{Adaptive horizon inference.}
-  Develop stable estimators of the roughness and amplitude parameters that drive
-  the horizon law, with explicit guarantees for memory localization under lag
-  noise.
+  \item \textbf{Support-changing embedded Sinkhorn classes.}
+  For fixed-$\varepsilon$ Sinkhorn, the compact-support one-dimensional
+  pointwise and bandwise inheritance results are explicit, bounded-cardinality
+  finite discrete embedded classes satisfy the same moderate-band root-$n$ law,
+  and the calibrated support-growth family is closed on the discrete $k=2$
+  grid. The open extension is support change beyond that fixed
+  support-growth construction.
 
-  \item \textbf{Support-changing embedded Sinkhorn.}
-  Extend the calibrated embedded Sinkhorn theorem to classes with changing support
-  and beyond the fixed support-growth construction.
+  \item \textbf{Online validity control under streaming noise.}
+  Horizon inference closes plug-in asymptotics, identifiability, deterministic
+  stability, and quadratic regret under the lag-geometry input model. The open
+  operational problem is to obtain stable online estimation and time-uniform
+  memory localization guarantees under streaming noise. The experiments target
+  structural signatures rather than detector-uniform delay laws or competitive
+  end-to-end performance, so sequential validity versus detection remains open
+  at the theorem level.
 \end{enumerate}
