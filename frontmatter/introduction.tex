@@ -1,12 +1,16 @@
 \section{Introduction}\label{sec:intro}
 
-Retained evidence under drift is simultaneously informative and obsolete. Larger
-memory reduces finite-sample noise, but it also increases the age of the
-observations used to estimate the present. Finite-memory distribution tracking
-therefore has a temporal-validity horizon: a largest memory scale that remains
-useful before drift-induced staleness overtakes the remaining sampling gain.
+Retained evidence under drift is useful because it reduces sampling noise, and
+it is harmful because it describes an earlier state of the system. Any method
+that tracks a present distribution from a finite memory window must therefore
+balance two errors: a finite-sample term that decreases with the window length,
+and a staleness term that increases with age. The central object of this paper
+is the temporal-validity horizon, the memory scale at which those two forces
+balance.
 
-This horizon is governed by the balance law
+Let $P_t$ denote the present target law, let $\bar P_t^{(n)}$ denote the window
+target formed from the last $n$ target laws, and let $\widehat P_t^{(n)}$ be the
+estimator built from the last $n$ observations. The governing upper envelope is
 \[
   \mathbb E\,d\!\left(\widehat P_t^{(n)},P_t\right)
   \leq
@@ -23,26 +27,40 @@ The same envelope induces a useful-memory region: the memory lengths whose
 tracking error stays within a fixed factor of the optimum. Its normalized
 geometry depends only on $(a,H)$.
 
-This object is structural, but operational use requires more than the existence
-of an optimizer. Memory selection from data depends on whether noisy lagged
-transport discrepancies can localize the horizon within the useful-memory
-region. That question leads to horizon inference and to an identifiability
-criterion for useful-memory selection.
+This law identifies a statistical scale rather than a tuning heuristic. The
+finite-sample exponent $a$ depends on the geometry used to compare
+distributions, while the roughness exponent $H$ and amplitude $\zeta$ describe
+how quickly retained evidence loses temporal validity. The resulting horizon is
+structural: it is imposed jointly by metric geometry and drift regularity, not
+by a particular estimator. Operational use then raises a second question: when
+can noisy lagged discrepancies identify the horizon well enough to keep a
+data-driven memory choice inside the useful-memory region?
 
-The theorem line closes in a tractable one-dimensional bounded-support fixed-
-span triangular-array model. There, the quantile representation of $W_2^2$, a
-triangular-array Bahadur expansion, and a design-effect comparison yield a
-root-$n$ finite-sample term under explicit compact-support, fixed-span, and
-integrated-remainder hypotheses. A structural Gaussian lower bound shows that
-the horizon is imposed by drift geometry rather than by a particular estimator,
-and the Gaussian location model supplies a matching benchmark on deterministic
-H\"older paths. Beyond that proof model, finite projection families and sliced
-Wasserstein yield transfer results under uniform projected control, while in
-fixed-$\varepsilon$ Sinkhorn geometry one-dimensional inheritance is explicit on
-compact support and the embedded low-dimensional extension is reduced to a
-conditional theorem problem. Empirically, the same object appears through
-interior U-curves, roughness-dependent scaling, real-stream diagnostics, and
-validity loss before the first detector alarm.
+The theorem line closes in three theorem-level realizations of the same law.
+The first is a tractable one-dimensional bounded-support fixed-span triangular-
+array model, where the quantile representation of $W_2^2$, a triangular-array
+Bahadur expansion, and a design-effect comparison yield a root-$n$ finite-
+sample term under explicit compact-support, fixed-span, and integrated-remainder
+hypotheses. The second is bounded-cardinality finite discrete embedded Sinkhorn,
+where finite-state minorization and finite-support root-$n$ fluctuations close
+the same law. The third is a calibrated support-growth family, where a row-
+kernel parity decomposition and local block-curvature control close the same
+root-$n$ law. A structural Gaussian lower bound and a Gaussian location
+benchmark show that the horizon is imposed by drift geometry rather than by a
+particular estimator. Beyond those closed classes, finite projection families
+and sliced Wasserstein yield transfer results under uniform projected control.
+Empirically, the same object appears through interior U-curves,
+roughness-dependent scaling, real-stream diagnostics, and validity loss before
+the first detector alarm.
+
+This object sits at the intersection of three neighboring lines of work without
+reducing to any of them. Like local stationarity and bandwidth selection, it
+balances variance against temporal mismatch. Like transport theory, it depends
+sharply on the geometry that supplies the finite-sample exponent. Like
+sequential testing, it separates the timescale on which retained evidence stops
+representing the present from the timescale on which a detector accumulates
+enough evidence to trigger an alarm. The paper is organized around that
+statistical object rather than around a single proof technology.
 
 The contribution is fivefold:
 \begin{enumerate}[label=\textbf{(\arabic*)},leftmargin=*,itemsep=2pt,topsep=3pt]
@@ -51,16 +69,17 @@ The contribution is fivefold:
   under drift, together with a useful-memory region whose normalized geometry is
   determined by $(a,H)$.
 
-  \item \textbf{Theorem line: tractable proof model and benchmarks.}
-  A one-dimensional root-$n$ triangular-array proof model, the exact
-  uniform-window staleness bound, a structural Gaussian lower bound, and a
-  Gaussian location benchmark show that the horizon is structural.
+  \item \textbf{Theorem line: proof anchor and closed classes.}
+  A one-dimensional root-$n$ triangular-array proof anchor, the exact
+  uniform-window staleness bound, a structural Gaussian lower bound, a Gaussian
+  location benchmark, and theorem-level embedded Sinkhorn closures show that the
+  horizon is structural across tractable and operational geometries.
 
   \item \textbf{Transfer: projection families and Sinkhorn geometry.}
   Finite projection families and sliced geometries yield transfer theorems,
   one-dimensional fixed-$\varepsilon$ Sinkhorn inheritance is proved, and the
-  embedded low-dimensional Sinkhorn step is isolated as a conditional theorem
-  problem.
+  bounded-cardinality finite-discrete and calibrated support-growth embedded
+  Sinkhorn classes satisfy theorem-level horizon laws.
 
   \item \textbf{Inference: identifiability and regret.}
   Plug-in horizon inference yields an identifiability criterion for

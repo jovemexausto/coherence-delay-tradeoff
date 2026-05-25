@@ -27,6 +27,58 @@ and
   \zeta h^H\Phi\!\left(-\frac{\zeta}{\sigma}\sqrt{G_h}\right).
 \]
 
+\begin{proposition}[Gaussian lower-bound constants]
+\label{prop:gaussian_lower_bound_constants}
+Fix $H\in(0,1]$ and set $p_H \coloneqq 2H/(2H+1)$. Let $x_H>0$ be the unique
+maximizer of $x^{p_H}\Phi(-x)$, equivalently the unique solution of
+\[
+  p_H\Phi(-x_H)=x_H\varphi(x_H).
+\]
+Then, as $\sigma/\zeta\to\infty$,
+\[
+  \sup_{h\ge 1} L_h^{\mathrm{ramp}}(\sigma,\zeta)
+  \sim
+  C_H^{\mathrm{ramp}}\,\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)},
+\]
+with
+\[
+  C_H^{\mathrm{ramp}}
+  =
+  (2H+1)^{H/(2H+1)}x_H^{2H/(2H+1)}\Phi(-x_H).
+\]
+Among all endpoint-saturating H\"older profiles, the profile
+\[
+  g_r^{\min}=h^H-(h-r)^H
+\]
+minimizes the testing energy and has asymptotic energy constant
+\[
+  I_H
+  =
+  \int_0^1 \left(1-(1-u)^H\right)^2du
+  =
+  \frac{2H^2}{(H+1)(2H+1)}.
+\]
+Moreover,
+\[
+  \sup_{h\ge 1}L_h^{\min}(\sigma,\zeta)
+  \sim
+  C_H^{\min}\,\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)},
+\]
+with
+\[
+  C_H^{\min}
+  =
+  I_H^{-H/(2H+1)}x_H^{2H/(2H+1)}\Phi(-x_H),
+\]
+and for $H<1$ the improvement factor is
+\[
+  \frac{C_H^{\min}}{C_H^{\mathrm{ramp}}}
+  =
+  \left(\frac{H+1}{2H^2}\right)^{H/(2H+1)}
+  >1.
+\]
+\end{proposition}
+
 \begin{proof}[Proof of \cref{prop:gaussian_lower_bound_constants}]
 Fix $H\in(0,1]$ and write $p_H=2H/(2H+1)$.
 
@@ -163,3 +215,44 @@ the asymptotic just proved gives the lower scale
   \sigma^{2H/(2H+1)}\zeta^{1/(2H+1)}
 \]
 and therefore the horizon exponent $(2H+1)^{-1}$ for the root-$n$ regime.
+
+\subsection{Weighted-memory summaries}
+
+For a finite-memory estimator with weights $w_0,\dots,w_{n-1}$, define the
+effective sample size
+\[
+  n_{\mathrm{eff}}(w) \coloneqq \Bigl(\sum_{j=0}^{n-1} w_j^2\Bigr)^{-1}
+\]
+and the weighted lag moment
+\[
+  M_H(w) \coloneqq \sum_{j=0}^{n-1} j^H w_j.
+\]
+Any weighted horizon law of the form
+\[
+  \mathbb E\,d\!\left(\widehat P_t^{(w)},P_t\right)
+  \le C_K n_{\mathrm{eff}}(w)^{-a} + C_S\zeta M_H(w)
+\]
+balances the finite-sample and staleness terms through these two summaries.
+
+\begin{proposition}[Uniform weights maximize effective sample size]
+\label{prop:uniform_maximizes_effective_sample_size}
+Let $w_0,\dots,w_{n-1}$ be nonnegative weights with $\sum_{j=0}^{n-1} w_j=1$.
+Then
+\[
+  n_{\mathrm{eff}}(w) \le n,
+\]
+with equality if and only if $w_j=1/n$ for all $j$. Moreover, if the drift
+profile is an exact linear ramp in the sense that the lag-$j$ contribution is
+proportional to $j$, then the weighted staleness equals the effective lag.
+\end{proposition}
+
+\begin{proof}
+By Cauchy--Schwarz,
+\[
+  1=\Bigl(\sum_{j=0}^{n-1} w_j\Bigr)^2
+  \le n\sum_{j=0}^{n-1} w_j^2,
+\]
+so $n_{\mathrm{eff}}(w)=1/\sum_j w_j^2\le n$, with equality exactly when the
+weights are all equal. On an exact linear ramp, averaging the lag contribution
+with weights $w_j$ recovers the weighted mean lag.
+\end{proof}

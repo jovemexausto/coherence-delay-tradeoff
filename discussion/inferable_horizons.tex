@@ -34,11 +34,11 @@ concrete source of this assumption.
 The continuous optimizer of the horizon envelope can be written as the smooth
 map
 \[
-  n_\star(\alpha,H)
-  = \left(\frac{aC_K}{H C_S e^{\alpha}}\right)^{1/(a+H)},
-\]
-\[
-  g(\alpha,H) \coloneqq \log n_\star(\alpha,H).
+  \begin{aligned}
+    n_\star(\alpha,H)
+    &= \left(\frac{aC_K}{H C_S e^{\alpha}}\right)^{1/(a+H)}, \\
+    g(\alpha,H) &\coloneqq \log n_\star(\alpha,H).
+  \end{aligned}
 \]
 Its gradient is
 \[
@@ -90,7 +90,7 @@ inside the useful-memory region.
 \label{thm:operational_identifiability}
 Under \Cref{ass:lag_geometry_input},
 \[
-  \mathbb{P}\bigl(\widehat n_\star \in \mathcal U_\delta\bigr)
+  \mathbb P\bigl(\widehat n_\star \in \mathcal U_\delta\bigr)
   =
   2\Phi_{\mathcal N}\!\left(
     \frac{\sqrt{\mathcal I_{m,L}(H)}\,r_\delta(a,H)}{\tau}
@@ -100,7 +100,7 @@ where $\Phi_{\mathcal N}$ is the standard normal CDF. In particular,
 \[
   \frac{\sqrt{\mathcal I_{m,L}(H)}\,r_\delta(a,H)}{\tau(H,\zeta)} \to \infty
   \quad \Longrightarrow \quad
-  \mathbb{P}\bigl(\widehat n_\star \in \mathcal U_\delta\bigr) \to 1.
+  \mathbb P\bigl(\widehat n_\star \in \mathcal U_\delta\bigr) \to 1.
 \]
 \end{theorem}
 

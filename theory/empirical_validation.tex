@@ -113,8 +113,31 @@ grid. In the calibrated fixed-span model with $\alpha=2$ and span $0.25$, the
 stable regime is widest on $(8,1)$, $(8,2)$, and $(12,2)$, and narrower on
 $(12,1)$. Direct Jacobian probes localize the remaining instability in the
 self-coupling blocks, while the calibrated certificate identifies a
-moderate-band regime on which the conditional theorem rests. Supporting tables
-and calibration details are kept in \cref{app:finite_sample_geometry}.
+moderate-band regime that extends beyond the bounded-cardinality finite-support
+theorem. Supporting tables and calibration details appear in
+\cref{app:finite_sample_geometry}.
+
+On the calibrated discrete $k=2$ support grid, the theorem-facing diagnostics are
+sharper. The centered self-coupling squared block keeps spectral radius below
+$0.12$ on $\mathcal B=[0.1,0.5]$, the associated inverse norm stays below
+$1.14$, and the exact-target null slopes lie between about $-1.00$ and $-0.78$
+across $(8,2)$ and $(12,2)$. A finite-support root-$n$ fluctuation proxy also
+remains bounded on the tested sample range. On the same support-growth grid, the
+ratio between exact-target Sinkhorn cost and squared $\ell_2$ weight deviation
+stays numerically stable, with mean values below $0.084$ and worst pointwise
+values below $0.24$ across the reported bands. Combined with the exact
+$\ell_2$ fluctuation identity on the calibrated row-structured grid, these
+experiments organize the support-growth family around a covariance-weighted
+trace bound and a local block-curvature bound for the null Sinkhorn map. A
+finite-difference Hessian probe on a fixed tangent basis shows the same
+bounded-curvature picture on the reported grid: local blockwise curvatures stay
+below about $0.24$, while collective directions scale approximately like
+$c(\varepsilon)n$ with reduced-channel coefficients between about $0.04$ and
+$0.13$ on the reported band. The local-basis trace proxy grows linearly with
+$n$ at about $0.34$ units per sample block, while the covariance-weighted proxy
+stays around $0.002$ to $0.004$. The exact row-kernel parity decomposition
+reduces the curvature analysis to one scalar odd channel and one two-dimensional
+even channel.
 
 Intrinsic-dimension estimates from TwoNN track the stable-band cutoff better than
 ambient dimension on the tested grid, so the regime-selection variable is local

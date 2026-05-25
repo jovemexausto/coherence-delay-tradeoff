@@ -38,6 +38,37 @@ def sinkhorn_cost(
         raise ValueError("epsilon must be positive")
     a = np.full(x.shape[0], 1.0 / x.shape[0])
     b = np.full(y.shape[0], 1.0 / y.shape[0])
+    return sinkhorn_cost_weighted(
+        x,
+        y,
+        a,
+        b,
+        epsilon,
+        max_iters=max_iters,
+        tol=tol,
+    )
+
+
+def sinkhorn_cost_weighted(
+    x: np.ndarray,
+    y: np.ndarray,
+    a: np.ndarray,
+    b: np.ndarray,
+    epsilon: float,
+    *,
+    max_iters: int = 120,
+    tol: float = 1e-6,
+) -> SinkhornResult:
+    if epsilon <= 0:
+        raise ValueError("epsilon must be positive")
+    if x.shape[0] != a.shape[0] or y.shape[0] != b.shape[0]:
+        raise ValueError("weight vectors must match sample sizes")
+    if np.any(a < 0.0) or np.any(b < 0.0):
+        raise ValueError("weights must be nonnegative")
+    a = np.asarray(a, dtype=float)
+    b = np.asarray(b, dtype=float)
+    a = a / float(np.sum(a))
+    b = b / float(np.sum(b))
     cost = _pairwise_squared_distances(x, y)
     kernel = _sinkhorn_kernel_from_cost(cost, epsilon)
     u = np.ones_like(a)
@@ -65,9 +96,32 @@ def debiased_sinkhorn_divergence(
     max_iters: int = 250,
     tol: float = 1e-9,
 ) -> SinkhornResult:
-    xy = sinkhorn_cost(x, y, epsilon, max_iters=max_iters, tol=tol)
-    xx = sinkhorn_cost(x, x, epsilon, max_iters=max_iters, tol=tol)
-    yy = sinkhorn_cost(y, y, epsilon, max_iters=max_iters, tol=tol)
+    a = np.full(x.shape[0], 1.0 / x.shape[0])
+    b = np.full(y.shape[0], 1.0 / y.shape[0])
+    return debiased_sinkhorn_divergence_weighted(
+        x,
+        y,
+        a,
+        b,
+        epsilon,
+        max_iters=max_iters,
+        tol=tol,
+    )
+
+
+def debiased_sinkhorn_divergence_weighted(
+    x: np.ndarray,
+    y: np.ndarray,
+    a: np.ndarray,
+    b: np.ndarray,
+    epsilon: float,
+    *,
+    max_iters: int = 250,
+    tol: float = 1e-9,
+) -> SinkhornResult:
+    xy = sinkhorn_cost_weighted(x, y, a, b, epsilon, max_iters=max_iters, tol=tol)
+    xx = sinkhorn_cost_weighted(x, x, a, a, epsilon, max_iters=max_iters, tol=tol)
+    yy = sinkhorn_cost_weighted(y, y, b, b, epsilon, max_iters=max_iters, tol=tol)
     return SinkhornResult(
         cost=xy.cost - 0.5 * xx.cost - 0.5 * yy.cost,
         iterations=max(xy.iterations, xx.iterations, yy.iterations),

@@ -1,0 +1,20 @@
+\begin{table}[!htbp]
+\centering
+\caption{Calibrated embedded Sinkhorn-closure diagnostics on the discrete $k=2$
+support grid with span $0.25$ and moderate band $\mathcal B=[0.1,0.5]$. The
+table reports the worst centered self-coupling radius for the squared operator,
+the corresponding inverse-norm bound, the ranges of the exact-target null slopes
+for triangular and i.i.d. samples, and the worst root-$n$ support-deviation
+ratio across the band.}
+\label{tab:sinkhorn_embedded_closure_summary}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{cccccc}
+\toprule
+Pair & Worst $\rho(S_\varepsilon^2)$ & Worst $\|(I-S_\varepsilon^2)^{-1}\|$ & Tri slope range & IID slope range & Worst root-$n$ ratio \\
+\midrule
+$(8,2)$ & $0.116$ & $1.132$ & $[-1.001,-0.992]$ & $[-0.880,-0.878]$ & $2.582$ \\
+$(12,2)$ & $0.116$ & $1.132$ & $[-0.878,-0.826]$ & $[-0.843,-0.778]$ & $2.840$ \\
+\bottomrule
+\end{tabular}
+}
+\end{table}

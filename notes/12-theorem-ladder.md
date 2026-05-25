@@ -31,14 +31,14 @@ dominated class.
 
 ### 3. Fixed-`epsilon` Sinkhorn horizon inheritance theorem
 
-Replace the current operational conjecture by a full triangular-array theorem.
-The next usable target is the calibrated embedded `k=2` moderate-band
-inheritance statement on a band bounded away from zero, with the theorem line
-organized around uniform self-coupling stability, uniform linearization, and a
-root-`n` influence-class bound.
-The exact missing sub-lemma is the centered self-coupling stability statement on
-`B=[eps_min, eps_max]` with a strict contraction bound on the self blocks and a
-uniform inverse-norm bound on the centered subspace.
+The bounded-cardinality finite-discrete embedded theorem is now closed, and the
+calibrated support-growth family has an exact `\ell_2` fluctuation identity plus
+a sharp conditional quadratic-null proposition. Numerical Hessian probes now
+suggest that a uniform operator bound is too strong because collective
+curvatures grow linearly in `n`. The next usable target is therefore a
+covariance-weighted or block-averaged quadratic-null theorem on the calibrated
+support-growth grids, followed by support-changing embedded classes beyond the
+fixed support-growth construction.
 
 ### 4. Lower theory beyond the root-`n` regime
 

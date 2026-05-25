@@ -230,7 +230,7 @@ $H\in(0,1]$ and $\zeta>0$, write
   \left\{(P_s)_{s\in\mathbb Z}: W_2(P_{t-j},P_t) \le \zeta j^H
   \text{ for all } j\ge 0\right\}.
 \]
-The case $H=1$ is the local Lipschitz envelope; smaller $H$ correspond to slower
+The case $H=1$ is the local Lipschitz envelope; smaller $H$ corresponds to slower
 accumulation of staleness with lag.
 
 \begin{lemma}[Hölder staleness bound via averaged couplings]
@@ -488,16 +488,8 @@ a package, but no general dependent-row
 theorem.
 \end{remark}
 
-On the tested smooth fixed-support family, the integrated residual decays at
-empirical rates between $1.40$ and $1.54$ for spans $0.2$ and $0.4$, and the
-scaled quantity $n\int_0^1 R_n(u)^2du$ still decays at rates between $0.40$ and
-$0.54$; see \cref{app:finite_sample_geometry}. On the fixed-span triangular-array
-uniform-kernel model, the residual-to-MSE ratio drops from about $0.38$ at
-$n=25$ to about $0.11$ at $n=400$, with integrated residual rates $1.43$ for the
-triangular sample and $1.49$ for the i.i.d. mixture benchmark. These diagnostics
-do not replace a general verification theorem, but they sit behind an
-explicit sufficient-condition corollary on the smooth deformation class and
-quantify span dependence on the tested classes.
+Empirical diagnostics for the smooth deformation class and the fixed-support
+triangular-array model appear in \cref{app:finite_sample_geometry}.
 
 \subsection{Structural Lower Bound}\label{subsec:lower_bound}
 
@@ -558,8 +550,8 @@ keeps the testing problem in the Le Cam regime while respecting the roughness
 budget. The resulting two-point lower bound is of order $\beta h^H$. Balancing
 the active roughness constraint against the testing constraint gives
 $h^*(H)\asymp (\sigma/\zeta)^{2/(2H+1)}$ and therefore the displayed lower law.
-The exact Gaussian two-point calculation used here is recorded in
-\cref{app:proof_details}.
+Appendix \cref{app:proof_details} gives the exact Gaussian two-point
+calculation used here.
 
 The lower bound is subclass based and not class-tight, but it is enough to show
 that the horizon is a structural feature of the problem and not an estimator
@@ -570,89 +562,8 @@ The same Gaussian construction also exposes the constant-level geometry.
 The following proposition gives the sharp Gaussian constants available within
 that proof scheme.
 
-\subsection{Gaussian Benchmark Geometry}
-\label{subsec:gaussian_lower_bound_geometry}
-
-Let $\Phi$ and $\varphi$ denote the standard normal distribution function and
-density.
-\begin{proposition}[Gaussian lower-bound constants]
-\label{prop:gaussian_lower_bound_constants}
-Fix $H\in(0,1]$ and set $p_H \coloneqq 2H/(2H+1)$. Let $x_H>0$ be the unique
-maximizer of $x^{p_H}\Phi(-x)$, equivalently the unique solution of
-\[
-  p_H\Phi(-x_H)=x_H\varphi(x_H).
-\]
-For the Gaussian ramp profile $\mu_{t-j}^{\pm,h}=\pm\zeta(h-j)_+^H$, let
-\[
-  L_h^{\mathrm{ramp}}(\sigma,\zeta)
-  \coloneqq
-  \zeta h^H\Phi\!\left(-\frac{\zeta}{\sigma}\sqrt{\sum_{r=1}^h r^{2H}}\right).
-\]
-Then, as $\sigma/\zeta\to\infty$,
-\[
-  \sup_{h\ge 1} L_h^{\mathrm{ramp}}(\sigma,\zeta)
-  \sim
-  C_H^{\mathrm{ramp}}\,\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)},
-\]
-with
-\[
-  C_H^{\mathrm{ramp}}
-  =
-  (2H+1)^{H/(2H+1)}x_H^{2H/(2H+1)}\Phi(-x_H).
-\]
-Among all endpoint-saturating H\"older profiles, the profile
-\[
-  g_r^{\min}=h^H-(h-r)^H
-\]
-minimizes the testing energy and has asymptotic energy constant
-\[
-  I_H
-  =
-  \int_0^1 \left(1-(1-u)^H\right)^2du
-  =
-  \frac{2H^2}{(H+1)(2H+1)}.
-\]
-If
-\[
-  L_h^{\min}(\sigma,\zeta)
-  \coloneqq
-  \zeta h^H\Phi\!\left(-\frac{\zeta}{\sigma}\sqrt{\sum_{r=1}^h (g_r^{\min})^2}\right),
-\]
-then, as $\sigma/\zeta\to\infty$,
-\[
-  \sup_{h\ge 1} L_h^{\min}(\sigma,\zeta)
-  \sim
-  C_H^{\min}\,\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)},
-\]
-with
-\[
-  C_H^{\min}
-  =
-  I_H^{-H/(2H+1)}x_H^{2H/(2H+1)}\Phi(-x_H).
-\]
-For $H<1$, this strictly improves the ramp constant by the factor
-\[
-  \frac{C_H^{\min}}{C_H^{\mathrm{ramp}}}
-  =
-  \left(\frac{H+1}{2H^2}\right)^{H/(2H+1)}
-  >1,
-\]
-while at $H=1$ the two profiles coincide.
-\end{proposition}
-
-\begin{proof}
-The exact Gaussian testing problem reduces the two-point lower bound to the
-displayed quantities $L_h^{\mathrm{ramp}}$ and $L_h^{\min}$. After rescaling by
-$h=A(\sigma/\zeta)^{2/(2H+1)}$, the ramp energy and endpoint-minimal energy have
-limits $(2H+1)^{-1}$ and $I_H$, respectively. The corresponding normalized
-payoff becomes a scalar multiple of $x^{p_H}\Phi(-x)$, whose unique maximizer is
-$x_H$. The endpoint-minimal profile minimizes testing energy among all
-endpoint-saturating H\"older profiles, so it yields the sharper constant. Full
-details are given in \cref{app:proof_details}.
-\end{proof}
-
-These constants sharpen the lower-bound picture without changing the horizon
-exponents or the status of the main results.
+Appendix \cref{app:proof_details} records the sharpened Gaussian constant
+geometry for the ramp and endpoint-minimal profiles.
 
 The same lower-bound geometry also yields a full class-level benchmark once
 the model is specialized to Gaussian location tracking. In that setting, the
@@ -699,7 +610,7 @@ In particular, the deterministic H\"older class has horizon scale
 Moreover, the uniform-window mean estimator has an exact asymptotic upper
 constant on this benchmark. If $y_H>0$ solves
 \[
-  H y_H\bigl(2\Phi(y_H)-1\bigr)=\varphi(y_H),
+  H y_H\bigl(2\Phi_{\mathrm G}(y_H)-1\bigr)=\varphi_{\mathrm G}(y_H),
 \]
 then its asymptotic horizon shape is
 \[
@@ -710,7 +621,7 @@ and its asymptotic risk constant is
   \begin{aligned}
   U_H^{\mathrm{mean}}
   &= ((H+1)y_H)^{-1/(2H+1)} \\
-  &\quad \times \Bigl(2\varphi(y_H)+y_H\bigl(2\Phi(y_H)-1\bigr)\Bigr).
+  &\quad \times \Bigl(2\varphi_{\mathrm G}(y_H)+y_H\bigl(2\Phi_{\mathrm G}(y_H)-1\bigr)\Bigr).
   \end{aligned}
 \]
 \end{theorem}
@@ -725,8 +636,13 @@ Gaussian laws satisfy
 \[
   W_2\!\left(N(m_1,\sigma^2),N(m_2,\sigma^2)\right)=|m_1-m_2|,
 \]
-the risk reduces to mean estimation error. The noise term is
-$\sigma\sqrt{2/(\pi n)}$, while the deterministic bias is bounded by
+the risk reduces to mean estimation error. Since
+\[
+  \widehat\mu_t^{(n)}-\frac{1}{n}\sum_{j=0}^{n-1}\mu_{t-j}
+  \sim N\!\left(0,\frac{\sigma^2}{n}\right),
+\]
+the noise term is
+$\mathbb E|N(0,\sigma^2/n)|=\sigma\sqrt{2/(\pi n)}$, while the deterministic bias is bounded by
 \[
   \frac{\zeta}{n}\sum_{j=0}^{n-1} j^H,
 \]
@@ -875,47 +791,8 @@ Applying \cref{thm:abstract_upper_law} with $d=SW_{2,\rho}$ yields the stated
 envelope and horizon scale.
 \end{proof}
 
-\subsection{Weighted-Memory Summaries}
-
-The main line above is stated for uniform windows, but the same decomposition
-extends to non-uniform lag weights. For a finite-memory estimator with weights
-$w_0,\dots,w_{n-1}$, define the effective sample size
-\[
-  n_{\mathrm{eff}}(w) \coloneqq \Bigl(\sum_{j=0}^{n-1} w_j^2\Bigr)^{-1}
-\]
-and the weighted lag moment
-\[
-  M_H(w) \coloneqq \sum_{j=0}^{n-1} j^H w_j.
-\]
-Any weighted horizon law of the form
-\[
-  \mathbb E\,d\!\left(\widehat P_t^{(w)},P_t\right)
-  \le C_K n_{\mathrm{eff}}(w)^{-a} + C_S\zeta M_H(w)
-\]
-balances the finite-sample and staleness terms through these two summaries.
-
-\begin{proposition}[Uniform weights maximize effective sample size]
-\label{prop:uniform_maximizes_effective_sample_size}
-Let $w_0,\dots,w_{n-1}$ be nonnegative weights with $\sum_{j=0}^{n-1} w_j=1$.
-Then
-\[
-  n_{\mathrm{eff}}(w) \le n,
-\]
-with equality if and only if $w_j=1/n$ for all $j$. Moreover, if the drift
-profile is an exact linear ramp in the sense that the lag-$j$ contribution is
-proportional to $j$, then the weighted staleness equals the effective lag.
-\end{proposition}
-
-\begin{proof}
-By Cauchy--Schwarz,
-\[
-  1=\Bigl(\sum_{j=0}^{n-1} w_j\Bigr)^2
-  \le n\sum_{j=0}^{n-1} w_j^2,
-\]
-so $n_{\mathrm{eff}}(w)=1/\sum_j w_j^2\le n$, with equality exactly when the
-weights are all equal. On an exact linear ramp, averaging the lag contribution
-with weights $w_j$ recovers the weighted mean lag.
-\end{proof}
+Weighted-memory summaries and the effective-sample-size comparison are recorded
+in \cref{app:proof_details}.
 
 \subsection{Benchmarks and Sinkhorn Geometry}
 
@@ -960,45 +837,108 @@ support-complexity inheritance is exact, and the dual-complexity condition is
 precisely the LCA threshold $\alpha>k/2$.
 \end{proposition}
 
-\begin{proposition}[Conditional embedded moderate-band Sinkhorn inheritance]
-\label{prop:conditional_embedded_sinkhorn_inheritance}
-Fix the calibrated embedded fixed-span model with intrinsic dimension $k=2$ and
-a compact moderate band $\mathcal B=[\varepsilon_{\min},\varepsilon_{\max}]$
-bounded away from zero. Assume:
-\begin{enumerate}[label=(\roman*)]
-  \item a centered self-coupling stability lemma holds uniformly on $\mathcal B$
-  with a spectral-radius bound strictly below one and a uniform inverse-norm
-  bound on the centered subspace;
-  \item the centered Sinkhorn scaling map admits a uniform implicit-function
-  linearization on $\mathcal B$ with remainder $o(n^{-1/2})$;
-  \item the induced influence class satisfies a root-$n$ triangular empirical-
-  process bound on the embedded support class;
-  \item the embedded fixed-span support and dual-complexity hypotheses of
-  \cref{prop:operational_sinkhorn_ingredients} hold.
-\end{enumerate}
-Then there exists a finite constant $C_{\mathcal B}$ such that
+\begin{theorem}[Finite-discrete embedded moderate-band Sinkhorn inheritance]
+\label{thm:finite_discrete_embedded_sinkhorn}
+Fix a compact moderate band $\mathcal B=[\varepsilon_{\min},\varepsilon_{\max}]
+\subset (0,\infty)$, a support-size bound $m_0\in\mathbb N$, a support-diameter
+bound $D<\infty$, and a mass floor $\lambda\in(0,1/m_0]$. Suppose that for every
+window $(t,n)$ there exists a support set
+\[
+  X_{t,n}=\{x_1,\dots,x_m\},
+  \qquad m\le m_0,
+\]
+such that
+\[
+  \bar P_t^{(n)}=\sum_{i=1}^m b_i\delta_{x_i},
+  \qquad
+  \widehat P_{t,\mathrm{tri}}^{(n)}=\sum_{i=1}^m \widehat b_i\delta_{x_i},
+\]
+with
+\[
+  \max_{1\le i,j\le m}\|x_i-x_j\|^2\le D^2,
+  \qquad
+  b_i\ge \lambda\quad\text{for all }i.
+\]
+Then there exists a finite constant $C_{\mathcal B,m_0,D,\lambda}$ such that
 \[
   \sup_{\varepsilon\in\mathcal B}
   \mathbb E\,S_{\varepsilon}\!
   \left(\widehat P_{t,\mathrm{tri}}^{(n)},\bar P_t^{(n)}\right)
-  \le C_{\mathcal B} n^{-1/2}.
+  \le C_{\mathcal B,m_0,D,\lambda} n^{-1/2}.
 \]
 Consequently the corresponding temporal-validity horizon on $S_{\varepsilon}$ has
 the root-$n$ horizon scale
 \[
   n^*_{\mathcal B}(H)
   \asymp
-  \left(C_{\mathcal B}/\zeta\right)^{1/(H+1/2)}.
+  \left(C_{\mathcal B,m_0,D,\lambda}/\zeta\right)^{1/(H+1/2)}.
 \]
-\end{proposition}
+\end{theorem}
 
 \begin{proof}
-Under (i)--(iii), the regularized Sinkhorn value admits a uniform first-order
-expansion on $\mathcal B$ with a remainder lower order than $n^{-1/2}$. The
-embedded fixed-span support and dual-complexity hypotheses in (iv) supply the
-same structural comparison needed in the 1D proof model. Applying the abstract
-horizon law with $a=1/2$ yields the stated envelope and the induced horizon
-scale.
+Fix $(t,n)$ and abbreviate the support size by $m$. For each $\varepsilon\in\mathcal B$, let
+$K_{\varepsilon}$ be the Sinkhorn kernel on $X_{t,n}$ associated with the
+squared-Euclidean cost. Since the support diameter is at most $D$,
+\[
+  K_{ij}(\varepsilon) \ge \exp(-D^2/\varepsilon_{\min}) =: \alpha
+\]
+for all $i,j$. Let
+\[
+  P_{\varepsilon,b}(i,j)
+  \coloneqq
+  \frac{K_{ij}(\varepsilon)b_j}{\sum_{\ell=1}^m K_{i\ell}(\varepsilon)b_\ell}
+\]
+be the weighted self-coupling block. Because $\sum_{\ell}K_{i\ell}(\varepsilon)b_\ell\le 1$
+and $b_j\ge\lambda$, one has
+\[
+  P_{\varepsilon,b}(i,j)\ge \alpha\lambda.
+\]
+Hence
+\[
+  P_{\varepsilon,b}=\delta U_m + (1-\delta)Q_{\varepsilon,b},
+  \qquad
+  \delta\coloneqq m\alpha\lambda,
+\]
+where $U_m$ is the uniform kernel on $m$ atoms and $Q_{\varepsilon,b}$ is
+stochastic. Since $m\lambda\le 1$, one has $0<\delta\le 1$. The centered
+self-coupling block therefore contracts the zero-mass signed-measure subspace
+$V_0\coloneqq\{z\in\mathbb R^m:z\mathbf 1=0\}$ in total variation norm:
+for $z\in V_0$,
+\[
+  zP_{\varepsilon,b}=(1-\delta)zQ_{\varepsilon,b},
+  \qquad
+  \|zP_{\varepsilon,b}\|_1\le (1-\delta)\|z\|_1.
+\]
+Hence
+\[
+  \|zP_{\varepsilon,b}^2\|_1\le (1-\delta)^2\|z\|_1
+  \le (1-\alpha\lambda)^2\|z\|_1,
+\]
+uniformly over all admissible windows. Consequently
+\[
+  \bigl\|(I-P_{\varepsilon,b}^2|_{V_0})^{-1}\bigr\|
+  \le \bigl[1-(1-\alpha\lambda)^2\bigr]^{-1}.
+\]
+
+Because the support size is uniformly bounded and the target weights stay in the
+compact interior set $\{b\in\Delta_m:b_i\ge\lambda\}$, and because only the
+finitely many dimensions $m\le m_0$ occur, the finite-dimensional Sinkhorn
+scaling equations are analytic with a uniform implicit-function radius on
+$\mathcal B$. The debiased Sinkhorn divergence therefore admits a uniform
+first-order expansion with quadratic remainder in the weight perturbation.
+
+The empirical weight vector is a sum of bounded independent categorical vectors
+on at most $m_0$ atoms, so
+\[
+  \mathbb E\,\|\widehat b-b\|_1
+  \le \sqrt{m_0\,\mathbb E\,\|\widehat b-b\|_2^2}
+  = O(n^{-1/2}).
+\]
+Indeed, each coordinate is an average of bounded independent indicators, so the
+sum of coordinate variances is $O(1/n)$ uniformly on the admissible class.
+The induced influence class is therefore uniformly root-$n$ on the admissible
+finite-support class. Combining the uniform linearization with the abstract
+horizon law at $a=1/2$ yields the stated bound and horizon scale.
 \end{proof}
 
 \begin{proposition}[Pointwise fixed-$\varepsilon$ inheritance in the 1D proof model]
@@ -1099,38 +1039,327 @@ the triangular-to-i.i.d. $W_2$ comparison is independent of $\varepsilon$, the
   constants in the pointwise proof can be chosen uniformly over $\mathcal B$.
 \end{proof}
 
-\begin{proposition}[Conditional embedded fixed-$\varepsilon$ band inheritance]
-\label{prop:conditional_embedded_sinkhorn_band}
-Assume the fixed-$\varepsilon$ Sinkhorn setting from
-\cref{def:fixed_epsilon_sinkhorn_setting}. Suppose that on a compact band
-$\mathcal B=[\varepsilon_{\min},\varepsilon_{\max}]$, the centered Sinkhorn
-scaling map admits a uniform linearization with remainder $o(n^{-1/2})$ and a
-uniform self-coupling inverse bound. Then there exists $C_{\mathcal B}<\infty$
-such that
+\begin{lemma}[Exact $\ell_2$ fluctuation on the calibrated support-growth grid]
+\label{lem:calibrated_sinkhorn_support_growth_l2}
+In the calibrated discrete $k=2$ fixed-span grid with span $0.25$, let
+$b_{t,n}\in\mathbb R^{4n}$ be the weight vector of $\bar P_t^{(n)}$ and let
+$\widehat b_{t,n}$ be the corresponding triangular-window empirical weight
+vector. Let $\{v_{r,\ell}:1\le r\le n,\ 1\le \ell\le 3\}$ be any orthonormal
+block-contrast basis of the tangent space obtained by placing an orthonormal
+contrast basis on each four-point block. Then
+\[
+  \mathbb E\,\langle \widehat b_{t,n}-b_{t,n},v_{r,\ell}\rangle
+  \langle \widehat b_{t,n}-b_{t,n},v_{s,m}\rangle
+  = \frac{1}{4n^2}\mathbf 1\{(r,\ell)=(s,m)\}.
+\]
+In particular,
+\[
+  \mathbb E\,\|\widehat b_{t,n}-b_{t,n}\|_2^2 = \frac{3}{4n}.
+\]
+If $\widehat b_{t,n}^{\mathrm{iid}}$ is the i.i.d. empirical weight vector from
+$n$ samples drawn from the same $4n$-atom uniform mixture, then
+\[
+  \mathbb E\,\|\widehat b_{t,n}^{\mathrm{iid}}-b_{t,n}\|_2^2
+  = \frac{1-1/(4n)}{n}.
+\]
+\end{lemma}
+
+\begin{proof}
+The calibrated support-growth grid splits into $n$ disjoint four-point blocks,
+each carrying target mass $1/n$ and uniform within-block weights $1/4$. The
+triangular sample chooses exactly one atom from each block. On one block, the
+weight error vector is $(e_J-u/4)/n$, where $J$ is uniform on
+$\{1,2,3,4\}$ and $u=(1,1,1,1)$. Therefore
+\[
+  \mathbb E\,\bigl\|e_J-u/4\bigr\|_2^2
+  = \left(\frac34\right)^2 + 3\left(\frac14\right)^2
+  = \frac34.
+\]
+Summing over the $n$ disjoint blocks gives
+the block-basis covariance identity, and therefore
+\[
+  \mathbb E\,\|\widehat b_{t,n}-b_{t,n}\|_2^2
+  = n\cdot \frac{3}{4n^2}
+  = \frac{3}{4n}.
+\]
+For the i.i.d. empirical vector on a uniform $4n$-atom support,
+\[
+  \mathbb E\,\|\widehat b_{t,n}^{\mathrm{iid}}-b_{t,n}\|_2^2
+  = \frac{1-\sum_{i=1}^{4n} b_i^2}{n}
+  = \frac{1-1/(4n)}{n}.
+\]
+\end{proof}
+
+\begin{lemma}[Parity decomposition of the calibrated row kernel]
+\label{lem:calibrated_sinkhorn_parity_decomposition}
+In the calibrated discrete $k=2$ fixed-span grid, write each row support as
+\[
+  x_{r,\sigma_x,\sigma_y}
+  = \bigl(s_r+\sigma_x\rho,\,\sigma_y\rho\bigr),
+  \qquad
+  \sigma_x,\sigma_y\in\{-1,1\},
+\]
+with row shift $s_r\in[0,0.25]$ and radius $\rho=0.125$. For
+$\varepsilon>0$, let $K_{rs}^{(\varepsilon)}$ be the $4\times 4$ Sinkhorn kernel
+block between rows $r$ and $s$. Then, with $\Delta_{rs}=s_r-s_s$,
+\[
+  K_{rs}^{(\varepsilon)}
+  = K_x^{(\varepsilon)}(\Delta_{rs})\otimes K_y^{(\varepsilon)},
+\]
+where
+\[
+  K_x^{(\varepsilon)}(\Delta)=
+  \begin{bmatrix}
+    e^{-\Delta^2/\varepsilon} & e^{-(\Delta+2\rho)^2/\varepsilon}\\
+    e^{-(\Delta-2\rho)^2/\varepsilon} & e^{-\Delta^2/\varepsilon}
+  \end{bmatrix}
+\]
+and
+\[
+  K_y^{(\varepsilon)}=
+  \begin{bmatrix}
+    1 & e^{-4\rho^2/\varepsilon}\\
+    e^{-4\rho^2/\varepsilon} & 1
+  \end{bmatrix}.
+\]
+Let
+\[
+  H=2^{-1/2}\begin{bmatrix}1&1\\1&-1\end{bmatrix},
+  \qquad
+  W=H\otimes H.
+\]
+Then
+\[
+  WK_{rs}^{(\varepsilon)}W^\top
+  = \widetilde K_x^{(\varepsilon)}(\Delta_{rs})
+    \otimes
+    \operatorname{diag}\bigl(1+e^{-4\rho^2/\varepsilon},\,1-e^{-4\rho^2/\varepsilon}\bigr),
+\]
+where $\widetilde K_x^{(\varepsilon)}(\Delta)=H K_x^{(\varepsilon)}(\Delta)H^\top$.
+Consequently the rowwise four-point space splits exactly into a one-dimensional
+odd channel and a two-dimensional even channel, and the calibrated tangent space
+inherits the same invariant decomposition.
+\end{lemma}
+
+\begin{proof}
+The squared-Euclidean cost separates by coordinate:
+\[
+  \|x_{r,\sigma_x,\sigma_y}-x_{s,\tau_x,\tau_y}\|^2
+  = (\Delta_{rs}+\rho(\sigma_x-\tau_x))^2 + \rho^2(\sigma_y-\tau_y)^2.
+\]
+Exponentiating the negative cost divided by $\varepsilon$ therefore gives the
+stated tensor factorization of the kernel block. The matrix $H$ diagonalizes the
+two-point symmetric kernel in the $y$ coordinate, and tensoring with the same
+transform in the $x$ coordinate yields the displayed formula. The final claim
+follows because the transformed block matrix is block diagonal with respect to
+the $y$-parity splitting.
+\end{proof}
+
+\begin{lemma}[Quadratic null bound from a uniform Hessian bound]
+\label{lem:sinkhorn_quadratic_null_hessian}
+For the calibrated support-growth family, fix $(t,n)$ and let
+$F_{t,n,\varepsilon}(h)$ denote the null Sinkhorn map
+\[
+  F_{t,n,\varepsilon}(h)
+  \coloneqq
+  S_{\varepsilon}\!\left(
+    \sum_{i=1}^{4n}(b_{t,n,i}+h_i)\delta_{x_i},
+    \sum_{i=1}^{4n} b_{t,n,i}\delta_{x_i}
+  \right)
+\]
+on the tangent domain
+\[
+  \mathcal T_{t,n}
+  \coloneqq
+  \{h\in\mathbb R^{4n}: \sum_{i=1}^{4n} h_i = 0,\ b_{t,n}+h\in\Delta_{4n}\}.
+\]
+Assume that for some finite $M_{\mathcal B}$ the restriction of
+$F_{t,n,\varepsilon}$ to $\mathcal T_{t,n}$ is twice continuously
+differentiable for every $\varepsilon\in\mathcal B$, and that
+\[
+  \sup_{\varepsilon\in\mathcal B}
+  \sup_{(t,n)}
+  \sup_{h\in\mathcal T_{t,n}}
+  \bigl\|D^2F_{t,n,\varepsilon}(h)\bigr\|_{2\to 2}
+  \le M_{\mathcal B}.
+\]
+Then
+\[
+  \sup_{\varepsilon\in\mathcal B}
+  F_{t,n,\varepsilon}(h)
+  \le \frac{M_{\mathcal B}}{2}\|h\|_2^2
+  \qquad \text{for every } h\in\mathcal T_{t,n}.
+\]
+In particular, the hypothesis of
+\cref{thm:calibrated_support_growth_band_law} holds with
+$H_{\mathcal B}=M_{\mathcal B}/2$.
+\end{lemma}
+
+\begin{proof}
+For each fixed $(t,n,\varepsilon)$, the debiased Sinkhorn divergence is
+nonnegative and vanishes at the null comparison, so $F_{t,n,\varepsilon}(0)=0$
+and $0$ is a minimizer on $\mathcal T_{t,n}$. Since
+$F_{t,n,\varepsilon}$ is $C^2$ on the tangent domain, its first derivative on
+that domain vanishes at $0$. For any $h\in\mathcal T_{t,n}$, the one-variable
+path $g(s)=F_{t,n,\varepsilon}(sh)$ satisfies $g(0)=g'(0)=0$, and Taylor's
+formula gives
+\[
+  F_{t,n,\varepsilon}(h)
+  = \frac12 g''(\xi)
+  = \frac12\langle h, D^2F_{t,n,\varepsilon}(\xi h)h\rangle
+\]
+for some $\xi\in(0,1)$. Therefore
+\[
+  F_{t,n,\varepsilon}(h)
+  \le \frac12
+  \bigl\|D^2F_{t,n,\varepsilon}(\xi h)\bigr\|_{2\to 2}\|h\|_2^2
+  \le \frac{M_{\mathcal B}}{2}\|h\|_2^2.
+\]
+Taking the supremum over $\varepsilon\in\mathcal B$ yields the claim.
+\end{proof}
+
+\begin{remark}[Parity-channel curvature decomposition]
+\label{rem:sinkhorn_hessian_anisotropy}
+In the block-contrast basis, local directional curvatures remain $O(1)$ across
+the reported grid, whereas collective directional curvatures grow
+approximately like $c(\varepsilon)n$ with $c(\varepsilon)$ stable across $n$.
+The exact isotropic covariance of order $1/n^2$ in the same block basis
+translates a linear trace bound into an $O(n^{-1})$ expected null cost.
+\end{remark}
+
+\begin{proposition}[Covariance-weighted support-growth null control]
+\label{prop:covariance_weighted_support_growth}
+For the calibrated support-growth family, let $H_{t,n,\varepsilon}$ denote the
+null Hessian of the debiased Sinkhorn map in the orthonormal block-contrast
+basis. Suppose that for some $G_{\mathcal B}<\infty$ one has
+\[
+  \sup_{\varepsilon\in\mathcal B}\sup_{(t,n)}
+  \operatorname{tr}\bigl(H_{t,n,\varepsilon}\bigr)
+  \le G_{\mathcal B} n
+\]
+and that the null map is twice differentiable with a nonnegative quadratic
+remainder along the tangent domain. Then
 \[
   \sup_{\varepsilon\in\mathcal B}
   \mathbb E\,S_{\varepsilon}\!\left(\widehat P_{t,\mathrm{tri}}^{(n)},\bar P_t^{(n)}\right)
-  \le C_{\mathcal B} n^{-1/2}.
+  \le \frac{G_{\mathcal B}}{8n} + o(n^{-1}).
 \]
-Consequently, on any such band the induced horizon scale satisfies
-\[
-  \sup_{\varepsilon\in\mathcal B} n_{\varepsilon}^*(H)
-  \asymp (C_{\mathcal B}/\zeta)^{1/(H+1/2)}.
-\]
+Consequently the support-growth family has finite-sample exponent `a=1` under
+this trace condition.
 \end{proposition}
 
 \begin{proof}
-The linearization hypothesis reduces the triangular-array Sinkhorn divergence to
-its first-order influence term plus an $o(n^{-1/2})$ remainder. The uniform
-self-coupling inverse bound keeps the influence operator bounded across
-$\mathcal B$, while the triangular-array fluctuation of the empirical measure is
-root-$n$ on the embedded fixed-span class. The same balance then gives the
-uniform $n^{-1/2}$ bound and the stated horizon scale.
+Work in the orthonormal block-contrast basis. By the exact covariance identity in
+\cref{lem:calibrated_sinkhorn_support_growth_l2}, the empirical tangent
+covariance is $(4n^2)^{-1}I$. The second-order Taylor expansion of the null map
+therefore gives
+\[
+  \mathbb E\,S_{\varepsilon}
+  \le \frac12\operatorname{tr}\!
+  \left(H_{t,n,\varepsilon}\,\frac{1}{4n^2}I\right)
+  + o(n^{-1})
+  = \frac{\operatorname{tr}(H_{t,n,\varepsilon})}{8n^2}+o(n^{-1}).
+\]
+The trace bound then yields the displayed $O(n^{-1})$ rate.
+\end{proof}
+
+\begin{corollary}[Local block-curvature criterion for support growth]
+\label{cor:local_block_curvature_support_growth}
+In the calibrated support-growth family, let
+$\{v_{r,\ell}:1\le r\le n,\ 1\le \ell\le 3\}$ be the orthonormal block-
+contrast basis from \cref{lem:calibrated_sinkhorn_support_growth_l2}. Suppose
+that for some $L_{\mathcal B}<\infty$ one has
+\[
+  \sup_{\varepsilon\in\mathcal B}\sup_{(t,n)}\sup_{1\le r\le n}\sup_{1\le \ell\le 3}
+  \langle v_{r,\ell}, H_{t,n,\varepsilon} v_{r,\ell}\rangle
+  \le L_{\mathcal B}.
+\]
+Then
+\[
+  \sup_{\varepsilon\in\mathcal B}
+  \mathbb E\,S_{\varepsilon}\!\left(\widehat P_{t,\mathrm{tri}}^{(n)},\bar P_t^{(n)}\right)
+  \le \frac{3L_{\mathcal B}}{8n} + o(n^{-1}).
+\]
+In particular, the calibrated support-growth family has finite-sample exponent
+`a=1` under a uniform local block-curvature bound.
+\end{corollary}
+
+\begin{proof}
+In the orthonormal block-contrast basis,
+\[
+  \operatorname{tr}(H_{t,n,\varepsilon})
+  = \sum_{r=1}^n \sum_{\ell=1}^3
+  \langle v_{r,\ell}, H_{t,n,\varepsilon} v_{r,\ell}\rangle
+  \le 3L_{\mathcal B} n.
+\]
+Apply \cref{prop:covariance_weighted_support_growth} with
+$G_{\mathcal B}=3L_{\mathcal B}$.
+\end{proof}
+
+\begin{remark}[Channel reduction]
+\label{rem:calibrated_support_growth_channels}
+By \cref{lem:calibrated_sinkhorn_parity_decomposition}, the calibrated row
+kernel has only two nontrivial parity sectors: a one-dimensional odd channel and
+a two-dimensional even channel. The local block-curvature criterion in
+\cref{cor:local_block_curvature_support_growth} controls the reduced channels on
+the full `3n`-dimensional tangent space.
+\end{remark}
+
+\begin{proposition}[Uniform parity-channel curvature bound]
+\label{prop:uniform_parity_channel_curvature}
+For the calibrated support-growth family, write the row position as
+\[
+  u_r \coloneqq \frac{r-1}{n-1}\in[0,1],
+\]
+and let $\kappa_1(u,\varepsilon)$, $\kappa_2(u,\varepsilon)$, and
+$\kappa_3(u,\varepsilon)$ denote the second derivatives at the null comparison
+of the debiased Sinkhorn map in the odd channel and the two even channels
+obtained from \cref{lem:calibrated_sinkhorn_parity_decomposition}. Then each
+$\kappa_j$ is continuous on $\mathcal K \coloneqq [0,1]\times\mathcal B$, hence
+there exists a finite constant $L_{\mathcal B}$ such that
+\[
+  \sup_{(u,\varepsilon)\in\mathcal K} \max_{1\le j\le 3}
+  \kappa_j(u,\varepsilon)
+  \le L_{\mathcal B}.
+\]
+Consequently the local block-curvature criterion in
+\cref{cor:local_block_curvature_support_growth} holds uniformly on the calibrated
+support-growth family.
+\end{proposition}
+
+\begin{proof}
+The calibrated row kernel depends analytically on $(u,\varepsilon)$, and the
+kernel blocks are strictly positive on the compact set $\mathcal K$. The finite-
+dimensional Sinkhorn scaling equations therefore admit an analytic solution in
+the neighborhood of the null comparison by the implicit function theorem. The
+debiased Sinkhorn map is a composition of analytic maps in the weights and the
+kernel blocks, so its channelwise second derivatives are continuous on
+$\mathcal K$. A continuous function on a compact set attains its maximum, which
+gives the displayed uniform bound.
+\end{proof}
+
+\begin{theorem}[Calibrated quadratic support-growth Sinkhorn band law]
+\label{thm:calibrated_support_growth_band_law}
+Consider the calibrated discrete $k=2$ fixed-span support-growth grid and let
+$b_{t,n}$ denote the target weight vector on the common $4n$-point support. Fix
+a compact band $\mathcal B=[\varepsilon_{\min},\varepsilon_{\max}]$. Then the
+induced temporal-validity horizon on this support-growth family has exponent
+`a=1`:
+\[
+  n^*_{\mathcal B}(1,H)
+  \asymp (G_{\mathcal B}/\zeta)^{1/(H+1)}.
+\]
+\end{theorem}
+
+\begin{proof}
+Combine \cref{prop:covariance_weighted_support_growth} and
+\cref{prop:uniform_parity_channel_curvature} with the abstract horizon law at
+finite-sample exponent `a=1`.
 \end{proof}
 
 \begin{conjecture}[Bandwise fixed-$\varepsilon$ Sinkhorn horizon inheritance]
 \label{conj:embedded_sinkhorn_horizon}
-Beyond the one-dimensional fixed-$\varepsilon$ band result above, assume the fixed-$\varepsilon$ Sinkhorn setting from
+Beyond the one-dimensional and bounded-cardinality finite-discrete band results above, assume the fixed-$\varepsilon$ Sinkhorn setting from
 \cref{def:fixed_epsilon_sinkhorn_setting}. Then, on bands where the i.i.d.
 benchmark stays in the parametric Sinkhorn regime, the triangular-array
 finite-sample term should satisfy
@@ -1160,10 +1389,15 @@ support-complexity inheritance is exact and the dual smoothness threshold
 reduces to $\alpha>k/2$. Calibration then asks whether triangular and i.i.d.
 rate estimates remain close across the regularization band. Additional
 one-dimensional smooth fixed-support diagnostics show that triangular and i.i.d.
-fitted exponents can agree closely on moderate fixed-$\varepsilon$ bands, while
-direct Jacobian diagnostics concentrate the remaining difficulty on uniform
-control of the self-coupling derivative blocks across nontrivial bands and
-higher-dimensional embedded classes.
+fitted exponents can agree closely on moderate fixed-$\varepsilon$ bands.
+On the calibrated discrete $k=2$ support grid, the centered squared
+self-coupling block keeps a uniform gap on the moderate band, the exact-target
+null slopes stay near the quadratic remainder scale, the exact
+$\ell_2$ fluctuation is $3/(4n)$, and the empirical cost-to-$\ell_2^2$ ratios
+stay stable across the reported support-growth grid. This reduces the support-
+growth extension problem to a uniform quadratic null bound on the calibrated
+family and, beyond that, to support change beyond the fixed support-growth
+construction.
 
 Regular dominated families remain the natural family-level extension class.
 Support-changing and singular families fall outside the present regime.

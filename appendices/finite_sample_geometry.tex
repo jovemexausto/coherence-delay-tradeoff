@@ -1,8 +1,7 @@
 \section{Finite-Sample and Operational Diagnostics}\label{app:finite_sample_geometry}
 
 This appendix gives finite-sample diagnostics for the theorem line and the
-operational frontier. These diagnostics support theorem-facing regimes without
-changing claim status.
+operational frontier.
 
 \subsection{Finite-Sample Geometry Diagnostic}
 
@@ -56,8 +55,9 @@ near the root-$n$ regime without a dramatic triangular-versus-benchmark gap. The
 operational-regime rows record empirical evidence relevant to the fixed-
 $\varepsilon$ Sinkhorn setting in \cref{def:fixed_epsilon_sinkhorn_setting}:
 together with exact support-complexity inheritance and the dual threshold
-$\alpha>k/2$, they align with the embedded bandwise statement. A full proof of
-triangular-array inheritance would close this loop.
+$\alpha>k/2$, they align with the embedded bandwise statement. The bounded-
+cardinality finite-support theorem closes one theorem-level subclass; the
+remaining question is support growth and support change.
 
 Two complementary diagnostics sharpen the same boundary. First, direct probes of
 the centered Sinkhorn scaling Jacobian on the embedded fixed-span model show
@@ -67,8 +67,8 @@ and the self-coupling inverse norms appear to plateau with sample size. Second,
 on the supported synthetic frontier grid, intrinsic-dimension estimates
 predict the observed stable-band cutoff better than ambient dimension.
 These diagnostics identify a useful regime statistic and isolate the band where
-the instability is concentrated. They do not upgrade the embedded fixed-
-$\varepsilon$ statement from conjecture to theorem.
+the instability is concentrated. They probe a larger support-growth regime than
+the bounded-cardinality theorem.
 
 The calibrated summary separates three ingredients on the same embedded grid:
 the empirically stable band, the theorem-ready band obtained from the structural
@@ -81,6 +81,32 @@ mean inverse norm below $3.0$.
 \input{artifacts/tables/conceptual/sinkhorn_frontier_summary}
 
 \input{artifacts/tables/conceptual/sinkhorn_theorem_ready_band}
+
+On the calibrated discrete $k=2$ support grid, the closure diagnostics sharpen
+that picture further. The centered self-coupling operator for the squared block
+keeps radius well below one across the moderate band, the exact-target null
+Sinkhorn slopes are close to the $n^{-1}$ remainder law, and the finite-support
+root-$n$ empirical fluctuations remain bounded on the tested range. These
+diagnostics support the corrected $S^2$ self-coupling route and the finite-
+dimensional influence argument on the calibrated model. The analytic route is a
+finite-state minorization on the compact support rectangle: the kernel is
+uniformly bounded below on the calibrated band, so the centered block is a
+strict contraction and the inverse bound follows from a Doeblin-type
+decomposition. The support-growth probe points in the same direction: the ratio
+between exact-target Sinkhorn cost and squared $\ell_2$ weight deviation stays
+uniformly small on the reported grid, with mean values below $0.084$ and worst
+pointwise values below $0.24$. Together with the exact $3/(4n)$ calibrated
+$\ell_2$ fluctuation identity and the Hessian criterion in the main text, this
+organizes the support-growth family around a covariance-weighted trace bound
+and a local block-curvature bound for the null Sinkhorn map. A finite-difference
+basis probe supports that organization numerically:
+across the reported grid, local blockwise curvatures stay below about $0.24$ and
+the stiffer collective directions scale approximately like $c(\varepsilon)n$
+with reduced-channel coefficient between about $0.04$ and $0.13$. The
+local-basis trace proxy grows linearly in $n$ at about $0.34$ per block, while
+the covariance-weighted proxy stays around $0.002$ to $0.004$.
+
+\input{artifacts/tables/conceptual/sinkhorn_embedded_closure_summary}
 
 \subsection{Smooth Multivariate Transfer Diagnostics}
 
