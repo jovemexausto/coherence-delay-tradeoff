@@ -74,7 +74,10 @@ are too noisy, while very long windows become stale relative to the present
 block. On the robustness grid, the \texttt{nswprice} marginal retains an
 interior optimum in all tested configurations, and the \texttt{nswdemand}
 marginal shows the same interior pattern with more movement in the optimizing
-scale; see \Cref{tab:elec2_robustness}.
+scale. That robustness sweep already includes anchor sizes $24$, $48$, and $96$
+and segment starts $0$, $8000$, and $16000$, so the interior-optimum signature
+is stable to a moderate anchor-length perturbation on the tested stream; see
+\Cref{tab:elec2_robustness}.
 
 \subsection{Moderate-Band Sinkhorn Diagnostics}
 \label{sec:empirical_sinkhorn_evidence}
@@ -98,7 +101,7 @@ diagnostics organize the support-growth family around a covariance-weighted
 trace bound and a local block-curvature bound for the null Sinkhorn map. The
 finite-difference Hessian probe shows bounded local curvatures together with
 collective directions that grow approximately linearly with support growth,
-matching the parity-channel reduction used in the theorem line.
+matching the parity-channel reduction used in the support-growth proof.
 
 Intrinsic-dimension estimates from TwoNN \citep{FaccoEtAl2017} track the
 stable-band cutoff better than ambient dimension on the tested grid, so the

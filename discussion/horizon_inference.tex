@@ -121,6 +121,23 @@ is therefore the operational identifiability score of the horizon. It compares
 lag-geometry information to the curvature-imposed precision requirement of the
 useful-memory region.
 
+The following algorithm summarizes the operational pipeline.
+\begin{algorithm}[!htbp]
+\caption{Operational horizon-inference pipeline}
+\label{alg:horizon_inference}
+\footnotesize
+\begin{algorithmic}[1]
+\State Estimate recent lag discrepancies on lags $1,\dots,L$.
+\State Fit the lag model to obtain $(\widehat\alpha_{m,L},\widehat H_{m,L})$ and a covariance proxy.
+\State Compute $\widehat n_\star$ and $\widehat{\mathfrak S}_{\delta,m,L}$.
+\If{$\widehat{\mathfrak S}_{\delta,m,L}$ is below the target tolerance threshold}
+  \State widen to the useful-memory band or defer the update
+\Else
+  \State deploy $\widehat n_\star$ and monitor realized tracking error
+\EndIf
+\end{algorithmic}
+\end{algorithm}
+
 \begin{proposition}[Deterministic stability of the horizon map]
 \label{prop:deterministic_horizon_stability}
 Let $K\subset \mathbb R\times(0,\infty)$ be compact. Then there exists a finite
