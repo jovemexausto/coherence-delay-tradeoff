@@ -1,7 +1,7 @@
 \section{Finite-Sample and Operational Diagnostics}\label{app:finite_sample_geometry}
 
 This appendix gives finite-sample diagnostics for the theorem line and the
-operational frontier.
+operational implications.
 
 \subsection{Finite-Sample Geometry Diagnostic}
 
@@ -64,25 +64,25 @@ the centered Sinkhorn scaling Jacobian on the embedded fixed-span model show
 that bands approaching zero are the numerically unstable region, whereas on a
 moderate band such as $[0.2,0.8]$ the cross-coupling block remains contractive
 and the self-coupling inverse norms appear to plateau with sample size. Second,
-on the supported synthetic frontier grid, intrinsic-dimension estimates
+on the supported synthetic grid, intrinsic-dimension estimates
 predict the observed stable-band cutoff better than ambient dimension.
 These diagnostics identify a useful regime statistic and isolate the band where
 the instability is concentrated. They probe a larger support-growth regime than
 the bounded-cardinality theorem.
 
 The calibrated summary separates three ingredients on the same embedded grid:
-the empirically stable band, the theorem-ready band obtained from the structural
+the empirically stable band, the certified band obtained from the structural
 certificate, and the self-coupling proxy on the calibrated pairs where that
 proxy is currently informative. On $(8,2)$ and $(12,2)$, the empirical and
-theorem-ready bands both reach $0.5$, and the two self-coupling blocks keep
+certified bands both reach $0.5$, and the two self-coupling blocks keep
 positive spectral gap, worst spectral radius below $0.97$, and largest-sample
 mean inverse norm below $3.0$.
 
-\input{artifacts/tables/conceptual/sinkhorn_frontier_summary}
+\input{artifacts/tables/conceptual/sinkhorn_support_growth_band_summary}
 
-\input{artifacts/tables/conceptual/sinkhorn_theorem_ready_band}
+\input{artifacts/tables/conceptual/sinkhorn_moderate_band_certificate}
 
-On the calibrated discrete $k=2$ support grid, the closure diagnostics sharpen
+On the calibrated discrete $k=2$ support grid, the support-growth diagnostics sharpen
 that picture further. The centered self-coupling operator for the squared block
 keeps radius well below one across the moderate band, the exact-target null
 Sinkhorn slopes are close to the $n^{-1}$ remainder law, and the finite-support
@@ -106,7 +106,7 @@ with reduced-channel coefficient between about $0.04$ and $0.13$. The
 local-basis trace proxy grows linearly in $n$ at about $0.34$ per block, while
 the covariance-weighted proxy stays around $0.002$ to $0.004$.
 
-\input{artifacts/tables/conceptual/sinkhorn_embedded_closure_summary}
+\input{artifacts/tables/conceptual/sinkhorn_support_growth_summary}
 
 \subsection{Smooth Multivariate Transfer Diagnostics}
 
@@ -131,3 +131,34 @@ the tested grids.
 \input{artifacts/tables/conceptual/validity_gap_robustness_summary}
 
 \input{artifacts/tables/conceptual/online_controller_summary}
+
+\FloatBarrier
+
+\subsection{Contribution Summary}\label{app:contribution_summary}
+
+\begin{enumerate}[label=\textbf{(\arabic*)},leftmargin=*,itemsep=2pt,topsep=3pt]
+  \item \textbf{Object: temporal-validity horizon and useful-memory region.}
+  The temporal-validity horizon governs finite-memory distribution tracking
+  under drift, together with a useful-memory region whose normalized geometry is
+  determined by $(a,H)$.
+
+  \item \textbf{Theorem line: proof anchor and closed classes.}
+  A one-dimensional root-$n$ triangular-array proof anchor, the exact
+  uniform-window staleness bound, a structural Gaussian lower bound, a Gaussian
+  location benchmark, and theorem-level embedded Sinkhorn results show that the
+  horizon is structural across tractable and operational geometries.
+
+  \item \textbf{Transfer: projection families and Sinkhorn geometry.}
+  Finite projection families and sliced geometries yield transfer theorems,
+  one-dimensional fixed-$\varepsilon$ Sinkhorn inheritance is proved, and the
+  bounded-cardinality finite-discrete and calibrated support-growth embedded
+  Sinkhorn classes satisfy theorem-level horizon laws.
+
+  \item \textbf{Inference: identifiability and regret.}
+  Plug-in horizon inference yields an identifiability criterion for
+  useful-memory selection and a quadratic regret law for horizon mislocation.
+
+  \item \textbf{Empirics: signatures of temporal validity.}
+  Empirical results exhibit interior U-curves, roughness-dependent scaling,
+  real-stream finite-memory diagnostics, and pre-detection validity loss.
+\end{enumerate}

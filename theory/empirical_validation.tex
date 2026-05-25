@@ -1,24 +1,11 @@
 \section{Empirical Signatures}\label{sec:empirical_signatures}
 
-The experiments display the finite-sample signatures of the temporal-validity
-horizon, the useful-memory region induced by that horizon, and evidence
-relevant to the fixed-$\varepsilon$ Sinkhorn frontier.
-
-The Gaussian U-curve uses 20 Monte Carlo seeds, the roughness-family sweep uses
-12, the fixed-$\varepsilon$ Sinkhorn fits log--log slopes over sample sizes
-$(24,48,96,160)$ on the pairs $(8,1)$, $(8,2)$, $(12,1)$, and $(12,2)$ using
-24 seeds, and the validity-detection experiment uses a piecewise-ramped drift
-stream with 12 seeds, a fixed operating window, and both ADWIN and
-Page--Hinkley detectors. The real-stream diagnostic uses the ELEC2 stream and a
-short anchor block on the marginal distribution of \texttt{nswprice}. The empirical
-goal is qualitative and structural: persistence of shape, ordering, and sign
-across repeated runs, not precise constant estimation for every curve.
-
-Five signatures recur across the experiments. Finite-memory risk exhibits an interior
-optimum together with a near-optimal useful-memory band. That optimum moves with
-temporal roughness. The same shape appears on a real stream. The fixed-
-$\varepsilon$ Sinkhorn frontier receives structured empirical support. Temporal
-validity can fail before changepoint evidence becomes statistically visible.
+The experiments target qualitative signatures of the temporal-validity horizon:
+an interior memory optimum, roughness-dependent scaling, the same pattern on a
+real stream, structured support for the fixed-$\varepsilon$ Sinkhorn family, and
+validity loss before detector alarm. The reported sweeps use repeated Monte
+Carlo runs and are meant to identify shape, ordering, and sign rather than to
+estimate constants precisely.
 
 \subsection{Interior Memory Optimum}\label{sec:empirical_memory_optimum}
 
@@ -190,5 +177,5 @@ family, not a detector-uniform delay law; see
 \subsection{Empirical Summary}\label{sec:empirical_summary}
 The experiments support a structural U-curve with a near-optimal useful-memory
 region, roughness-dependent horizon scaling, a corresponding pattern on the
-ELEC2 stream, structured support for the fixed-$\varepsilon$ Sinkhorn frontier,
+ELEC2 stream, structured support for the fixed-$\varepsilon$ Sinkhorn family,
 and a measurable lag between validity loss and detector alarm.

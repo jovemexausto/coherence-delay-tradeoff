@@ -1,29 +1,22 @@
-\section{Temporal-Validity Horizon and Useful-Memory Geometry}
-\label{sec:useful_memory_under_drift}
+\section{Temporal-Validity Horizon}
+\label{sec:horizon_law}
 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.92\linewidth]{artifacts/figures/conceptual/fig_two_clocks_of_drift.pdf}
-\caption{Finite-sample--staleness trade-off under drift. The finite-sample term
-falls with horizon, the staleness term rises with age, and total error is
-minimized at the temporal-validity horizon $n^*$. The green band marks a
-near-optimal useful-memory region, and the red band marks pre-detection
-validity loss: retained evidence can stop representing the present before
-enough changepoint evidence accumulates to trigger an alarm.}
+\caption{Temporal-validity horizon under drift. The finite-sample term falls with
+horizon, the staleness term rises with age, and total error is minimized at the
+temporal-validity horizon $n^*$. The green band marks a near-optimal
+useful-memory region, and the red band marks pre-detection validity loss: retained
+evidence can stop representing the present before enough changepoint evidence
+accumulates to trigger an alarm.}
 \label{fig:finite_sample_staleness_tradeoff}
 \end{figure}
 
-Throughout, $P_t$ denotes the present target law,
-$\bar P_t^{(n)}$ the window target obtained by averaging the last $n$ target
-laws, and $\widehat P_t^{(n)}$ the estimator built from the last $n$
-observations. The finite-sample term always refers to the estimation error
-relative to $\bar P_t^{(n)}$, while the staleness term refers to the
-discrepancy between $\bar P_t^{(n)}$ and $P_t$.
-
-Finite-sample error relative to $\bar P_t^{(n)}$ and staleness relative to
-$P_t$ combine into a horizon law. When both sides are controlled, the resulting scale
-induces a useful-memory region: the range of memory lengths whose tracking
-error remains near optimal.
+Let $P_t$ denote the present target law, $\bar P_t^{(n)}$ the window target, and
+$\widehat P_t^{(n)}$ the estimator built from the last $n$ observations. The
+finite-sample term is the estimation error relative to $\bar P_t^{(n)}$, and
+the staleness term is the discrepancy between $\bar P_t^{(n)}$ and $P_t$.
 
 \subsection{General Horizon Law}\label{subsec:abstract_upper_law}
 
@@ -62,8 +55,7 @@ By the triangle inequality,
 Taking expectations and applying the two assumptions yields the claim.
 \end{proof}
 
-The theorem isolates the structure of the problem:
-the path class supplies the staleness term, while the chosen geometry and sample
+The path class supplies the staleness term, while the chosen geometry and sample
 regime supply the finite-sample term.
 
 \begin{proposition}[Triangular-array transfer for Hadamard-differentiable functionals]
@@ -164,7 +156,7 @@ Write the continuous optimizer of $\Phi$ as
 This optimizer differs from the scale $n^*(a,H)$ only by constants depending on
 $a$, $H$, and $C_S$, so the asymptotic horizon law remains unchanged.
 
-\subsection{Useful-Memory Region}
+\subsection{Useful-Memory Geometry}
 
 The horizon scale induces a near-optimal region of memory lengths. For any
 $\delta>0$, define the useful-memory region by
@@ -220,7 +212,7 @@ The horizon depends jointly on the finite-sample rate exponent and the
 roughness exponent. Different geometries and different drift regularities induce
 different memory scales.
 
-\subsection{Drift Regularity and Staleness Accumulation}
+\subsection{Drift Regularity and Staleness Control}
 
 The staleness side of the law is controlled by a deterministic path class. For
 $H\in(0,1]$ and $\zeta>0$, write
@@ -292,7 +284,7 @@ The finite-$n$ constant in
 uniform windows; the simpler $(2H+1)^{-1/2}$ expression is its large-window
 limit.
 
-\subsection{One-Dimensional Root-$n$ Proof Model}
+\subsection{One-Dimensional Proof Anchor}
 \label{subsec:one_dimensional_proof_model}
 
 The bounded-support fixed-span one-dimensional triangular array provides a
@@ -398,7 +390,7 @@ The main conclusion is the exponent. Under this bounded-support fixed-span
 regime, the triangular-array finite-sample term remains root-$n$.
 \end{proof}
 
-\subsection{Verifiable Conditions for the 1D Proof Model}
+\subsection{Verifiable Smooth Deformation Class}
 
 An explicit deformation class makes the proof-model hypotheses verifiable. Let
 \[
@@ -500,10 +492,11 @@ $a=1/2$, the horizon is imposed by the drift geometry itself.
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.88\linewidth]{artifacts/figures/conceptual/fig_lower_bound_witness.pdf}
-\caption{Gaussian lower-bound construction. The two paths share
-most of the retained history and differ only on a recent segment of width $h$,
-yet remain separated at the present. That recent segment already produces the
-same horizon exponent as the upper law in the root-$n$ regime.}
+\caption{Least-favorable Gaussian path pair for the root-$n$ horizon lower bound.
+The two paths share most of the retained history and differ only on a recent
+segment of width $h$, yet remain separated at the present. That recent segment
+already produces the same horizon exponent as the upper law in the root-$n$
+regime.}
 \label{fig:lower_bound_construction}
 \end{figure}
 
@@ -681,7 +674,7 @@ Minimizing over $h$ gives the same horizon scale $(\sigma/\zeta)^{2/(2H+1)}$.
 Combining the two sides proves the theorem.
 \end{proof}
 
-\subsection{Finite-Family and Sliced Transfer}
+\subsection{Projection and Sliced Transfer}
 
 The horizon law also extends beyond one dimension when the multivariate geometry
 reduces to a uniformly controlled family of one-dimensional transport problems.
@@ -794,7 +787,7 @@ envelope and horizon scale.
 Weighted-memory summaries and the effective-sample-size comparison are recorded
 in \cref{app:proof_details}.
 
-\subsection{Benchmarks and Sinkhorn Geometry}
+\subsection{Embedded Sinkhorn Theorems}
 
 The Gaussian benchmark closes a full path-class model, while the
 fixed-$\varepsilon$ Sinkhorn results place the same horizon logic in an
@@ -837,7 +830,7 @@ support-complexity inheritance is exact, and the dual-complexity condition is
 precisely the LCA threshold $\alpha>k/2$.
 \end{proposition}
 
-\begin{theorem}[Finite-discrete embedded moderate-band Sinkhorn inheritance]
+\begin{theorem}[Finite-Discrete Embedded Sinkhorn Horizon Law]
 \label{thm:finite_discrete_embedded_sinkhorn}
 Fix a compact moderate band $\mathcal B=[\varepsilon_{\min},\varepsilon_{\max}]
 \subset (0,\infty)$, a support-size bound $m_0\in\mathbb N$, a support-diameter
@@ -1227,7 +1220,7 @@ The exact isotropic covariance of order $1/n^2$ in the same block basis
 translates a linear trace bound into an $O(n^{-1})$ expected null cost.
 \end{remark}
 
-\begin{proposition}[Covariance-weighted support-growth null control]
+\begin{proposition}[Covariance-Weighted Null Bound for Calibrated Support Growth]
 \label{prop:covariance_weighted_support_growth}
 For the calibrated support-growth family, let $H_{t,n,\varepsilon}$ denote the
 null Hessian of the debiased Sinkhorn map in the orthonormal block-contrast
@@ -1263,7 +1256,7 @@ therefore gives
 The trace bound then yields the displayed $O(n^{-1})$ rate.
 \end{proof}
 
-\begin{corollary}[Local block-curvature criterion for support growth]
+\begin{corollary}[Uniform Local Block-Curvature Bound for Support Growth]
 \label{cor:local_block_curvature_support_growth}
 In the calibrated support-growth family, let
 $\{v_{r,\ell}:1\le r\le n,\ 1\le \ell\le 3\}$ be the orthonormal block-
@@ -1305,7 +1298,7 @@ a two-dimensional even channel. The local block-curvature criterion in
 the full `3n`-dimensional tangent space.
 \end{remark}
 
-\begin{proposition}[Uniform parity-channel curvature bound]
+\begin{proposition}[Uniform Local Parity-Channel Curvature Bound]
 \label{prop:uniform_parity_channel_curvature}
 For the calibrated support-growth family, write the row position as
 \[
@@ -1338,7 +1331,7 @@ $\mathcal K$. A continuous function on a compact set attains its maximum, which
 gives the displayed uniform bound.
 \end{proof}
 
-\begin{theorem}[Calibrated quadratic support-growth Sinkhorn band law]
+\begin{theorem}[Calibrated Support-Growth Sinkhorn Horizon Law]
 \label{thm:calibrated_support_growth_band_law}
 Consider the calibrated discrete $k=2$ fixed-span support-growth grid and let
 $b_{t,n}$ denote the target weight vector on the common $4n$-point support. Fix
@@ -1357,51 +1350,6 @@ Combine \cref{prop:covariance_weighted_support_growth} and
 finite-sample exponent `a=1`.
 \end{proof}
 
-\begin{conjecture}[Bandwise fixed-$\varepsilon$ Sinkhorn horizon inheritance]
-\label{conj:embedded_sinkhorn_horizon}
-Beyond the one-dimensional and bounded-cardinality finite-discrete band results above, assume the fixed-$\varepsilon$ Sinkhorn setting from
-\cref{def:fixed_epsilon_sinkhorn_setting}. Then, on bands where the i.i.d.
-benchmark stays in the parametric Sinkhorn regime, the triangular-array
-finite-sample term should satisfy
-\[
-  \mathbb E\,S_{\varepsilon}\!\left(\widehat P_{t,\mathrm{tri}}^{(n)},\bar P_t^{(n)}\right)
-  \le C_{\varepsilon} n^{-1/2},
-  \qquad \varepsilon\in\mathcal B,
-\]
-and the corresponding horizon scale should satisfy
-\[
-  n_{\varepsilon}^*(H) \asymp (C_{\varepsilon}/\zeta)^{1/(H+1/2)}.
-\]
-More generally, if the i.i.d. benchmark on $\mathcal B$ has exponent
-$a_{\varepsilon}$, then the operational horizon law should be
-\[
-  n_{\varepsilon}^*(a_{\varepsilon},H)
-  \asymp (C_{\varepsilon}/\zeta)^{1/(a_{\varepsilon}+H)}.
-\]
-\end{conjecture}
-
-\paragraph{Evidence.}
-The i.i.d. benchmark comes from existing fixed-$\varepsilon$ entropic transport
-results, including fixed-marginal limit theory for the Sinkhorn divergence and
-intrinsic-complexity adaptation \citep{GoldfeldEtAl2022,Stromme2023MID,
-GroppeHundrieser2024LCA}. In the embedded fixed-span model considered here,
-support-complexity inheritance is exact and the dual smoothness threshold
-reduces to $\alpha>k/2$. Calibration then asks whether triangular and i.i.d.
-rate estimates remain close across the regularization band. Additional
-one-dimensional smooth fixed-support diagnostics show that triangular and i.i.d.
-fitted exponents can agree closely on moderate fixed-$\varepsilon$ bands.
-On the calibrated discrete $k=2$ support grid, the centered squared
-self-coupling block keeps a uniform gap on the moderate band, the exact-target
-null slopes stay near the quadratic remainder scale, the exact
-$\ell_2$ fluctuation is $3/(4n)$, and the empirical cost-to-$\ell_2^2$ ratios
-stay stable across the reported support-growth grid. This reduces the support-
-growth extension problem to a uniform quadratic null bound on the calibrated
-family and, beyond that, to support change beyond the fixed support-growth
-construction.
-
-Regular dominated families remain the natural family-level extension class.
-Support-changing and singular families fall outside the present regime.
-
-Once the finite-sample regime and the roughness level are fixed, the law yields
-the memory scale and the corresponding error scale. Rougher drift and weaker
-finite-sample rates imply shorter memory and larger residual error.
+The theorem-level line closes on the bounded-cardinality and calibrated
+support-growth families. Support-changing and singular embedded Sinkhorn classes
+remain outside the proved regime.

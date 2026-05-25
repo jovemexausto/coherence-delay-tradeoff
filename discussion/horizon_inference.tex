@@ -1,11 +1,10 @@
 \section{Horizon Inference and Identifiability}
-\label{sec:inferable_horizons}
+\label{sec:horizon_inference}
 
-The horizon law is structural, but operational use requires more than the
-existence of an optimizer. A data-driven memory rule needs estimators of the
-drift-geometry parameters $(H,\zeta)$ together with a criterion that compares
-inferential resolution to the curvature of the useful-memory region. This
-section turns temporal validity into an inferable object.
+Operational use requires more than the existence of a horizon. A data-driven
+memory rule needs estimators of the drift parameters $(H,\zeta)$ together with a
+criterion that compares inferential resolution to the curvature of the
+useful-memory region.
 
 Write $\alpha = \log \zeta$, and let $m$ denote the per-lag sample size used to
 estimate lagged transport discrepancies. For a fixed lag design
@@ -217,16 +216,6 @@ useful-region hit rates collapse against the score
 $\mathfrak S_{\delta,m,L} = \sqrt{\mathcal I_{m,L}(H)}r_\delta(a,H)/\tau(H,\zeta)$,
 matching the Gaussian approximation from \Cref{thm:operational_identifiability}.}
 \label{fig:inferable_horizon}
-\end{figure}
-
-\begin{figure}[!htbp]
-\centering
-\safeincludegraphics[width=0.84\linewidth]{artifacts/figures/inferable_horizon/fig_operational_regret}
-\caption{Quadratic operational regret. Across the tested grid, the empirical
-relative regret of the plug-in horizon aligns with the quadratic law from
-\Cref{prop:plugin_horizon_regret}, showing that horizon mislocation costs are
-second order in log-scale error in the theorem regime.}
-\label{fig:inferable_horizon_regret}
 \end{figure}
 
 Structural existence and operational identifiability need not coincide. The

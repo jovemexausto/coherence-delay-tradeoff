@@ -1,11 +1,8 @@
 \section{Limitations and Further Directions}\label{sec:limitations_open_problems}
 
-The theorem-level results comprise the temporal-validity
-horizon, the induced useful-memory region, the exact uniform-window staleness
-bound, a tractable one-dimensional root-$n$ proof model, a structural Gaussian
-lower bound at the exponent level, a Gaussian location benchmark, and
-horizon-inference coverage and regret under lag-geometry input. Other results
-concern narrower transfer, operational, or empirical statements.
+The closed theorem line covers the temporal-validity horizon, its useful-memory
+geometry, the one-dimensional proof anchor, the Gaussian lower and benchmark
+results, the embedded Sinkhorn theorems, and horizon-inference guarantees.
 
 \paragraph{Closed theory.}
 The fully proved finite-sample instantiation is the one-dimensional root-$n$
@@ -20,20 +17,12 @@ lie beyond the proved range.
 For fixed-$\varepsilon$ Sinkhorn, the compact-support one-dimensional pointwise
 and bandwise inheritance results are explicit, and bounded-cardinality finite
 discrete embedded classes satisfy the same moderate-band root-$n$ law under a
-uniform diameter bound and a positive mass floor. The strongest support-growth
-evidence is concentrated on moderate bands bounded away from zero, especially on
-the calibrated $(8,2)$ and $(12,2)$ regimes. On the calibrated discrete $k=2$
-support grid, the centered $S^2$ self-coupling gap, the exact-target null
-slopes, the exact $\ell_2$ fluctuation law, and the finite-support root-$n$
-fluctuation proxy are all favorable. The support-growth theorem is organized by
-a covariance-weighted trace bound and a local block-curvature bound for the null
-Sinkhorn map on that family, and Taylor expansion yields the quadratic null
-control. Current numerical Hessian probes indicate anisotropic curvature, with
-collective directions scaling approximately linearly in the support-growth
-parameter. The trace proxy also grows linearly in the support-growth parameter
-at about $0.34$ per block, while the covariance-weighted proxy stays small,
-around $0.002$ to $0.004$. The exact row-kernel decomposition reduces the
-curvature analysis to one odd channel and one two-dimensional even channel.
+uniform diameter bound and a positive mass floor. The calibrated support-growth
+theorem is organized by the exact $\ell_2$ fluctuation law, a covariance-
+weighted trace bound, a local block-curvature bound, and the row-kernel parity
+decomposition. Numerical Hessian probes indicate anisotropic curvature, with
+collective directions growing approximately linearly in the support-growth
+parameter while the covariance-weighted proxy remains small.
 
 \paragraph{Empirical scope.}
 The experiments target structural signatures: U-curves, roughness scaling,
