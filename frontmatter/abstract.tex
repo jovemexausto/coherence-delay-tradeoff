@@ -1,20 +1,18 @@
 \begin{abstract}
-We study how long retained evidence remains statistically valid for
-distribution tracking under drift. Retaining more data reduces estimation noise
-but increases temporal mismatch, so finite memory has a nontrivial validity
-horizon. This horizon is the scale at which the finite-sample term and the
-drift-induced staleness term balance, yielding both an optimal memory law and a
-useful-memory region whose normalized shape depends only on the finite-sample
-and drift exponents. The law closes in a one-dimensional root-$n$ proof anchor
-and in embedded Sinkhorn classes, including bounded-cardinality finite-discrete
- models and a calibrated support-growth family. Finite projection families and
- sliced transport satisfy transfer theorems under uniform projected control;
- broader high-dimensional implications enter through the effective finite-
- sample exponent of the chosen geometry.
-Lag-geometry inference then yields identifiability and quadratic regret
-guarantees for data-driven memory selection. Experiments exhibit the predicted
-U-curves, roughness-dependent scaling, real-stream finite-memory effects, and
-validity loss before detector alarm.
+The temporal-validity profile of retained evidence under drift determines how
+long information remains operationally useful. Retaining more data reduces
+estimation noise but increases temporal mismatch, so finite memory traces out a
+validity geometry rather than a single optimal window. The finite-sample and
+drift-induced dissipation terms balance at the temporal-validity horizon,
+yielding an optimal memory law and a normalized useful-memory profile. The law
+closes in a one-dimensional root-$n$ proof anchor and in embedded Sinkhorn
+classes; finite projection and sliced transport transfer the law under uniform
+projected control. Lag-geometry inference then yields identifiability and
+quadratic regret guarantees for horizon estimation. Experiments exhibit the
+predicted U-curves, roughness-dependent scaling, real-stream validity
+signatures, and validity loss before detector alarm. The validity-detection gap
+also motivates a finite-horizon detector-class sign law under null false-alarm
+control.
 \end{abstract}
 
 \bigskip

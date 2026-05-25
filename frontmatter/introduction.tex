@@ -1,12 +1,13 @@
 \section{Introduction}\label{sec:intro}
 
-A drifting system is governed by two coupled clocks. The tracking clock rewards
-retention because larger windows reduce sampling noise. The validity clock
-penalizes retention because older evidence ceases to represent the present
-distribution. Change detection sharpens the same tension: a detector can remain
-silent even after retained evidence has already become stale. The central
-question is therefore not only when change becomes detectable, but how long
-retained evidence remains valid for distribution tracking.
+A drifting system is governed by two coupled clocks. The temporal-validity
+profile of retained evidence mediates them. The tracking clock rewards retention
+because larger windows reduce sampling noise. The validity clock penalizes
+retention because older evidence ceases to represent the present distribution.
+Change detection sharpens the same tension: a detector can remain silent even
+after retained evidence has already become stale. The central question is not
+only when change becomes detectable, but how long retained evidence remains
+valid as a measurable geometric property.
 
 Let $P_t$ denote the present target law, let $\bar P_t^{(n)}$ denote the window
 target formed from the last $n$ target laws, and let $\widehat P_t^{(n)}$ be the
@@ -24,32 +25,30 @@ induced useful-memory region.
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.92\linewidth]{artifacts/figures/conceptual/fig_two_clocks_of_drift.pdf}
-\caption{Temporal-validity horizon under drift. The finite-sample term falls with
-horizon, the staleness term rises with age, and total error is minimized at the
-temporal-validity horizon $n^*$. The green band marks a near-optimal
-useful-memory region, and the red band marks pre-detection validity loss: retained
-evidence can stop representing the present before enough changepoint evidence
-accumulates to trigger an alarm.}
+\caption{Temporal-validity profile under drift. The left panel shows raw validity
+profiles across roughness exponents, and the right panel shows the normalized
+profile in the horizon coordinate $n/n^*$. The green band marks a near-optimal
+useful-memory region, and the red band marks pre-detection validity loss.}
 \label{fig:finite_sample_staleness_tradeoff}
 \end{figure}
 
 The finite-sample exponent $a$ depends on the geometry used to compare
 distributions, while the roughness exponent $H$ and amplitude $\zeta$ describe
 how quickly retained evidence loses temporal validity. The resulting horizon is
-structural: it is imposed jointly by metric geometry and drift regularity. This
-is why dimensionality enters the problem only through the finite-sample regime
-supplied by the chosen geometry: a poor exponent collapses the useful memory
-scale, while projected, sliced, or regularized geometries can preserve it when
-a usable effective exponent is available.
+structural: it is imposed jointly by metric geometry and drift regularity.
+The same validity-vs-detection separation motivates a detector-class sign law
+under finite-horizon false-alarm control.
 
 Three proved cases make the law concrete. A one-dimensional root-$n$ proof
 anchor closes the basic finite-memory regime, while bounded-cardinality finite-
 discrete and calibrated support-growth embedded Sinkhorn classes show that the
-same mechanism persists in operational transport geometry. Gaussian lower and
-benchmark results identify the horizon as a property of drift geometry itself.
+same mechanism persists in operational transport geometry.
 
 Finite projection families and sliced transport provide transfer theorems,
 useful-memory localization from lag geometry yields identifiability and regret
 bounds, and the same object appears empirically through interior U-curves,
 roughness scaling, real-stream diagnostics, and validity loss before detector
 alarm.
+
+The central object is therefore not memory itself, but the persistence profile
+of retained statistical structure relative to the present.

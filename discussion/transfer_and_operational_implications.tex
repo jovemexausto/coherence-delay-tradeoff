@@ -5,7 +5,7 @@ uniform projected control, and the embedded Sinkhorn results in the main theory
 cover the bounded-cardinality finite-discrete and calibrated support-growth
 families. Beyond those proved classes,
 high-dimensional practicality becomes a geometric question: temporal validity
-remains usable only when the chosen geometry preserves a usable finite-sample
+remains inferable only when the chosen geometry preserves a usable finite-sample
 exponent.
 
 \begin{corollary}[Effective-exponent horizon transfer]
@@ -39,31 +39,27 @@ and the induced temporal-validity horizon satisfies
 Apply \Cref{thm:abstract_upper_law} with $d=d_{\mathrm{eff}}$.
 \end{proof}
 
-The practical question is which geometry preserves a usable exponent
+The relevant question is which geometry preserves a usable exponent
 $a_{\mathrm{eff}}$. Finite projection and sliced constructions provide explicit
 examples with one-dimensional finite-sample control. Intrinsic-dimension and
-projection-robust transport can
-replace ambient dimension by an effective dimension, while smoothed transport
-can preserve parametric behavior through regularization
-\citep{NilesWeedBach2019,PatyCuturi2019,NietertEtAl2022}. In these broader
-settings, the effective-exponent corollary yields a horizon law; it does not
-imply a new multivariate transport theorem. Geometry selection is therefore
-memory-scale selection.
+projection-robust transport can replace ambient dimension by an effective
+dimension, while smoothed transport can preserve parametric behavior through
+regularization \citep{NilesWeedBach2019,PatyCuturi2019,NietertEtAl2022}. In
+these broader settings, the effective-exponent corollary yields a horizon law;
+it does not imply a new multivariate transport theorem.
 
 For finite projection families, the constants inherit the worst projected
 finite-sample and staleness bounds over the chosen family, so enlarging $\Pi$
 helps only if those one-dimensional controls remain stable. For sliced
 transport, the same logic favors projection laws that sample the dominant drift
-directions while keeping projected estimation noise well behaved. Thus $\Pi$ or
-$\rho$ is part of memory design rather than a geometry-independent
-preprocessing step.
+directions while keeping projected estimation noise well behaved.
 
 Weighted-window diagnostics on uniform, triangular, and geometric tapers show
 the same finite-sample versus lag trade-off in operational form; see
 \Cref{tab:weight_sensitivity_summary}.
 
-Operational use begins with horizon inference: the plug-in horizon must enter
-the useful-memory region and remain there under streaming noise.
+Horizon inference begins with the plug-in horizon entering the useful-memory
+region and remaining there under streaming noise.
 
 Support change beyond the fixed support-growth construction and online validity
 control under streaming noise are not treated here.

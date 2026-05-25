@@ -1,13 +1,11 @@
-\section{Implications for Online Adaptation}\label{sec:online_adaptation}
+\section{Operational Use of Temporal Validity}\label{sec:online_adaptation}
 
-An online memory rule needs three ingredients: a finite-sample regime, a local
-drift geometry, and a criterion that relates estimation uncertainty to the
-curvature of the useful-memory region. The horizon law supplies the target once
-the regime parameter $a$ and the local roughness pair $(H,\zeta)$ are known.
-The inferable-horizon results identify the batch requirement: lag-geometry
-information must be strong enough to place the plug-in horizon inside the
-useful-memory region with high probability. The remaining online question is how
-to maintain that requirement under streaming noise and local nonstationarity.
+The temporal-validity profile is operationalized through three ingredients: a
+finite-sample regime, a local drift geometry, and a criterion that relates
+estimation uncertainty to the curvature of the useful-memory region. The horizon
+law supplies the target once the regime parameter $a$ and the local roughness
+pair $(H,\zeta)$ are known. Lag-geometry information must be strong enough to
+place the plug-in horizon inside the useful-memory region with high probability.
 
 In operational transport geometries, local support structure enters before
 roughness estimation. The embedded fixed-$\varepsilon$ theory shows that
@@ -40,27 +38,29 @@ phase-averaged windows across the four drift phases of the default profile.}
 \label{fig:online_adaptation}
 \end{figure}
 
-The comparison in \Cref{fig:online_adaptation} separates two controller
-architectures. A direct plug-in rule based on a local slope and intercept is too
-unstable to be useful. A structural controller first selects the finite-sample
-regime, then estimates roughness from aggregated lag discrepancies, and finally
-maps those quantities into an admissible useful-memory band. On the synthetic
-phase profile, that controller improves substantially on the naive plug-in rule
-and on a pure activity baseline. Adaptive EWMA and adaptive scalar Kalman
-baselines are more competitive, especially on the smooth default profile, but
-they degrade more visibly in rough and alternating regimes.
+\Cref{fig:online_adaptation} separates two controller architectures, but the
+valid object is the horizon profile rather than the controller itself. A direct
+plug-in rule based on a local slope and intercept is
+too unstable to be useful. A structural controller first selects the
+finite-sample regime, then estimates roughness from aggregated lag
+discrepancies, and finally maps those quantities into an admissible useful-
+memory band. On the synthetic phase profile, that controller improves
+substantially on the naive plug-in rule and on a pure activity baseline.
+Adaptive EWMA and adaptive scalar Kalman baselines are more competitive,
+especially on the smooth default profile, but they degrade more visibly in rough
+and alternating regimes.
 
-Across the tested default, smooth, rough, alternating, and ramp-up profiles
-with three seeds and a bounded window-jump constraint, the structural
-controller improves on the direct plug-in rule in every run, beats the activity
-baseline and adaptive EWMA in $13/15$ runs each, and beats the adaptive scalar
-Kalman baseline in $11/15$ runs. The smooth default profile remains the most
+Across the tested default, smooth, rough, alternating, and ramp-up profiles with
+three seeds and a bounded window-jump constraint, the structural controller
+improves on the direct plug-in rule in every run, beats the activity baseline
+and adaptive EWMA in $13/15$ runs each, and beats the adaptive scalar Kalman
+baseline in $11/15$ runs. The smooth default profile remains the most
 competitive setting for the classical filters, but the rough and alternating
-profiles favor the band-constrained structural rule clearly. The tested
-profiles therefore support a separation between unstable direct plug-in control,
+profiles favor the band-constrained structural rule clearly. The tested profiles
+therefore support a separation between unstable direct plug-in control,
 classical forgetting-factor baselines, and the more stable structural rule,
-without establishing theorem-level dominance for any single online controller;
-see \Cref{tab:online_controller_summary}.
+without making the controllers themselves the primary object; see
+\Cref{tab:online_controller_summary}.
 
 On any compact parameter range with $H$ bounded away from zero and $\zeta$
 bounded above and below, the map
@@ -68,17 +68,16 @@ bounded above and below, the map
   (H,\zeta) \mapsto n_\star(H,\zeta)
   = \left(\frac{aC_K}{H C_S\zeta}\right)^{1/(a+H)}
 \]
-is Lipschitz in $(H,\log \zeta)$ after taking logarithms. The inferable-horizon
-section sharpens this qualitative statement: online adaptation is viable only
-when the rolling lag-geometry estimate is precise relative to the log-radius of
-the useful-memory region. The open scale variable is whether a local activity
-statistic is stable enough to produce a useful controller that matches the
-stronger validation-based hybrid.
+is Lipschitz in $(H,\log \zeta)$ after taking logarithms. Online adaptation is
+viable only when the rolling lag-geometry estimate is precise relative to the
+log-radius of the useful-memory region. The open scale variable is whether a
+local activity statistic is stable enough to produce a useful controller that
+matches the stronger validation-based hybrid.
 
 The online problem is therefore a two-error problem. One term comes from
 statistical uncertainty in the estimated lag geometry; the other comes from the
 parameter drift accumulated within the estimation window itself. The horizon law
 supplies the target for adaptation, and the inferable-horizon results supply the
 batch bridge from lag geometry to memory choice. A time-uniform guarantee that
-combines those two errors and keeps a data-driven memory rule inside the
+  combines those two errors and keeps a data-driven memory rule inside the
 useful-memory region remains open.

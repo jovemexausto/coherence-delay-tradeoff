@@ -11,7 +11,11 @@ import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 import numpy as np
 
-from .useful_memory_region import useful_memory_interval
+from .useful_memory_region import (
+    continuous_optimal_horizon,
+    normalized_envelope_ratio,
+    useful_memory_interval,
+)
 
 
 def write_csv(path: Path, rows: Sequence[dict[str, Any]]) -> None:
@@ -42,130 +46,111 @@ def conceptual_style() -> None:
 
 
 def generate_two_clocks(output_path: Path, csv_path: Path) -> None:
-    x = np.linspace(0.35, 3.0, 500)
-    variance = (2.0 / 3.0) * x ** (-0.5)
-    staleness = (1.0 / 3.0) * x
-    total = variance + staleness
-    x_star = 1.0
-    x_cross = 2.0 ** (2.0 / 3.0)
-    y_star = 1.0
-    useful_lower, useful_upper = useful_memory_interval(0.5, 1.0, 0.18)
-
-    rows = [
-        {
-            "normalized_horizon": round(float(xi), 6),
-            "variance_cost_over_Emin": round(float(vi), 6),
-            "staleness_cost_over_Emin": round(float(si), 6),
-            "total_error_over_Emin": round(float(ti), 6),
-        }
-        for xi, vi, si, ti in zip(x, variance, staleness, total, strict=True)
+    a = 0.5
+    cases = [
+        {"label": r"$H=0.50$", "H": 0.5, "zeta": 0.7, "color": "#315caf"},
+        {"label": r"$H=0.75$", "H": 0.75, "zeta": 0.6, "color": "#2f8f5b"},
+        {"label": r"$H=1.00$", "H": 1.0, "zeta": 0.45, "color": "#b23a3a"},
     ]
+    x = np.linspace(0.25, 4.0, 600)
+    x_norm = np.linspace(0.35, 3.0, 600)
+
+    rows: list[dict[str, Any]] = []
+    for case in cases:
+        H = float(case["H"])
+        zeta = float(case["zeta"])
+        n_star = continuous_optimal_horizon(1.0, a, 1.0, zeta, H)
+        raw_variance = x ** (-a)
+        raw_staleness = zeta * x**H
+        raw_total = raw_variance + raw_staleness
+        normalized = normalized_envelope_ratio(x_norm, a, H)
+        lower, upper = useful_memory_interval(a, H, 0.12)
+        for xi, vi, si, ti in zip(
+            x, raw_variance, raw_staleness, raw_total, strict=True
+        ):
+            rows.append(
+                {
+                    "panel": "raw",
+                    "H": H,
+                    "zeta": zeta,
+                    "n": round(float(xi), 6),
+                    "n_over_n_star": round(float(xi / n_star), 6),
+                    "variance_cost": round(float(vi), 6),
+                    "staleness_cost": round(float(si), 6),
+                    "total_cost": round(float(ti), 6),
+                    "n_star": round(float(n_star), 6),
+                    "useful_lower_over_n_star": round(float(lower), 6),
+                    "useful_upper_over_n_star": round(float(upper), 6),
+                }
+            )
+        for xn, yn in zip(x_norm, normalized, strict=True):
+            rows.append(
+                {
+                    "panel": "normalized",
+                    "H": H,
+                    "zeta": zeta,
+                    "n": round(float(xn * n_star), 6),
+                    "n_over_n_star": round(float(xn), 6),
+                    "variance_cost": round(float(xn ** (-a)), 6),
+                    "staleness_cost": round(float(zeta * (xn * n_star) ** H), 6),
+                    "total_cost": round(float(yn), 6),
+                    "n_star": round(float(n_star), 6),
+                    "useful_lower_over_n_star": round(float(lower), 6),
+                    "useful_upper_over_n_star": round(float(upper), 6),
+                }
+            )
+
     write_csv(csv_path, rows)
 
-    fig, ax = plt.subplots(figsize=(7.4, 3.8))
-    ax.axvspan(x_star, 2.2, color="#f6ddd2", alpha=0.75, linewidth=0, zorder=0)
-    ax.axvspan(
-        useful_lower,
-        useful_upper,
-        color="#e7f2df",
-        alpha=0.95,
-        linewidth=0,
-        zorder=0,
-    )
-    ax.plot(x, variance, color="#315caf", linewidth=2.3)
-    ax.plot(x, staleness, color="#b23a3a", linewidth=2.3)
-    ax.plot(x, total, color="black", linewidth=2.6)
-    ax.axvline(x_star, color="black", linestyle="--", linewidth=1.0)
-    ax.axvline(x_cross, color="#666666", linestyle="--", linewidth=1.0)
-    ax.scatter([x_star], [y_star], color="black", s=22, zorder=3)
-    ax.set_xlim(0.35, 3.0)
-    ax.set_ylim(0.0, 1.55)
-    ax.set_xlabel(r"Normalized horizon $n / n^*$")
-    ax.set_ylabel(r"Normalized tracking error / $E_{\min}$")
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.grid(axis="y", alpha=0.18, linewidth=0.6)
+    fig, (ax_left, ax_right) = plt.subplots(1, 2, figsize=(9.5, 3.15))
 
-    handles = [
-        Line2D([0], [0], color="#315caf", linewidth=2.8),
-        Line2D([0], [0], color="#b23a3a", linewidth=2.8),
-        Line2D([0], [0], color="black", linewidth=3.0),
-    ]
-    labels = [
-        r"Variance $C_K n^{-1/2}$",
-        r"Staleness $3^{-1/2}\zeta n$",
-        r"Total $\mathcal{E}(n)$",
-    ]
+    for case in cases:
+        H = float(case["H"])
+        zeta = float(case["zeta"])
+        color = str(case["color"])
+        n_star = continuous_optimal_horizon(1.0, a, 1.0, zeta, H)
+        raw_variance = x ** (-a)
+        raw_staleness = zeta * x**H
+        raw_total = raw_variance + raw_staleness
+        ax_left.plot(x, raw_total, color=color, linewidth=2.2, label=case["label"])
+        ax_left.axvline(n_star, color=color, linestyle="--", linewidth=0.9, alpha=0.7)
+        ax_right.plot(
+            x_norm,
+            normalized_envelope_ratio(x_norm, a, H),
+            color=color,
+            linewidth=2.3,
+            label=case["label"],
+        )
+
+    ax_left.axhline(1.0, color="#666666", linestyle=":", linewidth=0.9)
+    ax_left.set_xlabel(r"Memory length $n$")
+    ax_left.set_ylabel(r"Envelope $\Phi(n)$")
+    ax_left.set_title("Raw validity profiles")
+    ax_left.spines["top"].set_visible(False)
+    ax_left.spines["right"].set_visible(False)
+    ax_left.grid(axis="y", alpha=0.18, linewidth=0.6)
+
+    ax_right.axvspan(1 - 0.12, 1 + 0.12, color="#e7f2df", alpha=0.8, linewidth=0)
+    ax_right.axvline(1.0, color="black", linestyle="--", linewidth=1.0)
+    ax_right.set_xlabel(r"Normalized horizon $n / n^*$")
+    ax_right.set_ylabel(r"Normalized profile $\Psi(n/n^*)$")
+    ax_right.set_title("Normalized validity profile")
+    ax_right.spines["top"].set_visible(False)
+    ax_right.spines["right"].set_visible(False)
+    ax_right.grid(axis="y", alpha=0.18, linewidth=0.6)
+
     fig.legend(
-        handles,
-        labels,
         loc="upper center",
-        bbox_to_anchor=(0.5, 0.985),
+        bbox_to_anchor=(0.5, 1.02),
         ncol=3,
         frameon=False,
-        handlelength=2.1,
-        handletextpad=0.6,
-        columnspacing=1.8,
-        fontsize=9,
+        handlelength=2.0,
+        handletextpad=0.5,
+        columnspacing=1.4,
+        fontsize=8,
     )
 
-    ax.annotate(
-        r"optimal $n^*$",
-        xy=(x_star, y_star),
-        xytext=(0.82, 1.17),
-        fontsize=8,
-        ha="right",
-        arrowprops={"arrowstyle": "-", "linewidth": 0.9, "color": "black"},
-        bbox={
-            "boxstyle": "round,pad=0.18",
-            "facecolor": "white",
-            "edgecolor": "none",
-            "alpha": 0.95,
-        },
-    )
-    ax.annotate(
-        "costs cross",
-        xy=(x_cross, float((2.0 / 3.0) * x_cross ** (-0.5))),
-        xytext=(1.82, 0.9),
-        fontsize=8,
-        ha="left",
-        arrowprops={"arrowstyle": "-", "linewidth": 0.9, "color": "#666666"},
-        bbox={
-            "boxstyle": "round,pad=0.18",
-            "facecolor": "white",
-            "edgecolor": "none",
-            "alpha": 0.95,
-        },
-        color="#444444",
-    )
-    ax.text(
-        1.58,
-        1.42,
-        "detector-silent staleness",
-        ha="center",
-        fontsize=8,
-        bbox={
-            "boxstyle": "round,pad=0.18",
-            "facecolor": "white",
-            "edgecolor": "none",
-            "alpha": 0.9,
-        },
-    )
-    ax.text(
-        1.0,
-        0.22,
-        "useful memory region",
-        ha="center",
-        fontsize=8,
-        bbox={
-            "boxstyle": "round,pad=0.16",
-            "facecolor": "white",
-            "edgecolor": "none",
-            "alpha": 0.95,
-        },
-    )
-
-    fig.subplots_adjust(left=0.12, right=0.98, top=0.82, bottom=0.18)
+    fig.subplots_adjust(left=0.08, right=0.985, top=0.78, bottom=0.18, wspace=0.28)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(output_path, bbox_inches="tight")
     plt.close(fig)

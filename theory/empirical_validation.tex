@@ -152,21 +152,24 @@ Residualized detector inputs are not uniformly better on this family. Across the
 same false-alarm-calibrated frontier, residual-input ADWIN, Page--Hinkley,
 KSWIN, and CUSUM often trade larger delays for missed alarms, with successful
 mean-gap ranges roughly $365$--$903$, $346$--$969$, $498$--$1310$, and
-$323$--$920$, respectively. The empirical claim is therefore a calibrated sign
-robustness statement for the observation-based ADWIN, Page--Hinkley, and CUSUM
-families on the tested compact $H$-grid, not a detector-uniform delay law; see
+$323$--$920$, respectively. The calibrated sign result therefore holds for the
+observation-based ADWIN, Page--Hinkley, and CUSUM families on the tested
+compact $H$-grid, not as a detector-uniform delay law; see
 \Cref{tab:validity_gap_robustness}.
+This empirical separation is the operational analogue of the detector-class
+sign law in the sequential-delay line: validity can expire before alarm even
+when the null false-alarm budget is fixed.
 
 \subsection{Empirical Summary}\label{sec:empirical_summary}
-The experiments support a structural U-curve with a near-optimal useful-memory
-region, roughness-dependent horizon scaling, a corresponding pattern on the
-ELEC2 stream, structured support for the fixed-$\varepsilon$ Sinkhorn family,
-and a measurable lag between validity loss and detector alarm. Complementary
-online-adaptation sweeps across default, smooth, rough, alternating, and
-ramp-up profiles show that the structural controller keeps mean error between
-$1.18$ and $1.36$ times oracle risk, versus $1.34$--$1.65$ for the activity
-baseline, $1.28$--$1.64$ for adaptive EWMA, $1.21$--$1.58$ for adaptive scalar
-Kalman, and $2.30$--$4.41$ for the raw plug-in rule. The structural rule beats
-EWMA on $13/15$ tested runs and Kalman on $11/15$, with the clearest gains in
-the rough and alternating regimes; see
+The experiments support a structural validity profile with a near-optimal
+useful-memory region, roughness-dependent horizon scaling, a corresponding
+pattern on the ELEC2 stream, structured support for the fixed-$\varepsilon$
+Sinkhorn family, and a measurable lag between validity loss and detector alarm.
+Complementary online-adaptation sweeps across default, smooth, rough,
+alternating, and ramp-up profiles show that the structural controller keeps
+mean error between $1.18$ and $1.36$ times oracle risk, versus $1.34$--$1.65$
+for the activity baseline, $1.28$--$1.64$ for adaptive EWMA, $1.21$--$1.58$ for
+adaptive scalar Kalman, and $2.30$--$4.41$ for the raw plug-in rule. The
+structural rule beats EWMA on $13/15$ tested runs and Kalman on $11/15$, with
+the clearest gains in the rough and alternating regimes; see
 \Cref{tab:online_controller_summary}.

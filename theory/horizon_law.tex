@@ -3,7 +3,7 @@
 
 \subsection{General Horizon Law}\label{subsec:abstract_upper_law}
 
-\begin{theorem}[Abstract upper law]\label{thm:abstract_upper_law}
+\begin{theorem}[Constitutive validity law]\label{thm:abstract_upper_law}
 Let $d$ be a probability metric satisfying the triangle inequality. At time $t$,
 let $P_t$ be the present target law, let $\bar P_t^{(n)}$ be the window target,
 and let $\widehat P_t^{(n)}$ be the estimator built from the last $n$
@@ -36,8 +36,9 @@ By the triangle inequality,
 Taking expectations and applying the two assumptions yields the claim.
 \end{proof}
 
-The path class supplies the staleness term, while the chosen geometry and sample
-regime supply the finite-sample term.
+This envelope is the constitutive law of temporal validity: the path class
+supplies validity dissipation, while the chosen geometry and sample regime
+supply finite-sample acquisition.
 
 \begin{proposition}[Triangular-array transfer for Hadamard-differentiable functionals]
 \label{prop:hadamard_triangular_transfer}
@@ -144,7 +145,7 @@ $\delta>0$, define the useful-memory region by
 \[
   \mathcal U_\delta \coloneqq \{n>0: \Phi(n) \le (1+\delta)\Phi(n_\star)\}.
 \]
-This object records how much memory remains acceptable up to a fixed tolerance.
+This region records the admissible validity band at a fixed tolerance.
 
 \begin{proposition}[Useful-memory region at tolerance $\delta$]
 \label{prop:useful_memory_region}
@@ -203,8 +204,8 @@ $H\in(0,1]$ and $\zeta>0$, write
   \left\{(P_s)_{s\in\mathbb Z}: W_2(P_{t-j},P_t) \le \zeta j^H
   \text{ for all } j\ge 0\right\}.
 \]
-The case $H=1$ is the local Lipschitz envelope; smaller $H$ corresponds to slower
-accumulation of staleness with lag.
+The case $H=1$ is the local Lipschitz envelope; smaller $H$ corresponds to
+slower validity dissipation with lag.
 
 \begin{lemma}[Hölder staleness bound via averaged couplings]
 \label{lem:holder_staleness_bound}
