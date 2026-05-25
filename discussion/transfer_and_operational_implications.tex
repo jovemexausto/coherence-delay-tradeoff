@@ -1,12 +1,53 @@
 \section{Transfer and Operational Implications}\label{sec:transfer_operational_implications}
 
-The horizon law extends to finite projection families and sliced geometries under
-uniform projected control, and the embedded Sinkhorn results in the main theory
-cover the bounded-cardinality finite-discrete and calibrated support-growth
-families.
+Finite projection families and sliced geometries already transfer the horizon
+law under uniform projected control, and the embedded Sinkhorn results in the
+main theory cover the bounded-cardinality finite-discrete and calibrated
+support-growth families. High-dimensional practicality then becomes a geometric
+question: temporal validity remains usable only when the chosen geometry
+preserves a usable finite-sample exponent.
 
-Operational use begins with horizon inference: the plug-in horizon must enter the
-useful-memory region and remain there under streaming noise.
+\begin{corollary}[Effective-exponent horizon transfer]
+\label{cor:effective_exponent_horizon_transfer}
+Let $d_{\mathrm{eff}}$ be a probability metric such that, on the drifting class of
+interest,
+\[
+  \mathbb E\,d_{\mathrm{eff}}\!\left(\widehat P_t^{(n)},\bar P_t^{(n)}\right)
+  \le C_{K,\mathrm{eff}} n^{-a_{\mathrm{eff}}}
+\]
+for some $a_{\mathrm{eff}}>0$, and suppose the same class satisfies the staleness
+bound
+\[
+  d_{\mathrm{eff}}\!\left(\bar P_t^{(n)},P_t\right)
+  \le C_{S,\mathrm{eff}}\zeta n^H.
+\]
+Then
+\[
+  \mathbb E\,d_{\mathrm{eff}}\!\left(\widehat P_t^{(n)},P_t\right)
+  \le C_{K,\mathrm{eff}} n^{-a_{\mathrm{eff}}} + C_{S,\mathrm{eff}}\zeta n^H,
+\]
+and the induced temporal-validity horizon satisfies
+\[
+  n^*_{\mathrm{eff}}(H)
+  \asymp
+  (C_{K,\mathrm{eff}}/\zeta)^{1/(a_{\mathrm{eff}}+H)}.
+\]
+\end{corollary}
+
+\begin{proof}
+Apply \Cref{thm:abstract_upper_law} with $d=d_{\mathrm{eff}}$.
+\end{proof}
+
+The practical question is therefore not high dimension in itself, but which
+geometry preserves a usable exponent $a_{\mathrm{eff}}$. Finite projection and
+sliced constructions target root-$n$ one-dimensional behavior. Intrinsic-
+dimension and projection-robust transport can replace ambient dimension by an
+effective dimension. Smoothed transport can preserve parametric behavior
+through regularization \citep{NilesWeedBach2019,PatyCuturi2019,
+NietertEtAl2022}. Geometry selection is therefore memory-scale selection.
+
+Operational use begins with horizon inference: the plug-in horizon must enter
+the useful-memory region and remain there under streaming noise.
 
 Support change beyond the fixed support-growth construction and detector-uniform
 online control remain open.

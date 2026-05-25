@@ -11,18 +11,18 @@ subclass based, and the exact Gaussian constants are internal to the available
 proof scheme rather than class-tight across broader deterministic H\"older path
 classes. Finite-family projection transfer is theorem-level under uniform
 projected control, but richer dominated families and raw multivariate Wasserstein
-lie beyond the proved range.
+lie beyond the proved range. In particular, no theorem here closes a general
+high-dimensional horizon law for raw multivariate Wasserstein, where the
+effective finite-sample exponent can become too small for practical memory
+selection.
 
 \paragraph{Embedded Sinkhorn.}
 For fixed-$\varepsilon$ Sinkhorn, the compact-support one-dimensional pointwise
 and bandwise inheritance results are explicit, and bounded-cardinality finite
 discrete embedded classes satisfy the same moderate-band root-$n$ law under a
 uniform diameter bound and a positive mass floor. The calibrated support-growth
-theorem is organized by the exact $\ell_2$ fluctuation law, a covariance-
-weighted trace bound, a local block-curvature bound, and the row-kernel parity
-decomposition. Numerical Hessian probes indicate anisotropic curvature, with
-collective directions growing approximately linearly in the support-growth
-parameter while the covariance-weighted proxy remains small.
+family is also closed on the discrete $k=2$ grid. What remains open is support
+change beyond that fixed support-growth construction.
 
 \paragraph{Empirical scope.}
 The experiments target structural signatures: U-curves, roughness scaling,
@@ -33,9 +33,10 @@ detector-uniform delay laws or competitive end-to-end performance.
 
 \begin{enumerate}[label=\textbf{(\arabic*)},leftmargin=*,itemsep=2pt,topsep=3pt]
   \item \textbf{High-dimensional horizon geometry.}
-  Identify which transport geometries in higher dimension preserve a nondegenerate
-  temporal-validity horizon, especially under intrinsic-dimension adaptation,
-  smoothed transport, and projection-robust formulations.
+  Identify which transport geometries in higher dimension preserve a
+  nondegenerate temporal-validity horizon by keeping the effective finite-sample
+  exponent away from zero. The main candidates are intrinsic-dimension,
+  smoothed, and projection-robust formulations.
 
   \item \textbf{Sequential validity versus detection delay.}
   Quantify the structural gap between the validity horizon and the time-uniform

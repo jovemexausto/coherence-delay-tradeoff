@@ -123,8 +123,7 @@ lower order than the finite-sample term on the tested windows.
 \subsection{Robustness Summaries}
 
 The real-stream, validity-gap, and online-controller sweeps are summarized here
-in compact form. They delimit where the qualitative signatures remain stable on
-the tested grids.
+in compact form.
 
 \input{artifacts/tables/conceptual/elec2_robustness_summary}
 
@@ -135,29 +134,23 @@ the tested grids.
 \FloatBarrier
 
 \subsection{Contribution Summary}\label{app:contribution_summary}
-
-\begin{enumerate}[label=\textbf{(\arabic*)},leftmargin=*,itemsep=2pt,topsep=3pt]
+\begin{enumerate}[label=\textbf{(\arabic*)},leftmargin=*,itemsep=1pt,topsep=2pt]
   \item \textbf{Object: temporal-validity horizon and useful-memory region.}
-  The temporal-validity horizon governs finite-memory distribution tracking
-  under drift, together with a useful-memory region whose normalized geometry is
-  determined by $(a,H)$.
-
+  Finite-memory distribution tracking under drift is governed by a
+  temporal-validity horizon together with a useful-memory region whose
+  normalized geometry is determined by $(a,H)$.
   \item \textbf{Theorem line: proof anchor and closed classes.}
-  A one-dimensional root-$n$ triangular-array proof anchor, the exact
-  uniform-window staleness bound, a structural Gaussian lower bound, a Gaussian
-  location benchmark, and theorem-level embedded Sinkhorn results show that the
-  horizon is structural across tractable and operational geometries.
-
+  A one-dimensional root-$n$ proof anchor, exact uniform-window staleness
+  control, Gaussian lower/benchmark results, and theorem-level embedded
+  Sinkhorn closures show that the horizon is structural across tractable and
+  operational geometries.
   \item \textbf{Transfer: projection families and Sinkhorn geometry.}
-  Finite projection families and sliced geometries yield transfer theorems,
-  one-dimensional fixed-$\varepsilon$ Sinkhorn inheritance is proved, and the
+  Finite projection and sliced geometries yield transfer theorems, and the
   bounded-cardinality finite-discrete and calibrated support-growth embedded
   Sinkhorn classes satisfy theorem-level horizon laws.
-
   \item \textbf{Inference: identifiability and regret.}
   Plug-in horizon inference yields an identifiability criterion for
   useful-memory selection and a quadratic regret law for horizon mislocation.
-
   \item \textbf{Empirics: signatures of temporal validity.}
   Empirical results exhibit interior U-curves, roughness-dependent scaling,
   real-stream finite-memory diagnostics, and pre-detection validity loss.

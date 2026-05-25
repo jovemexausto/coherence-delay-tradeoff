@@ -54,12 +54,10 @@ horizon logic of \cref{cor:temporal_validity_horizon}.
 
 \subsection{Real-Stream Memory Diagnostic}
 
-A similar signature appears on a real nonstationary stream. Using
-ELEC2, consider the one-dimensional marginal law of \texttt{nswprice}. At each time,
-approximate the present target by a short anchor block of 48 observations and
-compare it, in $W_1$, with the empirical law induced by the preceding memory
-window. Averaging this diagnostic across the stream yields a real-data analogue
-of the finite-memory U-curve.
+A similar signature appears on a real nonstationary stream. On ELEC2
+\citep{Harries1999ELEC2}, the
+diagnostic compares a short anchor block with the preceding memory window in
+$W_1$, yielding a real-data analogue of the finite-memory U-curve.
 
 \begin{figure}[!htbp]
 \centering
@@ -70,65 +68,42 @@ useful-memory band, matching the temporal-validity signature on a real stream.}
 \label{fig:elec2_ucurve}
 \end{figure}
 
-On ELEC2, the diagnostic optimum occurs at a finite memory scale, with a short
-near-optimal band around it. The real stream therefore exhibits the same basic
-retention pattern as the synthetic horizon experiments: very short windows are
-too noisy, while very long windows become stale relative to the present block.
-On a robustness grid with anchor sizes $24$, $48$, and $96$ and three
-contiguous segments of length $4000$, the \texttt{nswprice} marginal retains an
-interior optimum in all nine tested configurations, with edge-to-best error
-ratios between $1.31$ and $1.68$. An interior pattern also appears on the
-\texttt{nswdemand} marginal in all nine tested configurations, although the
-optimizing scale moves more substantially across segments and anchor lengths; see
-\Cref{tab:elec2_robustness}.
+The optimum occurs at a finite memory scale with a short near-optimal band. The
+same retention pattern therefore appears on a real stream: very short windows
+are too noisy, while very long windows become stale relative to the present
+block. On the robustness grid, the \texttt{nswprice} marginal retains an
+interior optimum in all tested configurations, and the \texttt{nswdemand}
+marginal shows the same interior pattern with more movement in the optimizing
+scale; see \Cref{tab:elec2_robustness}.
 
 \subsection{Moderate-Band Sinkhorn Diagnostics}
 \label{sec:empirical_sinkhorn_evidence}
 
-The fixed-$\varepsilon$ Sinkhorn experiments address the bandwise question: when
-a practical geometry replaces raw $W_2$, does the finite-sample term remain
-stable enough for the horizon law to stay informative in an embedded operational
-regime? The pointwise and bandwise one-dimensional fixed-support statements
-appear in \cref{prop:pointwise_sinkhorn_1d,prop:bandwise_sinkhorn_1d}; the
-calibrated embedded fixed-span model extends the question to a broader
-low-dimensional setting.
+The fixed-$\varepsilon$ Sinkhorn experiments ask whether a practical geometry
+can keep the finite-sample term stable enough for the horizon law to remain
+informative in an embedded regime. On the tested low-intrinsic-dimensional
+families, the finite-sample term stays close to the i.i.d. benchmark across a
+moderate regularization band, with the widest stable regimes on $(8,1)$,
+$(8,2)$, and $(12,2)$ and a narrower regime on $(12,1)$. Direct probes localize
+the remaining instability in the self-coupling blocks, while the calibrated
+certificate identifies a moderate band extending beyond the bounded-cardinality
+finite-support theorem.
 
-The fixed-$\varepsilon$ Sinkhorn geometry on embedded low-intrinsic-dimensional
-support keeps the finite-sample term close to the i.i.d. benchmark across a
-moderate regularization band, with no separate exponent emerging on the tested
-grid. In the calibrated fixed-span model with $\alpha=2$ and span $0.25$, the
-stable regime is widest on $(8,1)$, $(8,2)$, and $(12,2)$, and narrower on
-$(12,1)$. Direct Jacobian probes localize the remaining instability in the
-self-coupling blocks, while the calibrated certificate identifies a
-moderate-band regime that extends beyond the bounded-cardinality finite-support
-theorem. Supporting tables and calibration details appear in
-\cref{app:finite_sample_geometry}.
+On the calibrated discrete $k=2$ support grid, the theorem-facing diagnostics
+support the same picture: self-coupling remains contractive, exact-target null
+slopes stay near the quadratic scale, finite-support fluctuation proxies remain
+bounded, and the support-growth cost-to-$\ell_2^2$ ratio stays stable across the
+reported band. Together with the exact $\ell_2$ fluctuation identity, these
+diagnostics organize the support-growth family around a covariance-weighted
+trace bound and a local block-curvature bound for the null Sinkhorn map. The
+finite-difference Hessian probe shows bounded local curvatures together with
+collective directions that grow approximately linearly with support growth,
+matching the parity-channel reduction used in the theorem line.
 
-On the calibrated discrete $k=2$ support grid, the theorem-facing diagnostics are
-sharper. The centered self-coupling squared block keeps spectral radius below
-$0.12$ on $\mathcal B=[0.1,0.5]$, the associated inverse norm stays below
-$1.14$, and the exact-target null slopes lie between about $-1.00$ and $-0.78$
-across $(8,2)$ and $(12,2)$. A finite-support root-$n$ fluctuation proxy also
-remains bounded on the tested sample range. On the same support-growth grid, the
-ratio between exact-target Sinkhorn cost and squared $\ell_2$ weight deviation
-stays numerically stable, with mean values below $0.084$ and worst pointwise
-values below $0.24$ across the reported bands. Combined with the exact
-$\ell_2$ fluctuation identity on the calibrated row-structured grid, these
-experiments organize the support-growth family around a covariance-weighted
-trace bound and a local block-curvature bound for the null Sinkhorn map. A
-finite-difference Hessian probe on a fixed tangent basis shows the same
-bounded-curvature picture on the reported grid: local blockwise curvatures stay
-below about $0.24$, while collective directions scale approximately like
-$c(\varepsilon)n$ with reduced-channel coefficients between about $0.04$ and
-$0.13$ on the reported band. The local-basis trace proxy grows linearly with
-$n$ at about $0.34$ units per sample block, while the covariance-weighted proxy
-stays around $0.002$ to $0.004$. The exact row-kernel parity decomposition
-reduces the curvature analysis to one scalar odd channel and one two-dimensional
-even channel.
-
-Intrinsic-dimension estimates from TwoNN track the stable-band cutoff better than
-ambient dimension on the tested grid, so the regime-selection variable is local
-geometry rather than ambient dimension.
+Intrinsic-dimension estimates from TwoNN \citep{FaccoEtAl2017} track the
+stable-band cutoff better than ambient dimension on the tested grid, so the
+regime-selection variable is local geometry rather than ambient dimension.
+Detailed calibration tables appear in \Cref{app:finite_sample_geometry}.
 
 \subsection{Validity Loss Before Detection}\label{sec:empirical_validity_lag}
 
@@ -159,10 +134,11 @@ can already be invalid for the present while detector statistics remain below
 alarm threshold.
 
 The positive lag is not a knife-edge feature of one tuning choice. Across the
-tested ADWIN thresholds, mean detection time remains strictly later than mean
-validity-expiry time, and the qualitative lag persists under a different
-detector family as well. On the raw-observation input, the full tested grid of
-ADWIN and Page--Hinkley detectors, operating windows $160$, $220$, and $300$,
+tested ADWIN thresholds \citep{BifetGavalda2007}, mean detection time remains
+strictly later than mean validity-expiry time, and the qualitative lag persists
+under a different detector family as well. On the raw-observation input, the
+full tested grid of ADWIN and Page--Hinkley detectors \citep{Page1954,Hinkley1970},
+operating windows $160$, $220$, and $300$,
 and the reported threshold sweep keeps positive-gap rate equal to one together
 with unit detection rate. Page--Hinkley reacts earlier on this drift family,
 with mean gaps between about $205$ and $345$, while ADWIN yields mean gaps

@@ -1,26 +1,7 @@
 \section{Temporal-Validity Horizon}
 \label{sec:horizon_law}
 
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=0.92\linewidth]{artifacts/figures/conceptual/fig_two_clocks_of_drift.pdf}
-\caption{Temporal-validity horizon under drift. The finite-sample term falls with
-horizon, the staleness term rises with age, and total error is minimized at the
-temporal-validity horizon $n^*$. The green band marks a near-optimal
-useful-memory region, and the red band marks pre-detection validity loss: retained
-evidence can stop representing the present before enough changepoint evidence
-accumulates to trigger an alarm.}
-\label{fig:finite_sample_staleness_tradeoff}
-\end{figure}
-
-Let $P_t$ denote the present target law, $\bar P_t^{(n)}$ the window target, and
-$\widehat P_t^{(n)}$ the estimator built from the last $n$ observations. The
-finite-sample term is the estimation error relative to $\bar P_t^{(n)}$, and
-the staleness term is the discrepancy between $\bar P_t^{(n)}$ and $P_t$.
-
 \subsection{General Horizon Law}\label{subsec:abstract_upper_law}
-
-The main theorem separates finite-sample behavior from drift-induced staleness.
 
 \begin{theorem}[Abstract upper law]\label{thm:abstract_upper_law}
 Let $d$ be a probability metric satisfying the triangle inequality. At time $t$,
