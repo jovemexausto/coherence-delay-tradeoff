@@ -27,18 +27,27 @@ cross an alarm threshold.
 
 \paragraph{Sequential nonparametric testing.}
 Sequential two-sample testing and kernel change detection quantify the evidence
-needed to reject stability under time-uniform false-alarm control. These procedures
-operate on a detection timescale. The temporal-validity horizon identifies the
-tracking timescale on which retained evidence ceases to represent the present,
-so the two clocks need not agree. Exponentially weighted MMD detectors make this
-memory dependence explicit by replacing a single fixed window with implicit
-forgetting scales while still calibrating a detection threshold
+needed to reject stability under time-uniform false-alarm control. These
+procedures operate on a detection timescale. The temporal-validity horizon
+identifies the tracking timescale on which retained evidence ceases to represent
+the present, so the two clocks need not agree. Exponentially weighted MMD
+with implicit forgetting scales while still calibrating a detection threshold
 \citep{KalinkeEtAl2025MMDEW}.
 
 The closest stability-only perspective is the nonparametric stability principle
 of \citet{HuangWang2023}, which organizes learning under nonstationarity without
 an explicit constitutive law in the exponents $(a,H)$. The temporal-validity
 functional makes that geometry explicit through a closed-form persistence surface.
+
+Resource-aware scheduling under drift, including RCCDA \citep{PiasecznyEtAl2025RCCDA}, and memory hedging across
+multiple forgetting scales, such as MELO-style horizon grids, address a related
+operational question: when should adaptation consume budget on an updated memory
+scale rather than on a fixed one? The temporal-validity horizon plays the
+complementary role of a constitutive prior for that choice. It predicts the
+memory scale that a budget-aware controller should target once the effective
+roughness parameters are known. Variation budgets and path-length quantities are
+alternate summaries of the same nonstationarity resource, and translating them
+to $(a,H)$ remains a natural bridge problem.
 
 \paragraph{Filtering and local smoothing.}
 Classical adaptive filtering and state-space tracking tune forgetting factors,
@@ -60,13 +69,14 @@ show that geometry choice can change the finite-sample exponent, while intrinsic
 dimension and regularization calibration determine which regime is available
 \citep{KolouriRohdeHoffmann2018,DeshpandeEtAl2019,PatyCuturi2019,
 LinEtAl2020,NadjahiEtAl2020,NietertEtAl2022,GenansWintenberger2026,FaccoEtAl2017}.
-Those geometries sit inside a common temporal-validity law. In
-that law, dimensionality matters only through the effective finite-sample
-exponent: raw multivariate Wasserstein can force slow rates, while projection,
-intrinsic-dimension, or smoothing mechanisms can preserve a nondegenerate
+Those geometries sit inside a common temporal-validity law. In that law,
+dimensionality matters only through the effective finite-sample exponent: raw
+multivariate Wasserstein can force slow rates, while projection,
+intrinsic-dimension, or regularization mechanisms can preserve a nondegenerate
 horizon when they supply a usable exponent. The proved results cover finite-
 projection and sliced transfer together with embedded Sinkhorn classes; the
 broader high-dimensional message is an effective-exponent interpretation, not a
+claim that classical smoothing is the governing ontology.
 general raw multivariate Wasserstein theorem.
 
 \paragraph{Age and drift.}
@@ -81,9 +91,3 @@ Recent non-equilibrium accounts of continual learning describe stability through
 metastable escape across energy barriers \citep{Kim2026}. The temporal-validity
 horizon is the inference-side analogue: it identifies the critical persistence
 scale at which retained structure ceases to track the present.
-
-\paragraph{Lag-geometry inference.}
-Lag-geometry inference under noisy transport observations is complementary to the
-structural law. \citet{Parreira2026Jul} study power-law lag geometry through a
-parameter-coupled heteroscedastic regression, deriving an information law for
-estimating $(H,\zeta)$ and testing the lag model itself.

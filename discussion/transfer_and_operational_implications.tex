@@ -48,6 +48,17 @@ regularization \citep{NilesWeedBach2019,PatyCuturi2019,NietertEtAl2022}. In
 these broader settings, the effective-exponent corollary yields a horizon law;
 it does not imply a new multivariate transport theorem.
 
+A practical guide is therefore geometry-first. When the ambient dimension is low
+and the geometry is well resolved, raw Wasserstein remains the most direct choice.
+When only a small set of directions carries drift, finite projections or sliced
+variants are preferable because they preserve a usable exponent by discarding
+uninformative directions. When the geometry is noisy or the support is moderate,
+fixed-$\varepsilon$ Sinkhorn in a calibrated regularization band is the natural
+choice because it regularizes the finite-sample term without forcing a new
+transport theorem. In all cases, the guiding criterion is whether the chosen
+geometry supplies an effective exponent large enough to keep the horizon
+nondegenerate.
+
 For finite projection families, the constants inherit the worst projected
 finite-sample and staleness bounds over the chosen family, so enlarging $\Pi$
 helps only if those one-dimensional controls remain stable. For sliced

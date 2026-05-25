@@ -167,6 +167,30 @@ The informative regime lies across the transition from low to moderate
 identifiability. Table \Cref{tab:inferable_horizon} shows representative
 points across that transition.
 
+The lag-geometry pipeline is accurate on the power-law family used in the
+assumption, but it is not stable under arbitrary departures from that family.
+Targeted Monte Carlo checks on sinusoidal and piecewise departures show a small
+bias under the exact model and a much larger bias in both $\widehat H$ and the
+induced horizon estimate when the lag law is misspecified. Table
+\Cref{tab:observability_misspec} summarizes that sensitivity.
+
+\begin{table}[!htbp]
+\centering
+\small
+\begin{tabular}{lccc}
+\hline
+scenario & $H$ bias & $\log n^*$ bias & $\log n^*$ RMSE \\
+\hline
+correct & $-0.0000$ & $+0.0002$ & $0.0090$ \\
+sinusoidal & $-0.0932$ & $+0.1100$ & $0.1104$ \\
+piecewise & $-0.2114$ & $+0.8291$ & $0.8292$ \\
+\hline
+\end{tabular}
+\caption[Misspecification probe for observability]{Misspecification probe for
+observability.}
+\label{tab:observability_misspec}
+\end{table}
+
 \input{artifacts/tables/inferable_horizon/tab_inferable_horizon.tex}
 
 On the tested grid, the plug-in central limit law is also well calibrated at the

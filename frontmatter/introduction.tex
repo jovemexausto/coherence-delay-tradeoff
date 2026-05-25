@@ -13,12 +13,11 @@ Retention lowers sampling noise and ages evidence at the same time. Change
 detection exposes the same relation: a detector can remain silent after retained
 evidence has already become stale.
 
-The working object is the validity field $V$ on inferential structures and flow.
-
 The $V$-optimal problem asks, for fixed $\tau$, which geometry $\phi$ minimizes
 $V(\phi,\tau)$. That geometry-selection problem is distinct from the memory-
 length optimization at fixed $(\phi,\tau)$ and becomes visible only after the
-functional is written in closed form.
+functional is written in closed form. The horizon law studied here is a
+tractable closure of the constitutive Hölder--Wasserstein model for that field.
 
 Let $P_t$ denote the present target law, let $\bar P_t^{(n)}$ denote the window
 target formed from the last $n$ target laws, and let $\widehat P_t^{(n)}$ be the
@@ -32,7 +31,7 @@ $\bar P_t^{(n)}$ and $P_t$:
 \]
 When the finite-sample term decays like $n^{-a}$ and the staleness term grows
 like $\zeta n^H$, their balance defines the temporal-validity horizon and the
-induced useful-memory region. In the deterministic H"older--Wasserstein
+induced useful-memory region. In the deterministic Hölder--Wasserstein
 constitutive model, this balance realizes the temporal-validity functional
 \[
   V(\phi,\tau)=\inf_{n\ge 1}\bigl(C_K(\phi)n^{-a(\phi)}+C_S\zeta(\tau)n^{H(\tau)}\bigr).
@@ -63,10 +62,7 @@ validity observability from lag geometry yields identifiability and regret
 bounds, and the same object appears empirically through U-curves, roughness
 scaling, and validity loss before detector alarm.
 
-Inferential persistence is the central object: the residual validity profile of
-an inferential structure relative to a nonstationary flow.
-
-This formulation opens a small program of five frontiers: class-tight lower
+This formulation opens five frontiers: class-tight lower
 theory beyond the Gaussian benchmark, transfer beyond the proved projected
 range, support-changing embedded Sinkhorn, online validity control under
-streaming noise, and flow models beyond deterministic H"older flow.
+streaming noise, and flow models beyond deterministic Hölder flow.
