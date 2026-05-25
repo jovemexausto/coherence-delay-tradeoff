@@ -1,9 +1,9 @@
 \section{Temporal-Validity Horizon}
 \label{sec:horizon_law}
 
-\subsection{General Horizon Law}\label{subsec:abstract_upper_law}
+\subsection{Separability and Horizon Geometry}\label{subsec:abstract_upper_law}
 
-\begin{theorem}[Constitutive validity law]\label{thm:abstract_upper_law}
+\begin{lemma}[Auxiliary decomposition principle]\label{thm:abstract_upper_law}
 Let $d$ be a probability metric satisfying the triangle inequality. At time $t$,
 let $P_t$ be the present target law, let $\bar P_t^{(n)}$ be the window target,
 and let $\widehat P_t^{(n)}$ be the estimator built from the last $n$
@@ -23,7 +23,7 @@ hold for all $n$ in the regime of interest. Then
   \mathbb E\,d\!\left(\widehat P_t^{(n)},P_t\right)
   \le C_K n^{-a} + C_S\zeta n^H.
 \]
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 By the triangle inequality,
@@ -38,7 +38,64 @@ Taking expectations and applying the two assumptions yields the claim.
 
 This envelope is the constitutive law of temporal validity: the path class
 supplies validity dissipation, while the chosen geometry and sample regime
-supply finite-sample acquisition.
+provide finite-sample acquisition. The decomposition itself is elementary; the
+substantive content lies in the benchmark closure, transfer, and lower-theory
+results that follow.
+
+\begin{theorem}[Gaussian location minimax benchmark on the deterministic H\"older class]
+\label{thm:gaussian_location_minimax_holder}
+Fix $H\in(0,1]$, $\zeta>0$, and $\sigma>0$. Let $\mathfrak M_H(\zeta)$ denote the
+class of deterministic mean paths $(\mu_s)_{s\in\mathbb Z}$ such that
+\[
+  |\mu_{t-j}-\mu_t|\le \zeta j^H
+  \qquad\text{for all }j\ge 0.
+\]
+Suppose the observations are independent with
+\[
+  Y_{t-j}\sim N(\mu_{t-j},\sigma^2),
+  \qquad j=0,1,\dots,n-1,
+\]
+and let the target law at time $t$ be $P_t=N(\mu_t,\sigma^2)$. Define the
+optimal finite-memory minimax risk
+\[
+  \mathcal R_H^*(\sigma,\zeta)
+  \coloneqq
+  \inf_{n\ge 1}
+  \inf_{\widehat P_t^{(n)}}
+  \sup_{\mu\in\mathfrak M_H(\zeta)}
+  \mathbb E\,W_2\!\left(\widehat P_t^{(n)},P_t\right).
+\]
+Then there exist constants $0<c_H\le C_H<\infty$, depending only on $H$, such
+that
+\[
+  \begin{aligned}
+  c_H\,\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)}
+  &\le \mathcal R_H^*(\sigma,\zeta) \\
+  &\le C_H\,\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)}.
+  \end{aligned}
+\]
+In particular, the deterministic H\"older class has horizon scale
+\[
+  n_H^*\asymp (\sigma/\zeta)^{2/(2H+1)}.
+\]
+Moreover, the uniform-window mean estimator has an exact asymptotic upper
+constant on this benchmark. If $y_H>0$ solves
+\[
+  H y_H\bigl(2\Phi_{\mathrm G}(y_H)-1\bigr)=\varphi_{\mathrm G}(y_H),
+\]
+then its asymptotic horizon shape is
+\[
+  A_H^{\mathrm{mean}}=((H+1)y_H)^{2/(2H+1)}
+\]
+and its asymptotic risk constant is
+\[
+  \begin{aligned}
+  U_H^{\mathrm{mean}}
+  &= ((H+1)y_H)^{-1/(2H+1)} \\
+  &\quad \times \Bigl(2\varphi_{\mathrm G}(y_H)+y_H\bigl(2\Phi_{\mathrm G}(y_H)-1\bigr)\Bigr).
+  \end{aligned}
+\]
+\end{theorem}
 
 \begin{proposition}[Triangular-array transfer for Hadamard-differentiable functionals]
 \label{prop:hadamard_triangular_transfer}
@@ -61,6 +118,8 @@ such that
   \mathbb E\,\bigl\|\mathcal T(\widehat P_t^{(n)})-\mathcal T(P_t)\bigr\|
   \le \widetilde C_K n^{-a} + \widetilde C_S\zeta n^H.
 \]
+The transfer is exact at the level of the envelope: the geometry changes, but the
+finite-sample and drift exponents do not.
 \end{proposition}
 
 \begin{proof}
@@ -97,6 +156,8 @@ and the Taylor remainder is quadratic in the moment error:
   \le \frac{M}{2}\|Z(P')-Z(P)\|^2.
   \end{aligned}
 \]
+Again, the envelope is preserved at the level of exponents, with the constants
+absorbed into $\widetilde C_K$ and $\widetilde C_S$.
 \end{proposition}
 
 \begin{proof}
@@ -137,6 +198,23 @@ Write the continuous optimizer of $\Phi$ as
 \]
 This optimizer differs from the scale $n^*(a,H)$ only by constants depending on
 $a$, $H$, and $C_S$, so the asymptotic horizon law remains unchanged.
+
+\begin{definition}[Validity field]
+For an estimation geometry $\phi$ with finite-sample envelope
+$C_K(\phi)n^{-a(\phi)}$ and a drift class $\tau$ with dissipation envelope
+$C_S\zeta(\tau)n^{H(\tau)}$, define
+\[
+  V(\phi,\tau)
+  \coloneqq
+  \inf_{n\ge 1}\bigl(C_K(\phi)n^{-a(\phi)} + C_S\zeta(\tau)n^{H(\tau)}\bigr),
+\]
+and at the continuous optimizer,
+\[
+  V(\phi,\tau)
+  = \kappa(a,H) C_K(\phi)^{H/(a+H)}\bigl(C_S\zeta(\tau)\bigr)^{a/(a+H)},
+\]
+where $\kappa(a,H)=(a+H)a^{-a/(a+H)}H^{-H/(a+H)}$.
+\end{definition}
 
 \subsection{Useful-Memory Geometry}
 
@@ -189,6 +267,9 @@ For small tolerance, the useful-memory region has the local expansion
 \]
 because $\Psi''(1)=aH$. The local curvature therefore controls how quickly the
 near-optimal region contracts around the horizon.
+
+The product $aH$ is the local validity curvature of the normalized useful-memory
+profile at the optimizer.
 
 The horizon depends jointly on the finite-sample rate exponent and the
 roughness exponent. Different geometries and different drift regularities induce
@@ -396,8 +477,9 @@ Assume that each row law has the form
   \qquad |\delta_{n,j}|\le \Delta<1,
 \]
 and that the within-window span is uniformly bounded in $n$. Then item~(iv) of
-\cref{prop:one_dimensional_root_n_bound} holds. More precisely, there exists a
-constant $C_\Delta<\infty$ such that
+\cref{prop:one_dimensional_root_n_bound} holds. This is the verified deformation
+class used in the 1D proof anchor. More precisely, there exists a constant
+$C_\Delta<\infty$ such that
 \[
   \mathbb E\int_0^1 R_n(u)^2\,du \le C_\Delta n^{-2}.
 \]
@@ -548,60 +630,7 @@ deterministic H\"older envelope, the finite-memory estimator, and the lower-boun
 construction all live in the same one-dimensional parameterization, so this
 model admits a direct minimax rate statement.
 
-\begin{theorem}[Gaussian location minimax benchmark on the deterministic H\"older class]
-\label{thm:gaussian_location_minimax_holder}
-Fix $H\in(0,1]$, $\zeta>0$, and $\sigma>0$. Let $\mathfrak M_H(\zeta)$ denote the
-class of deterministic mean paths $(\mu_s)_{s\in\mathbb Z}$ such that
-\[
-  |\mu_{t-j}-\mu_t|\le \zeta j^H
-  \qquad\text{for all }j\ge 0.
-\]
-Suppose the observations are independent with
-\[
-  Y_{t-j}\sim N(\mu_{t-j},\sigma^2),
-  \qquad j=0,1,\dots,n-1,
-\]
-and let the target law at time $t$ be $P_t=N(\mu_t,\sigma^2)$. Define the
-optimal finite-memory minimax risk
-\[
-  \mathcal R_H^*(\sigma,\zeta)
-  \coloneqq
-  \inf_{n\ge 1}
-  \inf_{\widehat P_t^{(n)}}
-  \sup_{\mu\in\mathfrak M_H(\zeta)}
-  \mathbb E\,W_2\!\left(\widehat P_t^{(n)},P_t\right).
-\]
-Then there exist constants $0<c_H\le C_H<\infty$, depending only on $H$, such
-that
-\[
-  \begin{aligned}
-  c_H\,\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)}
-  &\le \mathcal R_H^*(\sigma,\zeta) \\
-  &\le C_H\,\sigma^{2H/(2H+1)}\zeta^{1/(2H+1)}.
-  \end{aligned}
-\]
-In particular, the deterministic H\"older class has horizon scale
-\[
-  n_H^*\asymp (\sigma/\zeta)^{2/(2H+1)}.
-\]
-Moreover, the uniform-window mean estimator has an exact asymptotic upper
-constant on this benchmark. If $y_H>0$ solves
-\[
-  H y_H\bigl(2\Phi_{\mathrm G}(y_H)-1\bigr)=\varphi_{\mathrm G}(y_H),
-\]
-then its asymptotic horizon shape is
-\[
-  A_H^{\mathrm{mean}}=((H+1)y_H)^{2/(2H+1)}
-\]
-and its asymptotic risk constant is
-\[
-  \begin{aligned}
-  U_H^{\mathrm{mean}}
-  &= ((H+1)y_H)^{-1/(2H+1)} \\
-  &\quad \times \Bigl(2\varphi_{\mathrm G}(y_H)+y_H\bigl(2\Phi_{\mathrm G}(y_H)-1\bigr)\Bigr).
-  \end{aligned}
-\]
-\end{theorem}
+
 
 \begin{proof}
 For the upper bound, estimate the present mean by the uniform-window average
@@ -778,6 +807,10 @@ fixed-$\varepsilon$ Sinkhorn results place the same horizon logic in an
 operational transport geometry. The linear-Gaussian entropic-OT setting suggests
 an intermediate recursive regime between the i.i.d. fixed-$\varepsilon$ theory
 and the embedded low-dimensional extension \citep{Kalman1960,Jazwinski1970,AkyildizEtAl2024}.
+
+The finite-discrete theorem and the calibrated support-growth theorem are proved
+statements. The figures and tables in this section are regime diagnostics for the
+calibrated support-growth hypotheses.
 
 \paragraph{Fixed-$\varepsilon$ Sinkhorn setting.}
 For fixed-$\varepsilon$ debiased Sinkhorn, the central question is whether a

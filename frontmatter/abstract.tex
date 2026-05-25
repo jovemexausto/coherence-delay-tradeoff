@@ -1,18 +1,20 @@
 \begin{abstract}
-The temporal-validity profile of retained evidence under drift determines how
-long information remains operationally useful. Retaining more data reduces
-estimation noise but increases temporal mismatch, so finite memory traces out a
-validity geometry rather than a single optimal window. The finite-sample and
-drift-induced dissipation terms balance at the temporal-validity horizon,
-yielding an optimal memory law and a normalized useful-memory profile. The law
-closes in a one-dimensional root-$n$ proof anchor and in embedded Sinkhorn
-classes; finite projection and sliced transport transfer the law under uniform
-projected control. Lag-geometry inference then yields identifiability and
+The temporal-validity functional $V(\phi,\tau)$ assigns a persistence value to
+an inferential structure $\phi$ against a drift class $\tau$: it is the minimum
+achievable tracking error at the optimal memory scale, and the best retained
+evidence can do before flow makes it stale. Here $\phi$ ranges over inferential
+structures and $\tau$ over admissible flow classes, so $V$ is a persistence
+field over inferential structure and flow. The finite-sample and
+drift-induced dissipation terms balance at the temporal-validity horizon, yielding an optimal
+memory law and a normalized useful-memory profile. The benchmark closure is the
+Gaussian location minimax theorem on the deterministic H\"older class, where
+the upper and lower horizon rates meet. A one-dimensional root-$n$ proof anchor
+and embedded Sinkhorn classes establish nontrivial instances of the same
+geometry, while finite projection and sliced transport transfer the law under
+uniform projected control. Validity observability from lag geometry yields identifiability and
 quadratic regret guarantees for horizon estimation. Experiments exhibit the
 predicted U-curves, roughness-dependent scaling, real-stream validity
-signatures, and validity loss before detector alarm. The validity-detection gap
-also motivates a finite-horizon detector-class sign law under null false-alarm
-control.
+signatures, and validity loss before detector alarm.
 \end{abstract}
 
 \bigskip

@@ -1,13 +1,14 @@
 \section{Introduction}\label{sec:intro}
 
-A drifting system is governed by two coupled clocks. The temporal-validity
-profile of retained evidence mediates them. The tracking clock rewards retention
-because larger windows reduce sampling noise. The validity clock penalizes
-retention because older evidence ceases to represent the present distribution.
-Change detection sharpens the same tension: a detector can remain silent even
-after retained evidence has already become stale. The central question is not
-only when change becomes detectable, but how long retained evidence remains
-valid as a measurable geometric property.
+Inferential structures possess finite persistence under flow. The temporal-
+validity functional $V(\phi,\tau)$ assigns that persistence value to an
+inferential structure $\phi$ and a drift class $\tau$. Here $\phi$ indexes the
+geometry and estimation rule used to retain evidence, while $\tau$ indexes the
+admissible flow of the target law. Retention lowers sampling noise and ages
+evidence at the same time. Change detection exposes the same relation: a
+detector can remain silent after retained evidence has already become stale.
+
+The working object is a field of persistence values on inferential structures.
 
 Let $P_t$ denote the present target law, let $\bar P_t^{(n)}$ denote the window
 target formed from the last $n$ target laws, and let $\widehat P_t^{(n)}$ be the
@@ -20,35 +21,36 @@ between $\bar P_t^{(n)}$ and $P_t$:
 \]
 When the finite-sample term decays like $n^{-a}$ and the staleness term grows
 like $\zeta n^H$, their balance defines the temporal-validity horizon and the
-induced useful-memory region.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.92\linewidth]{artifacts/figures/conceptual/fig_two_clocks_of_drift.pdf}
-\caption{Temporal-validity profile under drift. The left panel shows raw validity
-profiles across roughness exponents, and the right panel shows the normalized
-profile in the horizon coordinate $n/n^*$. The green band marks a near-optimal
-useful-memory region, and the red band marks pre-detection validity loss.}
-\label{fig:finite_sample_staleness_tradeoff}
-\end{figure}
+induced useful-memory region. Optimizing that envelope yields the temporal-
+validity functional
+\[
+  V(\phi,\tau)=\inf_{n\ge 1}\bigl(C_K(\phi)n^{-a(\phi)}+C_S\zeta(\tau)n^{H(\tau)}\bigr).
+\]
 
 The finite-sample exponent $a$ depends on the geometry used to compare
 distributions, while the roughness exponent $H$ and amplitude $\zeta$ describe
 how quickly retained evidence loses temporal validity. The resulting horizon is
 structural: it is imposed jointly by metric geometry and drift regularity.
-The same validity-vs-detection separation motivates a detector-class sign law
-under finite-horizon false-alarm control.
+
+\begin{figure}[!t]
+\centering
+\safeincludegraphics[width=0.90\linewidth]{artifacts/figures/conceptual/fig_validity_field}
+\caption{Validity field over the $(a,H)$ plane. Lower-left geometries favor persistence; upper-right geometries incur stronger drift penalty.}
+\label{fig:validity_field}
+\end{figure}
 
 Three proved cases make the law concrete. A one-dimensional root-$n$ proof
 anchor closes the basic finite-memory regime, while bounded-cardinality finite-
 discrete and calibrated support-growth embedded Sinkhorn classes show that the
 same mechanism persists in operational transport geometry.
 
-Finite projection families and sliced transport provide transfer theorems,
-useful-memory localization from lag geometry yields identifiability and regret
-bounds, and the same object appears empirically through interior U-curves,
-roughness scaling, real-stream diagnostics, and validity loss before detector
-alarm.
+The benchmark closure is the Gaussian location minimax theorem on the
+deterministic H\"older class, where the upper and lower horizon rates meet.
 
-The central object is therefore not memory itself, but the persistence profile
-of retained statistical structure relative to the present.
+Finite projection families and sliced transport provide transfer theorems,
+validity observability from lag geometry yields identifiability and regret bounds, and the same object
+appears empirically through U-curves, roughness scaling, and validity loss
+before detector alarm.
+
+The central object is inferential persistence: the persistence profile of an
+inferential structure relative to a nonstationary flow.

@@ -4,9 +4,14 @@
 Dynamic-regret and variation-budget analyses show that under drift, forgetting
 scales and window lengths must adapt to how quickly the target moves
 \citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,YuanLamperski2020,
-MazzettoUpfal2023,WangXieChenLuiZhou2024}. The object studied here is earlier in the
-pipeline: it asks how long retained evidence remains temporally valid before age
-becomes the dominant source of tracking error.
+MazzettoUpfal2023,WangXieChenLuiZhou2024}. The temporal-validity functional asks
+how long retained evidence remains valid before age becomes the dominant source
+of tracking error.
+
+Singular learning theory provides static equations of state for inference in
+nonregular models \citep{Watanabe2009}. The temporal-validity
+functional plays the dynamic role: it couples finite-sample geometry and drift
+regularity into a single persistence law under nonstationarity.
 
 The same structural trade-off also appears in drifting density estimation.
 \citet{MazzettoUpfal2023} derive minimax rates by optimizing over recent-memory
@@ -30,6 +35,11 @@ memory dependence explicit by replacing a single fixed window with implicit
 forgetting scales while still calibrating a detection threshold
 \citep{KalinkeEtAl2025MMDEW}.
 
+The closest stability-only perspective is the nonparametric stability principle
+of \citet{HuangWang2023}, which organizes learning under nonstationarity without
+an explicit constitutive law in the exponents $(a,H)$. The temporal-validity
+functional makes that geometry explicit through a closed-form persistence surface.
+
 \paragraph{Filtering and local smoothing.}
 Classical adaptive filtering and state-space tracking tune forgetting factors,
 gain schedules, or process-noise levels to balance smoothing against
@@ -51,7 +61,7 @@ show that geometry choice can change the finite-sample exponent, while intrinsic
 dimension and regularization calibration determine which regime is available
 \citep{KolouriRohdeHoffmann2018,DeshpandeEtAl2019,PatyCuturi2019,
 LinEtAl2020,NadjahiEtAl2020,NietertEtAl2022,GenansWintenberger2026,FaccoEtAl2017}.
-This paper places those geometries inside a common temporal-validity law. In
+Those geometries sit inside a common temporal-validity law. In
 that law, dimensionality matters only through the effective finite-sample
 exponent: raw multivariate Wasserstein can force slow rates, while projection,
 intrinsic-dimension, or smoothing mechanisms can preserve a nondegenerate
@@ -67,6 +77,11 @@ KeehanAndersonWiesemann2025,AminiVinas2026,KaulYatesGruteser2012,
 YatesEtAl2021AoI}. The temporal-validity horizon gives that variable a
 distributional interpretation: age is costly because it accumulates geometric
 mismatch with the present.
+
+Recent non-equilibrium accounts of continual learning describe stability through
+metastable escape across energy barriers \citep{Kim2026}. The temporal-validity
+horizon is the inference-side analogue: it identifies the critical persistence
+scale at which retained structure ceases to track the present.
 
 \paragraph{Lag-geometry inference.}
 Lag-geometry inference under noisy transport observations is complementary to the

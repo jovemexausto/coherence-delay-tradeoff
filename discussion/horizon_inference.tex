@@ -1,7 +1,7 @@
-\section{Horizon Inference}
-\label{sec:horizon_inference}
+\section{Validity Observability}
+\label{sec:validity_observability}
 
-Inferential use requires more than the existence of a horizon. A data-driven
+Validity observability requires more than the existence of a horizon. A data-driven
 memory rule needs estimators of the drift parameters $(H,\zeta)$ together with a
 criterion that compares inferential resolution to the curvature of the
 useful-memory region.
@@ -13,7 +13,7 @@ $1,\dots,L$, define the lag-energy information scale
   \mathcal I_{m,L}(H) \coloneqq m\sum_{j=1}^L j^{2H}.
 \]
 
-\begin{assumption}[Lag-geometry inference input]
+\begin{assumption}[Lag-geometry observability input]
 \label{ass:lag_geometry_input}
 For the lag model $D_j = \zeta j^H$, suppose there are estimators
 $(\widehat \alpha_{m,L},\widehat H_{m,L})$ such that, on compact parameter sets,
@@ -49,7 +49,7 @@ Its gradient is
   \end{pmatrix}.
 \]
 
-\begin{theorem}[Plug-in Horizon Central Limit Law]
+\begin{theorem}[Plug-in Validity Central Limit Law]
 \label{thm:plugin_horizon_clt}
 Under \Cref{ass:lag_geometry_input},
 \[
@@ -85,7 +85,7 @@ Let $(x_-(\delta;a,H),x_+(\delta;a,H))$ be the normalized endpoints from
 This quantity is the largest symmetric log-error around $n_\star$ that stays
 inside the useful-memory region.
 
-\begin{theorem}[Operational Identifiability of Useful Memory]
+\begin{theorem}[Operational Validity Identifiability of Useful Memory]
 \label{thm:operational_identifiability}
 Under \Cref{ass:lag_geometry_input},
 \[
@@ -117,13 +117,13 @@ The quantity
   \coloneqq
   \frac{\sqrt{\mathcal I_{m,L}(H)}\,r_\delta(a,H)}{\tau(H,\zeta)}
 \]
-is therefore the operational identifiability score of the horizon. It compares
-lag-geometry information to the curvature-imposed precision requirement of the
+is the operational identifiability score of the horizon. It compares
+lag-geometry information to the validity-curvature-imposed precision requirement of the
 useful-memory region.
 
 The following algorithm summarizes the operational pipeline.
 \begin{algorithm}[!htbp]
-\caption{Operational horizon-inference pipeline}
+\caption{Operational validity-observability pipeline}
 \label{alg:horizon_inference}
 \footnotesize
 \begin{algorithmic}[1]

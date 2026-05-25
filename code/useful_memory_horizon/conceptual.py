@@ -156,6 +156,58 @@ def generate_two_clocks(output_path: Path, csv_path: Path) -> None:
     plt.close(fig)
 
 
+def generate_validity_field(output_path: Path, csv_path: Path) -> None:
+    a_vals = np.linspace(0.25, 1.0, 180)
+    h_vals = np.linspace(0.25, 1.0, 180)
+    A, H = np.meshgrid(a_vals, h_vals)
+    V = (A + H) * A ** (-A / (A + H)) * H ** (-H / (A + H))
+
+    rows: list[dict[str, Any]] = []
+    for ai, hi, vi in zip(A.ravel(), H.ravel(), V.ravel(), strict=True):
+        rows.append(
+            {
+                "a": round(float(ai), 6),
+                "H": round(float(hi), 6),
+                "V": round(float(vi), 6),
+            }
+        )
+    write_csv(csv_path, rows)
+
+    fig, ax = plt.subplots(figsize=(6.7, 4.1))
+    levels = np.linspace(float(V.min()), float(V.max()), 18)
+    filled = ax.contourf(A, H, V, levels=levels, cmap="viridis")
+    contour_levels = np.linspace(float(V.min()), float(V.max()), 7)[1:-1]
+    contours = ax.contour(
+        A, H, V, levels=contour_levels, colors="white", linewidths=0.7, alpha=0.6
+    )
+    ax.clabel(contours, fmt="%.2f", fontsize=7, inline=True)
+    ax.scatter([0.5], [0.5], s=20, color="#b23a3a", zorder=4)
+    ax.text(0.52, 0.515, r"reference geometry", fontsize=8, color="#b23a3a")
+    ax.set_xlabel(r"finite-sample rate exponent $a(\phi)$")
+    ax.set_ylabel(r"drift roughness $H(\tau)$")
+    ax.set_title(r"Validity field $V(\phi,\tau)$")
+    cbar = fig.colorbar(filled, ax=ax, pad=0.02)
+    cbar.set_label(r"optimized persistence value $V(\phi,\tau)$")
+    ax.text(
+        0.28, 0.92, "lower persistence cost", color="white", fontsize=8, weight="bold"
+    )
+    ax.text(
+        0.72,
+        0.33,
+        "higher persistence cost",
+        color="white",
+        fontsize=8,
+        weight="bold",
+        ha="center",
+    )
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    fig.tight_layout()
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(output_path, bbox_inches="tight")
+    plt.close(fig)
+
+
 def generate_lower_bound(output_path: Path, csv_path: Path) -> None:
     m = 6.0
     h = 3.0
@@ -467,6 +519,10 @@ def main() -> None:
     generate_two_clocks(
         args.figures_dir / "fig_two_clocks_of_drift.pdf",
         args.csv_dir / "two_clocks_of_drift.csv",
+    )
+    generate_validity_field(
+        args.figures_dir / "fig_validity_field.pdf",
+        args.csv_dir / "validity_field.csv",
     )
     generate_lower_bound(
         args.figures_dir / "fig_lower_bound_witness.pdf",

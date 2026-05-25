@@ -1,8 +1,8 @@
 \section{Conclusion}\label{sec:conclusion}
 
-Under drift, retained evidence is never purely beneficial. It reduces finite-
-sample noise, but it also ages. The resulting trade-off gives retained
-statistical structure a temporal-validity profile with a finite horizon.
+Inferential structures under drift combine finite-sample gain with temporal
+aging. The resulting trade-off gives retained statistical structure a
+temporal-validity profile with a finite horizon.
 
 The horizon law
 \[
@@ -16,7 +16,7 @@ and its optimizer
 summarize that balance. This law induces a useful-memory region around the
 optimal scale.
 
-The core theory closes in three proved cases of the same law: a tractable
+Three proved cases establish the same temporal-validity law: a tractable
 one-dimensional root-$n$ proof anchor, bounded-cardinality finite-discrete
 embedded Sinkhorn, and a calibrated support-growth embedded Sinkhorn family. A
 structural Gaussian lower bound and a Gaussian location benchmark identify the
@@ -24,10 +24,9 @@ horizon as a property of drift geometry rather than of a particular estimator.
 
 The empirical signatures align with the theory: finite-memory U-curves,
 roughness-dependent horizon scaling, a real-stream finite-memory pattern, and a
-positive lag between validity loss and detector alarm. Horizon inference adds a
-second distinction: a temporal-validity horizon can exist structurally and still
-be operationally hard to estimate from lag geometry alone.
+positive lag between validity loss and detector alarm. Validity observability
+captures the operational side: a temporal-validity horizon can be structurally
+defined while remaining hard to estimate from lag geometry alone.
 
-Retained statistical information therefore has a measurable temporal-validity
-profile, and the horizon law identifies its critical persistence scale under
-drift.
+Inferential persistence has a measurable profile with a critical persistence
+scale under drift.
