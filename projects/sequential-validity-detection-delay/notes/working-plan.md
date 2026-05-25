@@ -10,6 +10,8 @@ Define on the same filtered stream:
 
 The main empirical question is whether `Delta_val-det` remains positive after calibrating detector aggressiveness on the same null false-alarm budget.
 
+The theorem-level false-alarm notion is the finite-horizon budget `P_0(tau <= T) <= alpha` under the stationary Gaussian null.
+
 ## Compact experimental contract
 
 1. Use false-alarm-calibrated detector frontiers rather than raw parameter sweeps whenever detectors are compared.
@@ -28,6 +30,14 @@ For a class of adapted stopping times satisfying a null false-alarm constraint a
 `P(tau_detect > tau_valid(n)) >= c`
 
 for some `c > 0`, uniformly over a range of operating windows `n` whose horizon has already collapsed.
+
+### Current benchmark theorem
+
+For the one-dimensional Gaussian location model with a null prefix through the validity-expiry time, every `tau in D_{alpha,T}` satisfies
+
+`P(tau_detect > tau_valid(n)) >= 1 - alpha`.
+
+This is the first sign result in the line.
 
 ### Stronger target
 

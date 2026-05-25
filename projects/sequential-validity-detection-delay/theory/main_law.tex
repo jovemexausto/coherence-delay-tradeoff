@@ -32,27 +32,67 @@ run on the same filtration. The central delay object is
   \tau_{\mathrm{detect}} - \tau_{\mathrm{valid}}(n).
 \]
 
-The goal is to determine when positive values of
-$\Delta_{\mathrm{val-det}}(n)$ are forced by the interaction between local drift
-geometry and false-alarm control.
+The detector class is indexed by a finite-horizon false-alarm budget.
+Let $\mathbb P_0$ denote the stationary Gaussian no-change law with the same
+noise variance and a constant mean path. For a horizon $T \in \mathbb N$ and a
+budget $\alpha \in (0,1)$, define
+\[
+  \mathcal D_{\alpha,T}
+  \coloneqq
+  \bigl\{\tau : \tau \text{ is a stopping time and } \mathbb P_0(\tau \le T) \le \alpha\bigr\}.
+\]
+This is the exact false-alarm notion used here: under the stationary null, the
+probability of at least one alarm before the calibration horizon $T$ is at most
+$\alpha$.
+
+The benchmark question is whether, under that constraint, the detector can fire
+before validity expiry on a drifting Gaussian location path. The target is a
+positive lower bound on the sign of $\Delta_{\mathrm{val-det}}(n)$.
+
+\subsection{Detector class and false-alarm notion}
+
+The detector class is deliberately broad. It contains any adapted stopping time
+calibrated to a null false-alarm budget on a fixed horizon. Standard detectors
+such as ADWIN, Page--Hinkley, CUSUM, and KSWIN enter only as benchmark
+instantiations once they are tuned to satisfy the same $\mathbb P_0(\tau \le T)
+\le \alpha$ constraint.
+
+The finite-horizon choice matches the experimental calibration. It is also the
+cleanest notion for the first theorem because it separates the alarm budget from
+the drift geometry. A sharper average-run-length formulation can be studied
+later, but it is not needed for the benchmark sign result.
 
 \subsection{Candidate delay law}
 
-\paragraph{Conjecture (detector-class sign law).}
-Fix a false-alarm budget $\alpha \in (0,1)$ and a detector class
-$\mathcal D_\alpha$ consisting of stopping times that satisfy the chosen null
-false-alarm constraint. There exist constants $c_0 > 0$ and a H\"older drift
-family $\mathcal M(H,\zeta)$ such that for every sufficiently stale operating
-window $n$ in a nonempty post-horizon regime,
+\paragraph{Benchmark drift family.}
+Let $t_\star$ denote the validity-expiry time of the operating window, and
+consider the one-sided H\"older location path
 \[
-  \inf_{\tau \in \mathcal D_\alpha}
-  \sup_{\mu \in \mathcal M(H,\zeta)}
-  \mathbb P_\mu\!\left(\tau > \tau_{\mathrm{valid}}(n)\right)
-  \ge c_0.
+  \mu_t =
+  \begin{cases}
+    0, & t \le t_\star, \\
+    \zeta (t - t_\star)^H, & t > t_\star.
+  \end{cases}
 \]
-In words: under false-alarm control, validity expiry can precede detector alarm
-with uniformly positive probability over a least-favorable H\"older drift
-family.
+This path is stationary before expiry and drifts only after the temporal-validity
+clock has crossed the chosen memory level.
+
+\paragraph{Theorem (first benchmark sign result).}
+Fix $\alpha \in (0,1)$ and $T \ge t_\star$. For every stopping time
+$\tau \in \mathcal D_{\alpha,T}$ and every benchmark path of the form above,
+\[
+  \mathbb P_\mu\!\left(\tau > \tau_{\mathrm{valid}}(n)\right)
+  \ge 1 - \alpha.
+\]
+Equivalently, the validity-detection delay satisfies
+\[
+  \mathbb P_\mu\!\left(\Delta_{\mathrm{val-det}}(n) > 0\right)
+  \ge 1 - \alpha.
+\]
+The proof is immediate from the definition of $\mathcal D_{\alpha,T}$ because
+the drifting benchmark path agrees with the null law on $\{1,\dots,t_\star\}$.
+The sign result is therefore a benchmark consequence of the false-alarm budget
+and the null prefix, not a detector-specific property.
 
 \paragraph{Stronger target (delay lower bound).}
 The sharper theorem target is a quantitative lower bound
@@ -64,16 +104,17 @@ The sharper theorem target is a quantitative lower bound
 \]
 for some explicit positive function $g$ on the pre-detection invalidity regime.
 The benchmark model should reveal how $g$ depends on the local evidence growth
-after horizon crossing.
+after horizon crossing. The current theorem only isolates the sign; the lower
+bound is the open next step.
 
 \paragraph{Mechanism.}
 The proof route separates two scales. The validity clock is determined by the
 finite-memory horizon, which contracts once the local roughness level rises. The
 detection clock is determined by how quickly post-expiry evidence can accumulate
-without violating the null false-alarm constraint. A positive validity-detection
-gap appears when the horizon has already collapsed but the local log-likelihood
-signal collected over the same interval is still too small to support reliable
-alarm.
+without violating the null false-alarm constraint. In the benchmark sign result,
+the null prefix makes the delay sign a direct consequence of the calibration
+budget. In the stronger lower-bound target, the same separation should be proved
+without an exact null prefix, using contiguity over the post-expiry window.
 
 \paragraph{Benchmark theorem program.}
 The tractable benchmark is a Gaussian location path whose local increments follow
@@ -88,7 +129,8 @@ a one-sided H\"older profile. The intended theorem line has four steps.
 4. Deduce a sign law, and then a quantitative lower bound, for
    $\Delta_{\mathrm{val-det}}(n)$.
 
-At present, the conjecture and the stronger lower-bound target are open. The
-existing false-alarm-calibrated experiments support the sign pattern across
+At present, the exact null-prefix benchmark theorem is the first theorem-level
+result in the line. The stronger contiguity-based lower bound remains open. The
+existing false-alarm-calibrated experiments support the same sign pattern across
 multiple detector families and across $H\in\{0.5,0.75,1.0\}$, but theorem-level
-closure remains to be proved.
+closure for the quantitative delay law remains to be proved.

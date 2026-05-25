@@ -1,3 +1,17 @@
 \section{Limitations}
 
-Scaffold limitations placeholder.
+The exact benchmark theorem above is intentionally weak: it uses a null prefix,
+so the positive sign follows directly from the finite-horizon false-alarm budget.
+That is the right starting point for the sequential-delay line, but it does not
+yet capture the genuinely hard case where the stream drifts gradually throughout
+the pre-expiry interval.
+
+The main open problem is the contiguity-based lower bound. A useful next result
+would replace the null prefix with a least-favorable H\"older path whose law is
+only close to the stationary null before expiry, and then prove a quantitative
+delay lower bound rather than only a sign result.
+
+Detector-specific calibration remains another limitation. The experiments show
+that ADWIN, Page--Hinkley, CUSUM, and KSWIN can be aligned to the same
+finite-horizon false-alarm budget, but the theorem program should separate the
+budget from any one detector implementation.
