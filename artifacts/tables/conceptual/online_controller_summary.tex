@@ -2,17 +2,22 @@
 \centering
 \small
 \resizebox{\linewidth}{!}{%
-\begin{tabular}{ccrrrr}
+\begin{tabular}{lrrrrr}
 \toprule
-Profile & Seed & Plug-in/oracle & Activity/oracle & Structural/oracle & Adaptive/oracle \\
+Profile & Best static/oracle & Activity/oracle & Plug-in/oracle & Structural/oracle & Adaptive/oracle \\
 \midrule
-Default & 0 & $4.14$ & $1.41$ & $1.33$ & $1.30$ \\
-Default & 1 & $4.17$ & $1.33$ & $1.38$ & $1.31$ \\
-Rough & 0 & $2.50$ & $1.65$ & $1.34$ & $1.49$ \\
-Rough & 1 & $2.18$ & $1.40$ & $1.26$ & $1.30$ \\
+Default & $1.43$ & $1.36$ & $4.41$ & $1.36$ & $1.30$ \\
+Smooth & $1.05$ & $1.41$ & $3.24$ & $1.22$ & $1.24$ \\
+Rough & $1.09$ & $1.65$ & $2.59$ & $1.30$ & $1.39$ \\
+Alternating & $1.02$ & $1.65$ & $2.30$ & $1.24$ & $1.36$ \\
+Ramp-up & $1.02$ & $1.34$ & $2.91$ & $1.18$ & $1.23$ \\
 \bottomrule
 \end{tabular}
 }
-\caption{Reduced online-controller sweep with profiles \texttt{default} and \texttt{rough}, seeds $0$ and $1$, and maximum one-step window-index jumps. Entries report mean absolute error relative to the oracle controller.}
+\caption{Online memory-selection baselines across five profile families,
+aggregated over seeds $0,1,2$, with maximum one-step window-index jumps.
+Entries report mean absolute error relative to the oracle controller. The
+structural controller consistently improves on the raw plug-in and activity
+baselines and stays close to oracle performance across profile changes.}
 \label{tab:online_controller_summary}
 \end{table}

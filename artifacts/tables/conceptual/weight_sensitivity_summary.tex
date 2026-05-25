@@ -1,0 +1,22 @@
+\begin{table}[!htbp]
+\centering
+\small
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lrrrrr}
+\toprule
+Scheme & Best window & MAE & $n_{\mathrm{eff}}$ & Mean lag & Horizon proxy \\
+\midrule
+Uniform & $12$ & $0.272$ & $12.00$ & $5.50$ & $3.880$ \\
+Triangular & $18$ & $0.257$ & $13.86$ & $5.67$ & $3.941$ \\
+Geometric & $15$ & $0.258$ & $12.15$ & $4.95$ & $3.607$ \\
+\bottomrule
+\end{tabular}
+}
+\caption{Weight-sensitivity summary for uniform, triangular, and geometric
+tapers. The table reports the best window under mean absolute error together
+with the induced effective sample size, mean lag, and the horizon proxy
+$n_{\mathrm{eff}}^{-a}+M_H$ used in the diagnostic. Geometric tapering reduces
+lag most strongly, while triangular tapering enlarges effective sample size at a
+higher lag cost.}
+\label{tab:weight_sensitivity_summary}
+\end{table}

@@ -125,22 +125,57 @@ def save_coverage_collapse_figure(
     output_path: Path,
 ) -> None:
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    fig, ax = plt.subplots(figsize=(5.4, 3.8))
+    fig, ax = plt.subplots(figsize=(6.2, 3.9))
+    max_score = max(float(row["identifiability_score"]) for row in coverage_rows)
+    scores = np.linspace(0.0, max_score, 400)
     grouped: dict[float, list[dict[str, float | int]]] = {}
     for row in coverage_rows:
         grouped.setdefault(float(row["delta"]), []).append(row)
-    for delta, rows in sorted(grouped.items()):
+    colors = plt.rcParams["axes.prop_cycle"].by_key().get("color", [])
+    for index, (delta, rows) in enumerate(sorted(grouped.items())):
         rows = sorted(rows, key=lambda row: float(row["identifiability_score"]))
-        ax.scatter(
-            [float(row["identifiability_score"]) for row in rows],
-            [float(row["empirical_hit_rate"]) for row in rows],
-            s=18,
-            alpha=0.8,
-            label=rf"$\delta={delta:.2f}$",
+        x = np.asarray([float(row["identifiability_score"]) for row in rows])
+        y = np.asarray([float(row["empirical_hit_rate"]) for row in rows])
+        y_se = np.asarray(
+            [float(row.get("empirical_hit_rate_se", 0.0)) for row in rows]
         )
-    scores = np.linspace(
-        0.0, max(float(row["identifiability_score"]) for row in coverage_rows), 400
-    )
+        n_bins = min(6, max(3, len(rows) // 2))
+        bins = np.array_split(np.arange(len(rows)), n_bins)
+        bin_x: list[float] = []
+        bin_y: list[float] = []
+        bin_lo: list[float] = []
+        bin_hi: list[float] = []
+        for bin_indices in bins:
+            if bin_indices.size == 0:
+                continue
+            local_x = x[bin_indices]
+            local_y = y[bin_indices]
+            local_se = y_se[bin_indices]
+            mean_x = float(np.mean(local_x))
+            mean_y = float(np.mean(local_y))
+            mean_se = float(np.sqrt(np.mean(local_se**2)))
+            bin_x.append(mean_x)
+            bin_y.append(mean_y)
+            bin_lo.append(max(0.0, mean_y - 1.96 * mean_se))
+            bin_hi.append(min(1.0, mean_y + 1.96 * mean_se))
+        color = colors[index % len(colors)] if colors else None
+        ax.plot(
+            bin_x,
+            bin_y,
+            marker="o",
+            linewidth=1.6,
+            markersize=4.5,
+            color=color,
+            label=rf"$\delta={delta:.3f}$",
+        )
+        ax.fill_between(
+            bin_x,
+            bin_lo,
+            bin_hi,
+            color=color,
+            alpha=0.12,
+            linewidth=0,
+        )
     ax.plot(
         scores,
         2.0 * norm.cdf(scores) - 1.0,
@@ -152,8 +187,9 @@ def save_coverage_collapse_figure(
     ax.set_xlabel(r"Operational identifiability score $\mathfrak{S}_{\delta,m,L}$")
     ax.set_ylabel(r"$\Pr(\widehat r^* \in \mathcal{U}_\delta)$")
     ax.set_ylim(0.0, 1.02)
-    ax.legend(frameon=False, fontsize=8)
+    ax.set_xlim(0.0, max_score)
     ax.grid(alpha=0.2, linewidth=0.5)
+    ax.legend(frameon=False, fontsize=8, ncol=2)
     fig.tight_layout()
     fig.savefig(output_path)
     plt.close(fig)

@@ -136,7 +136,7 @@ alarm threshold.
 The positive lag is not a knife-edge feature of one tuning choice. Across the
 tested ADWIN thresholds \citep{BifetGavalda2007}, mean detection time remains
 strictly later than mean validity-expiry time, and the qualitative lag persists
-under a different detector family as well. On the raw-observation input, the
+across detector families and input representations on the tested grid. On the raw-observation input, the
 full tested grid of ADWIN and Page--Hinkley detectors \citep{Page1954,Hinkley1970},
 operating windows $160$, $220$, and $300$,
 and the reported threshold sweep keeps positive-gap rate equal to one together
@@ -154,4 +154,9 @@ family, not a detector-uniform delay law; see
 The experiments support a structural U-curve with a near-optimal useful-memory
 region, roughness-dependent horizon scaling, a corresponding pattern on the
 ELEC2 stream, structured support for the fixed-$\varepsilon$ Sinkhorn family,
-and a measurable lag between validity loss and detector alarm.
+and a measurable lag between validity loss and detector alarm. Complementary
+online-adaptation sweeps across default, smooth, rough, alternating, and
+ramp-up profiles show that the structural controller keeps mean error between
+$1.18$ and $1.36$ times oracle risk, versus $1.34$--$1.65$ for the activity
+baseline and $2.30$--$4.41$ for the raw plug-in rule; see
+\Cref{tab:online_controller_summary}.
