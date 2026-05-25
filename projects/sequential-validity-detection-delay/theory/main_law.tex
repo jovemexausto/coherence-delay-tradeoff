@@ -1,0 +1,94 @@
+\section{Main Law}
+
+\subsection{Problem statement}
+
+Consider a one-dimensional observation stream
+\[
+  Y_t = \mu_t + \varepsilon_t,
+  \qquad
+  \varepsilon_t \stackrel{\mathrm{iid}}{\sim} \mathcal N(0,\sigma^2),
+\]
+where the mean path $\mu_t$ evolves under a local H\"older envelope with
+exponent $H\in(0,1]$ and roughness scale $\zeta_t$. For a fixed operating
+memory level $n$, the temporal-validity horizon from finite-memory tracking
+provides a local benchmark scale
+\[
+  n_t^* \asymp (C_K / \zeta_t)^{1/(a+H)}
+\]
+with $a=1/2$ in the Gaussian root-$n$ benchmark regime.
+
+Define the validity-expiry time of the operating memory level by
+\[
+  \tau_{\mathrm{valid}}(n)
+  \coloneqq
+  \inf\{t \ge 1 : n > n_t^*\},
+\]
+or its persistent analogue when one wants to suppress transient crossings.
+Define $\tau_{\mathrm{detect}}$ as the stopping time of a sequential detector
+run on the same filtration. The central delay object is
+\[
+  \Delta_{\mathrm{val-det}}(n)
+  \coloneqq
+  \tau_{\mathrm{detect}} - \tau_{\mathrm{valid}}(n).
+\]
+
+The goal is to determine when positive values of
+$\Delta_{\mathrm{val-det}}(n)$ are forced by the interaction between local drift
+geometry and false-alarm control.
+
+\subsection{Candidate delay law}
+
+\paragraph{Conjecture (detector-class sign law).}
+Fix a false-alarm budget $\alpha \in (0,1)$ and a detector class
+$\mathcal D_\alpha$ consisting of stopping times that satisfy the chosen null
+false-alarm constraint. There exist constants $c_0 > 0$ and a H\"older drift
+family $\mathcal M(H,\zeta)$ such that for every sufficiently stale operating
+window $n$ in a nonempty post-horizon regime,
+\[
+  \inf_{\tau \in \mathcal D_\alpha}
+  \sup_{\mu \in \mathcal M(H,\zeta)}
+  \mathbb P_\mu\!\left(\tau > \tau_{\mathrm{valid}}(n)\right)
+  \ge c_0.
+\]
+In words: under false-alarm control, validity expiry can precede detector alarm
+with uniformly positive probability over a least-favorable H\"older drift
+family.
+
+\paragraph{Stronger target (delay lower bound).}
+The sharper theorem target is a quantitative lower bound
+\[
+  \inf_{\tau \in \mathcal D_\alpha}
+  \sup_{\mu \in \mathcal M(H,\zeta)}
+  \mathbb E_\mu\!\left[(\tau - \tau_{\mathrm{valid}}(n))_+\right]
+  \ge c_1 \, g(\alpha,\zeta,H,n),
+\]
+for some explicit positive function $g$ on the pre-detection invalidity regime.
+The benchmark model should reveal how $g$ depends on the local evidence growth
+after horizon crossing.
+
+\paragraph{Mechanism.}
+The proof route separates two scales. The validity clock is determined by the
+finite-memory horizon, which contracts once the local roughness level rises. The
+detection clock is determined by how quickly post-expiry evidence can accumulate
+without violating the null false-alarm constraint. A positive validity-detection
+gap appears when the horizon has already collapsed but the local log-likelihood
+signal collected over the same interval is still too small to support reliable
+alarm.
+
+\paragraph{Benchmark theorem program.}
+The tractable benchmark is a Gaussian location path whose local increments follow
+a one-sided H\"older profile. The intended theorem line has four steps.
+
+1. Prove a finite-memory expiry bound for $\tau_{\mathrm{valid}}(n)$ from the
+   closed horizon law.
+2. Bound the post-expiry information accumulated by time
+   $\tau_{\mathrm{valid}}(n)+m$.
+3. Convert the null false-alarm constraint into a lower bound on required alarm
+   evidence for the detector class.
+4. Deduce a sign law, and then a quantitative lower bound, for
+   $\Delta_{\mathrm{val-det}}(n)$.
+
+At present, the conjecture and the stronger lower-bound target are open. The
+existing false-alarm-calibrated experiments support the sign pattern across
+multiple detector families and across $H\in\{0.5,0.75,1.0\}$, but theorem-level
+closure remains to be proved.

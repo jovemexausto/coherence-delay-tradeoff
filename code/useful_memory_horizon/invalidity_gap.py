@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import argparse
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from pathlib import Path
 from typing import Literal
 
@@ -22,12 +22,15 @@ class InvalidityGapConfig:
     phase_lengths: tuple[int, int, int] = (1000, 1400, 1200)
     low_drift: float = 0.00008
     high_drift: float = 0.0025
+    holder_exponent: float = 1.0
+    finite_sample_exponent: float = 0.5
+    staleness_coefficient: float = LIPSCHITZ_STALENESS_COEFFICIENT
     observation_scale: float = 1.0
     process_scale: float = 0.0
     operating_window: int = 220
     detector_delta: float = 0.002
     detector_deltas: tuple[float, ...] = (0.0005, 0.001, 0.002, 0.004)
-    detector_name: Literal["adwin", "page_hinkley"] = "adwin"
+    detector_name: Literal["adwin", "page_hinkley", "kswin", "cusum"] = "adwin"
     detector_input: Literal["observation", "signed_residual", "absolute_residual"] = (
         "observation"
     )
@@ -35,6 +38,9 @@ class InvalidityGapConfig:
     page_hinkley_threshold: float = 50.0
     page_hinkley_alpha: float = 0.9999
     page_hinkley_min_instances: int = 30
+    kswin_window_size: int = 100
+    kswin_stat_size: int = 30
+    cusum_threshold: float = 8.0
     n_min: int = 20
     n_max: int = 320
     Ck: float = 1.0
@@ -89,6 +95,40 @@ class InvalidityGapResult:
     summaries: list[InvalidityGapSummary]
 
 
+@dataclass(slots=True)
+class DetectorCalibrationSummary:
+    detector_name: str
+    detector_input: str
+    false_alarm_target: float
+    selected_delta: float
+    selected_threshold: float
+    selected_null_alarm_rate: float
+    target_met: bool
+
+
+@dataclass(slots=True)
+class SequentialDelayFrontierSummary:
+    scenario_id: str
+    detector_name: str
+    detector_input: str
+    holder_exponent: float
+    false_alarm_target: float
+    selected_delta: float
+    selected_threshold: float
+    selected_null_alarm_rate: float
+    target_met: bool
+    operating_window: int
+    high_drift: float
+    mean_t_valid: float
+    mean_t_detect: float
+    mean_gap: float
+    median_gap: float
+    positive_gap_rate: float
+    detection_rate: float
+    undetected_invalid_rate: float
+    mean_pre_detection_excess_area: float
+
+
 def _parse_csv_ints(text: str) -> tuple[int, ...]:
     return tuple(int(part.strip()) for part in text.split(",") if part.strip())
 
@@ -101,18 +141,51 @@ def _parse_csv_strings(text: str) -> tuple[str, ...]:
     return tuple(part.strip() for part in text.split(",") if part.strip())
 
 
-def _build_detector(
-    config: InvalidityGapConfig, detector_delta: float
-) -> river_drift.ADWIN | river_drift.PageHinkley:
+class _CUSUMDetector:
+    def __init__(self, drift: float, threshold: float) -> None:
+        self.drift = float(max(drift, 0.0))
+        self.threshold = float(threshold)
+        self.count = 0
+        self.mean = 0.0
+        self.positive_sum = 0.0
+        self.negative_sum = 0.0
+        self.drift_detected = False
+
+    def update(self, value: float) -> None:
+        self.count += 1
+        if self.count == 1:
+            self.mean = float(value)
+            self.drift_detected = False
+            return
+        previous_mean = self.mean
+        self.mean += (float(value) - self.mean) / self.count
+        centered = float(value) - previous_mean
+        self.positive_sum = max(0.0, self.positive_sum + centered - self.drift)
+        self.negative_sum = min(0.0, self.negative_sum + centered + self.drift)
+        self.drift_detected = bool(
+            self.positive_sum >= self.threshold or -self.negative_sum >= self.threshold
+        )
+
+
+def _build_detector(config: InvalidityGapConfig, detector_delta: float) -> object:
     if config.detector_name == "adwin":
         return river_drift.ADWIN(delta=detector_delta)
-    return river_drift.PageHinkley(
-        min_instances=config.page_hinkley_min_instances,
-        delta=detector_delta,
-        threshold=config.page_hinkley_threshold,
-        alpha=config.page_hinkley_alpha,
-        mode="both",
-    )
+    if config.detector_name == "page_hinkley":
+        return river_drift.PageHinkley(
+            min_instances=config.page_hinkley_min_instances,
+            delta=detector_delta,
+            threshold=config.page_hinkley_threshold,
+            alpha=config.page_hinkley_alpha,
+            mode="both",
+        )
+    if config.detector_name == "kswin":
+        return river_drift.KSWIN(
+            alpha=detector_delta,
+            window_size=config.kswin_window_size,
+            stat_size=config.kswin_stat_size,
+            seed=0,
+        )
+    return _CUSUMDetector(drift=detector_delta, threshold=config.cusum_threshold)
 
 
 def _detector_stream(
@@ -125,9 +198,35 @@ def _detector_stream(
     return trace.residual_stream
 
 
+def _detector_events_from_estimate(
+    observations: np.ndarray,
+    operating_estimate: np.ndarray,
+    config: InvalidityGapConfig,
+    detector_delta: float,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    residual_stream = np.abs(observations - operating_estimate)
+    signed_residual_stream = observations - operating_estimate
+    detector = _build_detector(config, detector_delta)
+    detector_events = np.zeros(observations.size, dtype=bool)
+    if config.detector_input == "observation":
+        detector_stream = observations
+    elif config.detector_input == "signed_residual":
+        detector_stream = signed_residual_stream
+    else:
+        detector_stream = residual_stream
+    for index, value in enumerate(detector_stream):
+        detector.update(float(value))
+        detector_events[index] = bool(detector.drift_detected)
+    return detector_events, residual_stream, signed_residual_stream
+
+
 def _simulate_stream(
     seed: int, config: InvalidityGapConfig
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    if sum(config.phase_lengths) != config.steps:
+        raise ValueError("phase_lengths must sum to steps")
+    if config.holder_exponent <= 0.0:
+        raise ValueError("holder_exponent must be positive")
     rng = np.random.default_rng(seed)
     p1, p2, _ = config.phase_lengths
     drift_path = np.empty(config.steps, dtype=float)
@@ -136,11 +235,22 @@ def _simulate_stream(
         config.low_drift, config.high_drift, p2, endpoint=True, dtype=float
     )
     drift_path[p1 + p2 :] = config.high_drift
+    phase_age = np.empty(config.steps, dtype=float)
+    start = 0
+    for length in config.phase_lengths:
+        phase_age[start : start + length] = np.arange(length, dtype=float)
+        start += length
+    increment_scale = np.zeros(config.steps, dtype=float)
+    positive_age = phase_age > 0.0
+    increment_scale[positive_age] = (
+        phase_age[positive_age] ** config.holder_exponent
+        - (phase_age[positive_age] - 1.0) ** config.holder_exponent
+    )
     latent_mean = np.zeros(config.steps, dtype=float)
     for step in range(1, config.steps):
         latent_mean[step] = (
             latent_mean[step - 1]
-            + drift_path[step]
+            + drift_path[step] * increment_scale[step]
             + rng.normal(scale=config.process_scale)
         )
     observations = latent_mean + rng.normal(
@@ -158,10 +268,17 @@ def _moving_average(values: np.ndarray, window: int) -> np.ndarray:
 
 
 def _oracle_horizon(config: InvalidityGapConfig, drift_path: np.ndarray) -> np.ndarray:
+    if config.finite_sample_exponent <= 0.0:
+        raise ValueError("finite_sample_exponent must be positive")
     horizon = (
-        config.Ck
-        / (2.0 * LIPSCHITZ_STALENESS_COEFFICIENT * np.maximum(drift_path, 1e-12))
-    ) ** (2.0 / 3.0)
+        config.finite_sample_exponent
+        * config.Ck
+        / (
+            config.staleness_coefficient
+            * config.holder_exponent
+            * np.maximum(drift_path, 1e-12)
+        )
+    ) ** (1.0 / (config.finite_sample_exponent + config.holder_exponent))
     return np.clip(horizon, config.n_min, config.n_max)
 
 
@@ -215,10 +332,12 @@ def _run_single_trace(
     oracle_estimate = _variable_window_estimate(observations, oracle_horizon)
     operating_error = np.abs(latent_mean - operating_estimate)
     oracle_error = np.abs(latent_mean - oracle_estimate)
-    residual_stream = np.abs(observations - operating_estimate)
-    signed_residual_stream = observations - operating_estimate
-    detector = _build_detector(config, detector_delta)
-    detector_events = np.zeros(config.steps, dtype=bool)
+    detector_events, residual_stream, _ = _detector_events_from_estimate(
+        observations,
+        operating_estimate,
+        config,
+        detector_delta,
+    )
     detector_trace = InvalidityGapTrace(
         seed=seed,
         time=np.arange(config.steps),
@@ -237,12 +356,6 @@ def _run_single_trace(
         invalidity_gap=None,
         pre_detection_excess_area=0.0,
     )
-    detector_stream = _detector_stream(detector_trace, config)
-    if config.detector_input == "signed_residual":
-        detector_stream = signed_residual_stream
-    for index, value in enumerate(detector_stream):
-        detector.update(float(value))
-        detector_events[index] = bool(detector.drift_detected)
     stale_mask = config.operating_window > oracle_horizon
     t_valid = _first_persistent_true(stale_mask, config.persistence, config.warmup)
     t_detect = _first_detector_time(detector_events, t_valid)
@@ -417,6 +530,214 @@ def run_invalidity_gap_sweep(
     configs: list[InvalidityGapConfig],
 ) -> list[InvalidityGapResult]:
     return [run_invalidity_gap_experiment(config) for config in configs]
+
+
+def estimate_null_alarm_rate(
+    config: InvalidityGapConfig,
+    detector_delta: float,
+    calibration_seeds: tuple[int, ...] | None = None,
+) -> float:
+    stationary_config = replace(config, low_drift=0.0, high_drift=0.0)
+    seeds = calibration_seeds or tuple(seed + 1000 for seed in stationary_config.seeds)
+    alarms: list[bool] = []
+    for seed in seeds:
+        _, _, observations = _simulate_stream(seed, stationary_config)
+        operating_estimate = _moving_average(
+            observations, stationary_config.operating_window
+        )
+        detector_events, _, _ = _detector_events_from_estimate(
+            observations,
+            operating_estimate,
+            stationary_config,
+            detector_delta,
+        )
+        alarms.append(bool(np.any(detector_events[stationary_config.warmup :])))
+    return float(np.mean(alarms))
+
+
+def calibrate_detector_delta(
+    config: InvalidityGapConfig,
+    false_alarm_target: float,
+    candidate_deltas: tuple[float, ...] | None = None,
+    calibration_seeds: tuple[int, ...] | None = None,
+    page_hinkley_thresholds: tuple[float, ...] | None = None,
+    cusum_thresholds: tuple[float, ...] | None = None,
+) -> DetectorCalibrationSummary:
+    delta_grid = candidate_deltas or config.detector_deltas
+    if config.detector_name == "page_hinkley":
+        threshold_grid = page_hinkley_thresholds or (config.page_hinkley_threshold,)
+    elif config.detector_name == "cusum":
+        threshold_grid = cusum_thresholds or (config.cusum_threshold,)
+    else:
+        threshold_grid = (0.0,)
+    evaluated = []
+    for threshold in threshold_grid:
+        if config.detector_name == "page_hinkley":
+            threshold_config = replace(config, page_hinkley_threshold=float(threshold))
+        elif config.detector_name == "cusum":
+            threshold_config = replace(config, cusum_threshold=float(threshold))
+        else:
+            threshold_config = config
+        for delta in delta_grid:
+            evaluated.append(
+                (
+                    float(delta),
+                    float(threshold),
+                    estimate_null_alarm_rate(
+                        threshold_config,
+                        float(delta),
+                        calibration_seeds,
+                    ),
+                )
+            )
+    feasible = [item for item in evaluated if item[2] <= false_alarm_target]
+    if feasible:
+        selected_delta, selected_threshold, selected_rate = max(
+            feasible, key=lambda item: item[2]
+        )
+        target_met = True
+    else:
+        selected_delta, selected_threshold, selected_rate = min(
+            evaluated, key=lambda item: item[2]
+        )
+        target_met = False
+    return DetectorCalibrationSummary(
+        detector_name=config.detector_name,
+        detector_input=config.detector_input,
+        false_alarm_target=float(false_alarm_target),
+        selected_delta=float(selected_delta),
+        selected_threshold=float(selected_threshold),
+        selected_null_alarm_rate=float(selected_rate),
+        target_met=target_met,
+    )
+
+
+def run_calibrated_delay_frontier(
+    *,
+    detector_names: tuple[str, ...] = ("adwin", "page_hinkley", "kswin", "cusum"),
+    detector_inputs: tuple[str, ...] = ("observation", "absolute_residual"),
+    holder_exponents: tuple[float, ...] = (0.5, 0.75, 1.0),
+    false_alarm_targets: tuple[float, ...] = (0.05, 0.1),
+    high_drifts: tuple[float, ...] = (0.006, 0.01, 0.016, 0.024),
+    operating_windows: tuple[int, ...] = (140, 180, 240),
+    candidate_deltas: tuple[float, ...] = (0.0005, 0.001, 0.002, 0.004, 0.008),
+    page_hinkley_thresholds: tuple[float, ...] = (50.0, 100.0, 150.0, 250.0),
+    cusum_thresholds: tuple[float, ...] = (4.0, 8.0, 12.0, 20.0),
+    calibration_seeds: tuple[int, ...] = tuple(range(100, 120)),
+    base_config: InvalidityGapConfig | None = None,
+) -> list[SequentialDelayFrontierSummary]:
+    template = base_config or InvalidityGapConfig()
+    rows: list[SequentialDelayFrontierSummary] = []
+    for detector_name in detector_names:
+        for detector_input in detector_inputs:
+            for holder_exponent in holder_exponents:
+                calibration_config = replace(
+                    template,
+                    detector_name=detector_name,  # type: ignore[arg-type]
+                    detector_input=detector_input,  # type: ignore[arg-type]
+                    detector_deltas=candidate_deltas,
+                    holder_exponent=float(holder_exponent),
+                )
+                for false_alarm_target in false_alarm_targets:
+                    calibration = calibrate_detector_delta(
+                        calibration_config,
+                        false_alarm_target,
+                        candidate_deltas,
+                        calibration_seeds,
+                        page_hinkley_thresholds,
+                        cusum_thresholds,
+                    )
+                    for operating_window in operating_windows:
+                        for high_drift in high_drifts:
+                            scenario_id = (
+                                f"{detector_name}-{detector_input}-H{holder_exponent:.2f}"
+                                f"-alpha{false_alarm_target:.3f}-w{operating_window}"
+                                f"-z{high_drift:.4f}"
+                            )
+                            config = replace(
+                                template,
+                                detector_name=detector_name,  # type: ignore[arg-type]
+                                detector_input=detector_input,  # type: ignore[arg-type]
+                                holder_exponent=float(holder_exponent),
+                                operating_window=operating_window,
+                                low_drift=min(template.low_drift, 0.2 * high_drift),
+                                high_drift=high_drift,
+                                detector_delta=calibration.selected_delta,
+                                detector_deltas=(calibration.selected_delta,),
+                                page_hinkley_threshold=calibration.selected_threshold,
+                                cusum_threshold=calibration.selected_threshold,
+                            )
+                            result = run_invalidity_gap_experiment(config)
+                            summary = result.summaries[0]
+                            rows.append(
+                                SequentialDelayFrontierSummary(
+                                    scenario_id=scenario_id,
+                                    detector_name=detector_name,
+                                    detector_input=detector_input,
+                                    holder_exponent=float(holder_exponent),
+                                    false_alarm_target=float(false_alarm_target),
+                                    selected_delta=float(calibration.selected_delta),
+                                    selected_threshold=float(
+                                        calibration.selected_threshold
+                                    ),
+                                    selected_null_alarm_rate=float(
+                                        calibration.selected_null_alarm_rate
+                                    ),
+                                    target_met=calibration.target_met,
+                                    operating_window=operating_window,
+                                    high_drift=float(high_drift),
+                                    mean_t_valid=float(summary.mean_t_valid),
+                                    mean_t_detect=float(summary.mean_t_detect),
+                                    mean_gap=float(summary.mean_gap),
+                                    median_gap=float(summary.median_gap),
+                                    positive_gap_rate=float(summary.positive_gap_rate),
+                                    detection_rate=float(summary.detection_rate),
+                                    undetected_invalid_rate=float(
+                                        summary.undetected_invalid_rate
+                                    ),
+                                    mean_pre_detection_excess_area=float(
+                                        summary.mean_pre_detection_excess_area
+                                    ),
+                                )
+                            )
+    return rows
+
+
+def build_calibrated_delay_frontier_rows(
+    summaries: list[SequentialDelayFrontierSummary],
+) -> list[dict[str, float | int | str]]:
+    rows: list[dict[str, float | int | str]] = []
+    for summary in summaries:
+        rows.append(
+            {
+                "scenario_id": summary.scenario_id,
+                "detector": summary.detector_name,
+                "detector_input": summary.detector_input,
+                "holder_exponent": round(float(summary.holder_exponent), 2),
+                "false_alarm_target": round(float(summary.false_alarm_target), 3),
+                "selected_delta": round(float(summary.selected_delta), 4),
+                "selected_threshold": round(float(summary.selected_threshold), 1),
+                "selected_null_alarm_rate": round(
+                    float(summary.selected_null_alarm_rate), 3
+                ),
+                "target_met": int(summary.target_met),
+                "operating_window": summary.operating_window,
+                "high_drift": round(float(summary.high_drift), 5),
+                "mean_t_valid": round(float(summary.mean_t_valid), 1),
+                "mean_t_detect": round(float(summary.mean_t_detect), 1),
+                "mean_gap": round(float(summary.mean_gap), 1),
+                "median_gap": round(float(summary.median_gap), 1),
+                "positive_gap_rate": round(float(summary.positive_gap_rate), 3),
+                "detection_rate": round(float(summary.detection_rate), 3),
+                "undetected_invalid_rate": round(
+                    float(summary.undetected_invalid_rate), 3
+                ),
+                "mean_pre_detection_excess_area": round(
+                    float(summary.mean_pre_detection_excess_area), 3
+                ),
+            }
+        )
+    return rows
 
 
 def _rolling_error(

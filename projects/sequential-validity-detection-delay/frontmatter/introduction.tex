@@ -1,0 +1,50 @@
+\section{Introduction}
+
+Finite memory under drift has two failure modes. One is distributional: a
+window that is too long becomes temporally stale, so the retained evidence no
+longer tracks the present distribution accurately. The other is sequential: a
+detector run on the same stream may still remain below alarm threshold while the
+window is already invalid. These two failures need not occur on the same
+timescale.
+
+The temporal-validity horizon identifies the first clock. In finite-memory
+distribution tracking under drift, the risk balance
+\[
+  \mathbb E\,d(\widehat P_t^{(n)},P_t) \le C_K n^{-a} + C_S \zeta n^H
+\]
+induces a horizon scale $n_t^* \asymp (C_K/\zeta_t)^{1/(a+H)}$. For a fixed
+operating memory level $n$, validity expires once the local horizon contracts
+below $n$. That defines the expiry time $\tau_{\mathrm{valid}}(n)$.
+
+Sequential detection introduces a second clock. A stopping time
+$\tau_{\mathrm{detect}}$ is designed to react to change while satisfying a
+false-alarm constraint. The central object of this paper is therefore the
+validity-detection delay
+\[
+  \Delta_{\mathrm{val-det}} \coloneqq \tau_{\mathrm{detect}} - \tau_{\mathrm{valid}}(n).
+\]
+Positive values mean that retained evidence has already become invalid before a
+detector alarm appears.
+
+The scientific question is whether that positive delay is a tuning accident or a
+structural consequence of evidence accumulation under drift. The target answer
+is structural. The paper seeks a detector-class sign law, and then a lower
+bound, showing that under false-alarm control there exist H\"older drift
+families for which detection must lag validity expiry with nontrivial
+probability.
+
+The benchmark proof model is one-dimensional Gaussian location with deterministic
+H\"older mean path and fixed observation noise. That model is analytically clean
+enough to separate three ingredients: the finite-memory horizon inherited from
+distribution tracking, the local post-expiry evidence available to the detector,
+and the false-alarm constraint that limits how aggressively stopping rules can
+react. The resulting theorem program is not detector-specific at the top level:
+detector families enter as benchmark instantiations of a broader stopping-time
+class.
+
+The empirical signal already points in that direction. On a compact
+false-alarm-calibrated frontier over roughness exponents
+$H\in\{0.5,0.75,1.0\}$, observation-based ADWIN, Page--Hinkley, and CUSUM keep
+positive validity-detection gaps across the tested grid, while residual-input
+variants and KSWIN often trade larger delays for missed alarms. Those results do
+not prove the delay law, but they identify the right theorem target.

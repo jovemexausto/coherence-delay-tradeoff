@@ -84,6 +84,22 @@ class OnlineHorizonAdaptationTest(unittest.TestCase):
         self.assertLess(result.mean_structural_error, result.mean_activity_error)
         self.assertLess(result.mean_structural_error, result.mean_best_static_error)
 
+    def test_ewma_and_kalman_baselines_are_finite_and_nontrivial(self) -> None:
+        config = OnlineAdaptationConfig(seed=7)
+        result = run_online_horizon_adaptation_experiment(config)
+        self.assertTrue(np.all(np.isfinite(result.ewma_estimate)))
+        self.assertTrue(np.all(np.isfinite(result.kalman_estimate)))
+        self.assertGreater(np.std(result.ewma_window.astype(float)), 0.0)
+        self.assertGreater(np.std(result.kalman_window.astype(float)), 0.0)
+        self.assertGreater(result.mean_ewma_error, 0.0)
+        self.assertGreater(result.mean_kalman_error, 0.0)
+
+    def test_structural_policy_beats_ewma_and_kalman_on_rough_profile(self) -> None:
+        config = make_profile_config("rough", seed=7)
+        result = run_online_horizon_adaptation_experiment(config)
+        self.assertLess(result.mean_structural_error, result.mean_ewma_error)
+        self.assertLess(result.mean_structural_error, result.mean_kalman_error)
+
     def test_aggregated_roughness_estimator_stays_bounded_on_noisy_stream(self) -> None:
         config = OnlineAdaptationConfig(seed=7)
         latent_mean, _, _ = phase_profile(config)
@@ -127,8 +143,13 @@ class OnlineHorizonAdaptationTest(unittest.TestCase):
         self.assertGreaterEqual(len(phase_rows), 1)
         self.assertGreaterEqual(len(timeline_rows), 1)
         self.assertIn("structural_to_oracle_ratio", summary_rows[0])
+        self.assertIn("ewma_to_oracle_ratio", summary_rows[0])
+        self.assertIn("kalman_to_oracle_ratio", summary_rows[0])
         self.assertIn("phase_index", phase_rows[0])
+        self.assertIn("mean_ewma_error", phase_rows[0])
         self.assertIn("structural_validation_score", timeline_rows[0])
+        self.assertIn("ewma_alpha", timeline_rows[0])
+        self.assertIn("kalman_gain", timeline_rows[0])
 
     def test_online_sweep_builder_and_runner(self) -> None:
         configs = build_online_adaptation_configs(

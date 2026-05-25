@@ -6,13 +6,17 @@
 \toprule
 Detector input & Detector & Detection rate & Mean-gap range & Excess-area range \\
 \midrule
-Observation & ADWIN & $1.00$ & $429$--$620$ & $7.41$--$20.41$ \\
-Observation & Page--Hinkley & $1.00$ & $205$--$345$ & $3.55$--$8.20$ \\
-Abs. residual & ADWIN & $0.00$ & --- & --- \\
-Abs. residual & Page--Hinkley & $0.33$--$0.92$ & $994$--$1665$ & $16.94$--$151.24$ \\
+Observation & ADWIN & $1.00$ & $204$--$660$ & $7.23$--$24.85$ \\
+Observation & Page--Hinkley & $1.00$ & $204$--$615$ & $6.00$--$26.17$ \\
+Observation & KSWIN & $0.17$--$1.00$ & $302$--$844$ & $3.98$--$236.31$ \\
+Observation & CUSUM & $1.00$ & $78$--$232$ & $1.52$--$6.86$ \\
+Abs. residual & ADWIN & $0.17$--$1.00$ & $365$--$903$ & $32.70$--$277.83$ \\
+Abs. residual & Page--Hinkley & $0.83$--$1.00$ & $346$--$969$ & $109.55$--$188.64$ \\
+Abs. residual & KSWIN & $0.17$--$0.50$ & $498$--$1310$ & $2.15$--$311.09$ \\
+Abs. residual & CUSUM & $0.17$--$1.00$ & $323$--$920$ & $20.28$--$172.90$ \\
 \bottomrule
 \end{tabular}
 }
-\caption{Validity-detection robustness summary across operating windows $160$, $220$, and $300$ and the reported threshold grid. Mean-gap and excess-area ranges are computed over the successful runs in each detector/input family.}
+\caption{False-alarm-calibrated validity-detection robustness summary on the compact frontier with $H\in\{0.5,0.75,1.0\}$, operating windows $160$ and $240$, roughness levels $0.01$ and $0.024$, and seeds $0,\dots,5$. Mean-gap and excess-area ranges are computed over the successful validity-expiry runs in each detector/input family.}
 \label{tab:validity_gap_robustness}
 \end{table}

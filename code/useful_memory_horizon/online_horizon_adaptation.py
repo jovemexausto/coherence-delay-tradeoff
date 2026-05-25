@@ -64,11 +64,15 @@ class OnlineAdaptationResult:
     adaptive_window: np.ndarray
     structural_window: np.ndarray
     activity_window: np.ndarray
+    ewma_window: np.ndarray
+    kalman_window: np.ndarray
     plugin_estimate: np.ndarray
     oracle_estimate: np.ndarray
     adaptive_estimate: np.ndarray
     structural_estimate: np.ndarray
     activity_estimate: np.ndarray
+    ewma_estimate: np.ndarray
+    kalman_estimate: np.ndarray
     plugin_holder_hat: np.ndarray
     plugin_roughness_hat: np.ndarray
     adaptive_holder_hat: np.ndarray
@@ -76,6 +80,8 @@ class OnlineAdaptationResult:
     structural_holder_hat: np.ndarray
     structural_roughness_hat: np.ndarray
     activity_proxy: np.ndarray
+    ewma_alpha: np.ndarray
+    kalman_gain: np.ndarray
     structural_band_min: np.ndarray
     structural_band_max: np.ndarray
     adaptive_validation_score: np.ndarray
@@ -87,12 +93,16 @@ class OnlineAdaptationResult:
     adaptive_error: np.ndarray
     structural_error: np.ndarray
     activity_error: np.ndarray
+    ewma_error: np.ndarray
+    kalman_error: np.ndarray
     best_static_error: np.ndarray
     mean_oracle_error: float
     mean_plugin_error: float
     mean_adaptive_error: float
     mean_structural_error: float
     mean_activity_error: float
+    mean_ewma_error: float
+    mean_kalman_error: float
     mean_best_static_error: float
 
 
@@ -441,6 +451,24 @@ def _project_window_to_grid(
     return min(feasible, key=lambda candidate: abs(candidate - window))
 
 
+def _ewma_alpha_from_window(window: int) -> float:
+    return float(min(1.0, max(2.0 / (float(window) + 1.0), 1e-4)))
+
+
+def _window_from_gain(
+    gain: float, config: OnlineAdaptationConfig, end_index: int
+) -> int:
+    effective_window = int(round((2.0 / max(float(gain), 1e-4)) - 1.0))
+    return _project_window_to_grid(effective_window, config, end_index)
+
+
+def _kalman_process_variance_from_gain(
+    target_gain: float, observation_variance: float
+) -> float:
+    gain = float(min(max(target_gain, 1e-4), 1.0 - 1e-4))
+    return observation_variance * (gain**2) / (1.0 - gain)
+
+
 def _activity_window(
     values: np.ndarray,
     end_index: int,
@@ -582,11 +610,15 @@ def run_online_horizon_adaptation_experiment(
     adaptive_window = np.full(latent_mean.size, min(cfg.candidate_windows), dtype=int)
     structural_window = np.full(latent_mean.size, min(cfg.candidate_windows), dtype=int)
     activity_window = np.full(latent_mean.size, min(cfg.candidate_windows), dtype=int)
+    ewma_window = np.full(latent_mean.size, min(cfg.candidate_windows), dtype=int)
+    kalman_window = np.full(latent_mean.size, min(cfg.candidate_windows), dtype=int)
     oracle_estimate = np.full(latent_mean.size, np.nan, dtype=float)
     plugin_estimate = np.full(latent_mean.size, np.nan, dtype=float)
     adaptive_estimate = np.full(latent_mean.size, np.nan, dtype=float)
     structural_estimate = np.full(latent_mean.size, np.nan, dtype=float)
     activity_estimate = np.full(latent_mean.size, np.nan, dtype=float)
+    ewma_estimate = np.full(latent_mean.size, np.nan, dtype=float)
+    kalman_estimate = np.full(latent_mean.size, np.nan, dtype=float)
     plugin_holder_hat = np.full(latent_mean.size, np.nan, dtype=float)
     plugin_roughness_hat = np.full(latent_mean.size, np.nan, dtype=float)
     adaptive_holder_hat = np.full(latent_mean.size, np.nan, dtype=float)
@@ -594,6 +626,8 @@ def run_online_horizon_adaptation_experiment(
     structural_holder_hat = np.full(latent_mean.size, np.nan, dtype=float)
     structural_roughness_hat = np.full(latent_mean.size, np.nan, dtype=float)
     activity_proxy_trace = np.full(latent_mean.size, np.nan, dtype=float)
+    ewma_alpha_trace = np.full(latent_mean.size, np.nan, dtype=float)
+    kalman_gain_trace = np.full(latent_mean.size, np.nan, dtype=float)
     structural_band_min = np.full(latent_mean.size, np.nan, dtype=float)
     structural_band_max = np.full(latent_mean.size, np.nan, dtype=float)
     adaptive_validation_score = np.full(latent_mean.size, np.nan, dtype=float)
@@ -603,6 +637,10 @@ def run_online_horizon_adaptation_experiment(
     previous_structural_window = min(cfg.candidate_windows)
     previous_activity_proxy = 0.0
     previous_activity_window = min(cfg.candidate_windows)
+    previous_ewma_estimate = float(observations[cfg.warmup - 1])
+    previous_kalman_estimate = float(observations[cfg.warmup - 1])
+    observation_variance = max(cfg.observation_scale**2, 1e-6)
+    previous_kalman_variance = observation_variance
     for t in range(cfg.warmup, latent_mean.size):
         oracle_window[t] = oracle_window_from_latent(latent_mean, t, cfg)
         plugin = estimate_local_roughness(observations, t, cfg)
@@ -639,6 +677,27 @@ def run_online_horizon_adaptation_experiment(
             previous_activity_window,
         )
         previous_activity_window = activity_window[t]
+        ewma_window[t] = activity_window[t]
+        ewma_alpha_trace[t] = _ewma_alpha_from_window(ewma_window[t])
+        previous_ewma_estimate = (
+            ewma_alpha_trace[t] * float(observations[t])
+            + (1.0 - ewma_alpha_trace[t]) * previous_ewma_estimate
+        )
+        ewma_estimate[t] = previous_ewma_estimate
+        target_gain = _ewma_alpha_from_window(activity_window[t])
+        process_variance = _kalman_process_variance_from_gain(
+            target_gain, observation_variance
+        )
+        predicted_variance = previous_kalman_variance + process_variance
+        kalman_gain_trace[t] = predicted_variance / (
+            predicted_variance + observation_variance
+        )
+        previous_kalman_estimate = previous_kalman_estimate + kalman_gain_trace[t] * (
+            float(observations[t]) - previous_kalman_estimate
+        )
+        previous_kalman_variance = (1.0 - kalman_gain_trace[t]) * predicted_variance
+        kalman_estimate[t] = previous_kalman_estimate
+        kalman_window[t] = _window_from_gain(kalman_gain_trace[t], cfg, t)
         oracle_estimate[t] = _moving_average(observations, t, oracle_window[t])
         plugin_estimate[t] = _moving_average(observations, t, plugin_window[t])
         adaptive_estimate[t] = _moving_average(observations, t, adaptive_window[t])
@@ -664,6 +723,8 @@ def run_online_horizon_adaptation_experiment(
     adaptive_error = np.abs(latent_mean[valid] - adaptive_estimate[valid])
     structural_error = np.abs(latent_mean[valid] - structural_estimate[valid])
     activity_error = np.abs(latent_mean[valid] - activity_estimate[valid])
+    ewma_error = np.abs(latent_mean[valid] - ewma_estimate[valid])
+    kalman_error = np.abs(latent_mean[valid] - kalman_estimate[valid])
     best_static_error_trace = np.abs(latent_mean[valid] - static_estimates[valid])
     return OnlineAdaptationResult(
         config=cfg,
@@ -678,11 +739,15 @@ def run_online_horizon_adaptation_experiment(
         adaptive_window=adaptive_window[valid],
         structural_window=structural_window[valid],
         activity_window=activity_window[valid],
+        ewma_window=ewma_window[valid],
+        kalman_window=kalman_window[valid],
         plugin_estimate=plugin_estimate[valid],
         oracle_estimate=oracle_estimate[valid],
         adaptive_estimate=adaptive_estimate[valid],
         structural_estimate=structural_estimate[valid],
         activity_estimate=activity_estimate[valid],
+        ewma_estimate=ewma_estimate[valid],
+        kalman_estimate=kalman_estimate[valid],
         plugin_holder_hat=plugin_holder_hat[valid],
         plugin_roughness_hat=plugin_roughness_hat[valid],
         adaptive_holder_hat=adaptive_holder_hat[valid],
@@ -690,6 +755,8 @@ def run_online_horizon_adaptation_experiment(
         structural_holder_hat=structural_holder_hat[valid],
         structural_roughness_hat=structural_roughness_hat[valid],
         activity_proxy=activity_proxy_trace[valid],
+        ewma_alpha=ewma_alpha_trace[valid],
+        kalman_gain=kalman_gain_trace[valid],
         structural_band_min=structural_band_min[valid],
         structural_band_max=structural_band_max[valid],
         adaptive_validation_score=adaptive_validation_score[valid],
@@ -701,12 +768,16 @@ def run_online_horizon_adaptation_experiment(
         adaptive_error=adaptive_error,
         structural_error=structural_error,
         activity_error=activity_error,
+        ewma_error=ewma_error,
+        kalman_error=kalman_error,
         best_static_error=best_static_error_trace,
         mean_oracle_error=float(np.mean(oracle_error)),
         mean_plugin_error=float(np.mean(plugin_error)),
         mean_adaptive_error=float(np.mean(adaptive_error)),
         mean_structural_error=float(np.mean(structural_error)),
         mean_activity_error=float(np.mean(activity_error)),
+        mean_ewma_error=float(np.mean(ewma_error)),
+        mean_kalman_error=float(np.mean(kalman_error)),
         mean_best_static_error=float(np.mean(best_static_error_trace)),
     )
 
@@ -733,6 +804,8 @@ def build_online_summary_rows(
                 "mean_oracle_error": round(result.mean_oracle_error, 6),
                 "mean_plugin_error": round(result.mean_plugin_error, 6),
                 "mean_activity_error": round(result.mean_activity_error, 6),
+                "mean_ewma_error": round(result.mean_ewma_error, 6),
+                "mean_kalman_error": round(result.mean_kalman_error, 6),
                 "mean_structural_error": round(result.mean_structural_error, 6),
                 "mean_adaptive_error": round(result.mean_adaptive_error, 6),
                 "mean_best_static_error": round(result.mean_best_static_error, 6),
@@ -741,6 +814,12 @@ def build_online_summary_rows(
                 ),
                 "activity_to_oracle_ratio": round(
                     result.mean_activity_error / result.mean_oracle_error, 6
+                ),
+                "ewma_to_oracle_ratio": round(
+                    result.mean_ewma_error / result.mean_oracle_error, 6
+                ),
+                "kalman_to_oracle_ratio": round(
+                    result.mean_kalman_error / result.mean_oracle_error, 6
                 ),
                 "structural_to_oracle_ratio": round(
                     result.mean_structural_error / result.mean_oracle_error, 6
@@ -753,6 +832,12 @@ def build_online_summary_rows(
                 ),
                 "structural_beats_activity": int(
                     result.mean_structural_error < result.mean_activity_error
+                ),
+                "structural_beats_ewma": int(
+                    result.mean_structural_error < result.mean_ewma_error
+                ),
+                "structural_beats_kalman": int(
+                    result.mean_structural_error < result.mean_kalman_error
                 ),
                 "adaptive_beats_structural": int(
                     result.mean_adaptive_error < result.mean_structural_error
@@ -789,6 +874,12 @@ def build_online_phase_rows(
                     "mean_activity_window": round(
                         float(np.mean(result.activity_window[mask])), 3
                     ),
+                    "mean_ewma_window": round(
+                        float(np.mean(result.ewma_window[mask])), 3
+                    ),
+                    "mean_kalman_window": round(
+                        float(np.mean(result.kalman_window[mask])), 3
+                    ),
                     "mean_structural_window": round(
                         float(np.mean(result.structural_window[mask])), 3
                     ),
@@ -803,6 +894,12 @@ def build_online_phase_rows(
                     ),
                     "mean_activity_error": round(
                         float(np.mean(result.activity_error[mask])), 6
+                    ),
+                    "mean_ewma_error": round(
+                        float(np.mean(result.ewma_error[mask])), 6
+                    ),
+                    "mean_kalman_error": round(
+                        float(np.mean(result.kalman_error[mask])), 6
                     ),
                     "mean_structural_error": round(
                         float(np.mean(result.structural_error[mask])), 6
@@ -835,11 +932,15 @@ def build_online_timeline_rows(
                 "oracle_window": int(result.oracle_window[idx]),
                 "plugin_window": int(result.plugin_window[idx]),
                 "activity_window": int(result.activity_window[idx]),
+                "ewma_window": int(result.ewma_window[idx]),
+                "kalman_window": int(result.kalman_window[idx]),
                 "structural_window": int(result.structural_window[idx]),
                 "adaptive_window": int(result.adaptive_window[idx]),
                 "oracle_error": round(float(result.oracle_error[idx]), 6),
                 "plugin_error": round(float(result.plugin_error[idx]), 6),
                 "activity_error": round(float(result.activity_error[idx]), 6),
+                "ewma_error": round(float(result.ewma_error[idx]), 6),
+                "kalman_error": round(float(result.kalman_error[idx]), 6),
                 "structural_error": round(float(result.structural_error[idx]), 6),
                 "adaptive_error": round(float(result.adaptive_error[idx]), 6),
                 "plugin_holder_hat": round(float(result.plugin_holder_hat[idx]), 6),
@@ -857,6 +958,8 @@ def build_online_timeline_rows(
                     float(result.adaptive_roughness_hat[idx]), 6
                 ),
                 "activity_proxy": round(float(result.activity_proxy[idx]), 6),
+                "ewma_alpha": round(float(result.ewma_alpha[idx]), 6),
+                "kalman_gain": round(float(result.kalman_gain[idx]), 6),
                 "structural_band_min": ""
                 if np.isnan(result.structural_band_min[idx])
                 else int(result.structural_band_min[idx]),

@@ -1,0 +1,22 @@
+\begin{abstract}
+Temporal validity and sequential detection operate on different statistical
+clocks under drift. For finite-memory distribution tracking, a fixed operating
+window can cross the temporal-validity horizon before standard changepoint
+detectors accumulate enough evidence to alarm under false-alarm control. The
+object of this paper is the delay
+\[
+  \Delta_{\mathrm{val-det}} \coloneqq \tau_{\mathrm{detect}} - \tau_{\mathrm{valid}}(n),
+\]
+where $\tau_{\mathrm{valid}}(n)$ is the expiry time of an operating memory level
+$n$ and $\tau_{\mathrm{detect}}$ is the detector stopping time on the same
+stream. The target theory is a detector-class sign law, and ultimately a lower
+bound, showing that positive pre-detection invalidity is structural for H\"older
+drift families under false-alarm constraints. The benchmark proof route starts
+from a one-dimensional Gaussian location model with H\"older mean path and uses
+the temporal-validity horizon from finite-memory tracking to define the expiry
+clock. Compact false-alarm-calibrated experiments already support the target:
+observation-based ADWIN, Page--Hinkley, and CUSUM retain positive
+validity-detection gaps across tested roughness exponents $H\in\{0.5,0.75,1.0\}$,
+while residual-input variants and KSWIN often trade larger delays for missed
+alarms.
+\end{abstract}

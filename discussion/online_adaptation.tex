@@ -35,7 +35,7 @@ statistics estimate $H$ far more accurately than endpoint slopes in the tested
 low-intrinsic-dimensional regime. Middle: excess tracking error over the oracle
 controller, showing that the structural controller improves decisively on the
 direct plug-in rule and on the activity and static baselines, while the broader
-adaptive hybrid remains strongest. Right: oracle, structural, adaptive, and
+validation-based hybrid remains competitive. Right: oracle, structural, adaptive, and
 phase-averaged windows across the four drift phases of the default profile.}
 \label{fig:online_adaptation}
 \end{figure}
@@ -46,17 +46,21 @@ unstable to be useful. A structural controller first selects the finite-sample
 regime, then estimates roughness from aggregated lag discrepancies, and finally
 maps those quantities into an admissible useful-memory band. On the synthetic
 phase profile, that controller improves substantially on the naive plug-in rule
-and on a pure activity baseline, although the broader validation-based hybrid
-remains more accurate.
+and on a pure activity baseline. Adaptive EWMA and adaptive scalar Kalman
+baselines are more competitive, especially on the smooth default profile, but
+they degrade more visibly in rough and alternating regimes.
 
-On the tested default and rough phase profiles with two seeds and a bounded
-window-jump constraint, the structural controller improves on the direct plug-in
-rule in all runs and beats the activity baseline in three of the four runs. The
-validation-based hybrid remains strongest on the default profile, but it is not
-uniformly best on the rough profile. The tested profiles therefore support a
-separation between unstable direct plug-in control and the more stable
-band-constrained structural rule, without establishing theorem-level dominance
-for any single online controller; see \Cref{tab:online_controller_summary}.
+Across the tested default, smooth, rough, alternating, and ramp-up profiles
+with three seeds and a bounded window-jump constraint, the structural
+controller improves on the direct plug-in rule in every run, beats the activity
+baseline and adaptive EWMA in $13/15$ runs each, and beats the adaptive scalar
+Kalman baseline in $11/15$ runs. The smooth default profile remains the most
+competitive setting for the classical filters, but the rough and alternating
+profiles favor the band-constrained structural rule clearly. The tested
+profiles therefore support a separation between unstable direct plug-in control,
+classical forgetting-factor baselines, and the more stable structural rule,
+without establishing theorem-level dominance for any single online controller;
+see \Cref{tab:online_controller_summary}.
 
 On any compact parameter range with $H$ bounded away from zero and $\zeta$
 bounded above and below, the map

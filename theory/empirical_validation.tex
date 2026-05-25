@@ -136,21 +136,25 @@ Across the reported runs, the measured lag remains positive. Retained evidence
 can already be invalid for the present while detector statistics remain below
 alarm threshold.
 
-The positive lag is not a knife-edge feature of one tuning choice. Across the
-tested ADWIN thresholds \citep{BifetGavalda2007}, mean detection time remains
-strictly later than mean validity-expiry time, and the qualitative lag persists
-across detector families and input representations on the tested grid. On the raw-observation input, the
-full tested grid of ADWIN and Page--Hinkley detectors \citep{Page1954,Hinkley1970},
-operating windows $160$, $220$, and $300$,
-and the reported threshold sweep keeps positive-gap rate equal to one together
-with unit detection rate. Page--Hinkley reacts earlier on this drift family,
-with mean gaps between about $205$ and $345$, while ADWIN yields mean gaps
-between about $429$ and $620$. Residualized detector inputs are not uniformly
-better on this stream: ADWIN on absolute residuals fails to trigger on the
-tested grid, whereas Page--Hinkley still detects but with lower detection rates
-and substantially larger delays. The empirical claim is robustness of the sign
-of $\Delta_{\mathrm{val-det}}$ on the tested observation-based detector/tuning
-family, not a detector-uniform delay law; see
+The positive lag is not a knife-edge feature of one tuning choice. A compact
+false-alarm-calibrated frontier over $H\in\{0.5,0.75,1.0\}$, operating windows
+$160$ and $240$, roughness levels $0.01$ and $0.024$, and detector families
+ADWIN, Page--Hinkley, KSWIN, and CUSUM shows the same separation on the tested
+observation-based detector families. Whenever validity expiry occurs on that
+grid, observation-based ADWIN and Page--Hinkley keep unit detection rate and
+strictly positive mean gaps, with ranges about $204$--$660$ and $204$--$615$,
+respectively. Observation-based CUSUM also retains positive mean gaps, now in a
+smaller range about $78$--$232$, again with unit detection on the successful
+grid points. KSWIN preserves the sign of the gap when it detects, but detection
+rates fall substantially and missed alarms appear on the same compact grid.
+
+Residualized detector inputs are not uniformly better on this family. Across the
+same false-alarm-calibrated frontier, residual-input ADWIN, Page--Hinkley,
+KSWIN, and CUSUM often trade larger delays for missed alarms, with successful
+mean-gap ranges roughly $365$--$903$, $346$--$969$, $498$--$1310$, and
+$323$--$920$, respectively. The empirical claim is therefore a calibrated sign
+robustness statement for the observation-based ADWIN, Page--Hinkley, and CUSUM
+families on the tested compact $H$-grid, not a detector-uniform delay law; see
 \Cref{tab:validity_gap_robustness}.
 
 \subsection{Empirical Summary}\label{sec:empirical_summary}
@@ -161,5 +165,8 @@ and a measurable lag between validity loss and detector alarm. Complementary
 online-adaptation sweeps across default, smooth, rough, alternating, and
 ramp-up profiles show that the structural controller keeps mean error between
 $1.18$ and $1.36$ times oracle risk, versus $1.34$--$1.65$ for the activity
-baseline and $2.30$--$4.41$ for the raw plug-in rule; see
+baseline, $1.28$--$1.64$ for adaptive EWMA, $1.21$--$1.58$ for adaptive scalar
+Kalman, and $2.30$--$4.41$ for the raw plug-in rule. The structural rule beats
+EWMA on $13/15$ tested runs and Kalman on $11/15$, with the clearest gains in
+the rough and alternating regimes; see
 \Cref{tab:online_controller_summary}.
