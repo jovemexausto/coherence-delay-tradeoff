@@ -1,0 +1,80 @@
+\section{Results}
+
+\subsection*{Empirical objects}
+
+The inferential object is the utility curve $U(\tau)$, defined by linear access
+to future-relevant targets from present representations across horizons
+$\tau$. The summary observables are inferential half-life, utility area, and
+the adaptation burden target
+\[
+  R^*(m,\pi) = \min_w R(m,\pi,w),
+\]
+the minimum post-drift loss area over adaptation-window choices for protocol
+$\pi$. This definition lets the burden comparison absorb the non-monotone window
+effects already present in recurrent multiscale adaptation.
+
+\subsection*{Family-level regime separation}
+
+The first empirical regularity is a family-level ordering of burden regimes.
+Under the fast four-seed benchmark with the full window grid
+$w \in \{1,16,64\}$, the abrupt-drift mean burdens are approximately
+$2.1, 2.2, 3.2,$ and $12.2$ for feedforward local, feedforward multiscale,
+recurrent local, and recurrent multiscale variants respectively. Under gradual
+drift the means are approximately $2.8, 2.7, 9.3,$ and $22.3$ in the same
+order. The qualitative hierarchy therefore persists across the two tested drift
+types: feedforward variants occupy the low-burden regime, recurrent local lies
+intermediate, and recurrent multiscale is the highest-burden regime.
+
+Effective spectral rank is the strongest pooled regime separator in the current
+dataset. On the pooled fast benchmark ($n=32$ cases),
+$\mathrm{Spearman}(\mathrm{rank},R^*) \approx 0.74$, whereas
+$\mathrm{Spearman}(\Delta_v,R^*) \approx 0.02$. A pooled additive linear model
+using z-scored rank and $\Delta_v$ reaches $R^2 \approx 0.38$, and adding the
+interaction term rank$\times\Delta_v$ improves fit only marginally
+($\Delta R^2 \approx 0.005$). At the pooled level, effective rank therefore
+functions as a family-level regime coordinate, while $\Delta_v$ does not act as
+a universal burden predictor.
+
+\subsection*{Within-family scale structure in recurrent local models}
+
+The second empirical regularity appears inside a fixed family. In the recurrent
+local variant, a targeted capacity sweep over
+$\mathrm{hidden} \in \{32,48,64,96\}$ and
+$\mathrm{depth} \in \{2,3,4\}$ under abrupt drift yields
+$\mathrm{Spearman}(\Delta_v,R^*) \approx 0.71$, while
+$\mathrm{Spearman}(\mathrm{rank},R^*) \approx 0.36$. This is not a
+low-variance artifact: effective rank still spans approximately $17.6$ to
+$65.5$ across the same sweep, yet its Pearson correlation with $R^*$ is only
+moderate ($\approx 0.43$). Within this recurrent local regime, dynamic
+reactivity is therefore the stronger burden coordinate.
+
+The distinction between those two levels is the main empirical result. Rank
+varies enough within the recurrent local family to rule out a trivial variance
+explanation, but it still does not dominate burden there. The data support a
+hierarchical structure: family choice sets the degradation regime, while
+within-family scale variation shifts burden through the activation-velocity
+channel.
+
+\subsection*{Cross-drift prognosis remains sample-limited}
+
+The prognosis layer is feasible but not yet closed. On the fast four-seed run, a
+gradual-to-abrupt ridge forecaster based on routing alignment, deep incremental
+utility area, inferential half-life difference, and peak-gap information reaches
+$\rho \approx 0.66$ but negative $R^2$ and does not dominate the strongest
+single-feature baseline. Effective rank alone gives the best rank correlation in
+that setting ($\rho \approx 0.89$), while $\Delta_v$ yields weaker pooled
+generalization. The current evidence therefore supports prognosis as a viable
+layer, but not yet as a closed predictive theorem for burden across drift types.
+
+\subsection*{Architecture-moderated rank effects remain open}
+
+Exploratory diagnostics suggest that the semantics of spectral rank may depend on
+architecture. In reduced-budget within-variant tests, the recurrent local slice
+shows a strong positive relation between $\Delta_v$ and burden, whereas
+feedforward local behavior does not follow the same pattern and can even display
+sign reversals for rank in very small samples. A pooled moderation fit with an
+architecture indicator and rank$\times$architecture interaction improves fit
+modestly in a reduced dataset, but the coefficients remain unstable at that
+sample size. The supported conclusion is therefore hierarchical rather than fully
+mechanistic: rank separates families, and $\Delta_v$ controls burden inside the
+recurrent local regime.

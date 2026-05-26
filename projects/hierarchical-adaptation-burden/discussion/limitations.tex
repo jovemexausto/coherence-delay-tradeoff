@@ -1,0 +1,16 @@
+\section{Limitations}
+
+The architecture-moderated semantics of spectral rank are not yet settled. The
+current feedforward within-family diagnostics are short-run and low-sample, so
+they do not support a stable sign claim for rank inside feedforward regimes.
+Likewise, the prognosis layer remains sample-limited: the current cross-drift
+forecaster ranks cases nontrivially, but does not yet dominate strong single-
+feature baselines.
+
+The strongest within-family result is presently confined to the recurrent local
+regime. Extending the same scale-level monotonicity claims to recurrent
+multiscale or feedforward families requires additional controlled sweeps.
+
+Those limitations do not affect the main supported structure. The family-level
+role of effective rank and the within-family role of $\Delta_v$ in recurrent
+local models are empirically distinct and reproducible in the tested settings.

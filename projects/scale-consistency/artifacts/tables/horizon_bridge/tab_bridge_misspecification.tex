@@ -1,0 +1,20 @@
+\begin{table}[h]
+\centering
+\small
+\caption{Sensitivity of horizon recovery to lag-law misspecification.}
+\label{tab:bridge-misspecification}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lrrrrr}
+\toprule
+Perturbation & Amplitude & Bias($\widehat H$) & Bias($\widehat n_\star$) & RMSE($\widehat n_\star$) & Mean residual slope \\
+\midrule
+\detokenize{sinusoid} & 0 & 0.000597 & 0.000478 & 0.001687 & 0.000154 \\
+\detokenize{sinusoid} & 0.1 & 0.008954 & 0.046074 & 0.046091 & -0.04501 \\
+\detokenize{sinusoid} & 0.2 & 0.014126 & 0.095066 & 0.09509 & -0.086075 \\
+\detokenize{slope_shift} & 0 & 0.000991 & 0.001013 & 0.001667 & -0.000827 \\
+\detokenize{slope_shift} & 0.1 & 0.077401 & 0.047514 & 0.047565 & -0.027617 \\
+\detokenize{slope_shift} & 0.2 & 0.156441 & 0.104681 & 0.104711 & -0.059179 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}

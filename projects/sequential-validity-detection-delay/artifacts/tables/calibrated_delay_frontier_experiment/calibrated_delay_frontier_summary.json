@@ -1,0 +1,46 @@
+{
+  "row_count": 16,
+  "detectors": [
+    "adwin",
+    "page_hinkley",
+    "kswin",
+    "cusum"
+  ],
+  "inputs": [
+    "observation",
+    "absolute_residual"
+  ],
+  "holder_exponents": [
+    0.5,
+    1.0
+  ],
+  "false_alarm_targets": [
+    0.05
+  ],
+  "high_drifts": [
+    0.01
+  ],
+  "operating_windows": [
+    180
+  ],
+  "mean_gap_by_detector": {
+    "adwin": 703.1999999999999,
+    "cusum": 0.0,
+    "kswin": 840.625,
+    "page_hinkley": 645.9
+  },
+  "positive_gap_rate_by_detector": {
+    "adwin": 0.75,
+    "cusum": 0.0,
+    "kswin": 1.0,
+    "page_hinkley": 0.75
+  },
+  "mean_gap_by_input": {
+    "absolute_residual": 771.0500000000001,
+    "observation": 347.9375
+  },
+  "positive_gap_rate_by_input": {
+    "absolute_residual": 0.5,
+    "observation": 0.75
+  }
+}

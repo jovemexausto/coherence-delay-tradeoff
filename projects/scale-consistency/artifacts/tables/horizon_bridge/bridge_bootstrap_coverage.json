@@ -1,0 +1,294 @@
+{
+  "rows": [
+    {
+      "regime": "power",
+      "lag_count": 80,
+      "H": 0.4,
+      "method": "parametric",
+      "coverage_H": 0.6333333333333333,
+      "coverage_n_star": 0.8,
+      "mean_interval_width_H": 0.0038943686161126553,
+      "mean_interval_width_n_star": 0.006712507332652407
+    },
+    {
+      "regime": "power",
+      "lag_count": 80,
+      "H": 0.4,
+      "method": "wild",
+      "coverage_H": 0.9333333333333333,
+      "coverage_n_star": 0.9333333333333333,
+      "mean_interval_width_H": 0.00962054243124259,
+      "mean_interval_width_n_star": 0.011163392613305767
+    },
+    {
+      "regime": "power",
+      "lag_count": 80,
+      "H": 0.4,
+      "method": "moving_block",
+      "coverage_H": 0.7666666666666667,
+      "coverage_n_star": 0.7666666666666667,
+      "mean_interval_width_H": 0.007612654192014763,
+      "mean_interval_width_n_star": 0.011136082794511608
+    },
+    {
+      "regime": "power",
+      "lag_count": 80,
+      "H": 0.8,
+      "method": "parametric",
+      "coverage_H": 0.6333333333333333,
+      "coverage_n_star": 0.6,
+      "mean_interval_width_H": 0.001157062080630759,
+      "mean_interval_width_n_star": 0.001954159725494997
+    },
+    {
+      "regime": "power",
+      "lag_count": 80,
+      "H": 0.8,
+      "method": "wild",
+      "coverage_H": 0.8666666666666667,
+      "coverage_n_star": 0.9333333333333333,
+      "mean_interval_width_H": 0.0030501048451842022,
+      "mean_interval_width_n_star": 0.0046971054216280415
+    },
+    {
+      "regime": "power",
+      "lag_count": 80,
+      "H": 0.8,
+      "method": "moving_block",
+      "coverage_H": 0.9,
+      "coverage_n_star": 0.9,
+      "mean_interval_width_H": 0.0032148275537714267,
+      "mean_interval_width_n_star": 0.0049893647189334644
+    },
+    {
+      "regime": "power",
+      "lag_count": 160,
+      "H": 0.4,
+      "method": "parametric",
+      "coverage_H": 0.4666666666666667,
+      "coverage_n_star": 0.5333333333333333,
+      "mean_interval_width_H": 0.002112971369554789,
+      "mean_interval_width_n_star": 0.005592361641153754
+    },
+    {
+      "regime": "power",
+      "lag_count": 160,
+      "H": 0.4,
+      "method": "wild",
+      "coverage_H": 1.0,
+      "coverage_n_star": 1.0,
+      "mean_interval_width_H": 0.0052742040448518455,
+      "mean_interval_width_n_star": 0.010726208843279928
+    },
+    {
+      "regime": "power",
+      "lag_count": 160,
+      "H": 0.4,
+      "method": "moving_block",
+      "coverage_H": 0.9,
+      "coverage_n_star": 0.9666666666666667,
+      "mean_interval_width_H": 0.0045876192941046575,
+      "mean_interval_width_n_star": 0.010377059326972186
+    },
+    {
+      "regime": "power",
+      "lag_count": 160,
+      "H": 0.8,
+      "method": "parametric",
+      "coverage_H": 0.5666666666666667,
+      "coverage_n_star": 0.5666666666666667,
+      "mean_interval_width_H": 0.0004806697523026463,
+      "mean_interval_width_n_star": 0.0009780733334718147
+    },
+    {
+      "regime": "power",
+      "lag_count": 160,
+      "H": 0.8,
+      "method": "wild",
+      "coverage_H": 0.9666666666666667,
+      "coverage_n_star": 0.9666666666666667,
+      "mean_interval_width_H": 0.0013199948667883025,
+      "mean_interval_width_n_star": 0.002518403493456567
+    },
+    {
+      "regime": "power",
+      "lag_count": 160,
+      "H": 0.8,
+      "method": "moving_block",
+      "coverage_H": 0.9,
+      "coverage_n_star": 0.9666666666666667,
+      "mean_interval_width_H": 0.0016752706774368243,
+      "mean_interval_width_n_star": 0.0032209665126463173
+    },
+    {
+      "regime": "ar",
+      "lag_count": 80,
+      "H": 0.4,
+      "method": "parametric",
+      "coverage_H": 0.7666666666666667,
+      "coverage_n_star": 0.8,
+      "mean_interval_width_H": 0.0038978196539284564,
+      "mean_interval_width_n_star": 0.0067175382733457205
+    },
+    {
+      "regime": "ar",
+      "lag_count": 80,
+      "H": 0.4,
+      "method": "wild",
+      "coverage_H": 0.8666666666666667,
+      "coverage_n_star": 0.9,
+      "mean_interval_width_H": 0.004885203194151688,
+      "mean_interval_width_n_star": 0.008188339989868646
+    },
+    {
+      "regime": "ar",
+      "lag_count": 80,
+      "H": 0.4,
+      "method": "moving_block",
+      "coverage_H": 0.8666666666666667,
+      "coverage_n_star": 0.7333333333333333,
+      "mean_interval_width_H": 0.004212637572550929,
+      "mean_interval_width_n_star": 0.00623373404348199
+    },
+    {
+      "regime": "ar",
+      "lag_count": 80,
+      "H": 0.8,
+      "method": "parametric",
+      "coverage_H": 0.9333333333333333,
+      "coverage_n_star": 0.9333333333333333,
+      "mean_interval_width_H": 0.0011571346347595195,
+      "mean_interval_width_n_star": 0.0019547005814016362
+    },
+    {
+      "regime": "ar",
+      "lag_count": 80,
+      "H": 0.8,
+      "method": "wild",
+      "coverage_H": 0.8333333333333334,
+      "coverage_n_star": 0.8333333333333334,
+      "mean_interval_width_H": 0.0013969235448093623,
+      "mean_interval_width_n_star": 0.002342167913095024
+    },
+    {
+      "regime": "ar",
+      "lag_count": 80,
+      "H": 0.8,
+      "method": "moving_block",
+      "coverage_H": 0.9,
+      "coverage_n_star": 0.9333333333333333,
+      "mean_interval_width_H": 0.0022348156278458246,
+      "mean_interval_width_n_star": 0.003482038845615265
+    },
+    {
+      "regime": "ar",
+      "lag_count": 160,
+      "H": 0.4,
+      "method": "parametric",
+      "coverage_H": 0.8,
+      "coverage_n_star": 0.8,
+      "mean_interval_width_H": 0.0021130605615505764,
+      "mean_interval_width_n_star": 0.005596454088718265
+    },
+    {
+      "regime": "ar",
+      "lag_count": 160,
+      "H": 0.4,
+      "method": "wild",
+      "coverage_H": 1.0,
+      "coverage_n_star": 0.9333333333333333,
+      "mean_interval_width_H": 0.0027879862881526646,
+      "mean_interval_width_n_star": 0.007374214955696182
+    },
+    {
+      "regime": "ar",
+      "lag_count": 160,
+      "H": 0.4,
+      "method": "moving_block",
+      "coverage_H": 0.9666666666666667,
+      "coverage_n_star": 0.9,
+      "mean_interval_width_H": 0.0027944501806238197,
+      "mean_interval_width_n_star": 0.006478860747707464
+    },
+    {
+      "regime": "ar",
+      "lag_count": 160,
+      "H": 0.8,
+      "method": "parametric",
+      "coverage_H": 0.6333333333333333,
+      "coverage_n_star": 0.6666666666666666,
+      "mean_interval_width_H": 0.0004806915680615198,
+      "mean_interval_width_n_star": 0.0009782923512629957
+    },
+    {
+      "regime": "ar",
+      "lag_count": 160,
+      "H": 0.8,
+      "method": "wild",
+      "coverage_H": 0.9,
+      "coverage_n_star": 0.9333333333333333,
+      "mean_interval_width_H": 0.0006557955367955856,
+      "mean_interval_width_n_star": 0.0013413501308821353
+    },
+    {
+      "regime": "ar",
+      "lag_count": 160,
+      "H": 0.8,
+      "method": "moving_block",
+      "coverage_H": 1.0,
+      "coverage_n_star": 1.0,
+      "mean_interval_width_H": 0.0013051881842633284,
+      "mean_interval_width_n_star": 0.0025053699547014086
+    }
+  ],
+  "aggregated": [
+    {
+      "regime": "power",
+      "method": "parametric",
+      "coverage_H": 0.575,
+      "coverage_n_star": 0.625,
+      "mean_interval_width_H": 0.0019112679546502123,
+      "mean_interval_width_n_star": 0.0038092755081932427
+    },
+    {
+      "regime": "power",
+      "method": "wild",
+      "coverage_H": 0.9416666666666667,
+      "coverage_n_star": 0.9583333333333334,
+      "mean_interval_width_H": 0.004816211547016735,
+      "mean_interval_width_n_star": 0.007276277592917575
+    },
+    {
+      "regime": "power",
+      "method": "moving_block",
+      "coverage_H": 0.8666666666666667,
+      "coverage_n_star": 0.9,
+      "mean_interval_width_H": 0.004272592929331918,
+      "mean_interval_width_n_star": 0.007430868338265894
+    },
+    {
+      "regime": "ar",
+      "method": "parametric",
+      "coverage_H": 0.7833333333333333,
+      "coverage_n_star": 0.7999999999999999,
+      "mean_interval_width_H": 0.001912176604575018,
+      "mean_interval_width_n_star": 0.0038117463236821544
+    },
+    {
+      "regime": "ar",
+      "method": "wild",
+      "coverage_H": 0.9,
+      "coverage_n_star": 0.9000000000000001,
+      "mean_interval_width_H": 0.0024314771409773253,
+      "mean_interval_width_n_star": 0.004811518247385497
+    },
+    {
+      "regime": "ar",
+      "method": "moving_block",
+      "coverage_H": 0.9333333333333333,
+      "coverage_n_star": 0.8916666666666666,
+      "mean_interval_width_H": 0.0026367728913209757,
+      "mean_interval_width_n_star": 0.004675000897876532
+    }
+  ]
+}

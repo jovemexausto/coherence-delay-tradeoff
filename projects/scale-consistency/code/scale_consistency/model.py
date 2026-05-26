@@ -50,7 +50,13 @@ def misspecified_scale_profile(
     zeta: float,
     H: float,
     amplitude: float,
-    kind: Literal["bump", "sinusoid", "slope_shift"] = "bump",
+    kind: Literal[
+        "bump",
+        "mixed",
+        "piecewise",
+        "sinusoid",
+        "slope_shift",
+    ] = "bump",
 ) -> np.ndarray:
     lag_array = _as_lag_array(lags)
     base = exact_scale_profile(lag_array, zeta, H)
@@ -65,6 +71,29 @@ def misspecified_scale_profile(
     elif kind == "slope_shift":
         midpoint = np.median(x)
         perturbation = np.where(x <= midpoint, -0.5, 0.5)
+    elif kind == "piecewise":
+        midpoint = np.median(x)
+        left = lag_array <= np.exp(midpoint)
+        profile = np.empty_like(base)
+        profile[left] = zeta * lag_array[left] ** H
+        if np.any(~left):
+            continuity_scale = np.exp(-amplitude * midpoint)
+            profile[~left] = (
+                zeta * continuity_scale * lag_array[~left] ** (H + amplitude)
+            )
+        if np.any(profile <= 0.0):
+            raise ValueError("misspecified profile became non-positive")
+        return profile
+    elif kind == "mixed":
+        span = max(x.max() - x.min(), 1.0e-8)
+        oscillation = np.sin(2.0 * np.pi * (x - x.min()) / span)
+        jump_1 = np.where(lag_array >= np.quantile(lag_array, 0.35), 1.0, 0.0)
+        jump_2 = np.where(lag_array >= np.quantile(lag_array, 0.7), 1.0, 0.0)
+        profile = base * (1.0 + 0.5 * amplitude * oscillation)
+        profile = profile * np.exp(0.5 * amplitude * jump_1 + amplitude * jump_2)
+        if np.any(profile <= 0.0):
+            raise ValueError("misspecified profile became non-positive")
+        return profile
     else:
         raise ValueError(f"unsupported misspecification kind: {kind}")
     profile = base * (1.0 + amplitude * perturbation)
@@ -83,8 +112,20 @@ def simulate_log_observations(
     kappa: float = 0.0,
     rng: np.random.Generator | None = None,
     profile: np.ndarray | None = None,
-    noise: Literal["gaussian", "bounded", "student"] = "gaussian",
+    noise: Literal[
+        "gaussian",
+        "bounded",
+        "heteroskedastic",
+        "heteroskedastic_ar",
+        "heteroskedastic_power",
+        "heteroskedastic_jump",
+        "student",
+    ] = "gaussian",
     student_df: float = 8.0,
+    heteroskedastic_alpha: float = 0.0,
+    heteroskedastic_beta: float = 1.0,
+    heteroskedastic_jump_lag: float | None = None,
+    heteroskedastic_rho: float = 0.0,
 ) -> np.ndarray:
     lag_array = _as_lag_array(lags)
     rng = np.random.default_rng() if rng is None else rng
@@ -99,11 +140,47 @@ def simulate_log_observations(
         raise ValueError("profile must be positive")
     mean = np.log(D)
     variance = sigma0**2 / (float(n) * D**2)
+    if noise in {
+        "heteroskedastic",
+        "heteroskedastic_ar",
+        "heteroskedastic_power",
+        "heteroskedastic_jump",
+    }:
+        x = np.log(lag_array)
+        if noise == "heteroskedastic_ar":
+            innovations = rng.normal(
+                scale=abs(heteroskedastic_alpha), size=lag_array.size
+            )
+            state = np.zeros(lag_array.size, dtype=float)
+            rho = float(np.clip(heteroskedastic_rho, -0.99, 0.99))
+            for idx in range(1, lag_array.size):
+                state[idx] = rho * state[idx - 1] + innovations[idx]
+            scale = np.exp(state - float(np.mean(state)))
+        elif noise == "heteroskedastic_jump":
+            jump_lag = (
+                float(np.median(lag_array))
+                if heteroskedastic_jump_lag is None
+                else float(heteroskedastic_jump_lag)
+            )
+            scale = 1.0 + abs(heteroskedastic_alpha) * (lag_array >= jump_lag)
+        else:
+            normalized_lag = lag_array / float(np.max(lag_array))
+            scale = (
+                1.0 + abs(heteroskedastic_alpha) * normalized_lag**heteroskedastic_beta
+            )
+        variance = variance * scale**2
     std = np.sqrt(variance)
     if noise == "gaussian":
         base_noise = rng.normal(size=lag_array.size)
     elif noise == "bounded":
         base_noise = rng.uniform(-np.sqrt(3.0), np.sqrt(3.0), size=lag_array.size)
+    elif noise in {
+        "heteroskedastic",
+        "heteroskedastic_ar",
+        "heteroskedastic_power",
+        "heteroskedastic_jump",
+    }:
+        base_noise = rng.normal(size=lag_array.size)
     elif noise == "student":
         if student_df <= 2.0:
             raise ValueError("student_df must exceed 2")
@@ -111,7 +188,17 @@ def simulate_log_observations(
         base_noise = base_noise / np.sqrt(student_df / (student_df - 2.0))
     else:
         raise ValueError(f"unsupported noise model: {noise}")
-    inconsistency = kappa * rng.normal(size=lag_array.size)
+    inconsistency = (
+        0.0
+        if noise
+        in {
+            "heteroskedastic",
+            "heteroskedastic_ar",
+            "heteroskedastic_power",
+            "heteroskedastic_jump",
+        }
+        else kappa * rng.normal(size=lag_array.size)
+    )
     return mean + inconsistency + std * base_noise
 
 
@@ -125,8 +212,20 @@ def simulate_observed_discrepancies(
     kappa: float = 0.0,
     rng: np.random.Generator | None = None,
     profile: np.ndarray | None = None,
-    noise: Literal["gaussian", "bounded", "student"] = "gaussian",
+    noise: Literal[
+        "gaussian",
+        "bounded",
+        "heteroskedastic",
+        "heteroskedastic_ar",
+        "heteroskedastic_power",
+        "heteroskedastic_jump",
+        "student",
+    ] = "gaussian",
     student_df: float = 8.0,
+    heteroskedastic_alpha: float = 0.0,
+    heteroskedastic_beta: float = 1.0,
+    heteroskedastic_jump_lag: float | None = None,
+    heteroskedastic_rho: float = 0.0,
 ) -> np.ndarray:
     return np.exp(
         simulate_log_observations(
@@ -140,5 +239,9 @@ def simulate_observed_discrepancies(
             profile=profile,
             noise=noise,
             student_df=student_df,
+            heteroskedastic_alpha=heteroskedastic_alpha,
+            heteroskedastic_beta=heteroskedastic_beta,
+            heteroskedastic_jump_lag=heteroskedastic_jump_lag,
+            heteroskedastic_rho=heteroskedastic_rho,
         )
     )

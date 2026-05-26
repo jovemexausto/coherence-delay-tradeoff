@@ -1,0 +1,32 @@
+\section{Introduction}
+
+Temporal representation quality under drift is not exhausted by endpoint task
+accuracy. A model can retain acceptable pre-drift performance and still require
+substantially different post-drift re-learning effort from another model with
+similar static accuracy. The empirical question is therefore not only whether a
+representation is accurate, but how costly it is to re-tune once the signal
+changes.
+
+The operational object in this paper is the minimum realizable adaptation burden
+over protocol-window choices,
+\[
+  R^*(m,\pi) \coloneqq \min_w R(m,\pi,w).
+\]
+Here $m$ denotes the trained model family and $\pi$ denotes the adaptation
+protocol. This object connects the empirical program to the temporal-validity
+functional $V(\phi,\tau)$: inferential utility curves over horizon identify how
+useful present representations remain for future targets, while $R^*$ measures
+the downstream cost of restoring utility after drift.
+
+The central empirical claim is hierarchical rather than universal. Effective
+spectral rank separates degradation regimes across architectural families.
+Within a recurrent local regime, activation velocity $\Delta_v$ predicts burden
+more strongly than effective rank, even though effective rank still varies over
+a wide range. Those two facts imply that family choice and within-family scale
+choice move burden through distinct empirical channels.
+
+That hierarchy matters because the literature often compresses stability,
+plasticity, representational geometry, and memory into a single tradeoff. The
+results below instead identify two observational levels. Family-level geometry
+determines which burden regime a model enters. Within at least one recurrent
+family, dynamic reactivity determines where the model sits inside that regime.

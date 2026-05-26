@@ -4,6 +4,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from scale_consistency.bridge_plots import generate_bridge_figures
+from scale_consistency.bridge_report import generate_bridge_reports
+from scale_consistency.horizon_bridge import (
+    BridgeMisspecificationConfig,
+    BridgeRecoveryConfig,
+)
 from scale_consistency.experiments import (
     BoundaryPowerConfig,
     FWLSOracleConfig,
@@ -64,6 +70,49 @@ class ScaleConsistencyReportingTest(unittest.TestCase):
             self.assertTrue(
                 (
                     output_root / "tables" / "scale_consistency" / "tab_null_size.tex"
+                ).exists()
+            )
+            for path in figure_paths.values():
+                self.assertTrue(path.exists())
+
+    def test_bridge_reports_and_figures_are_generated(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            output_root = Path(tmp_dir)
+            kwargs = {
+                "recovery_config": BridgeRecoveryConfig(
+                    lags=20,
+                    n_values=(200,),
+                    H_values=(0.6,),
+                    zeta_values=(1.0,),
+                    sigma0_values=(0.5,),
+                    repetitions=10,
+                    bootstrap_repetitions=10,
+                ),
+                "misspec_config": BridgeMisspecificationConfig(
+                    lags=20,
+                    n=200,
+                    H=0.6,
+                    zeta=1.0,
+                    sigma0=0.5,
+                    amplitudes=(0.0, 0.1),
+                    kinds=("sinusoid",),
+                    repetitions=10,
+                ),
+            }
+            report_rows = generate_bridge_reports(output_root, **kwargs)
+            figure_paths = generate_bridge_figures(output_root, **kwargs)
+            self.assertEqual(set(report_rows.keys()), {"recovery", "misspecification"})
+            self.assertTrue(
+                (
+                    output_root / "csv" / "horizon_bridge" / "bridge_recovery.csv"
+                ).exists()
+            )
+            self.assertTrue(
+                (
+                    output_root
+                    / "tables"
+                    / "horizon_bridge"
+                    / "tab_bridge_recovery.tex"
                 ).exists()
             )
             for path in figure_paths.values():

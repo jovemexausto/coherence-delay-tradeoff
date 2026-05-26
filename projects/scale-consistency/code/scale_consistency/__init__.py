@@ -43,6 +43,42 @@ from .model import (
     simulate_log_observations,
     simulate_observed_discrepancies,
 )
+from .horizon_bridge import (
+    BridgeMisspecificationConfig,
+    BridgeMisspecificationRow,
+    BridgeRecoveryConfig,
+    BridgeRecoveryRow,
+    LagPowerLawEstimate,
+    PercentileInterval,
+    bootstrap_lag_power_law,
+    continuous_optimal_horizon,
+    fit_lag_power_law,
+    percentile_interval,
+    plug_in_horizon,
+    residual_log_lag_slope,
+    run_bridge_misspecification_experiment,
+    run_bridge_recovery_experiment,
+)
+from .bridge_diagnostics import (
+    cusum_squared_statistic,
+    dominant_periodogram_frequency,
+    dominant_periodogram_power,
+    durbin_watson,
+    log_variance_trend,
+    rolling_window_variances,
+    sliding_window_kl_scores,
+    quadratic_curvature_p_value,
+    standardized_residuals,
+    window_centers,
+    window_scale_test_p_values,
+    variance_window_kl_scores,
+)
+from .bridge_report import generate_bridge_reports
+from .variance_bridge import (
+    VarianceBridgeFit,
+    fit_best_variance_model,
+    fit_variance_model,
+)
 from .report import export_rows_csv, generate_v1_reports, write_latex_table
 from .theory_diagnostics import (
     chi_square_degrees_of_freedom,
@@ -66,6 +102,12 @@ __all__ = [
     "NoiseRobustnessRow",
     "NullCalibrationConfig",
     "NullCalibrationRow",
+    "BridgeMisspecificationConfig",
+    "BridgeMisspecificationRow",
+    "BridgeRecoveryConfig",
+    "BridgeRecoveryRow",
+    "LagPowerLawEstimate",
+    "PercentileInterval",
     "RateConstantConfig",
     "RateConstantRow",
     "Sigma0PluginConfig",
@@ -73,14 +115,23 @@ __all__ = [
     "RegressionEstimate",
     "ScaleConsistencyTestResult",
     "SplitScaleConsistencyTestResult",
+    "bootstrap_lag_power_law",
     "chi_square_degrees_of_freedom",
     "chi_square_null_mean",
     "chi_square_null_variance",
     "exact_scale_profile",
+    "dominant_periodogram_frequency",
+    "dominant_periodogram_power",
+    "durbin_watson",
+    "cusum_squared_statistic",
     "feasible_precision_weights",
     "feasible_wls",
+    "continuous_optimal_horizon",
+    "generate_bridge_figures",
+    "generate_bridge_reports",
     "generate_v1_figures",
     "generate_v1_reports",
+    "fit_lag_power_law",
     "information_scale",
     "kappa_boundary",
     "lag_energy",
@@ -90,9 +141,17 @@ __all__ = [
     "oracle_h_variance",
     "oracle_precision_weights",
     "oracle_wls",
+    "percentile_interval",
     "pilot_ols",
+    "plug_in_horizon",
+    "quadratic_curvature_p_value",
+    "log_variance_trend",
+    "rolling_window_variances",
     "residual_statistic",
+    "residual_log_lag_slope",
     "run_boundary_power_experiment",
+    "run_bridge_misspecification_experiment",
+    "run_bridge_recovery_experiment",
     "run_fwls_oracle_experiment",
     "run_misspecification_experiment",
     "run_noise_robustness_experiment",
@@ -104,8 +163,16 @@ __all__ = [
     "scaled_rmse_constant",
     "simulate_log_observations",
     "simulate_observed_discrepancies",
+    "sliding_window_kl_scores",
+    "window_centers",
     "export_rows_csv",
+    "standardized_residuals",
+    "window_scale_test_p_values",
     "write_latex_table",
+    "variance_window_kl_scores",
+    "VarianceBridgeFit",
+    "fit_best_variance_model",
+    "fit_variance_model",
     "weighted_least_squares",
 ]
 
@@ -114,3 +181,9 @@ def generate_v1_figures(*args, **kwargs):
     from .plots import generate_v1_figures as _generate_v1_figures
 
     return _generate_v1_figures(*args, **kwargs)
+
+
+def generate_bridge_figures(*args, **kwargs):
+    from .bridge_plots import generate_bridge_figures as _generate_bridge_figures
+
+    return _generate_bridge_figures(*args, **kwargs)

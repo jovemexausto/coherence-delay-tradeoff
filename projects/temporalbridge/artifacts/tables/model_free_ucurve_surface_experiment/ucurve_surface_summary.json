@@ -1,0 +1,30 @@
+{
+  "correct": {
+    "count": 100.0,
+    "mean_rel_err_ucurve": 0.34333333333333343,
+    "mean_rel_err_param": 0.6917848001587881,
+    "ucurve_better_fraction": 0.73,
+    "ci_coverage": 0.99
+  },
+  "sinusoidal": {
+    "count": 100.0,
+    "mean_rel_err_ucurve": 0.5416666666666667,
+    "mean_rel_err_param": 0.20114922068240212,
+    "ucurve_better_fraction": 0.07,
+    "ci_coverage": 1.0
+  },
+  "piecewise": {
+    "count": 100.0,
+    "mean_rel_err_ucurve": 0.637,
+    "mean_rel_err_param": 0.731378139867681,
+    "ucurve_better_fraction": 0.31,
+    "ci_coverage": 0.99
+  },
+  "mixed": {
+    "count": 100.0,
+    "mean_rel_err_ucurve": 0.49285714285714305,
+    "mean_rel_err_param": 0.35985921384627995,
+    "ucurve_better_fraction": 0.26,
+    "ci_coverage": 0.99
+  }
+}

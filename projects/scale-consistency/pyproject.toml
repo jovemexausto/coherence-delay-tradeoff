@@ -16,6 +16,9 @@ dependencies = [
 [project.scripts]
 scale-consistency-report = "scale_consistency.report:main"
 scale-consistency-plots = "scale_consistency.plots:main"
+scale-consistency-bridge-report = "scale_consistency.bridge_report:main"
+scale-consistency-bridge-plots = "scale_consistency.bridge_plots:main"
+scale-consistency-bridge-runner = "scale_consistency.bridge_runner:main"
 
 [tool.setuptools]
 package-dir = {"" = "code"}

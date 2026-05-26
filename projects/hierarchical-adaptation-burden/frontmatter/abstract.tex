@@ -1,0 +1,17 @@
+\begin{abstract}
+Adaptation burden under drift is not determined by a single scalar notion of
+memory quality. The empirical object in this paper is the minimum realizable
+re-learning burden
+\[
+  R^*(m,\pi) \coloneqq \min_w R(m,\pi,w),
+\]
+defined over protocol-window choices after drift. The main empirical result is a
+hierarchical decomposition. Across architectural families, effective spectral
+rank separates degradation regimes. Within a recurrent local regime, activation
+velocity $\Delta_v$ predicts burden strongly even when effective rank still
+varies substantially. The pooled data therefore support a two-level structure:
+rank is a family-level regime coordinate, while $\Delta_v$ is a within-regime
+scale coordinate. This decomposition makes clear why static endpoint metrics are
+insufficient: models with similar task performance can occupy different burden
+regimes and require different post-drift re-learning effort.
+\end{abstract}

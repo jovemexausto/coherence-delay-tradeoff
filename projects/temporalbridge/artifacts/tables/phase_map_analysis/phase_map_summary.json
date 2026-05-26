@@ -1,0 +1,93 @@
+{
+  "schedule_modes": [
+    "default",
+    "strong"
+  ],
+  "lambda0_values": [
+    0.0,
+    2.0,
+    4.0
+  ],
+  "lambda1_values": [
+    0.0,
+    2.0,
+    4.0
+  ],
+  "truth_h_values": [
+    0.1,
+    0.5,
+    0.9
+  ],
+  "repetitions": 3,
+  "bootstrap_repetitions": 4,
+  "row_count": 270,
+  "cell_count": 54,
+  "best_non_oracle_counts": [
+    {
+      "schedule_mode": "default",
+      "truth_h": 0.1,
+      "best_non_oracle_policy": "fixed_policy",
+      "cell_count": 9
+    },
+    {
+      "schedule_mode": "default",
+      "truth_h": 0.5,
+      "best_non_oracle_policy": "controller",
+      "cell_count": 1
+    },
+    {
+      "schedule_mode": "default",
+      "truth_h": 0.5,
+      "best_non_oracle_policy": "deploy_only",
+      "cell_count": 2
+    },
+    {
+      "schedule_mode": "default",
+      "truth_h": 0.5,
+      "best_non_oracle_policy": "fixed_policy",
+      "cell_count": 6
+    },
+    {
+      "schedule_mode": "default",
+      "truth_h": 0.9,
+      "best_non_oracle_policy": "controller",
+      "cell_count": 8
+    },
+    {
+      "schedule_mode": "default",
+      "truth_h": 0.9,
+      "best_non_oracle_policy": "deploy_only",
+      "cell_count": 1
+    },
+    {
+      "schedule_mode": "strong",
+      "truth_h": 0.1,
+      "best_non_oracle_policy": "fixed_policy",
+      "cell_count": 9
+    },
+    {
+      "schedule_mode": "strong",
+      "truth_h": 0.5,
+      "best_non_oracle_policy": "deploy_only",
+      "cell_count": 3
+    },
+    {
+      "schedule_mode": "strong",
+      "truth_h": 0.5,
+      "best_non_oracle_policy": "fixed_policy",
+      "cell_count": 6
+    },
+    {
+      "schedule_mode": "strong",
+      "truth_h": 0.9,
+      "best_non_oracle_policy": "controller",
+      "cell_count": 2
+    },
+    {
+      "schedule_mode": "strong",
+      "truth_h": 0.9,
+      "best_non_oracle_policy": "detector_only",
+      "cell_count": 7
+    }
+  ]
+}

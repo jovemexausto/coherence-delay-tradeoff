@@ -1,0 +1,12 @@
+schedule_mode,truth_h,best_non_oracle_policy,cell_count
+default,0.1,fixed_policy,9
+default,0.5,fixed_policy,6
+default,0.5,deploy_only,2
+default,0.5,controller,1
+default,0.9,controller,8
+default,0.9,deploy_only,1
+strong,0.1,fixed_policy,9
+strong,0.5,fixed_policy,6
+strong,0.5,deploy_only,3
+strong,0.9,detector_only,7
+strong,0.9,controller,2
