@@ -1,25 +1,34 @@
 \begin{abstract}
-The temporal-validity functional $V(\phi,\tau)$ assigns a persistence value to
-an inferential structure $\phi$ against a drift class $\tau$: it is the minimum
-achievable tracking error at the optimal memory scale, and the best retained
-evidence can do before flow makes it stale. Here $\phi$ ranges over inferential
-structures and $\tau$ over admissible flow classes, so $V$ is a persistence
-field over structure and flow. In the deterministic H"older--Wasserstein
-constitutive model, the finite-sample and drift-induced dissipation terms
-balance at the temporal-validity horizon, yielding an optimal memory law and a normalized useful-memory profile. The benchmark closure is the
-Gaussian location minimax theorem on the deterministic H\"older class, where
-the upper and lower horizon rates meet. A one-dimensional root-$n$ proof anchor
-and embedded Sinkhorn classes establish nontrivial instances of the same
-geometry, while finite projection and sliced transport transfer the law under
-uniform projected control. Validity observability from lag geometry yields identifiability and
-quadratic regret guarantees for horizon estimation. Experiments exhibit the
-predicted U-curves, roughness-dependent scaling, real-stream validity
-signatures, and validity loss before detector alarm.
+The object of study is validity of an information state under drift, with
+temporal validity as one distinguished slice. An information state may be a
+windowed empirical law, a transport estimator, a calibration set, or a
+controller memory, but in every case retained data reduce finite-sample noise
+while accumulating mismatch with the present. For an information-state pipeline
+$\phi$ and a flow family $\tau$, the validity functional $V(\phi,\tau)$ records
+the best achievable present-time error over memory scale. In the deterministic
+H"older--Wasserstein model, this yields the constitutive law
+\[
+  \mathbb E\,d\!\left(\widehat P_t^{(n)},P_t\right)
+  \le C_K n^{-a} + C_S\zeta n^H,
+\]
+with horizon scale $n^*(a,H)\asymp (C_K/\zeta)^{1/(a+H)}$ and a nontrivial
+useful-memory band. A Gaussian location benchmark closes the exponent of the
+law, and a tractable one-dimensional proof model together with projection and
+sliced transfer establish the same mechanism beyond the benchmark class.
+Lag-geometry observability yields plug-in inference and operational
+identifiability for the horizon. Empirically, the predicted U-curves,
+roughness-dependent scaling, validity-before-detection gap, and sequential
+phase map all appear in synthetic and real streams. A split-conformal benchmark
+under drift exhibits the same geometry: the calibration window has an interior
+optimum, coverage degrades before alarm, and the empirically safe calibration
+band coincides with the useful-memory band. Validity is therefore a structural
+property of retained information itself, with temporal validity and conformal
+calibration as operational readouts.
 \end{abstract}
 
 \bigskip
 \noindent\textbf{Keywords:}
-tracking under drift; temporal validity; finite-memory tracking;
-distribution tracking; Wasserstein distance; Sinkhorn divergence.
+tracking under drift; validity; finite-memory tracking; distribution tracking;
+conformal calibration; Wasserstein distance.
 
 \noindent\textbf{MSC 2020:} 93D05, 93D30, 68P99.

@@ -1,12 +1,14 @@
-\section{Transfer and Operational Implications}\label{sec:transfer_operational_implications}
+\section{Information-State Transfer, Calibration, and Control}
+\label{sec:transfer_operational_implications}
 
-Finite projection families and sliced geometries transfer the horizon law under
-uniform projected control, and the embedded Sinkhorn results in the main theory
-cover the bounded-cardinality finite-discrete and calibrated support-growth
-families. Beyond those proved classes,
-high-dimensional practicality becomes a geometric question: temporal validity
-remains inferable only when the chosen geometry preserves a usable finite-sample
-exponent.
+The horizon law is attached to an information state, not only to a raw
+retention window. Once a pipeline admits a finite-sample envelope and a
+staleness envelope, the same constitutive balance governs estimation,
+calibration, and control. Finite projection families and sliced geometries
+transfer the law under uniform projected control. Beyond those proved
+classes, high-dimensional practicality becomes a geometric question: temporal
+validity remains inferable only when the chosen state geometry preserves a
+usable finite-sample exponent.
 
 \begin{corollary}[Effective-exponent horizon transfer]
 \label{cor:effective_exponent_horizon_transfer}
@@ -27,7 +29,7 @@ Then
   \mathbb E\,d_{\mathrm{eff}}\!\left(\widehat P_t^{(n)},P_t\right)
   \le C_{K,\mathrm{eff}} n^{-a_{\mathrm{eff}}} + C_{S,\mathrm{eff}}\zeta n^H,
 \]
-and the induced temporal-validity horizon satisfies
+and the induced validity horizon satisfies
 \[
   n^*_{\mathrm{eff}}(H)
   \asymp
@@ -49,28 +51,46 @@ these broader settings, the effective-exponent corollary yields a horizon law;
 it does not imply a new multivariate transport theorem.
 
 A practical guide is therefore geometry-first. When the ambient dimension is low
-and the geometry is well resolved, raw Wasserstein remains the most direct choice.
-When only a small set of directions carries drift, finite projections or sliced
-variants are preferable because they preserve a usable exponent by discarding
-uninformative directions. When the geometry is noisy or the support is moderate,
-fixed-$\varepsilon$ Sinkhorn in a calibrated regularization band is the natural
-choice because it regularizes the finite-sample term without forcing a new
-transport theorem. In all cases, the guiding criterion is whether the chosen
-geometry supplies an effective exponent large enough to keep the horizon
-nondegenerate.
+and the geometry is well resolved, raw Wasserstein remains the most direct
+choice. When only a small set of directions carries drift, finite projections or
+sliced variants are preferable because they preserve a usable exponent by
+discarding uninformative directions. When the geometry is noisy or the support
+is moderate, a calibrated regularization band is natural because it regularizes
+the finite-sample term without forcing a new transport theorem. In all cases,
+the guiding criterion is whether the chosen geometry supplies an effective
+exponent large enough to keep the horizon nondegenerate.
 
-For finite projection families, the constants inherit the worst projected
-finite-sample and staleness bounds over the chosen family, so enlarging $\Pi$
-helps only if those one-dimensional controls remain stable. For sliced
-transport, the same logic favors projection laws that sample the dominant drift
-directions while keeping projected estimation noise well behaved.
+An equivalent operator view is often more informative than the geometry-first
+view. Let $R_t^{(n)}$ retain a state from the recent past, let $U_t$ update that
+state as new observations arrive, and let $G_t$ extract an estimate, interval,
+alarm statistic, or control action. The object governed by validity is
+the composite information state $G_t\circ U_t\circ R_t^{(n)}$, not memory length
+alone. The horizon law explains when a retained state remains useful, the
+inference layer estimates that horizon from lag geometry, and the control layer
+decides whether to deploy a point estimate, a useful-memory band, or a deferred
+update.
+
+Conformal calibration under drift fits this template directly. A split-conformal
+calibration set is a retained information state, the nonconformity quantile is a
+readout, and predictive coverage is the operational validity criterion. The same
+finite-sample versus staleness balance therefore applies to calibration-window
+selection. In the benchmark reported here, the calibration score has an interior
+optimum over window size, coverage degrades before alarm, and the empirically
+safe calibration band coincides with the useful-memory band. The conformal
+connection is therefore constitutive rather than analogical: calibration under
+drift is another readout of validity.
+
+Sequential memory control closes the same object on the action side. Once memory
+becomes a controlled state and updates incur fixed and proportional actuation
+cost, the decision problem is not to maximize memory or to react as early as
+possible, but to remain inside the temporally valid region at acceptable cost.
+The resulting frontier is regime dependent. Drift roughness, sensing quality,
+and actuation price determine whether aggressive control, detector-triggered
+updates, or more conservative deployment is preferred.
 
 Weighted-window diagnostics on uniform, triangular, and geometric tapers show
 the same finite-sample versus lag trade-off in operational form; see
-\Cref{tab:weight_sensitivity_summary}.
-
-Horizon inference begins with the plug-in horizon entering the useful-memory
-region and remaining there under streaming noise.
-
-Support change beyond the fixed support-growth construction and online validity
-control under streaming noise are not treated here.
+\Cref{tab:weight_sensitivity_summary}. Horizon inference begins with the plug-in
+horizon entering the useful-memory region and remaining there under streaming
+noise. Support change beyond the fixed support-growth construction and online
+validity control under streaming noise are not treated here at theorem level.

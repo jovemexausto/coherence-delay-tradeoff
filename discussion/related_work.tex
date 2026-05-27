@@ -4,12 +4,12 @@
 Dynamic-regret and variation-budget analyses show that under drift, forgetting
 scales and window lengths must adapt to how quickly the target moves
 \citep{BesbesGurZeevi2015,CheungSimchiLeviZhu2019,YuanLamperski2020,
-MazzettoUpfal2023,WangXieChenLuiZhou2024}. The temporal-validity functional asks
+MazzettoUpfal2023,WangXieChenLuiZhou2024}. The validity functional asks
 how long retained evidence remains valid before age becomes the dominant source
 of tracking error.
 
 Singular learning theory provides static equations of state for inference in
-nonregular models \citep{Watanabe2009}. The temporal-validity
+nonregular models \citep{Watanabe2009}. The validity
 functional plays the dynamic role: it couples finite-sample geometry and drift
 regularity into a single persistence law under nonstationarity.
 
@@ -23,12 +23,17 @@ Adaptive-window and concept-drift methods study when accumulated evidence is
 sufficient to react \citep{BifetGavalda2007,Gama2004,GamaSurvey2014}. Those works
 provide the reaction timescale. The horizon law adds the validity timescale:
 retained evidence can cease to represent the present before change statistics
-cross an alarm threshold.
+cross an alarm threshold. The same separation appears in calibration under
+drift, where a retained calibration window can lose present-time coverage before
+any detector signals that the state is stale.
+Adaptive-window conformal methods make a similar calibration-window choice from
+coverage proxies; the validity surface makes that choice geometric rather than
+proxy-only.
 
 \paragraph{Sequential nonparametric testing.}
 Sequential two-sample testing and kernel change detection quantify the evidence
 needed to reject stability under time-uniform false-alarm control. These
-procedures operate on a detection timescale. The temporal-validity horizon
+procedures operate on a detection timescale. The validity horizon
 identifies the tracking timescale on which retained evidence ceases to represent
 the present, so the two clocks need not agree. Exponentially weighted MMD
 with implicit forgetting scales while still calibrating a detection threshold
@@ -36,13 +41,13 @@ with implicit forgetting scales while still calibrating a detection threshold
 
 The closest stability-only perspective is the nonparametric stability principle
 of \citet{HuangWang2023}, which organizes learning under nonstationarity without
-an explicit constitutive law in the exponents $(a,H)$. The temporal-validity
+an explicit constitutive law in the exponents $(a,H)$. The validity
 functional makes that geometry explicit through a closed-form persistence surface.
 
 Resource-aware scheduling under drift, including RCCDA \citep{PiasecznyEtAl2025RCCDA}, and memory hedging across
 multiple forgetting scales, such as MELO-style horizon grids, address a related
 operational question: when should adaptation consume budget on an updated memory
-scale rather than on a fixed one? The temporal-validity horizon plays the
+scale rather than on a fixed one? The validity horizon plays the
 complementary role of a constitutive prior for that choice. It predicts the
 memory scale that a budget-aware controller should target once the effective
 roughness parameters are known. Variation budgets and path-length quantities are
@@ -55,13 +60,14 @@ gain schedules, or process-noise levels to balance smoothing against
 responsiveness \citep{Kalman1960,Jazwinski1970}. Locally stationary smoothing
 and bandwidth selection, together with dynamic-regret analyses for time-varying
 statistical estimation, solve a closely related trade-off for evolving regression
-or spectral targets \citep{Dahlhaus1997,Vogt2012}. The temporal-validity horizon
-places that trade-off inside a persistence field for retained evidence, where
-the finite-sample exponent depends on the chosen probability geometry and the
-resulting balance defines a measurable validity geometry.
+or spectral targets \citep{Dahlhaus1997,Vogt2012}. The validity horizon
+places that trade-off inside a persistence field for retained information,
+where the finite-sample exponent depends on the chosen probability geometry or
+readout functional and the resulting balance defines a measurable validity
+geometry.
 
 \paragraph{Transport geometry.}
-Wasserstein distance and Sinkhorn-type estimators provide the finite-sample
+Wasserstein distance and related transport geometries provide the finite-sample
 geometries that enter the horizon law \citep{FournierGuillin2015,
 BoissardLeGouic2014,NilesWeedBach2019,GenevayEtAl2019,MenaWeed2019,
 delBarrioEtAl2023,GoldfeldEtAl2022}. Sliced and projection-robust variants
@@ -69,25 +75,24 @@ show that geometry choice can change the finite-sample exponent, while intrinsic
 dimension and regularization calibration determine which regime is available
 \citep{KolouriRohdeHoffmann2018,DeshpandeEtAl2019,PatyCuturi2019,
 LinEtAl2020,NadjahiEtAl2020,NietertEtAl2022,GenansWintenberger2026,FaccoEtAl2017}.
-Those geometries sit inside a common temporal-validity law. In that law,
+Those geometries sit inside a common validity law. In that law,
 dimensionality matters only through the effective finite-sample exponent: raw
 multivariate Wasserstein can force slow rates, while projection,
 intrinsic-dimension, or regularization mechanisms can preserve a nondegenerate
 horizon when they supply a usable exponent. The proved results cover finite-
-projection and sliced transfer together with embedded Sinkhorn classes; the
-broader high-dimensional message is an effective-exponent interpretation, not a
-claim that classical smoothing is the governing ontology.
-general raw multivariate Wasserstein theorem.
+projection and sliced transfer together with the operational classes;
+the broader high-dimensional message is an effective-exponent interpretation,
+not a claim that any single geometry is canonical.
 
 \paragraph{Age and drift.}
 Wasserstein nonstationarity measures and Age-of-Information formulations make
 age into an operational variable \citep{JiangLiZhang2020,
 KeehanAndersonWiesemann2025,AminiVinas2026,KaulYatesGruteser2012,
-YatesEtAl2021AoI}. The temporal-validity horizon gives that variable a
+YatesEtAl2021AoI}. The validity horizon gives that variable a
 distributional interpretation: age is costly because it accumulates geometric
 mismatch with the present.
 
 Recent non-equilibrium accounts of continual learning describe stability through
-metastable escape across energy barriers \citep{Kim2026}. The temporal-validity
-horizon is the inference-side analogue: it identifies the critical persistence
+metastable escape across energy barriers \citep{Kim2026}. The validity horizon
+is the inference-side analogue: it identifies the critical persistence
 scale at which retained structure ceases to track the present.

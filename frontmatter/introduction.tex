@@ -1,23 +1,26 @@
 \section{Introduction}\label{sec:intro}
 
-Inferential structures possess finite persistence under flow. The temporal-
-validity functional
+Validity under drift operates through an information state built from recent data.
+A windowed empirical law, a geometric estimator, a conformal calibration set, or
+a controller memory all compress the past and are then used to estimate,
+calibrate, or decide in the present. These objects are useful only while the
+retained information remains valid for the current target.
+
+Write $\phi$ for a pipeline that retains recent data, updates that retained
+state, and extracts a present-time readout. Let $\tau=\{\tau_d:d\in\mathcal D\}$
+be a flow family indexed by dimensions such as time, space, structure, or
+operation. The validity functional
 \[
   V(\phi,\tau)
   = \inf_{n\ge 1}\bigl(C_K(\phi)n^{-a(\phi)} + C_S\zeta(\tau)n^{H(\tau)}\bigr)
 \]
-assigns that persistence value to an inferential structure $\phi$ and a drift
-class $\tau$. Here $\phi$ indexes the geometry and estimation rule used to
-retain evidence, while $\tau$ indexes the admissible flow of the target law.
-Retention lowers sampling noise and ages evidence at the same time. Change
-detection exposes the same relation: a detector can remain silent after retained
-evidence has already become stale.
-
-The $V$-optimal problem asks, for fixed $\tau$, which geometry $\phi$ minimizes
-$V(\phi,\tau)$. That geometry-selection problem is distinct from the memory-
-length optimization at fixed $(\phi,\tau)$ and becomes visible only after the
-functional is written in closed form. The horizon law studied here is a
-tractable closure of the constitutive Hölder--Wasserstein model for that field.
+assigns a persistence value to that pipeline against a flow class $\tau$.
+Here $C_K n^{-a}$ is the finite-sample acquisition term induced by the chosen
+state geometry, while $C_S\zeta n^H$ is the drift-induced dissipation of that
+state under the admissible flow. Retention lowers sampling noise and ages the
+retained information at the same time. Detection and calibration expose the same
+mechanism: an alarm can remain silent after retained evidence has already become
+stale, and a calibration set can lose coverage before any detector reacts.
 
 Let $P_t$ denote the present target law, let $\bar P_t^{(n)}$ denote the window
 target formed from the last $n$ target laws, and let $\widehat P_t^{(n)}$ be the
@@ -30,39 +33,47 @@ $\bar P_t^{(n)}$ and $P_t$:
   \le C_K n^{-a} + C_S\zeta n^H.
 \]
 When the finite-sample term decays like $n^{-a}$ and the staleness term grows
-like $\zeta n^H$, their balance defines the temporal-validity horizon and the
-induced useful-memory region. In the deterministic Hölder--Wasserstein
-constitutive model, this balance realizes the temporal-validity functional
+like $\zeta n^H$, their balance defines the validity horizon and the induced
+useful-memory region. In the deterministic H"older--Wasserstein constitutive
+model, this balance realizes the validity functional
 \[
   V(\phi,\tau)=\inf_{n\ge 1}\bigl(C_K(\phi)n^{-a(\phi)}+C_S\zeta(\tau)n^{H(\tau)}\bigr).
 \]
 
 The finite-sample exponent $a$ depends on the geometry used to compare
-distributions, while the roughness exponent $H$ and amplitude $\zeta$ describe
-how quickly retained evidence loses temporal validity. The resulting horizon is
-structural: it is imposed jointly by metric geometry and drift regularity.
+distributions or evaluate readouts, while the roughness exponent $H$ and
+amplitude $\zeta$ describe how quickly retained information loses validity.
+The resulting horizon is structural: it is imposed jointly by metric geometry
+and drift regularity. The temporal coordinate is one slice of this validity
+surface: if $d=\mathrm{time}$ is one coordinate in $\mathcal D$, then
+$V(\phi,\tau_d)$ recovers validity as a special case.
 
 \begin{figure}[!t]
 \centering
 \safeincludegraphics[width=0.90\linewidth]{artifacts/figures/conceptual/fig_validity_field}
-\caption{Validity field over the $(a,H)$ plane. Lower-left geometries favor persistence; upper-right geometries incur stronger drift penalty.}
+\caption{Validity field over the $(a,H)$ plane. Lower-left geometries favor
+persistence; upper-right geometries incur stronger drift penalty.}
 \label{fig:validity_field}
 \end{figure}
 
-Three proved cases make the law concrete. A one-dimensional root-$n$ proof
-anchor closes the basic persistence regime, while bounded-cardinality finite-
-discrete and calibrated support-growth embedded Sinkhorn classes show that the
-same mechanism persists in operational transport geometry.
+The law raises three linked tasks: identify the horizon imposed by sampling and
+drift, infer that horizon from data, and act on it when the memory scale becomes
+a control variable. The main theorem closes the exponent of the horizon law on a
+Gaussian location benchmark over a deterministic H"older class. A tractable
+one-dimensional root-$n$ proof anchor and projection-based transfer show that the
+same mechanism persists beyond that benchmark.
 
-The benchmark closure is the Gaussian location minimax theorem on the
-deterministic H\"older class, where the upper and lower horizon rates meet.
+Horizon inference becomes possible when lag geometry reveals the drift law.
+Plug-in asymptotics from lag geometry yield confidence structure for the horizon
+and an operational identifiability score for the useful-memory band. Sequential
+control closes the operational layer: once update cost is explicit, the best
+policy depends on drift roughness and on actuation price, producing a phase map
+rather than a universal winner.
 
-Finite projection families and sliced transport provide transfer theorems,
-validity observability from lag geometry yields identifiability and regret
-bounds, and the same object appears empirically through U-curves, roughness
-scaling, and validity loss before detector alarm.
-
-This formulation opens five frontiers: class-tight lower
-theory beyond the Gaussian benchmark, transfer beyond the proved projected
-range, support-changing embedded Sinkhorn, online validity control under
-streaming noise, and flow models beyond deterministic Hölder flow.
+The same object also organizes calibration under drift. A conformal calibration
+window is retained information used to deliver present-time coverage. In the
+split-conformal benchmark reported here, the calibration score exhibits the same
+U-curve geometry as distribution tracking: small windows are noisy, large
+windows are stale, coverage degrades before alarm, and the safe calibration band
+aligns with the useful-memory band. Conformal prediction is therefore one
+operational readout of the validity field.

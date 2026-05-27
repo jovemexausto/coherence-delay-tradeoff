@@ -1,28 +1,40 @@
-\section{Operational Use of Temporal Validity}\label{sec:online_adaptation}
+\section{Operational Use of Validity}\label{sec:online_adaptation}
 
-The temporal-validity profile takes operational form through three ingredients: a
-finite-sample regime, a local drift geometry, and a criterion that relates
-estimation uncertainty to the local validity curvature of the useful-memory region. The horizon
-law supplies the target once the regime parameter $a$ and the local roughness
-pair $(H,\zeta)$ are known. Lag-geometry information must be strong enough to
-place the plug-in horizon inside the useful-memory region with high probability.
+The validity horizon becomes operational once memory is treated as a
+controlled state. The same finite-sample versus staleness balance that defines
+the horizon also determines when an online controller should update, defer, or
+hold its memory scale. The resulting problem is not to maximize memory or to
+react as soon as possible, but to keep the information state inside its useful
+band at acceptable cost.
 
-A direct plug-in rule based on a local slope and intercept is too unstable to be
-useful. A structural controller first selects the finite-sample regime, then
-estimates roughness from aggregated lag discrepancies, and finally maps those
-quantities into an admissible useful-memory band. On the synthetic phase
-profile, that controller improves substantially on the naive plug-in rule and on
-a pure activity baseline. Adaptive EWMA and adaptive scalar Kalman baselines are
-more competitive, especially on the smooth default profile, but they degrade
-more visibly in rough and alternating regimes.
+\begin{figure}[!htbp]
+\centering
+\safeincludegraphics[width=0.96\linewidth]{artifacts/figures/online/fig_online_implications}
+\caption{Online implications of the validity horizon. Aggregated lag
+stabilizes roughness estimation, the structural controller closes most of the gap
+to the oracle policy, and the preferred memory scale rotates across drift
+phases.}
+\label{fig:online_implications}
+\end{figure}
 
-Across the tested default, smooth, rough, alternating, and ramp-up profiles with
-three seeds and a bounded window-jump constraint, the structural controller
-improves on the direct plug-in rule in every run, beats the activity baseline
-and adaptive EWMA in $13/15$ runs each, and beats the adaptive scalar Kalman
-baseline in $11/15$ runs. The smooth default profile remains the most
-competitive setting for the classical filters, but the rough and alternating
-profiles favor the band-constrained structural rule clearly. The tested profiles
-place the structural controller ahead of the direct plug-in rule, the activity
-baseline, adaptive EWMA, and the adaptive scalar Kalman baseline;
-see \Cref{tab:online_controller_summary}.
+The figure above summarizes the online object directly. Aggregating lagged
+discrepancies improves roughness estimation, the structural controller reduces
+tracking error relative to the raw plug-in rule, and the preferred scale moves
+with the drift phase rather than remaining fixed. The online use of temporal
+validity is therefore a combined inference-and-control problem.
+
+\input{artifacts/tables/conceptual/online_controller_summary}
+
+Across the five tested profile families, the structural controller consistently
+improves on the raw plug-in rule and beats the adaptive EWMA and adaptive
+Kalman baselines on the majority of runs. The gains are strongest on the rough
+and alternating profiles, where the online memory state must move with drift
+while still resisting noise. This is the operational interpretation of the
+validity horizon: a memory scale is useful only while its retained
+information remains temporally valid, and the controller must pay cost to keep
+it there.
+
+The controller evidence is therefore not a separate story from the horizon law.
+It is the sequential readout of the same object. Horizon inference estimates the
+usable band; online control decides whether to deploy it, hold it, or update it
+under cost.

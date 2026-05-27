@@ -1,8 +1,8 @@
 \section{Conclusion}\label{sec:conclusion}
 
-Inferential structures under flow combine finite-sample acquisition with temporal
-aging. The resulting persistence law gives retained statistical structure a
-temporal-validity profile with a finite horizon.
+Validity under drift is constrained by the validity of the information state
+used at the present time. Retention reduces finite-sample noise and ages the
+retained state simultaneously, so validity has a finite horizon.
 
 In the deterministic H"older--Wasserstein constitutive model, the horizon law
 \[
@@ -16,18 +16,20 @@ and its optimizer
 summarize that balance. This law induces a useful-memory region around the
 optimal scale.
 
-Three proved cases establish the same temporal-validity law: a tractable
-one-dimensional root-$n$ proof anchor, bounded-cardinality finite-discrete
-embedded Sinkhorn, and a calibrated support-growth embedded Sinkhorn family. A
-structural Gaussian lower bound and a Gaussian location benchmark identify the
-horizon as a property of drift geometry rather than of a particular estimator or
-of classical smoothing heuristics.
+A structural Gaussian lower bound and a Gaussian location benchmark identify the
+horizon as a property of drift geometry rather than of a particular estimator.
+A tractable one-dimensional proof anchor and projection-based transfer establish
+the same mechanism beyond the benchmark class.
 
 The empirical signatures align with the theory: U-curves,
-roughness-dependent horizon scaling, a real-stream finite-memory pattern, and a
-positive lag between validity loss and detector alarm. Validity observability
-captures the operational side: a temporal-validity horizon can be structurally
-defined while remaining hard to estimate from lag geometry alone.
+roughness-dependent horizon scaling, a real-stream finite-memory pattern, a
+positive lag between validity loss and detector alarm, a regime-dependent policy
+frontier under actuation cost, and a conformal calibration window with the same
+finite-memory geometry. Horizon inference from lag geometry captures the
+observability side: validity can be structurally defined while remaining hard to
+estimate from data alone.
 
-Inferential persistence has a measurable profile with a critical persistence
-scale under flow. The central object is the validity field, not memory choice.
+Inferential persistence therefore has a measurable profile with a critical scale
+under flow. The central object is the validity of the information state itself.
+Memory choice, calibration-window choice, and sequential control are all
+operational readouts of that same object.

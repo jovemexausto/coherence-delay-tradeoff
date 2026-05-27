@@ -1,11 +1,11 @@
 \section{Empirical Signatures}\label{sec:empirical_signatures}
 
-The experiments target qualitative signatures of the temporal-validity horizon:
-an interior memory optimum, roughness-dependent scaling, the same pattern on a
-real stream, structured support for the fixed-$\varepsilon$ Sinkhorn family, and
-validity loss before detector alarm. The reported sweeps use repeated Monte
-Carlo runs and are meant to identify shape, ordering, and sign rather than to
-estimate constants precisely.
+The experiments target qualitative signatures of the validity field:
+an interior optimum over memory scale, roughness-dependent horizon movement, a
+real-stream analogue, positive separation between validity loss and alarm,
+regime-dependent operational control, and an explicit conformal-calibration
+readout. The reported sweeps use repeated Monte Carlo runs and are meant to
+identify shape, ordering, and sign rather than to estimate constants precisely.
 
 \subsection{Interior Memory Optimum}\label{sec:empirical_memory_optimum}
 
@@ -22,18 +22,18 @@ gain. The optimum remains finite across drift strengths.}
 \label{fig:memory_optimum}
 \end{figure}
 
-This interior optimum is the basic empirical signature of temporal validity under drift. Under
-stationarity, more memory would continue to help. Under drift, the horizon
-that reduces variance also ages the evidence. Around the minimizing horizon, the
-curve displays a flat near-optimal region, which is the empirical analogue of
-the useful-memory region defined from the envelope $\Phi$.
+This interior optimum is the basic empirical signature of validity under drift.
+Under stationarity, more memory would continue to help. Under drift, the horizon
+that reduces variance also ages the evidence. Around the minimizing horizon,
+the curve displays a flat near-optimal region, which is the empirical analogue
+of the useful-memory region defined from the envelope $\Phi$.
 
 \subsection{Roughness-Dependent Horizon Scaling}
 \label{sec:empirical_roughness_scaling}
 
-The roughness-family experiment varies the roughness index directly. For each H\"older-type
-regime, the surrogate error obeys the same structural decomposition as the
-theory,
+The roughness-family experiment varies the roughness index directly. For each
+H\"older-type regime, the surrogate error obeys the same structural
+decomposition as the theory,
 \[
   \mathcal E(n) \approx \sigma n^{-1/2} + \zeta n^H,
 \]
@@ -55,16 +55,17 @@ horizon logic of \cref{cor:temporal_validity_horizon}.
 \subsection{Real-Stream Memory Diagnostic}
 
 A similar signature appears on a real nonstationary stream. On ELEC2
-\citep{Harries1999ELEC2}, the
-diagnostic compares a short anchor block with the preceding memory window in
-$W_1$, yielding a real-data analogue of the finite-memory U-curve.
+\citep{Harries1999ELEC2}, the diagnostic compares a short anchor block with the
+preceding memory window in $W_1$, yielding a real-data analogue of the
+finite-memory U-curve.
 
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.88\linewidth]{artifacts/figures/elec2/fig_elec2_ucurve}
-\caption{ELEC2 real-stream diagnostic on the \texttt{nswprice} marginal. The mean
-anchor-block $W_1$ error exhibits a finite interior optimum and a near-optimal
-useful-memory band, matching the temporal-validity signature on a real stream.}
+\caption{ELEC2 real-stream diagnostic on the \texttt{nswprice} marginal. The
+mean anchor-block $W_1$ error exhibits a finite interior optimum and a
+near-optimal useful-memory band, matching the validity signature on a real
+stream.}
 \label{fig:elec2_ucurve}
 \end{figure}
 
@@ -74,39 +75,7 @@ are too noisy, while very long windows become stale relative to the present
 block. On the robustness grid, the \texttt{nswprice} marginal retains an
 interior optimum in all tested configurations, and the \texttt{nswdemand}
 marginal shows the same interior pattern with more movement in the optimizing
-scale. That robustness sweep already includes anchor sizes $24$, $48$, and $96$
-and segment starts $0$, $8000$, and $16000$, so the interior-optimum signature
-is stable to a moderate anchor-length perturbation on the tested stream; see
-\Cref{tab:elec2_robustness}.
-
-\subsection{Moderate-Band Sinkhorn Diagnostics}
-\label{sec:empirical_sinkhorn_evidence}
-
-The fixed-$\varepsilon$ Sinkhorn experiments ask whether a practical geometry
-can keep the finite-sample term stable enough for the horizon law to remain
-informative in an embedded regime. On the tested low-intrinsic-dimensional
-families, the finite-sample term stays close to the i.i.d. benchmark across a
-moderate regularization band, with the widest stable regimes on $(8,1)$,
-$(8,2)$, and $(12,2)$ and a narrower regime on $(12,1)$. Direct probes localize
-the remaining instability in the self-coupling blocks, while the calibrated
-certificate identifies a moderate band extending beyond the bounded-cardinality
-finite-support theorem.
-
-On the calibrated discrete $k=2$ support grid, the theorem-facing diagnostics
-support the same picture: self-coupling remains contractive, exact-target null
-slopes stay near the quadratic scale, finite-support fluctuation proxies remain
-bounded, and the support-growth cost-to-$\ell_2^2$ ratio stays stable across the
-reported band. Together with the exact $\ell_2$ fluctuation identity, these
-diagnostics organize the support-growth family around a covariance-weighted
-trace bound and a local block-curvature bound for the null Sinkhorn map. The
-finite-difference Hessian probe shows bounded local curvatures together with
-collective directions that grow approximately linearly with support growth,
-matching the parity-channel reduction used in the support-growth proof.
-
-Intrinsic-dimension estimates from TwoNN \citep{FaccoEtAl2017} track the
-stable-band cutoff better than ambient dimension on the tested grid, so the
-regime-selection variable is local geometry rather than ambient dimension.
-Detailed calibration tables appear in \Cref{app:finite_sample_geometry}.
+scale; see \Cref{tab:elec2_robustness}.
 
 \subsection{Validity Loss Before Detection}\label{sec:empirical_validity_lag}
 
@@ -118,17 +87,17 @@ operating horizon remains fixed. Define
   \Delta_{\mathrm{val-det}} \coloneqq t_{\mathrm{detect}} - t_{\mathrm{valid}},
 \]
 where $t_{\mathrm{valid}}$ is the first time the operating horizon persistently
-exceeds the temporal-validity horizon, and $t_{\mathrm{detect}}$ is the first
+exceeds the validity horizon, and $t_{\mathrm{detect}}$ is the first
 detector alarm that follows.
 
 \begin{figure}[!htbp]
 \centering
 \safeincludegraphics[width=0.9\linewidth]{artifacts/figures/validity_lag/fig_validity_lag}
-\caption{Temporal validity can fail before detector alarm. As drift intensifies, the
-temporal-validity horizon contracts until the operating horizon becomes stale at
-$t_{\mathrm{valid}}$; the detector responds only later at $t_{\mathrm{detect}}$,
-leaving a strictly positive validity-detection lag. The lower panel shows
-excess tracking error accumulating before the alarm appears.}
+\caption{Temporal validity can fail before detector alarm. As drift intensifies,
+the validity horizon contracts until the operating horizon becomes
+stale at $t_{\mathrm{valid}}$; the detector responds only later at
+$t_{\mathrm{detect}}$, leaving a strictly positive validity-detection lag. The
+lower panel shows excess tracking error accumulating before the alarm appears.}
 \label{fig:validity_lag}
 \end{figure}
 
@@ -140,39 +109,38 @@ The positive lag is not a knife-edge feature of one tuning choice. A compact
 false-alarm-calibrated frontier over $H\in\{0.5,0.75,1.0\}$, operating windows
 $160$ and $240$, roughness levels $0.01$ and $0.024$, and detector families
 ADWIN, Page--Hinkley, KSWIN, and CUSUM shows the same separation on the tested
-observation-based detector families. Whenever validity expiry occurs on that
-grid, observation-based ADWIN and Page--Hinkley keep unit detection rate and
-strictly positive mean gaps, with ranges about $204$--$660$ and $204$--$615$,
-respectively. Observation-based CUSUM also retains positive mean gaps, now in a
-smaller range about $78$--$232$, again with unit detection on the successful
-grid points. KSWIN preserves the sign of the gap when it detects, but detection
-rates fall substantially and missed alarms appear on the same compact grid.
+observation-based detector families. Observation-based ADWIN and Page--Hinkley
+retain unit detection rate and strictly positive mean gaps on the successful
+grid points, while KSWIN preserves the sign of the gap when it detects but with
+substantially lower detection rates. Residualized detector inputs are not
+uniformly better on this family. The calibrated sign result therefore holds for
+observation-based detector families on the tested compact grid, not as a
+detector-uniform delay law; see \Cref{tab:validity_gap_robustness}.
 
-Residualized detector inputs are not uniformly better on this family. Across the
-same false-alarm-calibrated frontier, residual-input ADWIN, Page--Hinkley,
-KSWIN, and CUSUM often trade larger delays for missed alarms, with successful
-mean-gap ranges roughly $365$--$903$, $346$--$969$, $498$--$1310$, and
-$323$--$920$, respectively. The calibrated sign result therefore holds for the
-observation-based ADWIN, Page--Hinkley, and CUSUM families on the tested
-compact $H$-grid, not as a detector-uniform delay law; see
-\Cref{tab:validity_gap_robustness}.
-This empirical separation is the operational analogue of the detector-class
-sign law in the sequential-delay line: validity can expire before alarm even
-when the null false-alarm budget is fixed.
+\subsection{Conformal Calibration under Drift}
+\label{sec:empirical_conformal}
+
+The same geometry appears when retained information is used for predictive
+coverage rather than for direct distribution tracking. In the split-conformal
+benchmark, the calibration window acts as a finite-memory state, the
+nonconformity quantile is the readout, and the score combines interval width
+with coverage loss. Small calibration windows are variance dominated, while
+large calibration windows become stale under drift, so the score has an interior
+optimum over window size.
+
+The benchmark also separates the calibration-validity clock from the detection
+clock. Coverage loss occurs before alarm on the tested drifted residual family,
+leaving a positive coverage-before-alarm gap. Around the score-minimizing
+window, the empirically safe calibration band coincides with the useful-memory
+band. Conformal prediction under drift therefore fits the same validity law:
+retained calibration is useful only up to a finite horizon.
 
 \subsection{Empirical Summary}\label{sec:empirical_summary}
+
 The experiments support a structural validity profile with a near-optimal
 useful-memory region, roughness-dependent horizon scaling, a corresponding
-pattern on the ELEC2 stream, structured support for the fixed-$\varepsilon$
-Sinkhorn family, and a measurable lag between validity loss and detector alarm.
-Complementary online-adaptation sweeps across default, smooth, rough,
-alternating, and ramp-up profiles show that the structural controller keeps
-mean error between $1.18$ and $1.36$ times oracle risk, versus $1.34$--$1.65$
-for the activity baseline, $1.28$--$1.64$ for adaptive EWMA, $1.21$--$1.58$ for
-adaptive scalar Kalman, and $2.30$--$4.41$ for the raw plug-in rule. The
-structural rule beats EWMA on $13/15$ tested runs and Kalman on $11/15$, with
-the clearest gains in the rough and alternating regimes; see
-\Cref{tab:online_controller_summary}.
-Across the three-seed runs used for that summary, the profile-level mean errors
-have standard errors on the order of $10^{-2}$, while the structural-controller
-gap to the plug-in rule remains much larger than that sampling variability.
+pattern on the ELEC2 stream, a measurable lag between validity loss and detector
+alarm, and a conformal calibration window with the same horizon geometry. The
+online adaptation section summarizes the controller and phase-map evidence; it
+shows that the structural controller keeps mean error close to the oracle while
+the preferred scale rotates with drift phase.

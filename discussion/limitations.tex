@@ -1,14 +1,14 @@
 \section{Limitations and Open Problems}\label{sec:limitations_open_problems}
 
-The proved results cover the temporal-validity horizon, its useful-memory
-geometry, the one-dimensional proof anchor, the Gaussian lower and benchmark
-results, the embedded Sinkhorn theorems, and validity-observability guarantees.
+The proved results cover the validity horizon, its useful-memory geometry, the
+one-dimensional proof anchor, the Gaussian lower and benchmark results, and
+horizon-inference guarantees.
 
 The remaining open problems are the following.
 
 \begin{enumerate}[label=\textbf{(\arabic*)},leftmargin=*,itemsep=2pt,topsep=3pt]
   \item \textbf{Class-tight lower theory beyond the Gaussian benchmark.}
-  The abstract lower proposition establishes that the temporal-validity horizon
+  The abstract lower proposition establishes that the validity horizon
   is structural by means of a Gaussian two-point subclass, and the Gaussian
   location benchmark closes the corresponding minimax rate on the deterministic
   H\"older class. What remains open is class-tight lower theory for broader
@@ -22,13 +22,12 @@ The remaining open problems are the following.
   multivariate Wasserstein, where the effective exponent can become too small
     for practical geometry selection.
 
-  \item \textbf{Support-changing embedded Sinkhorn classes.}
-  For fixed-$\varepsilon$ Sinkhorn, the compact-support one-dimensional
-  pointwise and bandwise inheritance results are explicit, bounded-cardinality
-  finite discrete embedded classes satisfy the same moderate-band root-$n$ law,
-  and the calibrated support-growth family is closed on the discrete $k=2$
-  grid. The open extension is support change beyond that fixed
-  support-growth construction.
+  \item \textbf{Operator-level transfer beyond the proved classes.}
+  The current theory closes the law for benchmark tracking models, finite-family
+  projection transfer, sliced transfer under uniform projected control, and the
+  embedded transport examples developed here. A general operator-level theorem
+  for richer information states, including adaptive calibration and broader
+  multivariate transport regimes, remains open.
 
   \item \textbf{Online validity control under streaming noise.}
   Horizon inference closes plug-in asymptotics, identifiability, deterministic
@@ -45,4 +44,17 @@ The remaining open problems are the following.
   bias under the exact model but much larger bias in both $\widehat H$ and the
   induced horizon estimate when the law was misspecified. A robust theory for
   horizon inference under such departures remains open.
+
+  \item \textbf{Conformal calibration under drift at theorem level.}
+  The split-conformal benchmark exhibits the same validity geometry as
+  distribution tracking, but the current conformal connection is empirical. A
+  theorem-level transfer from information-state validity to time-varying
+  coverage, set width, and calibration-window selection under drift remains to
+  be developed.
+
+  \item \textbf{Validity surface across flow dimensions.}
+  The main law is stated for a one-parameter flow class, but the same algebra
+  suggests a surface $V(\phi,\tau_d)$ indexed by dimensions such as time, space,
+  structure, and operation. A general theorem that makes this multiaxis surface
+  explicit, with validity as one slice, remains conjectural.
 \end{enumerate}
