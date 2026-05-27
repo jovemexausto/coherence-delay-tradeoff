@@ -2,8 +2,7 @@
 
 ## Status
 
-Este repositório já não é mais um conjunto de linhas paralelas sem relação clara.
-O objeto central ficou nítido:
+O objeto central é a **validade temporal sob drift**.
 
 - **validade temporal sob drift**
 - **horizonte prospectivo de validade**
@@ -11,26 +10,36 @@ O objeto central ficou nítido:
 - **controle operacional de memória**
 - **custo explícito de atuação** como fecho da camada operacional
 
-O trabalho recente dissipou incertezas importantes:
-
-- o horizonte não é só uma metáfora; ele é um objeto constitutivo com lei explícita
-- a inferência via geometria de lag funciona sob especificação correta
-- misspecification de forma é detectável por diagnósticos locais
-- heterocedasticidade afeta principalmente cobertura e thresholds, não o ponto estimado
-- o controller só se torna realmente discriminativo quando a memória vira um **estado controlado** com inércia, deadband e custo explícito de atuação
-- em custo fixo alto de reconfiguração, o `detector_only` pode ultrapassar o `controller` em custo total, mesmo sem vencer em validade pura
-
-O plano a partir de agora é **consolidar** tudo isso no paper raiz e matar os spin-offs como narrativas independentes. Eles passam a existir apenas como superfícies temporárias de trabalho e migração.
-
-Essa consolidação não muda a identidade central do projeto. O centro continua sendo a
-**validade temporal sob drift**. O horizonte prospectivo é o objeto inferido; a política de
-atuação é a camada operacional; o custo explícito de atuação fecha o loop. Agora já existe
-material suficiente para fechar a passagem completa:
+O arco científico consolidado é:
 
 - lei constitutiva
-- inferência do horizonte
+- inferência do horizonte a partir da geometria de lag
 - calibração robusta da incerteza
 - política operacional de memória com custo explícito de atuação
+
+As principais descobertas empíricas são:
+
+- `H`, `zeta` e `n^*` são observáveis via lag geometry sob o modelo correto
+- misspecification de forma aparece em diagnósticos locais
+- heterocedasticidade muda cobertura/thresholds mais do que o ponto estimado
+- o controller só separa de forma clara quando memória vira estado controlado com custo explícito
+- o mapa de fases em `(H, lambda_0, lambda_1)` é regime-dependente; não existe política universalmente dominante
+- `signed_residual` não melhora o gap validade-detecção e parece piorar a taxa de gap positivo no frontier reduzido
+- a razão de particionamento `R_t(n)` é uma coordenada dual candidata: em `n^*` ela vale `a/H`, mas fora do benchmark sua utilidade depende da qualidade da decomposição observada
+- a dualidade do horizonte fica mais forte quando `R_t(n)` é usada como coordenada de sinal: ela identifica o lado de `n^*` sem estimar `(a,H,\zeta)` e supera a recuperação de slope em grid esparso
+- o harness `code/useful_memory_horizon/hypothesis_suite.py` agora testa H1-H23 com benchmarks de controller, delay, ratio, misspecification e U-curve model-free
+- `code/useful_memory_horizon/partition_ratio.py` é agora o objeto dual central: ratio exata, monotonicidade e inversão de horizonte entram como primitives do núcleo
+- em benchmark sintético rápido, o controlador monotônico local supera levemente o two-point self-normalized step, então ele é o candidato default online sem conhecer `H`
+- `code/useful_memory_horizon/ratio_control.py` adiciona um processo persistente com smoothing/deadband; em ruído alto ele supera a política instantânea e reduz updates, o que o torna a camada online mais importante do objeto dual
+- `hypothesis_suite.py` agora fecha o crossover do controlador com H24-H25: persistência vence em ruído alto e instantâneo vence em ruído baixo
+- o benchmark comparativo mais amplo sugere mapa de regimes, não vencedor universal: `instant_ratio` domina a maior parte das células, `persistent_ratio` ocupa um subconjunto ruidoso e `lag_geometry` ainda vence em algumas células de `H` alto
+- o proxy-based regime router ainda não é competitivo no grid amplo; o gargalo parece ser sensing do regime, não a regra de política em si
+- `regime_route_delay.py` mede `\Delta_{reg-route}`; o atraso de roteamento é positivo mesmo com sensing perfeito e cresce com ruído, confirmando que o meta-controlador herda coerência-atraso
+- `meta_sensing_benchmark.py` mostra que um ensemble multiescala melhora o roteamento em ruído moderado, mas satura em ruído alto; sensing pode melhorar a fronteira, não apagar o atraso estrutural
+- `policy_frontier_theorem.py` gera a figura central da fronteira de políticas em `artifacts/figures/policy_frontier/`; o sensor oracular já tem atraso positivo e o ensemble multiescala só reduz a parte evitável em ruído moderado
+- a figura principal de sensing já está gerada em `artifacts/figures/meta_sensing/fig_meta_sensing_frontier.{pdf,png}` com tabela de suporte em `artifacts/tables/meta_sensing/meta_sensing_summary.csv`
+
+Os spin-offs existem só como superfícies de migração e não como narrativas independentes.
 
 ## Core Thesis
 
@@ -43,7 +52,7 @@ Conjectura operacional latente:
 `\mathcal L_t(n_t^\pi) + \alpha E_t + \beta \Delta_{val-det} \ge \gamma`
 
 
-Essa desigualdade não deve ser apresentada como teorema fechado sem prova. Ela funciona, por ora, como a forma condensada do limite estrutural sob fricção operacional e como a linguagem natural do mapa de fases.
+Essa desigualdade não é theorem-level; ela organiza o mapa de fases e a camada operacional.
 
 Em termos formais, o objeto principal permanece:
 
@@ -55,8 +64,8 @@ com horizonte induzido
 
 Tudo o que entra no manuscrito final deve servir diretamente a essa tese.
 
-Como framing auxiliar da camada operacional, podemos organizar a parte sequencial como
-uma tríade **P--A--Φ**, sem deixar isso competir com a identidade central do paper:
+Como framing auxiliar da camada operacional, a parte sequencial pode ser lida como
+uma tríade **P--A--Φ**:
 
 - **P (Potencialidade)**: a região de validade ainda disponível, resumida pelo horizonte
   e pela banda near-optimal de memória
@@ -64,8 +73,7 @@ uma tríade **P--A--Φ**, sem deixar isso competir com a identidade central do p
 - **Φ (Convergência)**: o funcional que mede quão bem a atuação mantém a memória
   realizada próxima da região temporalmente válida, penalizando perda de validade e esforço de atuação
 
-Essa tríade não é o objeto principal do paper. Ela é a melhor linguagem para descrever
-o **fecho operacional** do horizonte.
+Essa tríade não compete com o objeto principal; ela descreve o fecho operacional do horizonte.
 
 O custo explícito de atuação é
 
@@ -73,95 +81,24 @@ O custo explícito de atuação é
 
 e o objeto operacional passa a ser a soma entre perda de validade e esforço de atuação.
 
-## What We Now Know
-
-### 1. The constitutive law is the real center
-
-O melhor enquadramento do projeto não é drift detection, nem adaptation burden, nem package design.
-O centro é:
-
-- o **campo de validade** `V(\phi, \tau)`
-- a decomposição entre termo finito-amostral e termo de staleness
-- a geometria do horizonte e da banda de memória útil
-- a lei dinâmica de validade temporal sob fricção operacional, ainda tratada como conjectura latente na camada de controle
-
-### 2. Horizon inference works
-
-No workspace `projects/scale-consistency`, a linha `horizon_bridge` mostrou:
-
-- recovery forte sob especificação correta
-- grids ampliados com `lag_count`, `n`, `H`, `\zeta`, `sigma0`
-- misspecification stress test com `sinusoid`, `piecewise`, `mixed`, `bump`, `slope_shift`
-- diagnósticos úteis: KL residual, KL standardized, curvature, Durbin-Watson, periodogram
-
-O resultado importante aqui é: a geometria de lag realmente carrega informação operacional sobre `H`, `\zeta` e `n^*`.
-
-### 3. Heteroskedasticity changes inference, not the point estimate
-
-O trabalho com:
-
-- `variance_bridge.py`
-- sweeps hetero fortes (`power`, `jump`, `ar`)
-- bootstrap `parametric`, `wild`, `moving_block`
-
-fixou uma descoberta central:
-
-- **modelagem explícita de variância não move materialmente `H` nem `n^*` nos regimes testados**
-- **bootstrap robusto melhora cobertura e thresholds de forma substantiva**
-
-Leitura científica:
-
-- heterocedasticidade não exige reescrever o estimador pontual
-- ela exige inferência mais honesta
-
-### 4. The controller only separated once memory became a controlled state
-
-O primeiro controller mínimo tinha boa lógica de decisão, mas não separava bem `controller` de `detector_only` na camada de loss.
-
-O salto veio quando `n_t` virou:
-
-- estado controlado
-- com atualização amortecida
-- deadband / histerese
-- custo explícito de atuação
-
-Essa foi a peça operacional faltante.
-
-### 5. The sequential benchmark is now scientifically meaningful
-
-No `projects/temporalbridge`, o benchmark sequencial com schedule temporal e memória dinâmica já mostra:
-
-- `controller` com alta acurácia de ação
-- lead time positivo em média
-- falso-alarme muito baixo
-- excess validity loss pequeno
-- custo de atuação reportado separadamente
-- separação real contra `detector_only`, `deploy_only` e `fixed_policy`
-
-Na forma atual do benchmark:
-
-- `controller`: excess baixo, regret baixo
-- `detector_only`: mantém lead time, mas paga muito mais em validity loss
-- `deploy_only`: às vezes razoável em loss, mas colapsa em lead time
-- `fixed_policy`: colapso completo
-
 ## Scientific Claims
 
 ### Closed / strong claims
 
-1. Existe uma **lei constitutiva** do horizonte de validade temporal sob drift.
+1. Existe uma lei constitutiva do horizonte de validade temporal sob drift.
 2. O horizonte `n^*` é imposto pela geometria do problema, não por tuning contingente.
-3. `H`, `\zeta` e `n^*` são inferíveis a partir da geometria de lag sob o modelo correto.
-4. Heterocedasticidade nos regimes testados não altera materialmente o ponto estimado de `H` e `n^*`.
-5. Bootstrap robusto (`wild`, `moving_block`) melhora substancialmente cobertura e calibração de thresholds.
-6. Um controller bootstrap-calibrado com memória dinâmica supera baselines simples em benchmark sequencial sintético quando a métrica operacional inclui custo explícito de atuação.
-7. Em regimes fortes, o mapa de fases em `H` mostra que a fronteira ótima depende do custo de atuação e da severidade do drift; não existe política universalmente dominante.
+3. `H`, `zeta` e `n^*` são inferíveis a partir da geometria de lag sob o modelo correto.
+4. Heterocedasticidade nos regimes testados não move materialmente o ponto estimado de `H` e `n^*`, mas exige bootstrap mais honesto.
+5. O controller só se separa de forma clara quando a memória é um estado controlado com custo explícito de atuação.
+6. Em regimes fortes, o mapa de fases em `H` depende de custo e drift; não existe política universalmente dominante.
+7. `signed_residual` não melhora o frontier reduzido; `observation` segue como melhor baseline.
 
 ### Negative results that matter
 
 1. `variance_bridge` não justificou promoção da modelagem explícita de variância ao núcleo do estimador.
 2. Detectores sozinhos não resolvem o problema operacional; é a política de memória que importa.
-3. No outro eixo do repo, a claim forte de suficiência pre-drift para PHH não se sustentou em dados reais. Isso é útil porque impede que a linha PHH capture a narrativa principal por inércia.
+3. A claim forte de suficiência pre-drift para PHH não se sustentou em dados reais.
+4. `signed_residual` é mais conservador e não corrige o gap validade-detecção.
 
 ### Open claims / still frontier
 
@@ -170,46 +107,13 @@ Na forma atual do benchmark:
 3. replay convincente em streams reais
 4. teoria mais apertada para misspecification misto forma+escala
 
-## Why This Is Scientifically Strong
-
-O projeto hoje entrega algo raro:
-
-- uma **lei constitutiva**
-- uma **inferência calibrada** dessa lei
-- um **fecho operacional** em controle de memória com custo explícito de atuação
-
-Isso é muito mais forte do que:
-
-- mais um detector de drift
-- mais um benchmark empírico de adaptation
-- mais uma heurística de update policy
-
-O resultado final é um novo objeto de ML/streaming inference:
-
-- **validade temporal prospectiva**
-- com **horizonte estimável**
-- e **alarmes / decisões calibrados**
-
-Em termos informacionais, o arco já pode ser lido assim:
-
-1. a lei define a geometria temporal da validade
-2. a geometria de lag torna essa validade observável
-3. o bootstrap torna a inferência honesta
-4. o controller transforma a inferência em atuação com custo explícito
-5. o benchmark sequencial mede se a atuação converge para a região válida e a que preço
-
 ## Information Architecture
 
 ### Root paper
 
 O `main.tex` na raiz deve ser o único manuscrito ativo.
 
-Ele deve absorver:
-
-- a teoria do horizonte
-- a inferência por geometria de lag
-- a calibração bootstrap
-- o controller sequencial
+Ele deve absorver a teoria do horizonte, a inferência por geometria de lag, a calibração bootstrap e o controller sequencial.
 
 ### Surviving code surface
 
@@ -243,21 +147,7 @@ e permite consolidar a linha operacional sem levar toda a história de experimen
 
 ## Manuscript Arc
 
-O arco do paper deve seguir a ordem científica ótima, não a ordem histórica em que os
-workspaces apareceram.
-
-### Arc 1. Constitutive law
-
-- definição de `V(\phi,\tau)`
-- lei `C_K n^{-a} + C_S \zeta n^H`
-- geometria de `n^*`
-- benchmark Gaussiano
-
-### Arc 2. Horizon inference
-
-- estimadores de `H`, `\zeta`, `n^*`
-- CLT / delta method / identifiability
-- recovery sob especificação correta
+O arco do paper segue: constitutive law -> horizon inference -> calibration -> control -> empirical phase map.
 
 ### Arc 3. Calibration under misspecification and heteroskedasticity
 
